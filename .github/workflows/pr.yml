@@ -1,0 +1,46 @@
+name: Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  validate-pr:
+    name: Validate PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Check PR title
+        run: |
+          if [ "${{ github.event.pull_request.draft }}" == "true" ]; then
+            echo "PR is a draft, skipping validation"
+            exit 0
+          fi
+          echo "PR title: ${{ github.event.pull_request.title }}"
+      
+      - name: Check for merge conflicts
+        run: |
+          git fetch origin main:${{ github.event.pull_request.base.ref }}
+          git merge-base --is-ancestor origin/${{ github.event.pull_request.base.ref }} HEAD || {
+            echo "⚠️  Warning: Branch may be out of date with base branch"
+            echo "This is not a blocking issue, but consider rebasing"
+          }
+
+  pr-checks:
+    name: PR Checks
+    needs: validate-pr
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
+

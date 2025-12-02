@@ -1,5 +1,8 @@
 # HUMMBL Monorepo
 
+[![CI](https://github.com/hummbl-dev/hummbl-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/hummbl-dev/hummbl-monorepo/actions/workflows/ci.yml)
+[![PR Checks](https://github.com/hummbl-dev/hummbl-monorepo/actions/workflows/pr.yml/badge.svg)](https://github.com/hummbl-dev/hummbl-monorepo/actions/workflows/pr.yml)
+
 A monorepo for all HUMMBL projects and packages.
 
 ## Structure
