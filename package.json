@@ -8,15 +8,31 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "echo 'Add your dev script here'",
-    "build": "echo '✓ Build check passed' && exit 0",
-    "test": "echo '✓ No tests to run' && exit 0",
-    "lint": "echo '✓ Linting check passed' && exit 0",
-    "type-check": "echo 'TypeScript not configured yet' && exit 0",
-    "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules",
-    "validate": "npm run lint && npm run test && npm run build"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "clean": "turbo run clean && rm -rf node_modules apps/*/node_modules packages/*/node_modules .turbo",
+    "validate": "npm run lint && npm run type-check && npm run test && npm run build",
+    "prepare": "husky install"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.3",
+    "turbo": "^2.6.1",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "npm@10.0.0",
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
@@ -28,4 +44,3 @@
   "author": "hummbl-dev",
   "license": "UNLICENSED"
 }
-

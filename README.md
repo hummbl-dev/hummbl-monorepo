@@ -53,6 +53,29 @@ pnpm dev
 2. Add a `package.json` with a unique name
 3. Reference shared packages using `@hummbl/package-name`
 
+## Available Scripts
+
+- `npm run dev` - Start development mode (uses Turbo)
+- `npm run build` - Build all packages and apps
+- `npm run test` - Run tests across all workspaces
+- `npm run lint` - Lint all code
+- `npm run type-check` - Type check all TypeScript code
+- `npm run format` - Format code with Prettier
+- `npm run format:check` - Check code formatting
+- `npm run validate` - Run lint, type-check, test, and build
+- `npm run clean` - Clean all build artifacts and node_modules
+
+## Tooling
+
+This monorepo uses:
+
+- **Turbo** - Fast build system for JavaScript and TypeScript monorepos
+- **TypeScript** - Type-safe JavaScript
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Husky** - Git hooks
+- **lint-staged** - Run linters on git staged files
+
 ## Contributing
 
 [Add your contributing guidelines here]
@@ -60,4 +83,3 @@ pnpm dev
 ## License
 
 [Add your license here]
-

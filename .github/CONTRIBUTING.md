@@ -30,7 +30,7 @@ Thank you for your interest in contributing!
 ## Commit Messages
 
 Use clear, descriptive commit messages:
+
 - `feat: add new package for auth`
 - `fix: resolve build issue in package X`
 - `docs: update README with setup instructions`
-
