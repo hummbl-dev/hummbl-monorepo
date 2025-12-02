@@ -1,6 +1,6 @@
-# Hummbl Monorepo
+# HUMMBL Monorepo
 
-A monorepo for all Hummbl projects and packages.
+A monorepo for all HUMMBL projects and packages.
 
 ## Structure
 
