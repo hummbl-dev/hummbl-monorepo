@@ -1,0 +1,29 @@
+{
+  "name": "hummbl-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Monorepo for Hummbl projects and packages",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "echo 'Add your dev script here'",
+    "build": "echo 'Add your build script here'",
+    "test": "echo 'Add your test script here'",
+    "lint": "echo 'Add your lint script here'",
+    "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hummbl-dev/hummbl-monorepo.git"
+  },
+  "author": "hummbl-dev",
+  "license": "UNLICENSED"
+}
+
