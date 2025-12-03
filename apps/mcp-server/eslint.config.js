@@ -24,6 +24,8 @@ export default [
         URL: "readonly",
         crypto: "readonly",
         fetch: "readonly",
+        KVNamespace: "readonly",
+        D1Database: "readonly",
       },
     },
     plugins: {
