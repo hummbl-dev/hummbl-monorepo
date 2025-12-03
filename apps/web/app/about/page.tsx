@@ -16,8 +16,12 @@ export default function AboutPage() {
             The Base120 Framework
           </h1>
 
-          <p className="text-xl text-neutral-400 leading-relaxed animate-in max-w-2xl mx-auto" style={{ animationDelay: '0.1s' }}>
-            A comprehensive system for better thinking through 120 mental models organized into 6 transformational categories.
+          <p
+            className="text-xl text-neutral-400 leading-relaxed animate-in max-w-2xl mx-auto"
+            style={{ animationDelay: '0.1s' }}
+          >
+            A comprehensive system for better thinking through 120 mental models organized into 6
+            transformational categories.
           </p>
         </div>
       </div>
@@ -33,14 +37,15 @@ export default function AboutPage() {
           </div>
           <div className="prose prose-invert max-w-none text-lg text-neutral-400 leading-relaxed">
             <p className="mb-6">
-              Base120 is a curated framework of mental models—cognitive tools that help you think more effectively,
-              solve problems creatively, and make better decisions. Rather than learning hundreds of disconnected concepts,
-              Base120 organizes 120 essential models into 6 fundamental transformations.
+              Base120 is a curated framework of mental models—cognitive tools that help you think
+              more effectively, solve problems creatively, and make better decisions. Rather than
+              learning hundreds of disconnected concepts, Base120 organizes 120 essential models
+              into 6 fundamental transformations.
             </p>
             <p>
-              Each transformation represents a different way to approach problems: changing your perspective,
-              inverting assumptions, composing solutions, decomposing complexity, iterating recursively,
-              or understanding meta-systems.
+              Each transformation represents a different way to approach problems: changing your
+              perspective, inverting assumptions, composing solutions, decomposing complexity,
+              iterating recursively, or understanding meta-systems.
             </p>
           </div>
         </section>
@@ -55,21 +60,46 @@ export default function AboutPage() {
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             {[
-              { code: 'P', name: 'Perspective', desc: 'Frame and name what is. Anchor or shift your point of view.' },
-              { code: 'IN', name: 'Inversion', desc: 'Reverse assumptions. Examine opposites, edges, and negations.' },
-              { code: 'CO', name: 'Composition', desc: 'Combine parts into coherent wholes that create synergy.' },
-              { code: 'DE', name: 'Decomposition', desc: 'Break complex systems into manageable constituent parts.' },
-              { code: 'RE', name: 'Recursion', desc: 'Apply operations iteratively, with outputs becoming inputs.' },
-              { code: 'SY', name: 'Meta-Systems', desc: 'Understand systems of systems and emergent dynamics.' }
-            ].map((item) => (
-              <div key={item.code} className="p-6 bg-black border border-neutral-800 hover:border-white transition-colors">
+              {
+                code: 'P',
+                name: 'Perspective',
+                desc: 'Frame and name what is. Anchor or shift your point of view.',
+              },
+              {
+                code: 'IN',
+                name: 'Inversion',
+                desc: 'Reverse assumptions. Examine opposites, edges, and negations.',
+              },
+              {
+                code: 'CO',
+                name: 'Composition',
+                desc: 'Combine parts into coherent wholes that create synergy.',
+              },
+              {
+                code: 'DE',
+                name: 'Decomposition',
+                desc: 'Break complex systems into manageable constituent parts.',
+              },
+              {
+                code: 'RE',
+                name: 'Recursion',
+                desc: 'Apply operations iteratively, with outputs becoming inputs.',
+              },
+              {
+                code: 'SY',
+                name: 'Meta-Systems',
+                desc: 'Understand systems of systems and emergent dynamics.',
+              },
+            ].map(item => (
+              <div
+                key={item.code}
+                className="p-6 bg-black border border-neutral-800 hover:border-white transition-colors"
+              >
                 <div className="flex items-center gap-3 mb-2">
                   <span className="font-bold text-emerald-500">{item.code}</span>
                   <h3 className="font-bold text-lg text-white">{item.name}</h3>
                 </div>
-                <p className="text-sm text-neutral-400">
-                  {item.desc}
-                </p>
+                <p className="text-sm text-neutral-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -85,20 +115,34 @@ export default function AboutPage() {
           </div>
           <div className="space-y-6">
             {[
-              { step: 1, title: 'Start with Priority 1 Models', desc: 'Begin with the most foundational models (Priority 1) across all transformations. These are the essential building blocks.' },
-              { step: 2, title: 'Apply to Real Problems', desc: 'Don\'t just read—actively apply each model to current challenges you\'re facing. Real practice builds intuition.' },
-              { step: 3, title: 'Combine Models', desc: 'The real power comes from combining multiple models. Use Perspective to frame, Decomposition to analyze, and Composition to synthesize solutions.' },
-              { step: 4, title: 'Progress by Priority', desc: 'After mastering Priority 1 models, gradually explore Priority 2 and higher. You don\'t need all 120 immediately.' }
-            ].map((item) => (
+              {
+                step: 1,
+                title: 'Start with Priority 1 Models',
+                desc: 'Begin with the most foundational models (Priority 1) across all transformations. These are the essential building blocks.',
+              },
+              {
+                step: 2,
+                title: 'Apply to Real Problems',
+                desc: "Don't just read—actively apply each model to current challenges you're facing. Real practice builds intuition.",
+              },
+              {
+                step: 3,
+                title: 'Combine Models',
+                desc: 'The real power comes from combining multiple models. Use Perspective to frame, Decomposition to analyze, and Composition to synthesize solutions.',
+              },
+              {
+                step: 4,
+                title: 'Progress by Priority',
+                desc: "After mastering Priority 1 models, gradually explore Priority 2 and higher. You don't need all 120 immediately.",
+              },
+            ].map(item => (
               <div key={item.step} className="flex gap-6 p-6 bg-black border border-neutral-800">
                 <div className="flex-shrink-0 w-8 h-8 rounded bg-emerald-600 text-black flex items-center justify-center font-bold text-sm">
                   {item.step}
                 </div>
                 <div>
                   <h3 className="font-bold text-lg mb-2 text-white">{item.title}</h3>
-                  <p className="text-neutral-400 leading-relaxed">
-                    {item.desc}
-                  </p>
+                  <p className="text-neutral-400 leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -106,11 +150,14 @@ export default function AboutPage() {
         </section>
 
         {/* CTA */}
-        <div className="p-10 bg-black text-white text-center animate-in border border-white" style={{ animationDelay: '0.5s' }}>
+        <div
+          className="p-10 bg-black text-white text-center animate-in border border-white"
+          style={{ animationDelay: '0.5s' }}
+        >
           <h3 className="text-3xl font-bold mb-4">Ready to Start Learning?</h3>
           <p className="text-neutral-400 mb-8 max-w-2xl mx-auto text-lg">
-            Explore the complete library of 120 mental models, organized by transformation type
-            and prioritized for effective learning.
+            Explore the complete library of 120 mental models, organized by transformation type and
+            prioritized for effective learning.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

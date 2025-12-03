@@ -17,9 +17,12 @@ export default function TransformationsPage() {
             The 6 Transformations
           </h1>
 
-          <p className="text-xl text-neutral-400 max-w-2xl mx-auto animate-in" style={{ animationDelay: '0.1s' }}>
-            Six fundamental ways to transform your thinking and approach problems.
-            Every mental model belongs to one of these core categories.
+          <p
+            className="text-xl text-neutral-400 max-w-2xl mx-auto animate-in"
+            style={{ animationDelay: '0.1s' }}
+          >
+            Six fundamental ways to transform your thinking and approach problems. Every mental
+            model belongs to one of these core categories.
           </p>
         </div>
       </div>
@@ -38,16 +41,17 @@ export default function TransformationsPage() {
                 <div className="w-12 h-12 rounded bg-black text-white flex items-center justify-center font-bold text-xl border border-white group-hover:border-emerald-500 group-hover:text-emerald-500 transition-colors">
                   {transformation.code}
                 </div>
-                <ArrowRight className="text-neutral-600 group-hover:text-emerald-500 transition-colors" size={20} />
+                <ArrowRight
+                  className="text-neutral-600 group-hover:text-emerald-500 transition-colors"
+                  size={20}
+                />
               </div>
 
               <h2 className="text-2xl font-bold mb-3 text-white group-hover:text-emerald-400 transition-colors">
                 {transformation.name}
               </h2>
 
-              <p className="text-neutral-400 mb-6 leading-relaxed">
-                {transformation.description}
-              </p>
+              <p className="text-neutral-400 mb-6 leading-relaxed">{transformation.description}</p>
 
               <div className="flex items-center gap-3">
                 <span className="px-3 py-1 rounded bg-black text-neutral-400 text-sm font-bold border border-neutral-800">
@@ -62,7 +66,10 @@ export default function TransformationsPage() {
         </div>
 
         {/* CTA */}
-        <div className="mt-20 p-12 bg-black text-white text-center animate-in border border-white" style={{ animationDelay: '0.6s' }}>
+        <div
+          className="mt-20 p-12 bg-black text-white text-center animate-in border border-white"
+          style={{ animationDelay: '0.6s' }}
+        >
           <h3 className="text-3xl font-bold mb-4">Ready to dive deeper?</h3>
           <p className="text-neutral-400 mb-8 max-w-2xl mx-auto text-lg">
             Explore the complete library of 120 mental models across all transformations.

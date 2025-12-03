@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { ArrowRight, Brain, Layers, Zap, Sparkles } from "lucide-react";
+import Link from 'next/link';
+import { ArrowRight, Brain, Layers, Zap, Sparkles } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -20,11 +20,18 @@ export default function Home() {
             Master the <span className="text-emerald-500">Base120</span> Framework
           </h1>
 
-          <p className="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto mb-10 animate-in leading-relaxed" style={{ animationDelay: '0.1s' }}>
-            A comprehensive system of mental models to elevate your thinking, sharpen decision-making, and unlock creative problem-solving.
+          <p
+            className="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto mb-10 animate-in leading-relaxed"
+            style={{ animationDelay: '0.1s' }}
+          >
+            A comprehensive system of mental models to elevate your thinking, sharpen
+            decision-making, and unlock creative problem-solving.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-in" style={{ animationDelay: '0.2s' }}>
+          <div
+            className="flex flex-col sm:flex-row gap-4 justify-center animate-in"
+            style={{ animationDelay: '0.2s' }}
+          >
             <Link
               href="/models"
               className="px-8 py-4 rounded-full bg-emerald-600 text-black font-bold hover:bg-emerald-500 transition-all flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]"
@@ -77,27 +84,36 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold mb-3 text-white">6 Transformations</h3>
               <p className="text-neutral-400 leading-relaxed">
-                Structured categories like Perspective, Inversion, and Composition to systematically organize your thinking tools.
+                Structured categories like Perspective, Inversion, and Composition to systematically
+                organize your thinking tools.
               </p>
             </div>
 
-            <div className="p-8 rounded-none bg-black border border-white hover:border-emerald-500 transition-colors animate-in group" style={{ animationDelay: '0.1s' }}>
+            <div
+              className="p-8 rounded-none bg-black border border-white hover:border-emerald-500 transition-colors animate-in group"
+              style={{ animationDelay: '0.1s' }}
+            >
               <div className="w-12 h-12 rounded bg-black border border-white text-emerald-500 flex items-center justify-center mb-6 group-hover:bg-emerald-900/20 transition-colors">
                 <Brain size={24} />
               </div>
               <h3 className="text-xl font-bold mb-3 text-white">120 Mental Models</h3>
               <p className="text-neutral-400 leading-relaxed">
-                A rich library of cognitive tools from First Principles to Systems Thinking, prioritized for effective learning.
+                A rich library of cognitive tools from First Principles to Systems Thinking,
+                prioritized for effective learning.
               </p>
             </div>
 
-            <div className="p-8 rounded-none bg-black border border-white hover:border-emerald-500 transition-colors animate-in group" style={{ animationDelay: '0.2s' }}>
+            <div
+              className="p-8 rounded-none bg-black border border-white hover:border-emerald-500 transition-colors animate-in group"
+              style={{ animationDelay: '0.2s' }}
+            >
               <div className="w-12 h-12 rounded bg-black border border-white text-emerald-500 flex items-center justify-center mb-6 group-hover:bg-emerald-900/20 transition-colors">
                 <Zap size={24} />
               </div>
               <h3 className="text-xl font-bold mb-3 text-white">Practical Application</h3>
               <p className="text-neutral-400 leading-relaxed">
-                Clear definitions, real-world examples, and guidance on when to apply each model in your decision-making.
+                Clear definitions, real-world examples, and guidance on when to apply each model in
+                your decision-making.
               </p>
             </div>
           </div>

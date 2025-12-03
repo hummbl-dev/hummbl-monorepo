@@ -1,13 +1,9 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getModelByCode, TRANSFORMATIONS } from "@hummbl/core";
-import { ArrowLeft, BookOpen, Lightbulb, Compass, ArrowRight } from "lucide-react";
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { getModelByCode, TRANSFORMATIONS } from '@hummbl/core';
+import { ArrowLeft, BookOpen, Lightbulb, Compass, ArrowRight } from 'lucide-react';
 
-export default function ModelDetailPage({
-  params,
-}: {
-  params: { code: string };
-}) {
+export default function ModelDetailPage({ params }: { params: { code: string } }) {
   const model = getModelByCode(params.code.toUpperCase());
 
   if (!model) {
@@ -19,9 +15,12 @@ export default function ModelDetailPage({
   // Minimalist monochrome priority colors
   const getPriorityColor = (priority: number) => {
     switch (priority) {
-      case 1: return "bg-white text-black border-white";
-      case 2: return "bg-black text-neutral-300 border-neutral-600";
-      default: return "bg-black text-neutral-500 border-neutral-800";
+      case 1:
+        return 'bg-white text-black border-white';
+      case 2:
+        return 'bg-black text-neutral-300 border-neutral-600';
+      default:
+        return 'bg-black text-neutral-500 border-neutral-800';
     }
   };
 
@@ -40,7 +39,9 @@ export default function ModelDetailPage({
 
           <div className="max-w-4xl">
             <div className="flex flex-wrap items-center gap-3 mb-6 animate-in">
-              <span className={`px-3 py-1 rounded text-sm font-bold border ${getPriorityColor(model.priority)}`}>
+              <span
+                className={`px-3 py-1 rounded text-sm font-bold border ${getPriorityColor(model.priority)}`}
+              >
                 {model.code}
               </span>
               <span className="text-neutral-700">|</span>
@@ -54,7 +55,10 @@ export default function ModelDetailPage({
               <span className="text-sm text-neutral-500">Priority {model.priority}</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6 animate-in" style={{ animationDelay: '0.1s' }}>
+            <h1
+              className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6 animate-in"
+              style={{ animationDelay: '0.1s' }}
+            >
               {model.name}
             </h1>
           </div>
@@ -66,19 +70,23 @@ export default function ModelDetailPage({
           {/* Main Content */}
           <div className="md:col-span-2 space-y-8">
             {/* Definition Card */}
-            <div className="p-8 bg-black border border-white animate-in" style={{ animationDelay: '0.2s' }}>
+            <div
+              className="p-8 bg-black border border-white animate-in"
+              style={{ animationDelay: '0.2s' }}
+            >
               <h2 className="text-sm font-bold mb-4 flex items-center gap-2 text-neutral-400 uppercase tracking-wider">
                 <BookOpen size={18} className="text-emerald-500" />
                 Definition
               </h2>
-              <p className="text-xl text-white leading-relaxed font-medium">
-                {model.definition}
-              </p>
+              <p className="text-xl text-white leading-relaxed font-medium">{model.definition}</p>
             </div>
 
             {/* Example Card */}
             {model.example && (
-              <div className="p-8 bg-black border border-neutral-800 animate-in" style={{ animationDelay: '0.3s' }}>
+              <div
+                className="p-8 bg-black border border-neutral-800 animate-in"
+                style={{ animationDelay: '0.3s' }}
+              >
                 <h2 className="text-sm font-bold mb-4 flex items-center gap-2 text-neutral-400 uppercase tracking-wider">
                   <Lightbulb size={18} className="text-white" />
                   Example
@@ -98,9 +106,7 @@ export default function ModelDetailPage({
                 <Compass size={16} className="text-emerald-600" />
                 When to Apply
               </h3>
-              <p className="text-sm text-neutral-300 leading-relaxed">
-                {model.whenToUse}
-              </p>
+              <p className="text-sm text-neutral-300 leading-relaxed">{model.whenToUse}</p>
             </div>
 
             {/* Transformation Context */}
@@ -108,16 +114,11 @@ export default function ModelDetailPage({
               <h3 className="font-bold mb-3 text-xs text-neutral-600 uppercase tracking-wider">
                 Transformation
               </h3>
-              <Link
-                href={`/transformations/${model.transformation}`}
-                className="block group"
-              >
+              <Link href={`/transformations/${model.transformation}`} className="block group">
                 <div className="text-lg font-bold mb-2 group-hover:text-emerald-500 transition-colors text-white">
                   {transformation.name}
                 </div>
-                <p className="text-sm text-neutral-400 mb-4">
-                  {transformation.description}
-                </p>
+                <p className="text-sm text-neutral-400 mb-4">{transformation.description}</p>
                 <div className="text-sm font-medium text-emerald-600 flex items-center gap-1 group-hover:gap-2 transition-all">
                   View all models <ArrowRight size={16} />
                 </div>

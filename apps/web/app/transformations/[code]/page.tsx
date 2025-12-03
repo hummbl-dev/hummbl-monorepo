@@ -4,7 +4,7 @@ import { ArrowLeft, ChevronRight } from 'lucide-react';
 import { TRANSFORMATIONS } from '@hummbl/core';
 
 export async function generateStaticParams() {
-  return Object.keys(TRANSFORMATIONS).map((code) => ({
+  return Object.keys(TRANSFORMATIONS).map(code => ({
     code,
   }));
 }
@@ -19,7 +19,7 @@ export default function TransformationPage({ params }: { params: { code: string 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Breadcrumb */}
-      <Link 
+      <Link
         href="/models"
         className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 mb-6"
       >
@@ -33,9 +33,7 @@ export default function TransformationPage({ params }: { params: { code: string 
           {transformation.code}
         </div>
         <h1 className="text-4xl font-bold mb-3">{transformation.name}</h1>
-        <p className="text-xl text-gray-600 dark:text-gray-400">
-          {transformation.description}
-        </p>
+        <p className="text-xl text-gray-600 dark:text-gray-400">{transformation.description}</p>
       </div>
 
       {/* Statistics */}
@@ -72,7 +70,7 @@ export default function TransformationPage({ params }: { params: { code: string 
         <div className="space-y-3">
           {transformation.models
             .sort((a, b) => a.priority - b.priority || a.code.localeCompare(b.code))
-            .map((model) => (
+            .map(model => (
               <Link
                 key={model.code}
                 href={`/models/${model.code}`}
@@ -84,24 +82,27 @@ export default function TransformationPage({ params }: { params: { code: string 
                       <span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-mono font-medium">
                         {model.code}
                       </span>
-                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                        model.priority === 1 
-                          ? 'bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-400'
-                          : model.priority === 2
-                          ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
-                          : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400'
-                      }`}>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-medium ${
+                          model.priority === 1
+                            ? 'bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-400'
+                            : model.priority === 2
+                              ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
+                              : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400'
+                        }`}
+                      >
                         Priority {model.priority}
                       </span>
                     </div>
                     <h3 className="font-semibold text-lg mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {model.name}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">
-                      {model.definition}
-                    </p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{model.definition}</p>
                   </div>
-                  <ChevronRight className="text-gray-400 group-hover:text-blue-500 transition-colors flex-shrink-0" size={20} />
+                  <ChevronRight
+                    className="text-gray-400 group-hover:text-blue-500 transition-colors flex-shrink-0"
+                    size={20}
+                  />
                 </div>
               </Link>
             ))}
