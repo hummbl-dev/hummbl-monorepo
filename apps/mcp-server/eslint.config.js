@@ -23,6 +23,7 @@ export default [
         __filename: "readonly",
         URL: "readonly",
         crypto: "readonly",
+        fetch: "readonly",
       },
     },
     plugins: {
