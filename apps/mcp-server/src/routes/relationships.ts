@@ -51,7 +51,7 @@ router.get('/relationships', async (c: AppContext) => {
       limit: query.limit || 50,
       offset: query.offset || 0,
     });
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -71,7 +71,7 @@ router.get('/relationships/:id', async (c: AppContext) => {
     }
 
     return c.json(result.value);
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -106,7 +106,7 @@ router.get('/models/:code/relationships', async (c: AppContext) => {
       model: code,
       relationships,
     });
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -179,7 +179,7 @@ router.post('/relationships', async (c: AppContext) => {
     }
 
     return c.json({ id, ...relationshipData }, 201);
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -237,7 +237,7 @@ router.patch('/relationships/:id', async (c: AppContext) => {
     }
 
     return c.json({ success: true });
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -263,7 +263,7 @@ router.delete('/relationships/:id', async (c: AppContext) => {
     }
 
     return c.json({ success: true });
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -329,7 +329,7 @@ router.get('/graph', async (c: AppContext) => {
     };
 
     return c.json(graphExport);
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });

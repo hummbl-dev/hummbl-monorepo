@@ -2,7 +2,7 @@
  * Test utilities and shared fixtures for HUMMBL MCP Server tests
  */
 
-import { MentalModel, Transformation } from '../types/domain.js';
+import { MentalModel, Transformation, TransformationType } from '../types/domain.js';
 
 /**
  * Sample mental models for testing
@@ -13,18 +13,24 @@ export const mockModels: MentalModel[] = [
     name: 'First Principles',
     definition: 'Break down problems to fundamental truths and build up from there',
     priority: 1,
+    transformation: 'P',
+    whenToUse: 'When solving complex problems',
   },
   {
     code: 'IN1',
     name: 'Inversion',
     definition: 'Think about what you want to avoid instead of what you want to achieve',
     priority: 1,
+    transformation: 'IN',
+    whenToUse: 'When stuck',
   },
   {
     code: 'CO1',
     name: 'Emergence',
     definition: 'Understand how simple rules create complex patterns',
     priority: 1,
+    transformation: 'CO',
+    whenToUse: 'When analyzing systems',
   },
 ];
 
@@ -42,6 +48,11 @@ export const mockTransformations: Record<TransformationType, Transformation> = {
     description: 'Frame and name what is',
     models: [mockModel1, mockModel2],
   },
+  IN: { code: 'IN', name: 'Inversion', description: 'Invert', models: [] },
+  CO: { code: 'CO', name: 'Connection', description: 'Connect', models: [] },
+  DE: { code: 'DE', name: 'Decomposition', description: 'Decompose', models: [] },
+  RE: { code: 'RE', name: 'Recombination', description: 'Recombine', models: [] },
+  SY: { code: 'SY', name: 'Synthesis', description: 'Synthesize', models: [] },
 };
 
 /**

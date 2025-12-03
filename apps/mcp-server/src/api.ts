@@ -22,7 +22,7 @@ import { isOk, isTransformationType } from './types/domain.js';
 import { validateApiKey } from './auth/api-keys.js';
 import { createD1Client } from './storage/d1-client.js';
 import relationshipsRoutes from './routes/relationships.js';
-import type { SimpleRelationship, RelationshipInput } from './types/relationships.js';
+import type { ModelRelationship } from './types/relationships.js';
 
 type Bindings = {
   DB: D1Database;
@@ -100,7 +100,7 @@ app.get('/v1/models/:code', authenticate, async (c: AppContext) => {
       name: model.name,
       definition: model.definition,
       priority: model.priority,
-      transformation: transformation?.key ?? null,
+      transformation: transformation?.code ?? null,
     });
   }
 
@@ -122,7 +122,7 @@ app.get('/v1/models/:code/relationships', async (c: AppContext) => {
       model: code,
       relationships: result.value,
     });
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -159,7 +159,7 @@ app.post('/v1/relationships', authenticate, async (c: AppContext) => {
     const result = await db.createRelationship(relationshipInput);
 
     return c.json({ success: true, relationship: result }, 201);
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -196,7 +196,7 @@ app.post('/v1/relationships/seed', authenticate, async (c: AppContext) => {
       seeded: successCount,
       failed: errorCount,
     });
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -221,7 +221,7 @@ app.patch('/v1/relationships/:id', authenticate, async (c: AppContext) => {
     const result = await db.updateRelationship(id, updates);
 
     return c.json({ success: true, relationship: result });
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -238,7 +238,7 @@ app.get('/v1/relationships/:id', async (c: AppContext) => {
     }
 
     return c.json(result);
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -265,7 +265,7 @@ app.get('/v1/relationships', async (c: AppContext) => {
       limit: filters.limit || 50,
       offset: filters.offset || 0,
     });
-  } catch (error) {
+  } catch (_error) {
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
@@ -298,7 +298,7 @@ app.get('/v1/models', authenticate, async (c: AppContext) => {
       name: m.name,
       definition: m.definition,
       priority: m.priority,
-      transformation: trans?.key ?? 'UNKNOWN',
+      transformation: trans?.code ?? 'UNKNOWN',
     };
   });
 
@@ -330,7 +330,7 @@ app.get('/v1/search', authenticate, async (c: AppContext) => {
       name: m.name,
       definition: m.definition,
       priority: m.priority,
-      transformation: trans?.key ?? 'UNKNOWN',
+      transformation: trans?.code ?? 'UNKNOWN',
     };
   });
 
@@ -356,7 +356,7 @@ app.get('/v1/transformations/:key', authenticate, async (c: AppContext) => {
 
   const transformation = result.value;
   return c.json({
-    key: transformation.key,
+    code: transformation.code,
     name: transformation.name,
     description: transformation.description,
     modelCount: transformation.models.length,
@@ -367,7 +367,7 @@ app.get('/v1/transformations/:key', authenticate, async (c: AppContext) => {
 // List all transformations
 app.get('/v1/transformations', authenticate, (c: AppContext) => {
   const transformations = Object.values(TRANSFORMATIONS).map(t => ({
-    key: t.key,
+    key: t.code,
     name: t.name,
     description: t.description,
     modelCount: t.models.length,
@@ -401,7 +401,8 @@ app.post('/v1/recommend', authenticate, async (c: AppContext) => {
     transformations: rec.transformations.map(tKey => {
       const t = TRANSFORMATIONS[tKey];
       return {
-        key: t.key,
+        key: t.code,
+
         name: t.name,
         description: t.description,
       };
