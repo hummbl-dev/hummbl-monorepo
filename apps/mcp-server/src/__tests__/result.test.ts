@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { ok, err, isOk, isErr, type DomainError, Result } from '../types/domain.js';
+import { ok, err, isOk, isError, type DomainError, Result } from '../types/domain.js';
 
 describe('Result Pattern', () => {
   describe('ok', () => {
@@ -73,20 +73,20 @@ describe('Result Pattern', () => {
     });
   });
 
-  describe('isErr', () => {
+  describe('isError', () => {
     it('should return true for error result', () => {
       const result: Result<number> = err<DomainError>({ type: 'Internal', message: 'test' });
-      expect(isErr(result)).toBe(true);
+      expect(isError(result)).toBe(true);
     });
 
     it('should return false for success result', () => {
       const result: Result<number> = ok(42);
-      expect(isErr(result)).toBe(false);
+      expect(isError(result)).toBe(false);
     });
 
     it('should narrow type correctly', () => {
       const result: Result<number> = err<DomainError>({ type: 'Internal', message: 'test' });
-      if (isErr(result)) {
+      if (isError(result)) {
         const error: DomainError = result.error;
         if (error.type === 'Internal') {
           expect(error.message).toBe('test');
