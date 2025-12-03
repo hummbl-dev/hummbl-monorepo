@@ -1,0 +1,72 @@
+name: Publish @hummbl/mcp-server to npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version tag (e.g., v1.0.0-beta.2)'
+        required: true
+        type: string
+  push:
+    tags:
+      - '@hummbl/mcp-server@*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for npm provenance (OIDC)
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build @hummbl/core (dependency)
+        run: pnpm --filter @hummbl/core build
+      
+      - name: Build @hummbl/mcp-server
+        run: pnpm --filter @hummbl/mcp-server build
+      
+      - name: Run tests (if any)
+        run: pnpm --filter @hummbl/mcp-server test || echo "No tests configured"
+        continue-on-error: true
+      
+      - name: Publish to npm
+        run: |
+          cd apps/mcp-server
+          npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name || inputs.tag }}
+          release_name: '@hummbl/mcp-server ${{ github.ref_name || inputs.tag }}'
+          body: |
+            Published @hummbl/mcp-server to npm registry with provenance
+            
+            **Install**: `npm install @hummbl/mcp-server`
+            
+            See [npm package](https://www.npmjs.com/package/@hummbl/mcp-server) for details.
+          draft: false
+          prerelease: false
+

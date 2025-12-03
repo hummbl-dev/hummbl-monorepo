@@ -1,0 +1,34 @@
+{
+  "name": "@hummbl/core",
+  "version": "1.0.0",
+  "description": "Core types and utilities for the HUMMBL Base120 cognitive framework",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src/**/*.ts"
+  },
+  "keywords": [
+    "mental-models",
+    "base120",
+    "cognitive-framework",
+    "thinking-tools"
+  ],
+  "author": "hummbl-dev",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

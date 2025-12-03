@@ -1,0 +1,29 @@
+{
+  "name": "@hummbl/workers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Workers REST API for HUMMBL Base120 mental models",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hummbl/core": "workspace:*",
+    "hono": "^4.6.12",
+    "zod": "^3.25.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251202.0",
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.14",
+    "wrangler": "^3.98.0"
+  }
+}
