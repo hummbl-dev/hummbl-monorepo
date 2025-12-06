@@ -1,18 +1,19 @@
 import type { Context } from 'hono';
+import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import type { Env } from '../env';
 import type { Result } from '@hummbl/core';
 
 export interface ApiError {
   code: string;
   message: string;
-  status: number;
+  status: ContentfulStatusCode;
   details?: unknown;
 }
 
 export const createApiError = (
   code: string,
   message: string,
-  status: number,
+  status: ContentfulStatusCode,
   details?: unknown
 ): ApiError => ({
   code,
@@ -24,7 +25,7 @@ export const createApiError = (
 export const respondWithResult = <T>(
   c: Context<{ Bindings: Env }>,
   result: Result<T, ApiError>,
-  successStatus = 200
+  successStatus = 200 as const
 ) => {
   if (result.ok) {
     return c.json(
