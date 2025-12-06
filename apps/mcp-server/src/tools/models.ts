@@ -11,6 +11,7 @@ import { z } from 'zod';
 
 import {
   TRANSFORMATIONS,
+  PROBLEM_PATTERNS,
   getAllModels,
   getModelByCode,
   searchModels,
@@ -1000,6 +1001,115 @@ export function registerModelTools(server: McpServer): void {
           isError: true,
         };
       }
+    }
+  );
+
+  // Tool: Get transformation details
+  server.registerTool(
+    'get_transformation',
+    {
+      title: 'Get Transformation Details',
+      description:
+        'Get detailed information about a specific HUMMBL transformation (P, IN, CO, DE, RE, SY).',
+      inputSchema: z.object({
+        key: z.enum(['P', 'IN', 'CO', 'DE', 'RE', 'SY']).describe('Transformation key'),
+      }),
+      outputSchema: z.object({
+        code: z.string(),
+        name: z.string(),
+        description: z.string(),
+        modelCount: z.number(),
+        models: z.array(
+          z.object({
+            code: z.string(),
+            name: z.string(),
+            definition: z.string(),
+            priority: z.number(),
+          })
+        ),
+      }),
+    },
+    async ({ key }) => {
+      const transformation = TRANSFORMATIONS[key];
+
+      if (!transformation) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Transformation '${key}' not found. Valid keys: P, IN, CO, DE, RE, SY.`,
+            },
+          ],
+          isError: true,
+        } as const;
+      }
+
+      const payload = {
+        code: transformation.code,
+        name: transformation.name,
+        description: transformation.description,
+        modelCount: transformation.models.length,
+        models: transformation.models.map(m => ({
+          code: m.code,
+          name: m.name,
+          definition: m.definition,
+          priority: m.priority,
+        })),
+      };
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(payload, null, 2),
+          },
+        ],
+        structuredContent: payload,
+      } as const;
+    }
+  );
+
+  // Tool: Search problem patterns
+  server.registerTool(
+    'search_problem_patterns',
+    {
+      title: 'Search Problem Patterns',
+      description:
+        'Search for common problem patterns and get recommended transformations and models.',
+      inputSchema: z.object({
+        query: z.string().min(2).describe('Search query for problem patterns'),
+      }),
+      outputSchema: z.object({
+        query: z.string(),
+        patternCount: z.number(),
+        patterns: z.array(
+          z.object({
+            pattern: z.string(),
+            transformations: z.array(z.string()),
+            topModels: z.array(z.string()),
+          })
+        ),
+      }),
+    },
+    async ({ query }) => {
+      const lowerQuery = query.toLowerCase();
+      const matches = PROBLEM_PATTERNS.filter(p => p.pattern.toLowerCase().includes(lowerQuery));
+
+      const payload = {
+        query,
+        patternCount: matches.length,
+        patterns: matches,
+      };
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(payload, null, 2),
+          },
+        ],
+        structuredContent: payload,
+      } as const;
     }
   );
 }

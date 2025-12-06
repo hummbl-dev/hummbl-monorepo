@@ -9,10 +9,6 @@
     "requestsPerHour": 100,
     "requestsPerDay": 1000
   },
-  "permissions": [
-    "read:health",
-    "read:models",
-    "read:transformations"
-  ],
+  "permissions": ["read:health", "read:models", "read:transformations"],
   "isActive": true
 }

@@ -13,12 +13,14 @@ A complete **client-side workflow execution engine** that makes workflows actual
 ### Components
 
 #### 1. **AI Service Layer** (`src/services/ai.ts`)
+
 - Integrates with Claude (Anthropic) and GPT (OpenAI)
 - Configurable API keys
 - Temperature and token control
 - Error handling
 
 #### 2. **Task Executor** (`src/services/taskExecutor.ts`)
+
 - Executes individual tasks with assigned agents
 - Dependency checking
 - Context passing between tasks
@@ -26,6 +28,7 @@ A complete **client-side workflow execution engine** that makes workflows actual
 - AI prompt building
 
 #### 3. **Workflow Runner** (`src/services/workflowRunner.ts`)
+
 - Orchestrates full workflow execution
 - Parallel task execution where possible
 - Dependency resolution
@@ -33,6 +36,7 @@ A complete **client-side workflow execution engine** that makes workflows actual
 - Pause/resume support
 
 #### 4. **Settings Page** (`src/pages/Settings.tsx`)
+
 - Configure API keys for Anthropic/OpenAI
 - Secure key storage (localStorage)
 - User-friendly interface
@@ -63,6 +67,7 @@ A complete **client-side workflow execution engine** that makes workflows actual
 ### Dependency Resolution
 
 Tasks execute in order based on dependencies:
+
 - Tasks with no dependencies run first
 - Tasks wait for their dependencies to complete
 - Multiple independent tasks run in parallel
@@ -71,12 +76,14 @@ Tasks execute in order based on dependencies:
 ### AI Integration
 
 Each agent has:
+
 - **Model**: claude-3-sonnet, gpt-4, etc.
 - **Role**: researcher, analyst, executor, reviewer
 - **Capabilities**: List of what agent can do
 - **Temperature**: Controls creativity (0-1)
 
 Tasks prompt agents with:
+
 - Agent role and capabilities
 - Task description
 - Previous task outputs (dependencies)
@@ -89,6 +96,7 @@ Tasks prompt agents with:
 ### 1. Configure API Keys
 
 Navigate to **Settings** and add:
+
 - **Anthropic API Key** for Claude models
 - **OpenAI API Key** for GPT models
 
@@ -118,6 +126,7 @@ Keys are stored locally in browser.
 ### To Make This Production-Ready
 
 **Phase 1: Current (Client-Side)**
+
 - ✅ AI service integration
 - ✅ Task execution
 - ✅ Workflow orchestration
@@ -127,6 +136,7 @@ Keys are stored locally in browser.
 - ⏳ Show live progress and results
 
 **Phase 2: Backend (Cloudflare Workers)**
+
 - Move execution to Cloudflare Workers
 - Use D1 for workflow/result storage
 - Use Queue for task orchestration
@@ -134,6 +144,7 @@ Keys are stored locally in browser.
 - Better error handling and logging
 
 **Phase 3: Advanced Features**
+
 - Workflow scheduling (cron)
 - Webhook triggers
 - Team collaboration
@@ -165,6 +176,7 @@ src/
 Get your API key from: https://console.anthropic.com/
 
 Supported models:
+
 - `claude-3-opus-20240229`
 - `claude-3-sonnet-20240229`
 - `claude-3-haiku-20240307`
@@ -174,6 +186,7 @@ Supported models:
 Get your API key from: https://platform.openai.com/api-keys
 
 Supported models:
+
 - `gpt-4`
 - `gpt-4-turbo-preview`
 - `gpt-3.5-turbo`
@@ -183,12 +196,14 @@ Supported models:
 ## Security
 
 **Client-Side Storage:**
+
 - API keys stored in browser localStorage
 - Keys never sent to HUMMBL servers
 - Keys only used for direct API calls to providers
 - Clear localStorage to remove keys
 
 **Best Practices:**
+
 - Don't share API keys
 - Use environment variables in production
 - Monitor API usage on provider dashboards
@@ -223,16 +238,20 @@ All three agents work together automatically!
 ## Troubleshooting
 
 ### "API key not configured"
+
 → Go to Settings and add your API key
 
 ### "Agent model not configured"
+
 → Edit agent and select a model (claude-3-sonnet, etc.)
 
 ### "Dependencies not satisfied"
+
 → Check task dependencies are correct
 → Ensure no circular dependencies
 
 ### "Task failed"
+
 → Check AI response in task result
 → May need to adjust prompt or retry
 
@@ -251,4 +270,3 @@ Test the execution engine:
 ---
 
 **Next**: Update WorkflowDetail page to integrate the runner and show live execution!
-

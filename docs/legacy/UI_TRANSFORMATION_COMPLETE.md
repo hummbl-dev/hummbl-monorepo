@@ -24,18 +24,21 @@ Successfully implemented all remaining design opportunities from the audit, tran
 ### What Was Built
 
 **Theme Context** (`src/contexts/ThemeContext.tsx`)
+
 - React Context for global theme state management
 - localStorage persistence (`hummbl-theme` key)
 - System preference detection via `prefers-color-scheme`
 - Automatic class toggling on `<html>` element
 
 **Theme Toggle** (Header component)
+
 - Moon/Sun icon based on current theme
 - Positioned between search and notifications
 - Accessible title attributes
 - Smooth icon transitions
 
 **Dark Mode Styling**
+
 - Updated all base components (buttons, cards, inputs)
 - Header: `dark:bg-gray-900`, `dark:border-gray-800`
 - Sidebar: `dark:bg-black` for deeper contrast
@@ -45,21 +48,23 @@ Successfully implemented all remaining design opportunities from the audit, tran
 ### Configuration
 
 **Tailwind Config**
+
 ```javascript
 // tailwind.config.js
 export default {
   darkMode: 'class', // ← Added
   // ... rest of config
-}
+};
 ```
 
 **Usage Example**
+
 ```tsx
 // Automatic via context
 const { theme, toggleTheme } = useTheme();
 
 // In components, use dark: prefix
-className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+className = 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white';
 ```
 
 ---
@@ -69,12 +74,14 @@ className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
 ### What Was Built
 
 **Toast Context** (`src/contexts/ToastContext.tsx`)
+
 - Centralized notification management
 - 4 toast types: `success`, `error`, `info`, `warning`
 - Auto-dismiss with configurable duration
 - Stack of toasts in bottom-right corner
 
 **Toast Component Features**
+
 - Icon per type (CheckCircle, AlertCircle, Info, AlertTriangle)
 - Color-coded backgrounds and borders
 - Dark mode support for all variants
@@ -82,6 +89,7 @@ className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
 - Manual dismiss button (X icon)
 
 **API Methods**
+
 ```tsx
 const toast = useToast();
 
@@ -98,9 +106,12 @@ toast.showToast('success', 'Message', 'Description', 10000);
 ### Integration Points
 
 **Wrapped in main.tsx**
+
 ```tsx
 <ThemeProvider>
-  <ToastProvider>  {/* ← Added */}
+  <ToastProvider>
+    {' '}
+    {/* ← Added */}
     <ErrorBoundary>
       <App />
     </ErrorBoundary>
@@ -109,6 +120,7 @@ toast.showToast('success', 'Message', 'Description', 10000);
 ```
 
 **Replacement for `alert()` calls**
+
 - Use `toast.success()` instead of `alert('Success!')`
 - Use `toast.error()` instead of `alert('Error:')`
 - Better UX, doesn't block interaction
@@ -144,10 +156,15 @@ toast.showToast('success', 'Message', 'Description', 10000);
 ### Styling
 
 **Shimmer Animation**
+
 ```css
 @keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
 .skeleton {
@@ -161,12 +178,13 @@ toast.showToast('success', 'Message', 'Description', 10000);
 ```
 
 **Usage Pattern**
+
 ```tsx
 import { SkeletonStat } from '../components/SkeletonLoader';
 
 function Dashboard() {
   const [loading, setLoading] = useState(true);
-  
+
   if (loading) {
     return (
       <div className="grid grid-cols-4 gap-4">
@@ -177,7 +195,7 @@ function Dashboard() {
       </div>
     );
   }
-  
+
   // ... render actual data
 }
 ```
@@ -189,6 +207,7 @@ function Dashboard() {
 ### What Was Built
 
 **Base Component** (`src/components/EmptyState.tsx`)
+
 - Generic EmptyState with props:
   - `icon`: Lucide icon component
   - `title`: Main heading
@@ -222,21 +241,23 @@ function Dashboard() {
    - Guidance on running workflows
 
 ### Usage Example
+
 ```tsx
 import { EmptyWorkflows } from '../components/EmptyState';
 
 function WorkflowList() {
-  const workflows = useWorkflowStore((state) => state.workflows);
-  
+  const workflows = useWorkflowStore(state => state.workflows);
+
   if (workflows.length === 0) {
     return <EmptyWorkflows onCreate={() => navigate('/workflows/new')} />;
   }
-  
+
   return <div>{/* render workflows */}</div>;
 }
 ```
 
 ### Styling
+
 - Centered layout with fade-in animation
 - Icon in circular gray background
 - Max-width description for readability
@@ -273,13 +294,14 @@ function WorkflowList() {
    - Consistent styling with inputs
 
 ### Usage Example
+
 ```tsx
 import { FormField, Input } from '../components/Form';
 
 function WorkflowForm() {
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
-  
+
   const validateName = () => {
     if (name.length < 3) {
       setNameError('Name must be at least 3 characters');
@@ -288,7 +310,7 @@ function WorkflowForm() {
     setNameError('');
     return true;
   };
-  
+
   return (
     <FormField
       label="Workflow Name"
@@ -298,7 +320,7 @@ function WorkflowForm() {
     >
       <Input
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={e => setName(e.target.value)}
         onBlur={validateName}
         error={!!nameError}
         placeholder="Enter workflow name"
@@ -309,6 +331,7 @@ function WorkflowForm() {
 ```
 
 ### Visual Indicators
+
 - **Error state**: Red border, red focus ring, alert icon, error text
 - **Success state**: Green border, green focus ring, checkmark icon, success text
 - **Hint state**: Gray text with info icon
@@ -321,6 +344,7 @@ function WorkflowForm() {
 ### New Animations Added
 
 **slide-in-right** (for toasts)
+
 ```css
 @keyframes slide-in-right {
   from {
@@ -335,6 +359,7 @@ function WorkflowForm() {
 ```
 
 **Updated fade-in** (for page loads, empty states)
+
 ```css
 @keyframes fade-in {
   from {
@@ -349,6 +374,7 @@ function WorkflowForm() {
 ```
 
 **Loading Spinner**
+
 - Changed from `border-blue-600` to `border-primary-600`
 - Added dark mode text color
 - Fade-in animation on container
@@ -358,6 +384,7 @@ function WorkflowForm() {
 ## Technical Implementation
 
 ### File Structure
+
 ```
 src/
 ├── contexts/
@@ -376,13 +403,20 @@ src/
 ```
 
 ### Provider Hierarchy
+
 ```tsx
 <React.StrictMode>
-  <ThemeProvider>           // ← Theme state (light/dark)
-    <ToastProvider>         // ← Toast notifications
-      <ErrorBoundary>       // ← Error handling
-        <App />             // ← Main app
-        <Analytics />       // ← Vercel analytics
+  <ThemeProvider>
+    {' '}
+    // ← Theme state (light/dark)
+    <ToastProvider>
+      {' '}
+      // ← Toast notifications
+      <ErrorBoundary>
+        {' '}
+        // ← Error handling
+        <App /> // ← Main app
+        <Analytics /> // ← Vercel analytics
       </ErrorBoundary>
     </ToastProvider>
   </ThemeProvider>
@@ -392,6 +426,7 @@ src/
 ### CSS Updates
 
 **Global Styles** (`src/index.css`)
+
 - Body: Dark mode background and text
 - All button classes: Dark variants
 - Card class: Dark background and borders
@@ -400,6 +435,7 @@ src/
 - Skeleton shimmer: Dark gradient
 
 **Tailwind Config** (`tailwind.config.js`)
+
 - Added `darkMode: 'class'` option
 - Enables `dark:` prefix throughout app
 
@@ -407,15 +443,18 @@ src/
 
 ## Bundle Size Impact
 
-**Before**: 
+**Before**:
+
 - Main: 43.21 kB
 - Vendor: 328.53 kB
 
 **After**:
+
 - Main: 45.57 kB (+2.36 kB, +5.5%)
 - Vendor: 328.53 kB (no change)
 
 **Analysis**:
+
 - Small increase from new components/contexts
 - Still well under thresholds (warn >250KB, fail >300KB)
 - Gzipped sizes excellent (12.96 kB main, 105.63 kB vendor)
@@ -425,6 +464,7 @@ src/
 ## Testing Verification
 
 ### Build Test
+
 ```bash
 npm run build
 # ✅ TypeScript compilation successful
@@ -435,14 +475,14 @@ npm run build
 ### Component Coverage
 
 | Component | Dark Mode | Skeleton | Empty State | Toast | Form |
-|-----------|-----------|----------|-------------|-------|------|
-| Dashboard | ✅ | ✅ | ✅ | - | - |
-| Workflows | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Agents | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Templates | ✅ | ✅ | ✅ | - | - |
-| Settings | ✅ | - | - | ✅ | ✅ |
-| Header | ✅ | - | - | - | - |
-| Sidebar | ✅ | - | - | - | - |
+| --------- | --------- | -------- | ----------- | ----- | ---- |
+| Dashboard | ✅        | ✅       | ✅          | -     | -    |
+| Workflows | ✅        | ✅       | ✅          | ✅    | ✅   |
+| Agents    | ✅        | ✅       | ✅          | ✅    | ✅   |
+| Templates | ✅        | ✅       | ✅          | -     | -    |
+| Settings  | ✅        | -        | -           | ✅    | ✅   |
+| Header    | ✅        | -        | -           | -     | -    |
+| Sidebar   | ✅        | -        | -           | -     | -    |
 
 ---
 
@@ -451,18 +491,20 @@ npm run build
 ### Adding Dark Mode to Existing Components
 
 1. **Text colors**: Add `dark:text-gray-*` classes
+
    ```tsx
-   className="text-gray-900 dark:text-white"
+   className = 'text-gray-900 dark:text-white';
    ```
 
 2. **Backgrounds**: Add `dark:bg-gray-*` classes
+
    ```tsx
-   className="bg-white dark:bg-gray-800"
+   className = 'bg-white dark:bg-gray-800';
    ```
 
 3. **Borders**: Add `dark:border-gray-*` classes
    ```tsx
-   className="border-gray-200 dark:border-gray-700"
+   className = 'border-gray-200 dark:border-gray-700';
    ```
 
 ### Using Toast Notifications
@@ -472,7 +514,7 @@ import { useToast } from '../contexts/ToastContext';
 
 function MyComponent() {
   const toast = useToast();
-  
+
   const handleSave = async () => {
     try {
       await saveData();
@@ -492,14 +534,14 @@ import { SkeletonCard } from '../components/SkeletonLoader';
 function MyList() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  
+
   useEffect(() => {
-    fetchData().then((result) => {
+    fetchData().then(result => {
       setData(result);
       setLoading(false);
     });
   }, []);
-  
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -509,7 +551,7 @@ function MyList() {
       </div>
     );
   }
-  
+
   return <div>{/* render data */}</div>;
 }
 ```
@@ -520,8 +562,8 @@ function MyList() {
 import { EmptyWorkflows } from '../components/EmptyState';
 
 function WorkflowList() {
-  const workflows = useWorkflowStore((state) => state.workflows);
-  
+  const workflows = useWorkflowStore(state => state.workflows);
+
   if (workflows.length === 0) {
     return (
       <EmptyWorkflows
@@ -531,7 +573,7 @@ function WorkflowList() {
       />
     );
   }
-  
+
   return <div>{/* render workflows */}</div>;
 }
 ```
@@ -545,7 +587,7 @@ function MyForm() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [emailSuccess, setEmailSuccess] = useState('');
-  
+
   const validateEmail = () => {
     if (!email.includes('@')) {
       setEmailError('Invalid email address');
@@ -556,7 +598,7 @@ function MyForm() {
     setEmailSuccess('Email looks good!');
     return true;
   };
-  
+
   return (
     <FormField
       label="Email Address"
@@ -568,7 +610,7 @@ function MyForm() {
       <Input
         type="email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={e => setEmail(e.target.value)}
         onBlur={validateEmail}
         error={!!emailError}
         success={!!emailSuccess}
@@ -584,18 +626,18 @@ function MyForm() {
 
 ### Final Audit Results
 
-| Category | Score | Notes |
-|----------|-------|-------|
-| **Brand Identity** | 10/10 | ✅ Green theme, distinctive logo, transformation colors |
-| **Typography** | 9/10 | ✅ Inter font, proper hierarchy, code font |
-| **Color System** | 10/10 | ✅ Consistent palette, dark mode, semantic colors |
-| **Spacing & Layout** | 9/10 | ✅ Consistent scale, good rhythm |
-| **Animations** | 10/10 | ✅ Micro-interactions, skeleton loaders, toast slides |
-| **Dark Mode** | 10/10 | ✅ Full support, theme toggle, smooth transitions |
-| **Accessibility** | 9/10 | ✅ Semantic HTML, ARIA labels, keyboard nav |
-| **Loading States** | 10/10 | ✅ Skeleton screens, spinners, shimmer animations |
-| **Empty States** | 10/10 | ✅ Helpful guidance, clear CTAs, icons |
-| **Form UX** | 10/10 | ✅ Inline validation, visual feedback, hints |
+| Category             | Score | Notes                                                   |
+| -------------------- | ----- | ------------------------------------------------------- |
+| **Brand Identity**   | 10/10 | ✅ Green theme, distinctive logo, transformation colors |
+| **Typography**       | 9/10  | ✅ Inter font, proper hierarchy, code font              |
+| **Color System**     | 10/10 | ✅ Consistent palette, dark mode, semantic colors       |
+| **Spacing & Layout** | 9/10  | ✅ Consistent scale, good rhythm                        |
+| **Animations**       | 10/10 | ✅ Micro-interactions, skeleton loaders, toast slides   |
+| **Dark Mode**        | 10/10 | ✅ Full support, theme toggle, smooth transitions       |
+| **Accessibility**    | 9/10  | ✅ Semantic HTML, ARIA labels, keyboard nav             |
+| **Loading States**   | 10/10 | ✅ Skeleton screens, spinners, shimmer animations       |
+| **Empty States**     | 10/10 | ✅ Helpful guidance, clear CTAs, icons                  |
+| **Form UX**          | 10/10 | ✅ Inline validation, visual feedback, hints            |
 
 **Overall Design Score**: **9.7/10** 🎉
 
@@ -604,6 +646,7 @@ function MyForm() {
 ## What's Next
 
 ### Immediate Opportunities
+
 1. **Apply toast notifications** to existing forms
    - Replace `alert()` calls in workflow editor
    - Add success toasts on save/delete actions
@@ -628,6 +671,7 @@ function MyForm() {
    - Login/register forms
 
 ### Future Enhancements
+
 - **Keyboard shortcuts** for power users
 - **Command palette** (Cmd+K) for navigation
 - **Advanced animations** for page transitions
@@ -657,15 +701,16 @@ Successfully implemented **all remaining design opportunities** from the audit:
 ✅ **Skeleton loaders** - 4 components, shimmer animation, dark mode support  
 ✅ **Empty states** - Base component + 4 presets, helpful guidance, clear CTAs  
 ✅ **Form validation** - Inline feedback, visual indicators, error/success states  
-✅ **Animations** - Enhanced fade-in, slide-in-right, shimmer, micro-interactions  
+✅ **Animations** - Enhanced fade-in, slide-in-right, shimmer, micro-interactions
 
 **Total files created**: 5 new components/contexts  
 **Total files modified**: 6 existing files  
 **Build status**: ✅ Successful (TypeScript + Vite)  
 **Bundle impact**: +2.36 kB (+5.5%), still under thresholds  
-**Design score**: 9.7/10 (up from 8.8/10)  
+**Design score**: 9.7/10 (up from 8.8/10)
 
 HUMMBL now has a **world-class, production-ready UI/UX** with:
+
 - Modern, distinctive brand identity (green theme)
 - Professional typography (Inter + JetBrains Mono)
 - Comprehensive dark mode support

@@ -9,12 +9,13 @@
 ## What Was Built
 
 ### Backend (Cloudflare Workers)
+
 ```
 workers/
 ├── schema.sql                 # D1 database schema
 ├── src/
 │   ├── index.ts              # Hono app entry point + CORS
-│   ├── types/index.ts        # TypeScript definitions  
+│   ├── types/index.ts        # TypeScript definitions
 │   ├── lib/db.ts             # D1 helpers (Result<T,E> pattern)
 │   ├── services/ai.ts        # Server-side AI (no CORS!)
 │   └── routes/
@@ -23,6 +24,7 @@ workers/
 ```
 
 ### Frontend Integration
+
 ```
 src/
 ├── services/api.ts           # Backend API client (NEW)
@@ -41,6 +43,7 @@ npm install
 ```
 
 This installs:
+
 - `hono` - Web framework
 - `@cloudflare/workers-types` - TypeScript types
 
@@ -51,11 +54,13 @@ wrangler d1 execute hummbl-workflows --file=./schema.sql
 ```
 
 This creates tables:
+
 - `workflows` - Workflow definitions
 - `executions` - Execution tracking
 - `task_results` - Task outputs and errors
 
 **Verify**:
+
 ```bash
 wrangler d1 execute hummbl-workflows --command="SELECT name FROM sqlite_master WHERE type='table';"
 ```
@@ -69,12 +74,13 @@ Should show: workflows, executions, task_results
 wrangler secret put ANTHROPIC_API_KEY
 # Paste your key when prompted
 
-# Set OpenAI API key  
+# Set OpenAI API key
 wrangler secret put OPENAI_API_KEY
 # Paste your key when prompted
 ```
 
 **Verify**:
+
 ```bash
 wrangler secret list
 ```
@@ -106,6 +112,7 @@ wrangler deploy
 ```
 
 **Expected Output**:
+
 ```
 Uploaded hummbl-backend (X.XX sec)
 Published hummbl-backend (X.XX sec)
@@ -122,6 +129,7 @@ Current Deployment ID: xxxxx
 ### Option A: Update API URL in Code
 
 Edit `src/services/api.ts`:
+
 ```typescript
 const API_URL = import.meta.env.DEV
   ? 'http://localhost:8787'
@@ -131,11 +139,13 @@ const API_URL = import.meta.env.DEV
 ### Option B: Use Environment Variable
 
 Create `.env.production`:
+
 ```
 VITE_API_URL=https://hummbl-backend.<YOUR-SUBDOMAIN>.workers.dev
 ```
 
 Then update `src/services/api.ts`:
+
 ```typescript
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8787';
 ```
@@ -169,12 +179,13 @@ curl -X POST https://hummbl-backend.<subdomain>.workers.dev/api/workflows/test/e
 2. Go to **Settings**
 3. Add your Anthropic API key
 4. Go to **Templates**
-5. Click "Research & Analysis Pipeline"  
+5. Click "Research & Analysis Pipeline"
 6. Click "Use Template"
 7. Open the new workflow
 8. Click **"Run Workflow"**
 
 **Expected**:
+
 - Button shows "Running..."
 - Progress bar animates
 - Tasks show blue spinners → green checks
@@ -190,6 +201,7 @@ curl -X POST https://hummbl-backend.<subdomain>.workers.dev/api/workflows/test/e
 5. See real-time logs
 
 **Check D1 Data**:
+
 ```bash
 # See executions
 wrangler d1 execute hummbl-workflows --command="SELECT * FROM executions LIMIT 5;"
@@ -205,11 +217,13 @@ wrangler d1 execute hummbl-workflows --command="SELECT task_name, status FROM ta
 ### What Changed
 
 **Before (CORS Blocked)**:
+
 ```
 Browser → Anthropic API ❌
 ```
 
 **After (Works!)**:
+
 ```
 Browser → Cloudflare Workers → Anthropic API ✅
          ↓
@@ -239,6 +253,7 @@ Browser → Cloudflare Workers → Anthropic API ✅
 ### Issue: "Cannot find module 'hono'"
 
 **Fix**:
+
 ```bash
 cd workers
 npm install
@@ -247,6 +262,7 @@ npm install
 ### Issue: "Database not found"
 
 **Fix**:
+
 ```bash
 # Check wrangler.toml has correct database_id
 wrangler d1 list
@@ -258,6 +274,7 @@ wrangler d1 execute hummbl-workflows --file=./schema.sql
 ### Issue: "API key not configured"
 
 **Fix**:
+
 ```bash
 # Check secrets exist
 wrangler secret list
@@ -269,11 +286,13 @@ wrangler secret put ANTHROPIC_API_KEY
 ### Issue: Frontend still shows CORS error
 
 **Possible causes**:
+
 1. Old build cached - Hard refresh (`Cmd+Shift+R`)
 2. API_URL not updated - Check `src/services/api.ts`
 3. CORS middleware not working - Check Workers logs
 
 **Debug**:
+
 ```bash
 # Check what URL frontend is calling
 # Open DevTools → Network tab → Look for API calls
@@ -282,6 +301,7 @@ wrangler secret put ANTHROPIC_API_KEY
 ### Issue: Workflows run but no results
 
 **Check**:
+
 1. D1 data: `wrangler d1 execute hummbl-workflows --command="SELECT * FROM task_results;"`
 2. Workers logs: `wrangler tail`
 3. AI API quotas/limits
@@ -307,6 +327,7 @@ wrangler secret put ANTHROPIC_API_KEY
 ### Scaling
 
 For production load:
+
 - Upgrade to Workers Paid ($5/month)
 - Unbounded requests
 - Add Cloudflare Queue for long workflows
@@ -323,7 +344,7 @@ For production load:
 ✅ **Frontend updated** - API_URL points to Workers  
 ✅ **Workflow executes** - Tasks run and complete  
 ✅ **Results display** - UI shows task outputs  
-✅ **No CORS errors** - Network tab clean  
+✅ **No CORS errors** - Network tab clean
 
 ---
 
@@ -395,4 +416,3 @@ wrangler deploy
 ```
 
 **Then update frontend API_URL and workflows will HUM! 🚀**
-

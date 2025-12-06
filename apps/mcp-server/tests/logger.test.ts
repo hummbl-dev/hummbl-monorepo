@@ -27,33 +27,21 @@ describe('Logger', () => {
   test('logs info messages with JSON structure', () => {
     logger.info('Test message', { key: 'value' });
 
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"level":"info"')
-    );
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"message":"Test message"')
-    );
-    expect(consoleLogSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"key":"value"')
-    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('"level":"info"'));
+    expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('"message":"Test message"'));
+    expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('"key":"value"'));
   });
 
   test('logs error messages with error details', () => {
     const error = new Error('Test error');
     logger.error('Error occurred', { code: 500 }, error);
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"level":"error"')
-    );
+    expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('"level":"error"'));
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       expect.stringContaining('"message":"Error occurred"')
     );
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"name":"Error"')
-    );
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      expect.stringContaining('"message":"Test error"')
-    );
+    expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('"name":"Error"'));
+    expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('"message":"Test error"'));
   });
 
   test('withCorrelation sets correlation ID in context', () => {
@@ -113,9 +101,7 @@ describe('Logger', () => {
       expect(consoleLogSpy).toHaveBeenCalledWith(
         expect.stringContaining('"correlationId":"parent-correlation"')
       );
-      expect(consoleLogSpy).toHaveBeenCalledWith(
-        expect.stringContaining('"userId":"user123"')
-      );
+      expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('"userId":"user123"'));
       expect(consoleLogSpy).toHaveBeenCalledWith(
         expect.stringContaining('"sessionId":"session456"')
       );

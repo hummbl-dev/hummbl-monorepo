@@ -3,6 +3,7 @@
 ## 1. X/Twitter Thread (10 posts)
 
 ### Post 1 (Hook)
+
 I built a 120-model mental models framework using... the framework itself.
 
 Meta-recursive product development. Here's what 18 months of framework-driven building taught me:
@@ -10,7 +11,9 @@ Meta-recursive product development. Here's what 18 months of framework-driven bu
 🧵👇
 
 ### Post 2 (Problem)
+
 Started with a mess:
+
 - Mental models scattered across notes
 - No validation methodology
 - Zero production infrastructure
@@ -19,6 +22,7 @@ Started with a mess:
 Wickedness score: 19/30 (Tier 4 problem)
 
 ### Post 3 (Architecture)
+
 First breakthrough: 6 transformations, not random categories.
 
 P - Perspective
@@ -31,6 +35,7 @@ SY - Systems
 Everything maps to these 6. Always.
 
 ### Post 4 (Scaling)
+
 Second breakthrough: Base-N scaling.
 
 Base6 = 6 models (core literacy)
@@ -40,9 +45,11 @@ Base120 = 120 models (pedagogical ceiling)
 Match complexity to problem tier. Don't over-engineer.
 
 ### Post 5 (Validation)
+
 Third breakthrough: Quantitative wickedness scoring.
 
 5 questions, 0-30 points:
+
 - Variables
 - Stakeholders
 - Predictability
@@ -52,6 +59,7 @@ Third breakthrough: Quantitative wickedness scoring.
 Replaced vibes with math.
 
 ### Post 6 (Multi-Agent)
+
 Fourth breakthrough: AI agents as team members.
 
 Claude = Lead Architect
@@ -62,6 +70,7 @@ Cursor = Specialist
 SITREP protocol for coordination. 4x parallel execution.
 
 ### Post 7 (Results)
+
 The numbers:
 
 ✅ 120/120 models validated
@@ -72,6 +81,7 @@ The numbers:
 ✅ 18 months
 
 ### Post 8 (Meta-Proof)
+
 The meta-recursive proof:
 
 If a framework can build itself, it can build anything at equivalent complexity.
@@ -79,6 +89,7 @@ If a framework can build itself, it can build anything at equivalent complexity.
 Base120 passed its own test.
 
 ### Post 9 (Learnings)
+
 What I'd do differently:
 
 1. Build MCP server earlier (AI-native distribution)
@@ -86,6 +97,7 @@ What I'd do differently:
 3. Document decisions BEFORE making them
 
 ### Post 10 (CTA)
+
 The framework is live at hummbl.io
 
 MCP server for Claude Desktop: @hummbl/mcp-server
@@ -137,6 +149,7 @@ If a framework can successfully build itself, it can handle any problem at equiv
 Base120 passed its own test.
 
 **What's next:**
+
 - MCP server for Claude Desktop (live now)
 - API for developers
 - Case studies from external users
@@ -218,43 +231,51 @@ The framework is free at hummbl.io. DM me if you want to be a case study.
 ## 4. Video Script Outline (3-5 min)
 
 ### HOOK (0:00-0:15)
+
 "I spent 18 months building a mental models framework. The twist? I used the framework to build itself. Here's what happened."
 
 ### PROBLEM (0:15-0:45)
+
 - Show messy notes, scattered models
 - "No system. No validation. No product."
 - "Solo founder. Full-time job. Multiple clients."
 - "This was a Tier 4 wicked problem."
 
 ### SOLUTION PART 1: Architecture (0:45-1:30)
+
 - Introduce 6 transformations (visual diagram)
 - Explain Base-N scaling
 - "Base42 is the sweet spot for wicked problems"
 - Show hummbl.io interface briefly
 
 ### SOLUTION PART 2: Validation (1:30-2:15)
+
 - 5-question wickedness rubric (on screen)
 - "Replaced vibes with math"
 - Show quality scores, test results
 - "9.2 out of 10 across 120 models"
 
 ### SOLUTION PART 3: Multi-Agent (2:15-3:15)
+
 - Diagram of 4 AI agents with roles
 - "Treat AI as team members, not assistants"
 - Explain SITREP protocol briefly
 - "4x parallel execution. Zero rework."
 
 ### RESULTS (3:15-3:45)
+
 - Numbers on screen: 120 models, 9.2 quality, 140 tests, 18 months
 - "The meta-recursive proof: if a framework can build itself..."
 
 ### CTA (3:45-4:00)
+
 - "Framework is free at hummbl.io"
 - "MCP server for Claude Desktop"
 - "Link to full case study below"
 - "What's YOUR Tier 4 problem?"
 
 ### B-ROLL SUGGESTIONS
+
 - Screen recordings of hummbl.io
 - Terminal showing test suite running
 - Diagram animations for transformations
@@ -273,18 +294,21 @@ Hey,
 The meta part: I used the framework to build the framework.
 
 **The challenge:**
+
 - Solo founder with a full-time job
-- No existing product or infrastructure  
+- No existing product or infrastructure
 - Needed empirical validation, not just theory
 - Had to coordinate multiple AI systems
 
 **The approach:**
+
 1. Six transformations (P, IN, CO, DE, RE, SY)
 2. Base-N scaling (match complexity to problem tier)
 3. Quantitative wickedness scoring (5 questions, 30 points)
 4. Multi-agent coordination (Claude + ChatGPT + Windsurf + Cursor)
 
 **The results:**
+
 - 120/120 models validated
 - 9.2/10 average quality
 - 140 chaos tests, 100% pass
@@ -293,6 +317,7 @@ The meta part: I used the framework to build the framework.
 The meta-recursive proof: if a framework can build itself, it can handle anything at equivalent complexity.
 
 **Want to try it?**
+
 - Web: hummbl.io (free)
 - Claude Desktop: @hummbl/mcp-server
 - Full case study: [link]
@@ -325,6 +350,7 @@ Sharing a case study from building HUMMBL—a systematic mental models framework
 4. **Multi-agent development:** Treated Claude, ChatGPT, Windsurf, and Cursor as team members with defined roles. SITREP protocol for coordination. 4x parallel execution.
 
 **Results:**
+
 - 120 models, 9.2/10 quality score
 - 140 chaos tests, 100% pass rate
 - MCP server for Claude Desktop
@@ -333,8 +359,9 @@ Sharing a case study from building HUMMBL—a systematic mental models framework
 **Tech stack:** React, Cloudflare Workers, D1, TypeScript
 
 **Links:**
+
 - Live: hummbl.io
-- MCP: npm @hummbl/mcp-server  
+- MCP: npm @hummbl/mcp-server
 - Case study: [link]
 
 Would love feedback on the framework architecture and multi-agent coordination approach. AMA about the development process.

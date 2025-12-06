@@ -73,10 +73,7 @@ Example:
 
 ```json
 {
-  "items": [
-    { "code": "IN11", "expectedTransformation": "IN" },
-    { "code": "CO4" }
-  ]
+  "items": [{ "code": "IN11", "expectedTransformation": "IN" }, { "code": "CO4" }]
 }
 ```
 

@@ -111,6 +111,7 @@ Follow the [Conventional Commits](https://www.conventionalcommits.org/) specific
 ```
 
 Types:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -120,6 +121,7 @@ Types:
 - `chore`: Build process or tooling changes
 
 Examples:
+
 ```
 feat(tools): add new search capability
 fix(framework): correct model lookup logic
@@ -141,9 +143,9 @@ docs(readme): update installation instructions
 3. **Coverage**: Maintain >= 80% coverage
 4. **Test Structure**:
    ```typescript
-   describe("Feature", () => {
-     describe("method", () => {
-       it("should do something", () => {
+   describe('Feature', () => {
+     describe('method', () => {
+       it('should do something', () => {
          // Test implementation
        });
      });
@@ -293,6 +295,7 @@ See [SECURITY.md](./SECURITY.md) for full policy.
 ## Recognition
 
 Contributors are recognized in:
+
 - GitHub contributors page
 - Release notes
 - CHANGELOG.md (for significant contributions)

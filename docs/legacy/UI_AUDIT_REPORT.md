@@ -1,4 +1,5 @@
 # HUMMBL UI Audit Report
+
 **Generated:** November 14, 2025  
 **Status:** CRITICAL - Multiple color system inconsistencies detected  
 **Priority:** HIGH - Immediate action required
@@ -10,6 +11,7 @@
 The UI currently has **significant color inconsistencies** that violate the monochrome design system. While 56+ emojis were successfully removed and 200+ color instances were converted to grayscale, a complete audit reveals **critical remaining issues** across 15+ files.
 
 ### Severity Breakdown
+
 - 🔴 **CRITICAL (P0):** 6 files with semantic color systems still active
 - 🟠 **HIGH (P1):** 8 files with gradient/primary color usage
 - 🟡 **MEDIUM (P2):** 4 files with purple/indigo gradients in Visual Workflow Builder
@@ -20,16 +22,20 @@ The UI currently has **significant color inconsistencies** that violate the mono
 ## Critical Issues (P0) - Semantic Color Systems
 
 ### 1. **Toast Notifications** - `src/contexts/ToastContext.tsx`
+
 **Status:** ❌ COMPLETELY COLORED  
 **Impact:** User sees green/red/blue/yellow toasts throughout app
 
 ```typescript
 // CURRENT STATE (LINES 82-92)
 const styles = {
-  success: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200',
-  error: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200',
+  success:
+    'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200',
+  error:
+    'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200',
   info: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200',
-  warning: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200',
+  warning:
+    'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200',
 };
 
 const iconStyles = {
@@ -41,12 +47,16 @@ const iconStyles = {
 ```
 
 **Required Fix:** Convert all to grayscale variants with intensity differences:
+
 ```typescript
 const styles = {
-  success: 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100',
-  error: 'bg-gray-200 dark:bg-gray-700 border-gray-400 dark:border-gray-500 text-gray-900 dark:text-gray-100',
+  success:
+    'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100',
+  error:
+    'bg-gray-200 dark:bg-gray-700 border-gray-400 dark:border-gray-500 text-gray-900 dark:text-gray-100',
   info: 'bg-gray-50 dark:bg-gray-850 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200',
-  warning: 'bg-gray-150 dark:bg-gray-750 border-gray-350 dark:border-gray-600 text-gray-900 dark:text-gray-100',
+  warning:
+    'bg-gray-150 dark:bg-gray-750 border-gray-350 dark:border-gray-600 text-gray-900 dark:text-gray-100',
 };
 
 const iconStyles = {
@@ -60,6 +70,7 @@ const iconStyles = {
 ---
 
 ### 2. **Form Components** - `src/components/Form.tsx`
+
 **Status:** ❌ RED/GREEN VALIDATION STATES  
 **Impact:** Input fields show red borders on error, green on success
 
@@ -70,14 +81,20 @@ const successClasses = success ? 'border-green-300 dark:border-green-700 focus:r
 ```
 
 **Required Fix:**
+
 ```typescript
-const errorClasses = error ? 'border-gray-500 dark:border-gray-400 focus:ring-gray-600 bg-gray-100 dark:bg-gray-800' : '';
-const successClasses = success ? 'border-gray-400 dark:border-gray-500 focus:ring-gray-500 bg-gray-50 dark:bg-gray-850' : '';
+const errorClasses = error
+  ? 'border-gray-500 dark:border-gray-400 focus:ring-gray-600 bg-gray-100 dark:bg-gray-800'
+  : '';
+const successClasses = success
+  ? 'border-gray-400 dark:border-gray-500 focus:ring-gray-500 bg-gray-50 dark:bg-gray-850'
+  : '';
 ```
 
 ---
 
 ### 3. **Error Logs Severity System** - `src/pages/ErrorLogs.tsx`
+
 **Status:** ❌ BLUE/YELLOW/ORANGE/RED BORDERS  
 **Impact:** Error severity visualization uses color coding
 
@@ -101,6 +118,7 @@ critical: {
 ```
 
 **Required Fix:** Use border thickness/darkness instead:
+
 ```typescript
 low: {
   border: 'border border-gray-300',  // Thin, light
@@ -119,6 +137,7 @@ critical: {
 ---
 
 ### 4. **Token Usage Page** - `src/pages/TokenUsage.tsx`
+
 **Status:** ❌ AMBER/ORANGE GRADIENT CARD  
 **Impact:** Optimization tips card has colored gradient background
 
@@ -128,6 +147,7 @@ critical: {
 ```
 
 **Required Fix:**
+
 ```typescript
 <div className="card bg-gradient-to-r from-gray-50 to-gray-100 border-gray-300">
 ```
@@ -135,10 +155,12 @@ critical: {
 ---
 
 ### 5. **Visual Workflow Builder Nodes** - `src/components/VisualWorkflowBuilder/`
+
 **Status:** ❌ PURPLE/PINK GRADIENTS IN INLINE STYLES  
 **Impact:** Agent and Task nodes have vibrant colored backgrounds
 
 **Files affected:**
+
 - `nodes/AgentNode.tsx` (line 25)
 - `nodes/TaskNode.tsx` (line 34)
 - `index.tsx` (lines 200, 220)
@@ -150,6 +172,7 @@ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',  // Pink gradie
 ```
 
 **Required Fix:**
+
 ```typescript
 background: 'linear-gradient(135deg, #6b7280 0%, #374151 100%)',  // Gray-600 to Gray-700
 background: 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)',  // Gray-400 to Gray-600
@@ -158,10 +181,12 @@ background: 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)',  // Gray-400 to
 ---
 
 ### 6. **Login/Register/VerifyEmail Pages** - Background Gradients
+
 **Status:** ❌ BLUE/INDIGO GRADIENTS  
 **Impact:** Authentication pages have colored backgrounds
 
 **Files affected:**
+
 - `src/pages/Login.tsx` (line 27)
 - `src/pages/Register.tsx` (line 80)
 - `src/pages/VerifyEmail.tsx` (line 53)
@@ -176,6 +201,7 @@ background: 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)',  // Gray-400 to
 ```
 
 **Required Fix:** All should use gray gradients:
+
 ```typescript
 <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
 <div className="card bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200">
@@ -186,6 +212,7 @@ background: 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)',  // Gray-400 to
 ## High Priority Issues (P1) - Primary Color System
 
 ### Problem: "Primary" Color Usage Throughout App
+
 **Count:** 200+ instances across all files  
 **Status:** ⚠️ PARTIALLY ACCEPTABLE (depends on Tailwind config)
 
@@ -203,10 +230,12 @@ primary: {
 ```
 
 **Decision Point:**
+
 - ✅ **IF** Tailwind config remains as-is: `primary-*` classes are acceptable (they resolve to grays)
 - ❌ **IF** you want semantic naming: Replace all `primary-*` with explicit `gray-*` classes for clarity
 
 **Recommendation:** Replace all `primary-*` references with `gray-*` for:
+
 1. Code clarity (no confusion about "primary" meaning)
 2. Maintenance (explicit gray references)
 3. Future-proofing (no accidental color reintroduction)
@@ -218,6 +247,7 @@ primary: {
 ## Medium Priority Issues (P2) - Gradient Details
 
 ### Template Preview Modal Header
+
 **File:** `src/components/TemplatePreviewModal.tsx` (line 39)
 
 ```typescript
@@ -232,6 +262,7 @@ Given that primary-500/600 are gray-500/600 (per Tailwind config), this is **tec
 ## Acceptable Patterns (Already Correct)
 
 ### ✅ Status Badge Backgrounds
+
 These are correctly using grayscale with varying shades for differentiation:
 
 ```typescript
@@ -242,26 +273,28 @@ completed: 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100',
 ```
 
 ### ✅ Mid-Tone Grays
+
 Background colors like `bg-gray-200`, `bg-gray-300`, `dark:bg-gray-700` are acceptable as they provide visual hierarchy without introducing color.
 
 ---
 
 ## Quantitative Summary
 
-| Category | Count | Status |
-|----------|-------|--------|
-| **Semantic color systems** (toast, forms, error severity) | 6 files | ❌ CRITICAL |
-| **Gradient colors** (auth pages, cards) | 8 files | ❌ HIGH |
-| **Visual Workflow Builder inline styles** | 4 instances | ❌ MEDIUM |
-| **Primary-* class usage** | 200+ instances | ⚠️ REVIEW NEEDED |
-| **Emojis remaining** | 0 | ✅ COMPLETE |
-| **Pure color classes** (red/green/blue/yellow) | 40+ instances | ❌ CRITICAL |
+| Category                                                  | Count          | Status           |
+| --------------------------------------------------------- | -------------- | ---------------- |
+| **Semantic color systems** (toast, forms, error severity) | 6 files        | ❌ CRITICAL      |
+| **Gradient colors** (auth pages, cards)                   | 8 files        | ❌ HIGH          |
+| **Visual Workflow Builder inline styles**                 | 4 instances    | ❌ MEDIUM        |
+| **Primary-\* class usage**                                | 200+ instances | ⚠️ REVIEW NEEDED |
+| **Emojis remaining**                                      | 0              | ✅ COMPLETE      |
+| **Pure color classes** (red/green/blue/yellow)            | 40+ instances  | ❌ CRITICAL      |
 
 ---
 
 ## Recommended Action Plan
 
 ### Phase 1: Critical Fixes (1-2 hours)
+
 1. ✅ Convert `ToastContext.tsx` to grayscale semantic system
 2. ✅ Fix `Form.tsx` error/success states
 3. ✅ Replace `ErrorLogs.tsx` colored borders with thickness variations
@@ -269,16 +302,19 @@ Background colors like `bg-gray-200`, `bg-gray-300`, `dark:bg-gray-700` are acce
 5. ✅ Replace Visual Workflow Builder inline gradient styles
 
 ### Phase 2: High Priority (2-3 hours)
+
 6. ✅ Convert all auth page backgrounds (Login, Register, VerifyEmail)
 7. ✅ Replace remaining blue/indigo gradients (TeamMembers, Analytics)
 8. 🔄 **Decision:** Keep `primary-*` classes OR replace with explicit `gray-*`
 
 ### Phase 3: Polish (1 hour)
+
 9. ✅ Verify no colored borders remain
 10. ✅ Test dark mode for all changes
 11. ✅ Run visual regression tests
 
 ### Phase 4: Documentation (30 mins)
+
 12. ✅ Update design system docs
 13. ✅ Add color usage guidelines
 14. ✅ Document grayscale intensity patterns
@@ -288,6 +324,7 @@ Background colors like `bg-gray-200`, `bg-gray-300`, `dark:bg-gray-700` are acce
 ## Files Requiring Changes
 
 ### Critical Priority (6 files)
+
 1. `src/contexts/ToastContext.tsx` — Toast notification colors
 2. `src/components/Form.tsx` — Input validation states
 3. `src/pages/ErrorLogs.tsx` — Error severity borders
@@ -296,6 +333,7 @@ Background colors like `bg-gray-200`, `bg-gray-300`, `dark:bg-gray-700` are acce
 6. `src/components/VisualWorkflowBuilder/nodes/TaskNode.tsx` — Pink gradient
 
 ### High Priority (8 files)
+
 7. `src/components/VisualWorkflowBuilder/index.tsx` — Inline gradients
 8. `src/pages/Login.tsx` — Background gradient
 9. `src/pages/Register.tsx` — Background gradient
@@ -317,7 +355,6 @@ After implementing fixes:
   - [ ] Error logs differentiate severity by border thickness
   - [ ] Auth pages have gray gradients
   - [ ] Visual Workflow Builder nodes are gray
-  
 - [ ] **Dark Mode:**
   - [ ] Toast contrast is readable
   - [ ] Form states visible
@@ -340,11 +377,13 @@ After implementing fixes:
 ## Risk Assessment
 
 ### High Risk Areas
+
 1. **Toast notifications** — Used throughout app, color removal may reduce urgency perception
 2. **Form validation** — Red/green removal requires alternate error indication (icons, text)
 3. **Error severity** — Must ensure border thickness alone is sufficient for accessibility
 
 ### Mitigation Strategies
+
 1. Add **icons** to toasts (⚠️ → [!], ✓ → [OK], ℹ️ → [i])
 2. Include **text labels** in form validation ("Error:", "Success:")
 3. Combine **border thickness + darkness** for error severity

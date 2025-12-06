@@ -13,6 +13,7 @@ HUMMBL now has a complete authentication system with sign-in, sign-up, and sessi
 ## 🎯 Features
 
 ### User-Facing Features
+
 - ✅ **Sign In** - Email/password authentication with error handling
 - ✅ **Sign Up** - User registration with validation and password strength indicator
 - ✅ **Sign Out** - Session termination with state cleanup
@@ -22,6 +23,7 @@ HUMMBL now has a complete authentication system with sign-in, sign-up, and sessi
 - ✅ **Protected Routes** - Automatic redirect to login for unauthenticated users
 
 ### Technical Features
+
 - ✅ **Zustand State Management** - Centralized auth state with persist middleware
 - ✅ **JWT Token Storage** - Secure token handling with localStorage
 - ✅ **Backend Integration** - Full integration with Cloudflare Workers auth endpoints
@@ -34,6 +36,7 @@ HUMMBL now has a complete authentication system with sign-in, sign-up, and sessi
 ## 📁 Architecture
 
 ### File Structure
+
 ```
 src/
 ├── store/
@@ -51,6 +54,7 @@ src/
 ### State Management
 
 **Auth Store** (`src/store/authStore.ts`)
+
 ```typescript
 interface User {
   id: string;
@@ -76,6 +80,7 @@ interface AuthState {
 ```
 
 **Persistence Strategy**:
+
 - Uses `zustand/middleware` persist
 - Stores: `user`, `token`, `isAuthenticated` in localStorage
 - Key: `'hummbl-auth'`
@@ -90,9 +95,11 @@ interface AuthState {
 **Base URL**: `https://hummbl-backend.hummbl.workers.dev` (or `VITE_API_URL` env var)
 
 #### POST /api/auth/login
+
 Login with email and password.
 
 **Request**:
+
 ```json
 {
   "email": "user@example.com",
@@ -101,6 +108,7 @@ Login with email and password.
 ```
 
 **Response (200)**:
+
 ```json
 {
   "user": {
@@ -117,14 +125,17 @@ Login with email and password.
 ```
 
 **Errors**:
+
 - `400`: Invalid email or password
 - `401`: Invalid credentials
 - `429`: Rate limit exceeded (5 requests/minute)
 
 #### POST /api/auth/register
+
 Create a new user account.
 
 **Request**:
+
 ```json
 {
   "email": "newuser@example.com",
@@ -134,6 +145,7 @@ Create a new user account.
 ```
 
 **Response (201)**:
+
 ```json
 {
   "user": {
@@ -150,19 +162,23 @@ Create a new user account.
 ```
 
 **Errors**:
+
 - `400`: Validation error (email format, password length)
 - `409`: Email already exists
 - `429`: Rate limit exceeded
 
 #### POST /api/auth/logout
+
 Terminate the current session.
 
 **Headers**:
+
 ```
 Authorization: Bearer <token>
 ```
 
 **Response (200)**:
+
 ```json
 {
   "success": true,
@@ -171,14 +187,17 @@ Authorization: Bearer <token>
 ```
 
 #### GET /api/auth/me
+
 Get current user information.
 
 **Headers**:
+
 ```
 Authorization: Bearer <token>
 ```
 
 **Response (200)**:
+
 ```json
 {
   "user": {
@@ -194,6 +213,7 @@ Authorization: Bearer <token>
 ```
 
 **Errors**:
+
 - `401`: Invalid or expired token
 
 ---
@@ -201,12 +221,13 @@ Authorization: Bearer <token>
 ## 🚀 Usage Examples
 
 ### Login Flow
+
 ```typescript
 import { useAuthStore } from '../store/authStore';
 
 function LoginPage() {
   const { login, isLoading, error } = useAuthStore();
-  
+
   const handleSubmit = async (email: string, password: string) => {
     try {
       await login(email, password);
@@ -221,12 +242,13 @@ function LoginPage() {
 ```
 
 ### Registration Flow
+
 ```typescript
 import { useAuthStore } from '../store/authStore';
 
 function RegisterPage() {
   const { register, isLoading, error } = useAuthStore();
-  
+
   const handleSubmit = async (email: string, password: string, name: string) => {
     try {
       await register(email, password, name);
@@ -240,17 +262,18 @@ function RegisterPage() {
 ```
 
 ### Logout Flow
+
 ```typescript
 import { useAuthStore } from '../store/authStore';
 
 function Header() {
   const { logout, user } = useAuthStore();
-  
+
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
-  
+
   return (
     <div>
       <span>Welcome, {user?.name}</span>
@@ -261,6 +284,7 @@ function Header() {
 ```
 
 ### Protected Routes
+
 ```typescript
 import ProtectedRoute from '../components/ProtectedRoute';
 
@@ -270,7 +294,7 @@ function App() {
       {/* Public routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      
+
       {/* Protected routes */}
       <Route path="/dashboard" element={
         <ProtectedRoute>
@@ -283,16 +307,17 @@ function App() {
 ```
 
 ### Check Authentication Status
+
 ```typescript
 import { useAuthStore } from '../store/authStore';
 
 function MyComponent() {
   const { isAuthenticated, user, token } = useAuthStore();
-  
+
   if (!isAuthenticated) {
     return <div>Please sign in to continue</div>;
   }
-  
+
   return (
     <div>
       <h1>Welcome, {user.name}!</h1>
@@ -308,7 +333,9 @@ function MyComponent() {
 ## 🎨 UI Components
 
 ### Login Page (`/login`)
+
 **Features**:
+
 - Email and password input fields with icons
 - Real-time error display
 - Loading state with disabled inputs
@@ -317,13 +344,16 @@ function MyComponent() {
 - Demo mode option (continue without signing in)
 
 **Design**:
+
 - Full-page gradient background (primary-50 to primary-100)
 - White card with rounded corners and shadow
 - Primary color buttons with hover states
 - Error messages with red background and alert icon
 
 ### Register Page (`/register`)
+
 **Features**:
+
 - Name, email, password, and confirm password fields
 - Password strength indicator (Weak/Fair/Good/Strong)
 - Visual password strength bar with color coding
@@ -333,13 +363,16 @@ function MyComponent() {
 - Terms of Service and Privacy Policy links
 
 **Design**:
+
 - Consistent with login page design
 - 4-level password strength meter (red/yellow/blue/green)
 - Progress bar animation for strength indicator
 - Form validation feedback
 
 ### Header Component (Updated)
+
 **Features**:
+
 - Conditional rendering based on auth state
 - User avatar with first letter of name
 - Dropdown menu with user info
@@ -347,6 +380,7 @@ function MyComponent() {
 - "Sign In" button for unauthenticated users
 
 **Changes**:
+
 - Removed hardcoded "U" avatar, now shows user initials
 - Added user name and email display in dropdown
 - Replaced `alert()` with functional `logout()` call
@@ -357,14 +391,16 @@ function MyComponent() {
 ## 🔐 Security Considerations
 
 ### Implemented Security Features
+
 ✅ **Password Strength Indicator** - Encourages strong passwords  
 ✅ **Client-Side Validation** - Prevents invalid submissions  
 ✅ **Token Storage** - JWT tokens stored securely in localStorage  
 ✅ **Session Expiration** - Backend enforces token expiration  
 ✅ **Rate Limiting** - Backend limits auth requests (5/min for login)  
-✅ **HTTPS Required** - Production backend uses HTTPS only  
+✅ **HTTPS Required** - Production backend uses HTTPS only
 
 ### Best Practices
+
 - Never log or display tokens in console (production)
 - Clear tokens on logout
 - Validate all inputs before API calls
@@ -372,17 +408,19 @@ function MyComponent() {
 - Show user-friendly error messages
 
 ### Future Enhancements
+
 ⏳ **Password Reset Flow** - Email-based password recovery  
 ⏳ **2FA/MFA** - Two-factor authentication support  
 ⏳ **Remember Me** - Extended session duration option  
 ⏳ **OAuth Integration** - Google/GitHub sign-in  
-⏳ **Session Management** - Active sessions list and revocation  
+⏳ **Session Management** - Active sessions list and revocation
 
 ---
 
 ## 🧪 Testing
 
 ### Manual Testing Checklist
+
 - [ ] Sign up with valid email/password
 - [ ] Sign up with weak password (should show strength indicator)
 - [ ] Sign up with mismatched passwords (should show error)
@@ -395,6 +433,7 @@ function MyComponent() {
 - [ ] Demo mode (continue without signing in)
 
 ### Automated Testing
+
 ```bash
 # Frontend tests
 npm test
@@ -405,7 +444,9 @@ npm run test:auth
 ```
 
 ### Test User Accounts
+
 For testing, you can create accounts with any email format:
+
 - `test@example.com` / `password123`
 - `demo@hummbl.com` / `demoPassword456`
 
@@ -414,6 +455,7 @@ For testing, you can create accounts with any email format:
 ## 🚧 Known Limitations
 
 ### Current Limitations
+
 1. **No Password Reset** - Forgot password link is placeholder
 2. **No Email Verification** - Users can sign up without email confirmation
 3. **No OAuth** - Only email/password authentication supported
@@ -421,6 +463,7 @@ For testing, you can create accounts with any email format:
 5. **No Role Management UI** - Role assignment requires backend API
 
 ### Workarounds
+
 - **Forgot Password**: Users can create new account or contact support
 - **Email Verification**: Backend validates email format, full verification coming soon
 - **OAuth**: Planned for future release
@@ -431,6 +474,7 @@ For testing, you can create accounts with any email format:
 ## 📊 Performance Metrics
 
 ### Bundle Size Impact
+
 - **authStore.ts**: ~2.5 KB (minified)
 - **Login.tsx**: ~4.0 KB (minified)
 - **Register.tsx**: ~6.3 KB (minified)
@@ -438,11 +482,13 @@ For testing, you can create accounts with any email format:
 - **Total Impact**: ~13.3 KB (~3.5 KB gzipped)
 
 ### Initial Load
+
 - Auth pages are lazy loaded, no impact on main bundle
 - Auth store loaded on demand when auth state accessed
 - Session restoration: <10ms (from localStorage)
 
 ### API Performance
+
 - Login: ~200-400ms (p95)
 - Register: ~300-500ms (p95)
 - Logout: ~150-300ms (p95)
@@ -453,6 +499,7 @@ For testing, you can create accounts with any email format:
 ## 🔧 Configuration
 
 ### Environment Variables
+
 ```bash
 # Backend API URL (required)
 VITE_API_URL=https://hummbl-backend.hummbl.workers.dev
@@ -462,10 +509,12 @@ VITE_AUTH_DEBUG=true
 ```
 
 ### localStorage Keys
+
 - `hummbl-auth`: Persisted auth state (user, token, isAuthenticated)
 - Keys are automatically managed by Zustand persist middleware
 
 ### Customization
+
 To customize the auth flow:
 
 1. **Change token storage**: Edit `authStore.ts` persist config
@@ -487,25 +536,30 @@ To customize the auth flow:
 ## 🆘 Troubleshooting
 
 ### "Invalid credentials" error on login
+
 - Verify email and password are correct
 - Check backend is running and accessible
 - Check network tab for API response details
 
 ### "Email already exists" on registration
+
 - Email is already registered
 - Try signing in instead, or use password reset (when available)
 
 ### Session not persisting after refresh
+
 - Check localStorage is enabled in browser
 - Verify `hummbl-auth` key exists in localStorage
 - Check browser console for errors
 
 ### Token expired errors
+
 - Backend tokens expire after set duration
 - Sign out and sign back in to get new token
 - Future: Automatic token refresh will be added
 
 ### API connection errors
+
 - Verify `VITE_API_URL` environment variable is set
 - Check backend is deployed and healthy
 - Check CORS headers allow frontend origin
@@ -515,6 +569,7 @@ To customize the auth flow:
 ## 📞 Support
 
 For issues or questions:
+
 1. Check this documentation first
 2. Review [SECURITY_AUDIT_REPORT.md](./SECURITY_AUDIT_REPORT.md)
 3. Check GitHub Issues: https://github.com/hummbl-dev/hummbl/issues

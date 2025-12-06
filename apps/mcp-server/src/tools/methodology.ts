@@ -60,6 +60,7 @@ export function registerMethodologyTools(server: McpServer): void {
             text: JSON.stringify(methodology, null, 2),
           },
         ],
+        structuredContent: methodology as unknown as Record<string, unknown>,
       };
     }
   );
@@ -136,6 +137,7 @@ export function registerMethodologyTools(server: McpServer): void {
             text: JSON.stringify(payload, null, 2),
           },
         ],
+        structuredContent: payload as unknown as Record<string, unknown>,
       };
     }
   );

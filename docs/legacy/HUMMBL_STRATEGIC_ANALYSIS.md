@@ -1,4 +1,5 @@
 # HUMMBL Strategic Analysis Workflow
+
 **Using Base120 Mental Models to Analyze & Scale**
 
 ---
@@ -6,6 +7,7 @@
 ## Workflow: "HUMMBL Growth Strategy Analysis"
 
 ### Agent 1: Systems Analyst
+
 **Model**: claude-3-haiku-20240307  
 **Temperature**: 0.6  
 **Role**: Analyst using Base120 mental models
@@ -13,6 +15,7 @@
 ### Task 1: Current State Analysis (Using Base120 Models)
 
 **Prompt**:
+
 ```
 You are analyzing the HUMMBL system using the Base120 mental models framework.
 
@@ -65,6 +68,7 @@ Provide a structured analysis (400 words) covering:
 ---
 
 ### Agent 2: Growth Strategist
+
 **Model**: claude-3-haiku-20240307  
 **Temperature**: 0.7  
 **Role**: Strategy using mental models
@@ -72,6 +76,7 @@ Provide a structured analysis (400 words) covering:
 ### Task 2: Scaling Strategy (Depends on Task 1)
 
 **Prompt**:
+
 ```
 Based on the systems analysis from Task 1, develop a scaling strategy using Base120 mental models.
 
@@ -114,6 +119,7 @@ OUTPUT (500 words):
 ---
 
 ### Agent 3: Risk Analyzer
+
 **Model**: claude-3-haiku-20240307  
 **Temperature**: 0.5  
 **Role**: Risk assessment using mental models
@@ -121,6 +127,7 @@ OUTPUT (500 words):
 ### Task 3: Risk Analysis & Mitigation (Depends on Task 2)
 
 **Prompt**:
+
 ```
 Analyze scaling risks using Base120 mental models and propose mitigation strategies.
 
@@ -164,6 +171,7 @@ OUTPUT (400 words):
 ---
 
 ### Agent 4: Action Planner
+
 **Model**: claude-3-haiku-20240307  
 **Temperature**: 0.4  
 **Role**: Strategic execution planning
@@ -171,6 +179,7 @@ OUTPUT (400 words):
 ### Task 4: 30-Day Action Plan (Depends on Tasks 1, 2, 3)
 
 **Prompt**:
+
 ```
 Create a concrete 30-day action plan using insights from the analysis, strategy, and risk assessments.
 

@@ -10,15 +10,19 @@
 ## 🎯 Implementation Strategy
 
 ### **Phase 1: Foundation** (5-7 hours)
+
 Connect core data flows that everything depends on
 
 ### **Phase 2: Core Features** (10-12 hours)
+
 Build the most critical user-facing features
 
 ### **Phase 3: Advanced Features** (10-12 hours)
+
 Complete team management and full analytics
 
 ### **Phase 4: Polish & Testing** (3-5 hours)
+
 Integration testing, bug fixes, deployment
 
 ---
@@ -31,6 +35,7 @@ Integration testing, bug fixes, deployment
 **Goal**: All pages call real telemetry endpoints
 
 **Tasks**:
+
 - [ ] Update Analytics.tsx to call `/api/telemetry/summary`
 - [ ] Update Analytics.tsx to call `/api/telemetry/components`
 - [ ] Remove all mock data from Analytics.tsx
@@ -39,10 +44,12 @@ Integration testing, bug fixes, deployment
 - [ ] Test with real data from D1
 
 **Files to modify**:
+
 - `src/pages/Analytics.tsx`
 - `src/services/api.ts` (add telemetry methods)
 
 **Validation**:
+
 - Analytics page shows real telemetry data
 - Component metrics display actual usage
 - Time range filters work with backend
@@ -55,6 +62,7 @@ Integration testing, bug fixes, deployment
 **Goal**: Live execution tracking from D1
 
 **Tasks**:
+
 - [ ] Update ExecutionMonitor.tsx to call `/api/executions?status=running`
 - [ ] Add polling for real-time updates (every 5s)
 - [ ] Implement filter by status/workflow
@@ -63,14 +71,17 @@ Integration testing, bug fixes, deployment
 - [ ] Test with actual workflow executions
 
 **Files to modify**:
+
 - `src/pages/ExecutionMonitor.tsx`
 - `src/services/api.ts` (enhance execution methods)
 
 **Backend enhancement needed**:
+
 - `GET /api/executions?status=...&workflow=...&limit=50`
 - Add filtering support to existing endpoint
 
 **Validation**:
+
 - Shows real workflow executions
 - Auto-refreshes every 5 seconds
 - Filters work correctly
@@ -84,6 +95,7 @@ Integration testing, bug fixes, deployment
 
 **Tasks**:
 **Backend** (workers/src/routes/errors.ts):
+
 - [ ] Create `/api/errors` endpoint
 - [ ] Create D1 table for errors
 - [ ] Capture errors from workflow executions
@@ -91,16 +103,19 @@ Integration testing, bug fixes, deployment
 - [ ] Add severity classification
 
 **Frontend** (src/pages/ErrorLogs.tsx):
+
 - [ ] Call `/api/errors?severity=...&resolved=...`
 - [ ] Remove mock error data
 - [ ] Implement resolve functionality
 - [ ] Add error detail modal
 
 **Files to create**:
+
 - `workers/src/routes/errors.ts`
 - Update `workers/schema.sql` (add errors table)
 
 **Validation**:
+
 - Real errors from workflow failures appear
 - Stack traces are captured
 - Can mark errors as resolved
@@ -116,6 +131,7 @@ Integration testing, bug fixes, deployment
 
 **Tasks**:
 **Backend** (workers/src/routes/tokens.ts):
+
 - [ ] Create `/api/tokens/usage` endpoint
 - [ ] Create D1 table for token_usage
 - [ ] Hook into AI service to track tokens
@@ -123,6 +139,7 @@ Integration testing, bug fixes, deployment
 - [ ] Aggregate by model, agent, time range
 
 **Frontend** (src/pages/TokenUsage.tsx):
+
 - [ ] Call `/api/tokens/usage?range=30d`
 - [ ] Call `/api/tokens/breakdown?by=model`
 - [ ] Remove mock token data
@@ -130,11 +147,13 @@ Integration testing, bug fixes, deployment
 - [ ] Show optimization recommendations
 
 **Files to create**:
+
 - `workers/src/routes/tokens.ts`
 - Update `workers/schema.sql` (add token_usage table)
 - Update `workers/src/services/ai.ts` (add token tracking)
 
 **Validation**:
+
 - Real token counts from API calls
 - Accurate cost calculations
 - Breakdown by model/agent works
@@ -148,6 +167,7 @@ Integration testing, bug fixes, deployment
 
 **Tasks**:
 **Backend** (workers/src/routes/notifications.ts):
+
 - [ ] Create `/api/notifications` endpoint
 - [ ] Create D1 table for notifications
 - [ ] Build notification service
@@ -156,6 +176,7 @@ Integration testing, bug fixes, deployment
 - [ ] Add read/unread tracking
 
 **Frontend** (src/pages/Notifications.tsx):
+
 - [ ] Call `/api/notifications?unread=true`
 - [ ] Remove mock notifications
 - [ ] Implement mark as read
@@ -164,12 +185,14 @@ Integration testing, bug fixes, deployment
 - [ ] Add toast notifications for new items
 
 **Files to create**:
+
 - `workers/src/routes/notifications.ts`
 - `workers/src/services/notifications.ts`
 - Update `workers/schema.sql` (add notifications table)
 - Update `src/components/Layout/Header.tsx` (real badge count)
 
 **Validation**:
+
 - Notifications created on workflow events
 - Can mark as read/unread
 - Badge count updates in header
@@ -183,6 +206,7 @@ Integration testing, bug fixes, deployment
 
 **Tasks**:
 **Backend** (workers/src/routes/keys.ts):
+
 - [ ] Create `/api/keys` endpoints (GET, POST, DELETE)
 - [ ] Create D1 table for api_keys
 - [ ] Encrypt keys in D1 (use CF secrets)
@@ -190,6 +214,7 @@ Integration testing, bug fixes, deployment
 - [ ] Validate keys on API calls
 
 **Frontend** (src/pages/APIKeys.tsx):
+
 - [ ] Call `/api/keys` to list keys
 - [ ] POST new keys securely
 - [ ] Remove mock key data
@@ -197,11 +222,13 @@ Integration testing, bug fixes, deployment
 - [ ] Add key rotation flow
 
 **Files to create**:
+
 - `workers/src/routes/keys.ts`
 - Update `workers/schema.sql` (add api_keys table)
 - Update `workers/src/services/ai.ts` (use keys from D1)
 
 **Validation**:
+
 - Keys stored securely in D1
 - Can add/delete keys
 - Usage tracked per key
@@ -218,6 +245,7 @@ Integration testing, bug fixes, deployment
 
 **Tasks**:
 **Backend** (workers/src/routes/team.ts):
+
 - [ ] Create `/api/team/members` endpoints
 - [ ] Create D1 tables (users, invites, sessions)
 - [ ] Build invite system
@@ -226,6 +254,7 @@ Integration testing, bug fixes, deployment
 - [ ] Track user activity
 
 **Frontend** (src/pages/TeamMembers.tsx):
+
 - [ ] Call `/api/team/members`
 - [ ] Remove mock team data
 - [ ] Implement invite flow
@@ -233,12 +262,14 @@ Integration testing, bug fixes, deployment
 - [ ] Add role management
 
 **Authentication**:
+
 - [ ] Add simple email-based auth (magic links)
 - [ ] Session management
 - [ ] Protected routes
 - [ ] User context provider
 
 **Files to create**:
+
 - `workers/src/routes/team.ts`
 - `workers/src/routes/auth.ts`
 - `workers/src/middleware/auth.ts`
@@ -247,6 +278,7 @@ Integration testing, bug fixes, deployment
 - `src/components/ProtectedRoute.tsx`
 
 **Validation**:
+
 - Can invite team members
 - Invites sent via email
 - Role permissions enforced
@@ -261,6 +293,7 @@ Integration testing, bug fixes, deployment
 
 **Tasks**:
 **Backend** (enhance workers/src/routes/telemetry.ts):
+
 - [ ] Add `/api/analytics/trends` endpoint
 - [ ] Add time-series aggregations
 - [ ] Add component performance metrics
@@ -268,6 +301,7 @@ Integration testing, bug fixes, deployment
 - [ ] Add export functionality (CSV)
 
 **Frontend** (enhance src/pages/Analytics.tsx):
+
 - [ ] Add real chart data from trends API
 - [ ] Implement date range picker
 - [ ] Add comparison views (week over week)
@@ -275,11 +309,13 @@ Integration testing, bug fixes, deployment
 - [ ] Show performance metrics
 
 **Files to modify**:
+
 - `workers/src/routes/telemetry.ts`
 - `src/pages/Analytics.tsx`
 - Add charting library (recharts or similar)
 
 **Validation**:
+
 - Charts show real time-series data
 - Trends calculated correctly
 - Export works
@@ -292,6 +328,7 @@ Integration testing, bug fixes, deployment
 ### **4.1 Integration Testing** (2-3 hours)
 
 **Tasks**:
+
 - [ ] Test all API endpoints
 - [ ] Test error handling
 - [ ] Test rate limiting
@@ -300,6 +337,7 @@ Integration testing, bug fixes, deployment
 - [ ] Load testing with wrk or similar
 
 **Create test suite**:
+
 - `workers/tests/integration.test.ts`
 - Test all endpoints
 - Mock D1 responses
@@ -310,6 +348,7 @@ Integration testing, bug fixes, deployment
 ### **4.2 Bug Fixes & Optimization** (1-2 hours)
 
 **Tasks**:
+
 - [ ] Fix any discovered bugs
 - [ ] Optimize slow queries
 - [ ] Add database indexes
@@ -498,33 +537,34 @@ src/
 
 ## ⏱️ Detailed Time Breakdown
 
-| Phase | Task | Estimate |
-|-------|------|----------|
-| **Phase 1** | | |
-| 1.1 | Connect telemetry | 2-3h |
-| 1.2 | Real execution monitor | 1-2h |
-| 1.3 | Error tracking system | 2-3h |
-| **Subtotal** | | **5-8h** |
-| **Phase 2** | | |
-| 2.1 | Token usage tracking | 3-4h |
-| 2.2 | Notification system | 4-5h |
-| 2.3 | API key management | 2-3h |
-| **Subtotal** | | **9-12h** |
-| **Phase 3** | | |
-| 3.1 | Team management | 8-10h |
-| 3.2 | Complete analytics | 5-6h |
-| **Subtotal** | | **13-16h** |
-| **Phase 4** | | |
-| 4.1 | Integration testing | 2-3h |
-| 4.2 | Bug fixes & optimization | 1-2h |
-| **Subtotal** | | **3-5h** |
-| **TOTAL** | | **30-41h** |
+| Phase        | Task                     | Estimate   |
+| ------------ | ------------------------ | ---------- |
+| **Phase 1**  |                          |            |
+| 1.1          | Connect telemetry        | 2-3h       |
+| 1.2          | Real execution monitor   | 1-2h       |
+| 1.3          | Error tracking system    | 2-3h       |
+| **Subtotal** |                          | **5-8h**   |
+| **Phase 2**  |                          |            |
+| 2.1          | Token usage tracking     | 3-4h       |
+| 2.2          | Notification system      | 4-5h       |
+| 2.3          | API key management       | 2-3h       |
+| **Subtotal** |                          | **9-12h**  |
+| **Phase 3**  |                          |            |
+| 3.1          | Team management          | 8-10h      |
+| 3.2          | Complete analytics       | 5-6h       |
+| **Subtotal** |                          | **13-16h** |
+| **Phase 4**  |                          |            |
+| 4.1          | Integration testing      | 2-3h       |
+| 4.2          | Bug fixes & optimization | 1-2h       |
+| **Subtotal** |                          | **3-5h**   |
+| **TOTAL**    |                          | **30-41h** |
 
 ---
 
 ## 🎯 Success Criteria
 
 **By the end, every page should:**
+
 - [ ] Show real data from D1 database
 - [ ] Have zero mock data
 - [ ] Handle loading states properly
@@ -534,6 +574,7 @@ src/
 - [ ] Be fully tested
 
 **Quality gates:**
+
 - [ ] All TypeScript errors resolved
 - [ ] All API endpoints documented
 - [ ] All tables have proper indexes

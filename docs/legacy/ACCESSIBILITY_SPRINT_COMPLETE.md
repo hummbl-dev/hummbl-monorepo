@@ -10,6 +10,7 @@
 ## 📊 Audit Results Summary
 
 ### Before
+
 ```
 Total Violations: 26
 ├─ Critical: 2  ❌
@@ -19,6 +20,7 @@ Total Violations: 26
 ```
 
 ### After
+
 ```
 Total Violations: 4
 ├─ Critical: 0  ✅ (100% resolved)
@@ -35,6 +37,7 @@ Total Violations: 4
 ## 🎯 Critical Fixes (2 → 0) - 100% Complete
 
 ### 1. Workflows Page - Select Without Label ❌ → ✅
+
 **File**: `src/pages/WorkflowList.tsx`  
 **Issue**: Status filter `<select>` had no accessible name  
 **Fix**: Added `aria-label="Filter workflows by status"`  
@@ -43,13 +46,16 @@ Total Violations: 4
 **Bonus Fix**: Added `aria-label="Open workflow menu"` to icon-only menu button
 
 ### 2. Settings Page - Icon-Only Buttons ❌ → ✅
+
 **File**: `src/pages/Settings.tsx`  
 **Issue**: Show/hide password toggle buttons had no text  
 **Fix**: Added dynamic `aria-label`:
+
 ```tsx
 aria-label={showAnthropicKey ? 'Hide Anthropic API key' : 'Show Anthropic API key'}
 aria-label={showOpenaiKey ? 'Hide OpenAI API key' : 'Show OpenAI API key'}
 ```
+
 **Impact**: Screen reader users can now understand button purpose and state
 
 ---
@@ -57,16 +63,19 @@ aria-label={showOpenaiKey ? 'Hide OpenAI API key' : 'Show OpenAI API key'}
 ## 🔴 Serious Fixes (10 → 0) - 100% Complete
 
 ### Color Contrast Violations - All Pages ❌ → ✅
+
 **File**: `tailwind.config.js`  
 **Issue**: Primary button color `#0284c7` had contrast ratio 4.09:1 (below WCAG AA 4.5:1)  
 **Fix**: Darkened primary-600 from `#0284c7` to `#0369a1`  
 **New Contrast Ratio**: 4.89:1 (meets WCAG AA ✅)  
-**Impact**: 
+**Impact**:
+
 - All primary buttons now meet WCAG 2.1 AA standards
 - Affects: Sign In, New Agent, Use Template, All filters, Try Again buttons
 - Improves readability for users with visual impairments
 
 **Before**:
+
 ```javascript
 primary: {
   600: '#0284c7', // 4.09:1 ❌
@@ -74,6 +83,7 @@ primary: {
 ```
 
 **After**:
+
 ```javascript
 primary: {
   600: '#0369a1', // 4.89:1 ✅
@@ -85,12 +95,15 @@ primary: {
 ## ⚠️ Moderate Fixes (14 → 4) - 71% Complete
 
 ### 1. Landmark Regions - All Pages ✅
-**Files**: 
+
+**Files**:
+
 - `src/components/Layout/Header.tsx`
 - `src/components/Layout/Sidebar.tsx`
 
 **Issue**: Header and sidebar content not in semantic landmarks  
 **Fix**:
+
 - Added `role="banner"` to Header
 - Added `role="navigation" aria-label="Main navigation"` to Sidebar nav
 - Added `role="complementary" aria-label="Application branding"` to Sidebar branding
@@ -99,12 +112,15 @@ primary: {
 **Impact**: Screen reader users can navigate by landmarks with keyboard shortcuts
 
 ### 2. Heading Hierarchy - Analytics & Templates ✅
-**Files**: 
+
+**Files**:
+
 - `src/pages/Analytics.tsx`
 - `src/pages/Templates.tsx`
 
 **Issue**: Pages jumped from h1 to h3, skipping h2  
 **Fix**:
+
 - Analytics: Added `<h2>Performance Metrics</h2>` section header
 - Templates: Added `<h2>Available Templates</h2>` section header
 
@@ -117,16 +133,19 @@ primary: {
 These are minor issues that don't block WCAG 2.1 AA compliance:
 
 ### 1. Analytics Page - Error State Heading (1)
+
 **Issue**: "Failed to Load Analytics" h3 appears in error state without parent h2  
 **Why Moderate**: Error state only, not core functionality  
 **Fix Strategy**: Could change to h2 or add conditional h2 wrapper
 
 ### 2. Mental Models Page - Heading Order (1)
+
 **Issue**: Mental model cards use h3 without parent h2  
 **Why Moderate**: Card-based layout by design, h3 appropriate for card titles  
 **Fix Strategy**: Add visually-hidden h2 or change cards to h2
 
 ### 3. Login Page - Missing Main Landmark (2)
+
 **Issue**: Login form content not wrapped in `<main>` landmark  
 **Why Moderate**: Single-purpose page, layout obvious  
 **Fix Strategy**: Wrap form in `<main role="main">`
@@ -136,6 +155,7 @@ These are minor issues that don't block WCAG 2.1 AA compliance:
 ## 🛠️ Tooling Setup
 
 ### New Audit Infrastructure
+
 Successfully set up automated accessibility testing:
 
 1. **Puppeteer + axe-core** (✅ Working)
@@ -150,6 +170,7 @@ Successfully set up automated accessibility testing:
    - ✅ Puppeteer includes bundled Chromium (no system deps)
 
 ### Audit Script Features
+
 - Tests 10 pages automatically
 - Spawns preview server (port 4173)
 - Uses bundled Chromium browser
@@ -204,12 +225,14 @@ Successfully set up automated accessibility testing:
 ## 🎓 WCAG 2.1 AA Compliance
 
 ### Achieved Standards
+
 - ✅ **1.4.3 Contrast (Minimum)** - All text meets 4.5:1 ratio
 - ✅ **2.4.1 Bypass Blocks** - Landmark navigation enabled
 - ✅ **2.4.6 Headings and Labels** - Descriptive labels on all controls
 - ✅ **4.1.2 Name, Role, Value** - All UI components properly labeled
 
 ### Remaining (Non-Critical)
+
 - ⚠️ **2.4.6 Headings** - 3 pages have minor heading order issues (error states/design patterns)
 - ⚠️ **1.3.1 Info and Relationships** - Login page missing main landmark
 
@@ -221,6 +244,7 @@ Successfully set up automated accessibility testing:
 ## 📊 Performance Impact
 
 ### Bundle Size (No Regression)
+
 - Vendor: 327.31 KB (105.22 KB gzipped) - **No change**
 - Main: 38.41 KB (11.01 KB gzipped) - +0.06 KB (+0.5%)
 - Total: 365.72 KB (116.23 KB gzipped)
@@ -228,6 +252,7 @@ Successfully set up automated accessibility testing:
 **Analysis**: Accessibility improvements added minimal overhead (60 bytes). ARIA attributes are HTML-only, no JavaScript impact.
 
 ### Build Time
+
 - Before: 7.89s
 - After: 12.05s (+4.16s, +53%)
 - Cause: More TypeScript strict checks from added attributes
@@ -237,12 +262,14 @@ Successfully set up automated accessibility testing:
 ## 🔄 Next Steps (Optional)
 
 ### Phase 2 - Remaining Moderate Issues (4)
+
 1. Fix Analytics error state heading order
 2. Add main landmark to Login page
 3. Add visually-hidden h2 to Mental Models
 4. Re-audit to achieve 0 violations
 
 ### Phase 3 - Enhanced Testing
+
 1. Manual screen reader testing (NVDA/JAWS)
 2. Keyboard navigation testing (Tab/Enter/Escape)
 3. Focus management review
@@ -250,6 +277,7 @@ Successfully set up automated accessibility testing:
 5. Focus visible styles audit
 
 ### Phase 4 - Advanced A11y
+
 1. ARIA live regions for dynamic content
 2. Form validation error announcements
 3. Loading state announcements
@@ -282,5 +310,5 @@ Successfully set up automated accessibility testing:
 
 ---
 
-*Audit powered by Puppeteer + axe-core*  
-*Report generated: November 11, 2025*
+_Audit powered by Puppeteer + axe-core_  
+_Report generated: November 11, 2025_

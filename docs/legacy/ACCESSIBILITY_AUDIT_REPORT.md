@@ -36,6 +36,7 @@ URL: http://localhost:4173/agents
 URL: http://localhost:4173/analytics
 
 **Violations**: 1
+
 - Critical: 0
 - Serious: 0
 - Moderate: 1
@@ -51,13 +52,14 @@ Ensure the order of headings is semantically correct
 
 - `<h3 class="text-lg font-semibold text-gray-900 mb-2">Failed to Load Analytics</h3>`
   - Fix any of the following:
-  Heading order invalid
+    Heading order invalid
 
 ### Mental Models
 
 URL: http://localhost:4173/mental-models
 
 **Violations**: 1
+
 - Critical: 0
 - Serious: 0
 - Moderate: 1
@@ -73,7 +75,7 @@ Ensure the order of headings is semantically correct
 
 - `<h3 class="font-bold text-gray-900">P1: First Principles</h3>`
   - Fix any of the following:
-  Heading order invalid
+    Heading order invalid
 
 ### Templates
 
@@ -104,6 +106,7 @@ URL: http://localhost:4173/team
 URL: http://localhost:4173/login
 
 **Violations**: 2
+
 - Critical: 0
 - Serious: 0
 - Moderate: 2
@@ -119,7 +122,7 @@ Ensure the document has a main landmark
 
 - `<html lang="en">`
   - Fix all of the following:
-  Document does not have a main landmark
+    Document does not have a main landmark
 
 #### region (moderate)
 
@@ -131,12 +134,11 @@ Ensure all page content is contained by landmarks
 
 - `<h1 class="text-3xl font-bold text-gray-900">Welcome Back</h1>`
   - Fix any of the following:
-  Some page content is not contained by landmarks
+    Some page content is not contained by landmarks
 - `<p class="text-gray-600 mt-2">Sign in to your HUMMBL account</p>`
   - Fix any of the following:
-  Some page content is not contained by landmarks
+    Some page content is not contained by landmarks
 - `<label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>`
   - Fix any of the following:
-  Some page content is not contained by landmarks
+    Some page content is not contained by landmarks
 - ... and 6 more
-

@@ -7,6 +7,7 @@ Email verification has been successfully implemented using Cloudflare Workers an
 ## ✅ Completed
 
 ### Backend Implementation
+
 - ✅ Migration 004 created and applied (`email_verifications` table)
 - ✅ Email service library with Resend integration (`workers/src/lib/email.ts`)
 - ✅ Three verification endpoints:
@@ -16,6 +17,7 @@ Email verification has been successfully implemented using Cloudflare Workers an
 - ✅ Backend deployed: version `316feb2d-8790-4d99-b21a-4148d2b18c43`
 
 ### Frontend Implementation
+
 - ✅ `VerifyEmail.tsx` page with loading/success/error states
 - ✅ `EmailVerificationBanner.tsx` component for unverified users
 - ✅ Updated User types to include `emailVerified` field
@@ -24,6 +26,7 @@ Email verification has been successfully implemented using Cloudflare Workers an
 - ✅ Frontend pushed to GitHub (auto-deploying to Vercel)
 
 ### Database
+
 - ✅ Local D1 database updated (8 commands executed)
 - ✅ Remote D1 database updated (4 commands executed)
 - ✅ Tables: `users` (with email_verified columns), `email_verifications`
@@ -76,6 +79,7 @@ Until domain is verified, emails will be sent from `onboarding@resend.dev` but w
 ## 📧 Email Verification Flow
 
 ### User Registration
+
 1. User fills out registration form
 2. Backend creates account with `email_verified = 0`
 3. Backend generates verification token (expires in 24 hours)
@@ -84,6 +88,7 @@ Until domain is verified, emails will be sent from `onboarding@resend.dev` but w
 6. User is logged in but sees verification banner
 
 ### Email Verification
+
 1. User clicks verification link in email
 2. Link redirects to `/verify-email?token=...`
 3. Frontend calls `GET /api/auth/verify-email/:token`
@@ -92,6 +97,7 @@ Until domain is verified, emails will be sent from `onboarding@resend.dev` but w
 6. Verification banner disappears
 
 ### Resend Email
+
 1. User clicks "Resend verification email" in banner
 2. Frontend calls `POST /api/auth/resend-verification`
 3. Backend checks rate limit (5 minutes between resends)
@@ -101,6 +107,7 @@ Until domain is verified, emails will be sent from `onboarding@resend.dev` but w
 ## 🧪 Testing Checklist
 
 ### Local Testing (Development)
+
 ```bash
 cd /Users/others/hummbl-1
 
@@ -114,6 +121,7 @@ cd /Users/others/hummbl-1 && npm run dev
 In development mode, emails are logged to console instead of sent.
 
 ### Production Testing
+
 1. ✅ Register new account at https://hummbl.vercel.app/register
 2. ⏳ Check email inbox for verification email
 3. ⏳ Click verification link
@@ -125,6 +133,7 @@ In development mode, emails are logged to console instead of sent.
 ## 📊 Email Templates
 
 ### Verification Email
+
 - **Subject**: Verify your HUMMBL account
 - **Design**: Gradient blue header (#0ea5e9 to #0369a1)
 - **Button**: Blue CTA button linking to verification page
@@ -132,6 +141,7 @@ In development mode, emails are logged to console instead of sent.
 - **Responsive**: Mobile-friendly design
 
 ### Rate Limits
+
 - **Registration**: 5 requests per minute per IP
 - **Verification**: Unlimited (tokens expire in 24 hours)
 - **Resend**: 5 minutes between resends per user
@@ -139,12 +149,14 @@ In development mode, emails are logged to console instead of sent.
 ## 🔍 Monitoring & Debugging
 
 ### Check Backend Logs
+
 ```bash
 cd /Users/others/hummbl-1/workers
 npm run tail
 ```
 
 ### Check Database
+
 ```bash
 # Local database
 npx wrangler d1 execute hummbl-workflows --local --command "SELECT * FROM email_verifications ORDER BY created_at DESC LIMIT 10"
@@ -156,16 +168,19 @@ npx wrangler d1 execute hummbl-workflows --command "SELECT * FROM email_verifica
 ### Common Issues
 
 **Emails not sending:**
+
 - Check `RESEND_API_KEY` is configured: `wrangler secret list`
 - Verify API key is valid in Resend dashboard
 - Check backend logs for errors: `npm run tail`
 
 **Verification link not working:**
+
 - Check token hasn't expired (24 hours)
 - Verify `APP_URL` secret is correct
 - Check frontend is deployed and accessible
 
 **Banner not showing:**
+
 - Check user's `email_verified` field in database
 - Verify `EmailVerificationBanner` is in Layout component
 - Check browser console for errors
@@ -173,6 +188,7 @@ npx wrangler d1 execute hummbl-workflows --command "SELECT * FROM email_verifica
 ## 📁 File Reference
 
 ### Backend Files
+
 - `workers/migrations/004_add_email_verification.sql` - Database schema
 - `workers/src/lib/email.ts` - Email service (250+ lines)
 - `workers/src/routes/auth.ts` - Verification endpoints
@@ -180,6 +196,7 @@ npx wrangler d1 execute hummbl-workflows --command "SELECT * FROM email_verifica
 - `workers/src/types/index.ts` - Env interface with email secrets
 
 ### Frontend Files
+
 - `src/pages/VerifyEmail.tsx` - Verification landing page (120 lines)
 - `src/components/EmailVerificationBanner.tsx` - Banner component (90 lines)
 - `src/components/Layout/Layout.tsx` - Includes banner

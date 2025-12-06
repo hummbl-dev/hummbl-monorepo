@@ -22,8 +22,9 @@ Create a workflow that generates real content:
 **Workflow**: "Blog Post Writer"
 
 **Agent 1**: Content Writer (claude-3-haiku-20240307)
+
 - **Task**: "Write Initial Draft"
-- **Input**: 
+- **Input**:
   ```json
   {
     "topic": "How Cloudflare Workers enable edge computing",
@@ -34,9 +35,10 @@ Create a workflow that generates real content:
   ```
 
 **Agent 2**: Editor (claude-3-haiku-20240307)
+
 - **Task**: "Polish and Improve"
 - **Depends on**: Task 1
-- **Input**: 
+- **Input**:
   ```json
   {
     "focus": "clarity, technical accuracy, readability"
@@ -52,6 +54,7 @@ Create a workflow that generates real content:
 **Workflow**: "Technology Analysis"
 
 **Agent 1**: Research Agent
+
 - **Task**: "Analyze Technology Landscape"
 - **Input**:
   ```json
@@ -63,6 +66,7 @@ Create a workflow that generates real content:
   ```
 
 **Agent 2**: Analysis Agent
+
 - **Task**: "Compare and Evaluate"
 - **Depends on**: Task 1
 - **Input**:
@@ -73,6 +77,7 @@ Create a workflow that generates real content:
   ```
 
 **Agent 3**: Report Generator
+
 - **Task**: "Create Recommendation Report"
 - **Depends on**: Task 2
 - **Input**:
@@ -92,6 +97,7 @@ Create a workflow that generates real content:
 **Workflow**: "React Component Review"
 
 **Agent 1**: Code Analyzer
+
 - **Task**: "Analyze React Component"
 - **Input**:
   ```json
@@ -103,6 +109,7 @@ Create a workflow that generates real content:
   ```
 
 **Agent 2**: Security Reviewer
+
 - **Task**: "Security Audit"
 - **Depends on**: Task 1
 - **Input**:
@@ -113,6 +120,7 @@ Create a workflow that generates real content:
   ```
 
 **Agent 3**: Quality Checker
+
 - **Task**: "Suggest Improvements"
 - **Depends on**: Task 1
 - **Input**:
@@ -122,7 +130,8 @@ Create a workflow that generates real content:
   }
   ```
 
-**Expected Output**: 
+**Expected Output**:
+
 - Issues identified (using div instead of button)
 - Security concerns (missing type safety)
 - Specific code improvements with examples
@@ -146,15 +155,16 @@ Create a workflow that generates real content:
    - Description: "Create a technical blog post about edge computing"
    - Assign to: Writer
    - **Prompt** (this is key!):
+
    ```
    Write a 300-word technical blog post about Cloudflare Workers and edge computing.
-   
+
    Include:
    - What edge computing is
    - Why it's faster than traditional servers
    - One real-world use case
    - A code example (simple)
-   
+
    Tone: Technical but approachable
    Audience: Web developers
    ```
@@ -188,6 +198,7 @@ The AI agent will receive this as context and generate specific analysis.
 ## Example Prompts That Work Well
 
 ### Good ✅
+
 ```
 Analyze the performance characteristics of Cloudflare Workers D1 database.
 Include: cold start times, read/write latency, consistency model.
@@ -196,6 +207,7 @@ Output: Table with metrics and recommendations.
 ```
 
 ### Bad ❌
+
 ```
 Analyze database performance.
 ```
@@ -212,16 +224,18 @@ Here's what you can do in the next 2 minutes:
 2. Name: "Quick Test: AI Explainer"
 3. Add one agent (claude-3-haiku-20240307)
 4. Add one task with this prompt:
+
    ```
    Explain how the HUMMBL system we just built works, including:
    - The frontend (React + Vite)
    - The backend (Cloudflare Workers + Hono)
    - The database (D1)
    - The AI integration (Anthropic Claude)
-   
+
    Write it as if explaining to a technical founder.
    Use bullet points and be specific about the architecture.
    ```
+
 5. **Run it**
 
 **You'll get**: A detailed, accurate explanation of your own system!

@@ -209,7 +209,7 @@ Optional:
    - Verify database exists: `wrangler d1 list`
 
 4. **API returns 401 Unauthorized**
-   - Check API key format (should start with "hummbl_")
+   - Check API key format (should start with "hummbl\_")
    - Verify key was created with correct tier
 
 ### Logs & Debugging

@@ -1,8 +1,9 @@
 # Visual Workflow Builder - User Testing Guide
+
 **Project**: HUMMBL-VWB-MVP-1.0  
 **Version**: 1.0.0  
 **Date**: 2025-11-08  
-**Test Environment**: https://hummbl.vercel.app  
+**Test Environment**: https://hummbl.vercel.app
 
 ---
 
@@ -11,6 +12,7 @@
 This guide provides structured test scenarios to validate the Visual Workflow Builder MVP features, including agent presets, visual canvas, edge synchronization, and telemetry tracking.
 
 **Target Metrics**:
+
 - TTFW (Time To First Win): 1:18 or less
 - Visual Adoption: 92% preference for visual mode
 - Delight Score: 4.7/5 average satisfaction
@@ -20,6 +22,7 @@ This guide provides structured test scenarios to validate the Visual Workflow Bu
 ## Pre-Test Setup
 
 ### Environment Check
+
 - [ ] Browser: Chrome, Firefox, Safari, or Edge (latest version)
 - [ ] Screen size: Minimum 1280x720 (desktop recommended)
 - [ ] Network: Stable internet connection
@@ -27,6 +30,7 @@ This guide provides structured test scenarios to validate the Visual Workflow Bu
 - [ ] Browser console: Open (F12) to monitor telemetry events
 
 ### Initial State Verification
+
 1. Navigate to https://hummbl.vercel.app
 2. Verify page loads successfully
 3. Confirm empty dashboard state:
@@ -93,10 +97,11 @@ This guide provides structured test scenarios to validate the Visual Workflow Bu
 
 7. **Calculate TTFW**
    - Target: ≤ 1:18 (78 seconds)
-   - Record: ___:___ (your time)
+   - Record: **_:_** (your time)
    - Status: ✅ Pass / ❌ Fail
 
 ### Expected Console Output
+
 ```
 [Telemetry] workflow_created {workflow_id: "...", task_count: 1, agent_count: 1, ...}
 [Telemetry] ttfw_achieved {time_to_first_win_seconds: XX, time_to_first_win_formatted: "X:XX"}
@@ -298,12 +303,14 @@ This guide provides structured test scenarios to validate the Visual Workflow Bu
 **Goal**: Verify analytics events are captured correctly.
 
 ### Pre-requisite
+
 - [ ] Open browser console (F12)
 - [ ] Filter console to show "[Telemetry]" messages
 
 ### Events to Verify
 
 1. **Visual Builder Events**
+
    ```
    [Telemetry] visual_builder_opened
    [Telemetry] agent_added {session_duration: XX}
@@ -312,6 +319,7 @@ This guide provides structured test scenarios to validate the Visual Workflow Bu
    ```
 
 2. **Workflow Events**
+
    ```
    [Telemetry] workflow_created {
      workflow_id: "...",
@@ -322,6 +330,7 @@ This guide provides structured test scenarios to validate the Visual Workflow Bu
    ```
 
 3. **TTFW Event** (first workflow only)
+
    ```
    [Telemetry] ttfw_achieved {
      time_to_first_win_seconds: XX,
@@ -343,6 +352,7 @@ This guide provides structured test scenarios to validate the Visual Workflow Bu
 **Note**: DelightModal appears after workflow execution completes. Since execution isn't implemented in MVP, you can test the component directly:
 
 ### Manual Test (DevTools Console)
+
 ```javascript
 // Simulate workflow completion
 localStorage.setItem('hummbl_show_delight', 'true');
@@ -450,6 +460,7 @@ localStorage.setItem('hummbl_show_delight', 'true');
 ## Performance Benchmarks
 
 ### Load Time Targets
+
 - [ ] Dashboard initial load: < 2 seconds
 - [ ] Workflow editor load: < 3 seconds
 - [ ] Visual canvas render: < 1 second
@@ -457,6 +468,7 @@ localStorage.setItem('hummbl_show_delight', 'true');
 - [ ] Save operation: < 2 seconds
 
 ### Bundle Size (Reference)
+
 - Total: 464.52 kB (139.69 kB gzipped)
 - Acceptable for MVP
 
@@ -465,18 +477,21 @@ localStorage.setItem('hummbl_show_delight', 'true');
 ## Accessibility Testing
 
 ### Keyboard Navigation
+
 - [ ] Tab through all interactive elements
 - [ ] Enter/Space activate buttons
 - [ ] Esc closes modals
 - [ ] Focus indicators visible
 
 ### Screen Reader
+
 - [ ] Search input has aria-label
 - [ ] Buttons have descriptive labels
 - [ ] Form fields have labels
 - [ ] Error messages announced
 
 ### Visual
+
 - [ ] Contrast ratios meet WCAG AA
 - [ ] Text readable at 200% zoom
 - [ ] Color not sole indicator
@@ -500,12 +515,14 @@ Test on multiple browsers:
 ## Known Issues & Limitations
 
 ### Expected Behavior (Not Bugs)
+
 - [ ] DelightModal doesn't auto-appear (execution not implemented)
 - [ ] onboarding.hum is spec only (parser not built)
 - [ ] Telemetry uses localStorage (backend sync pending)
 - [ ] No real-time collaboration yet (Phase 2)
 
 ### Report These Issues
+
 - Workflows not saving
 - Visual canvas not loading
 - Agent presets not appearing
@@ -528,10 +545,12 @@ Test on multiple browsers:
 ## Test Results
 
 ### TTFW Score
-- Time: ___:___ (target: ≤ 1:18)
+
+- Time: **_:_** (target: ≤ 1:18)
 - Status: ✅ Pass / ❌ Fail
 
 ### Scenarios Completed
+
 - [ ] Scenario 1: First Workflow Creation
 - [ ] Scenario 2: Agent Preset Validation
 - [ ] Scenario 3: Visual Canvas Interaction
@@ -544,22 +563,26 @@ Test on multiple browsers:
 - [ ] Scenario 10: Workflow Templates
 
 ### Issues Found
+
 1. [Issue description]
 2. [Issue description]
 
 ### User Experience Rating
-- Ease of Use: __ / 5
-- Visual Appeal: __ / 5
-- Performance: __ / 5
-- Overall: __ / 5
+
+- Ease of Use: \_\_ / 5
+- Visual Appeal: \_\_ / 5
+- Performance: \_\_ / 5
+- Overall: \_\_ / 5
 
 ### Delight Score (if modal tested)
-- Overall: __ / 5
-- TTFW Satisfaction: __ / 5
-- Visual Satisfaction: __ / 5
+
+- Overall: \_\_ / 5
+- TTFW Satisfaction: \_\_ / 5
+- Visual Satisfaction: \_\_ / 5
 - Would Recommend: Yes / No
 
 ### Additional Comments
+
 [Free-form feedback]
 ```
 
@@ -568,6 +591,7 @@ Test on multiple browsers:
 ## Next Steps After Testing
 
 ### If All Tests Pass ✅
+
 - Collect feedback from 5+ users
 - Calculate average TTFW
 - Measure visual adoption rate
@@ -575,6 +599,7 @@ Test on multiple browsers:
 - Plan Phase 2 features
 
 ### If Issues Found ❌
+
 - Document issues with screenshots
 - Note reproduction steps
 - Assign priority (P0-P3)

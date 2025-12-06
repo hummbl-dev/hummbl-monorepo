@@ -12,21 +12,22 @@ The complete HUMMBL Base120 framework is now implemented with all **120 mental m
 
 ### Full Breakdown
 
-| Transformation | Code | Models | Status |
-|---------------|------|--------|---------|
-| **Perspective** | P | 20/20 | ✅ Complete |
-| **Inversion** | IN | 20/20 | ✅ Complete |
-| **Composition** | CO | 20/20 | ✅ Complete |
-| **Decomposition** | DE | 20/20 | ✅ Complete |
-| **Recursion** | RE | 20/20 | ✅ Complete |
-| **Systems** | SY | 20/20 | ✅ Complete |
-| **TOTAL** | | **120/120** | ✅ **COMPLETE** |
+| Transformation    | Code | Models      | Status          |
+| ----------------- | ---- | ----------- | --------------- |
+| **Perspective**   | P    | 20/20       | ✅ Complete     |
+| **Inversion**     | IN   | 20/20       | ✅ Complete     |
+| **Composition**   | CO   | 20/20       | ✅ Complete     |
+| **Decomposition** | DE   | 20/20       | ✅ Complete     |
+| **Recursion**     | RE   | 20/20       | ✅ Complete     |
+| **Systems**       | SY   | 20/20       | ✅ Complete     |
+| **TOTAL**         |      | **120/120** | ✅ **COMPLETE** |
 
 ---
 
 ## What's Included
 
 Every mental model has:
+
 - ✅ Unique code (P1-P20, IN1-IN20, etc.)
 - ✅ Descriptive name
 - ✅ Clear description
@@ -48,6 +49,7 @@ Status: ✅ SUCCESS
 ```
 
 **Well within limits:**
+
 - JS threshold: 300KB (280.93 KB = 93.6% ✅)
 - CSS threshold: 50KB (21.15 KB = 42.3% ✅)
 
@@ -56,6 +58,7 @@ Status: ✅ SUCCESS
 ## Sample Models by Transformation
 
 ### Perspective (P)
+
 - P1: First Principles
 - P6: Occam's Razor
 - P17: Sunk Cost Fallacy
@@ -63,6 +66,7 @@ Status: ✅ SUCCESS
 - P20: Regret Minimization
 
 ### Inversion (IN)
+
 - IN1: Invert, Always Invert
 - IN3: Pre-Mortem
 - IN4: Antifragile
@@ -70,6 +74,7 @@ Status: ✅ SUCCESS
 - IN19: Falsification
 
 ### Composition (CO)
+
 - CO1: Compounding
 - CO2: Network Effects
 - CO8: Critical Mass
@@ -77,6 +82,7 @@ Status: ✅ SUCCESS
 - CO20: Geometric Growth
 
 ### Decomposition (DE)
+
 - DE1: Chunking
 - DE3: Root Cause Analysis
 - DE8: Minimum Viable Product
@@ -84,6 +90,7 @@ Status: ✅ SUCCESS
 - DE15: Pareto Analysis
 
 ### Recursion (RE)
+
 - RE1: Feedback Loops
 - RE3: Flywheel Effect
 - RE6: Habit Loops
@@ -91,6 +98,7 @@ Status: ✅ SUCCESS
 - RE14: OODA Loop
 
 ### Systems (SY)
+
 - SY1: Systems Thinking
 - SY2: Leverage Points
 - SY8: Tipping Points
@@ -102,17 +110,20 @@ Status: ✅ SUCCESS
 ## Features
 
 ### Filtering
+
 - Filter by transformation (P, IN, CO, DE, RE, SY)
 - Filter by difficulty (beginner, intermediate, advanced)
 - Search by name, description, or tags
 
 ### Navigation
+
 - Browse all 120 models
 - View related models
 - See examples and tags
 - Understand difficulty levels
 
 ### Quality
+
 - Each model researched and validated
 - Practical, real-world examples
 - Interconnected through relationships
@@ -131,6 +142,7 @@ npm run test:visual
 Then navigate to: `http://localhost:4173/mental-models`
 
 You should see:
+
 - **120 total models**
 - **P (20)**, **IN (20)**, **CO (20)**, **DE (20)**, **RE (20)**, **SY (20)**
 - All filters working correctly
@@ -142,6 +154,7 @@ You should see:
 ## What's Next
 
 ### Immediate
+
 - [x] All 120 models implemented
 - [x] Production build passing
 - [ ] Final QA testing
@@ -149,6 +162,7 @@ You should see:
 - [ ] Configure hummbl.io domain
 
 ### Phase 2 Enhancements
+
 - [ ] Individual model detail pages
 - [ ] Model relationship visualization
 - [ ] Save favorite models
@@ -157,6 +171,7 @@ You should see:
 - [ ] User notes on models
 
 ### Phase 3 Content
+
 - [ ] Case studies for each model
 - [ ] Video explanations
 - [ ] Interactive examples
@@ -168,6 +183,7 @@ You should see:
 ## Marketing Copy
 
 ### Homepage
+
 > **HUMMBL Base120: Master 120 Mental Models**
 >
 > Transform how you think with the complete Base120 framework. 120 mental models organized across 6 core transformations: Perspective, Inversion, Composition, Decomposition, Recursion, and Systems.
@@ -175,8 +191,9 @@ You should see:
 > From First Principles to Conway's Law. From Compounding to Black Swans. Build your mental toolkit.
 
 ### Social Media
+
 > 🧠 Just launched: HUMMBL Base120 - all 120 mental models for better thinking
-> 
+>
 > • 6 transformations
 > • Beginner to advanced
 > • Practical examples
@@ -191,6 +208,7 @@ You should see:
 **File**: `src/data/mentalModels.ts` (1,600+ lines)
 
 **Structure**:
+
 ```typescript
 interface MentalModel {
   code: string;
@@ -208,6 +226,7 @@ interface MentalModel {
 ```
 
 **Helper Functions**:
+
 - `getModelByCode(code: string)`
 - `getModelsByTransformation(transformation)`
 - `getModelsByDifficulty(difficulty)`
@@ -228,6 +247,7 @@ interface MentalModel {
 ## Acknowledgments
 
 Mental models sourced from:
+
 - Charlie Munger's latticework
 - Shane Parrish (Farnam Street)
 - Systems thinking literature

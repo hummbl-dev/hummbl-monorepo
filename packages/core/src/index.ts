@@ -1,6 +1,6 @@
 /**
  * @hummbl/core
- * 
+ *
  * Shared types and utilities for the HUMMBL Base120 cognitive framework.
  */
 

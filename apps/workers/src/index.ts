@@ -14,15 +14,18 @@ const app = new Hono<{ Bindings: Env }>();
 
 // Middleware
 app.use('*', logger());
-app.use('*', cors({
-  origin: '*',
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowHeaders: ['Content-Type', 'Authorization'],
-  maxAge: 86400,
-}));
+app.use(
+  '*',
+  cors({
+    origin: '*',
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    maxAge: 86400,
+  })
+);
 
 // Health check
-app.get('/', (c) => {
+app.get('/', c => {
   return c.json({
     name: 'HUMMBL Workers API',
     version: c.env.API_VERSION || 'v1',
@@ -31,7 +34,7 @@ app.get('/', (c) => {
   });
 });
 
-app.get('/health', (c) => {
+app.get('/health', c => {
   return c.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
@@ -40,17 +43,20 @@ app.route('/v1/models', modelsRouter);
 app.route('/v1/transformations', transformationsRouter);
 
 // 404 handler
-app.notFound((c) => {
+app.notFound(c => {
   return c.json({ error: 'Not Found', path: c.req.path }, 404);
 });
 
 // Error handler
 app.onError((err, c) => {
   console.error('Unhandled error:', err);
-  return c.json({
-    error: 'Internal Server Error',
-    message: err.message,
-  }, 500);
+  return c.json(
+    {
+      error: 'Internal Server Error',
+      message: err.message,
+    },
+    500
+  );
 });
 
 export default app;

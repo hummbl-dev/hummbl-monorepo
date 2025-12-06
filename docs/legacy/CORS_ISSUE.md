@@ -66,11 +66,13 @@ Browser → Cloudflare Workers → AI APIs
 ### What This Involves
 
 **1. Cloudflare Workers Setup**
+
 - Create worker for workflow execution
 - Handle AI API calls server-side
 - Return results to browser
 
 **2. API Endpoints**
+
 ```
 POST /api/workflows/:id/execute
   → Starts workflow execution
@@ -85,11 +87,13 @@ GET /api/workflows/:id/results
 ```
 
 **3. Database (D1)**
+
 - Store workflows
 - Store execution history
 - Store task results
 
 **4. Queue (Cloudflare Queue)**
+
 - Background task processing
 - Handle long-running workflows
 - Retry failed tasks
@@ -99,6 +103,7 @@ GET /api/workflows/:id/results
 ## Timeline
 
 ### Phase 1 (Current) ✅
+
 - [x] Mental models (120/120)
 - [x] Workflow UI
 - [x] Execution engine (client-side)
@@ -107,6 +112,7 @@ GET /api/workflows/:id/results
 - [ ] ⚠️ **BLOCKED: Browser execution** (CORS)
 
 ### Phase 2 (Next) 🎯
+
 - [ ] Cloudflare Workers setup
 - [ ] Backend API endpoints
 - [ ] D1 database schema
@@ -123,6 +129,7 @@ GET /api/workflows/:id/results
 ### Option 1: Build Phase 2 Backend (Recommended)
 
 This is the right architecture anyway. Benefits:
+
 - ✅ Production-ready
 - ✅ Scalable
 - ✅ Secure (API keys on server)
@@ -133,6 +140,7 @@ This is the right architecture anyway. Benefits:
 ### Option 2: Test with Browser Extension
 
 Install a CORS-bypass extension temporarily:
+
 - **For Chrome**: "CORS Unblock" extension
 - **For Firefox**: "CORS Everywhere"
 
@@ -141,6 +149,7 @@ Install a CORS-bypass extension temporarily:
 ### Option 3: Local Proxy Server
 
 Run a local Node.js proxy:
+
 ```bash
 # Quick proxy server
 npx cors-anywhere
@@ -175,20 +184,23 @@ Just the backend infrastructure - which we were planning anyway!
 ### Recommended Path Forward
 
 **1. Complete Phase 2 Backend**
-   - Set up Cloudflare Workers
-   - Implement API endpoints
-   - Add D1 database
-   - Move execution server-side
+
+- Set up Cloudflare Workers
+- Implement API endpoints
+- Add D1 database
+- Move execution server-side
 
 **2. Keep Current Frontend**
-   - UI is ready
-   - Just point to backend API
-   - No major changes needed
+
+- UI is ready
+- Just point to backend API
+- No major changes needed
 
 **3. Deploy Both**
-   - Frontend to Vercel (current)
-   - Backend to Cloudflare Workers (new)
-   - Both talk via API
+
+- Frontend to Vercel (current)
+- Backend to Cloudflare Workers (new)
+- Both talk via API
 
 ---
 
@@ -197,18 +209,21 @@ Just the backend infrastructure - which we were planning anyway!
 **What would you like to do?**
 
 ### A. Build Phase 2 Backend Now
+
 - Full production architecture
 - Takes 2-4 days
 - Proper solution
 - **Recommended**
 
 ### B. Quick CORS Workaround
+
 - Browser extension for testing
 - Can see it work immediately
 - Not production-ready
 - Just for validation
 
 ### C. Keep Frontend Only
+
 - Launch without workflow execution
 - Mental Models work fine
 - Add backend later
@@ -246,16 +261,19 @@ Just the backend infrastructure - which we were planning anyway!
 ## Summary
 
 **Good News**:
+
 - ✅ Everything we built works
 - ✅ Code is production-quality
 - ✅ UI is polished
 - ✅ Mental Models complete (120/120)
 
 **Challenge**:
+
 - ⚠️ Need backend for AI API calls
 - ⚠️ CORS blocks browser execution
 
 **Solution**:
+
 - 🎯 Build Phase 2: Cloudflare Workers backend
 - 🎯 Move execution server-side
 - 🎯 Keep awesome frontend
@@ -265,4 +283,3 @@ Just the backend infrastructure - which we were planning anyway!
 ---
 
 **Let me know which option you prefer and I'll help implement it!** 🚀
-

@@ -51,15 +51,19 @@ if (isOk(result)) {
 ## Types
 
 ### `MentalModel`
+
 Individual mental model with code, name, transformation, definition, usage guidance, and optional example.
 
 ### `Transformation`
+
 Transformation category containing metadata and 20 models.
 
 ### `TransformationType`
+
 Union type of the 6 transformation codes: `'P' | 'IN' | 'CO' | 'DE' | 'RE' | 'SY'`
 
 ### `Result<T, E>`
+
 Explicit success/error type for robust error handling without exceptions.
 
 ## License

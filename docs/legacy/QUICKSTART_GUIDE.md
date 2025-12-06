@@ -1,4 +1,5 @@
 # HUMMBL Visual Workflow Builder - Quickstart Guide
+
 **Get your first workflow running in under 5 minutes** 🚀
 
 ---
@@ -16,7 +17,7 @@ The Visual Workflow Builder lets you orchestrate multi-agent AI workflows withou
 1. Click the **"New Workflow"** button (blue button on dashboard)
 2. Give your workflow a name: **"My First Workflow"**
 3. Add a description: **"Learning the Visual Workflow Builder"**
-4. *(Optional)* Add tags like `test`, `learning`
+4. _(Optional)_ Add tags like `test`, `learning`
 
 ✅ **You should now see**: The Workflow Editor with a blank canvas
 
@@ -32,11 +33,13 @@ The Visual Workflow Builder lets you orchestrate multi-agent AI workflows withou
 4. The agent appears on your visual canvas!
 
 **💡 Pro Tip**: Each preset comes pre-configured with:
+
 - Optimal AI model (Claude Haiku for speed + cost)
 - Perfect temperature setting
 - Role-specific capabilities
 
 **Agent Types**:
+
 - **🔍 Researcher** - Fast information gathering
 - **📊 Analyst** - Data analysis and insights
 - **⚡ Executor** - Content creation and tasks
@@ -52,7 +55,7 @@ The Visual Workflow Builder lets you orchestrate multi-agent AI workflows withou
 **What's a Task?** Tasks are the actual work your agents will do.
 
 1. Scroll to the **"Tasks"** section  
-   *(Note: "Add Task" is only enabled after you have at least one agent)*
+   _(Note: "Add Task" is only enabled after you have at least one agent)_
 2. Click **"Add Task"** button
 3. A pink gradient node appears on canvas
 4. Give your task a name:
@@ -62,6 +65,7 @@ The Visual Workflow Builder lets you orchestrate multi-agent AI workflows withou
    - Add description: **"Find key information about HUMMBL"**
 
 **Common Task Types**:
+
 - Research/gathering information
 - Analyzing data
 - Writing content
@@ -77,6 +81,7 @@ The Visual Workflow Builder lets you orchestrate multi-agent AI workflows withou
 **The Magic Moment**: Connect your agent to your task!
 
 **Visual Mode (Recommended)**:
+
 1. Switch back to **"Visual"** mode (button at top)
 2. Find the **blue circle** on the right side of your Researcher node
 3. **Click and drag** from the blue circle
@@ -84,6 +89,7 @@ The Visual Workflow Builder lets you orchestrate multi-agent AI workflows withou
 5. A **blue animated line** (edge) appears!
 
 **OR Text Mode**:
+
 1. Stay in "Text" mode
 2. Find your task
 3. Use the "Assign to Agent" dropdown
@@ -106,6 +112,7 @@ The Visual Workflow Builder lets you orchestrate multi-agent AI workflows withou
 ## What Just Happened?
 
 You've built a complete workflow that:
+
 - ✅ Has an AI agent (Researcher) with optimal settings
 - ✅ Has a defined task (Research HUMMBL Features)
 - ✅ Connects the agent to the task (who does what)
@@ -146,17 +153,20 @@ Don't want to build from scratch?
 ### Explore Features
 
 **Visual Canvas Tools**:
+
 - **Zoom**: +/- buttons or mouse wheel
 - **Pan**: Click and drag background
 - **Fit View**: Centers all nodes
 - **Minimap**: Overview navigation (bottom-left)
 
 **Mode Toggle**:
+
 - **Visual**: Drag-and-drop canvas (great for overview)
 - **Text**: Detailed editing (great for specifics)
 - Switch anytime - no data loss!
 
 **Agent Presets**:
+
 - Hover over each preset to see details
 - Temperature = creativity level (0.3-0.7)
 - Model = which AI powers the agent
@@ -168,7 +178,7 @@ Don't want to build from scratch?
 ### Q: What's the difference between an agent and a task?
 
 **Agent** = WHO does the work (your AI team member)  
-**Task** = WHAT work gets done (the actual job)  
+**Task** = WHAT work gets done (the actual job)
 
 Think: "Researcher (agent) will 'gather sources' (task)"
 
@@ -207,7 +217,8 @@ Currently, use browser back button or reload to discard changes. Always save whe
 
 ### Problem: My workflow won't save
 
-**Solution**: 
+**Solution**:
+
 - Check that workflow has a name
 - Ensure at least one agent and one task exist
 - Refresh page and try again
@@ -226,21 +237,27 @@ Currently, use browser back button or reload to discard changes. Always save whe
 ## Tips for Success
 
 ### 🎯 Start Simple
+
 Build a 1-agent, 1-task workflow first. Add complexity after you're comfortable.
 
 ### 🎨 Use Visual for Planning
+
 Visual mode is perfect for seeing the big picture and planning workflow structure.
 
 ### ✏️ Use Text for Details
+
 Text mode makes it easy to edit names, descriptions, and configurations in bulk.
 
 ### 🏗️ Build Incrementally
+
 Add one agent or task at a time. Test connections before adding more.
 
 ### 💾 Save Often
+
 Click Save regularly, especially before switching modes or navigating away.
 
 ### 📊 Use Tags
+
 Add tags like `production`, `test`, `client-work` to organize workflows.
 
 ---
@@ -259,6 +276,7 @@ Add tags like `production`, `test`, `client-work` to organize workflows.
 ### Ready to execute workflows?
 
 Workflow execution is coming in the next release! For now, focus on:
+
 - Building and organizing workflows
 - Experimenting with agent types
 - Creating task dependencies
@@ -282,5 +300,5 @@ Workflow execution is coming in the next release! For now, focus on:
 
 **You're all set!** Start building amazing agentic workflows. 🚀
 
-*Last updated: 2025-11-08*  
-*HUMMBL Visual Workflow Builder v1.0*
+_Last updated: 2025-11-08_  
+_HUMMBL Visual Workflow Builder v1.0_

@@ -10,16 +10,19 @@
 ## 🎯 WHAT'S BEEN BUILT
 
 ### **Phase 1: Analytics Dashboard** ✅
+
 - **URL**: https://hummbl.vercel.app/analytics
 - **Backend**: `/api/telemetry/summary`, `/api/telemetry/components/top`
 - **Status**: LIVE & REAL DATA
 
 ### **Phase 2.1: Token Usage Tracking** ✅
+
 - **URL**: https://hummbl.vercel.app/analytics/tokens
 - **Backend**: `/api/tokens/usage`, `/api/tokens/history`
 - **Status**: LIVE & REAL DATA
 
 ### **Phase 2.2: Notification System** ✅
+
 - **URL**: https://hummbl.vercel.app/notifications
 - **Backend**: `/api/notifications` (full CRUD)
 - **Status**: LIVE & REAL DATA
@@ -33,6 +36,7 @@
 **URL**: https://hummbl.vercel.app/analytics
 
 **What to test**:
+
 - [ ] Page loads without errors
 - [ ] Shows metrics (may be 0 if no data)
 - [ ] Time range buttons work (7d/30d/90d)
@@ -42,12 +46,14 @@
 - [ ] No console errors (press F12)
 
 **Expected behavior**:
+
 - If no usage data exists → Shows 0s (this is correct)
 - If you've used the app → Shows real numbers
 - Clicking time ranges should update data
 - No mock/fake data anywhere
 
 **Test steps**:
+
 1. Open https://hummbl.vercel.app/analytics
 2. Click "Last 7 days" button
 3. Click "Last 30 days" button
@@ -57,6 +63,7 @@
 7. Refresh the page
 
 **Red flags** 🚩:
+
 - Page crashes
 - Shows "Failed to Load Analytics" error
 - Console shows API errors
@@ -70,6 +77,7 @@
 **URL**: https://hummbl.vercel.app/analytics/tokens
 
 **What to test**:
+
 - [ ] Page loads without errors
 - [ ] Shows token metrics
 - [ ] Time range selector works
@@ -79,12 +87,14 @@
 - [ ] Back button works
 
 **Expected behavior**:
+
 - If no workflows executed → Shows empty state
 - If workflows executed → Shows real token counts
 - Charts should display properly
 - No mock data
 
 **Test steps**:
+
 1. Open https://hummbl.vercel.app/analytics/tokens
 2. Try all time ranges (7d/30d/90d)
 3. Click "Export" button (should say "Coming soon")
@@ -92,6 +102,7 @@
 5. Check console for errors
 
 **Red flags** 🚩:
+
 - Shows "Failed to Load Token Usage"
 - Data looks suspiciously perfect (e.g., exactly 1,245,780 tokens)
 - API errors in console
@@ -104,6 +115,7 @@
 **URL**: https://hummbl.vercel.app/notifications
 
 **What to test**:
+
 - [ ] Page loads without errors
 - [ ] Shows notifications list
 - [ ] Can mark individual notification as read
@@ -114,6 +126,7 @@
 - [ ] Unread count updates correctly
 
 **Expected behavior**:
+
 - May show 0 notifications if none created yet
 - Marking as read changes appearance
 - Deleting removes notification
@@ -121,6 +134,7 @@
 - Real-time updates
 
 **Test steps**:
+
 1. Open https://hummbl.vercel.app/notifications
 2. Check if any notifications exist
 3. If exists: Click "Mark All Read" button
@@ -130,6 +144,7 @@
 7. Check console for errors
 
 **Red flags** 🚩:
+
 - Shows error message
 - Buttons don't do anything
 - Notifications look exactly like mockups (fake data)
@@ -141,6 +156,7 @@
 ### **Test 4: Integration & Navigation**
 
 **What to test**:
+
 - [ ] Can navigate between all pages
 - [ ] Header links work
 - [ ] Back buttons work
@@ -149,6 +165,7 @@
 - [ ] No broken links
 
 **Test steps**:
+
 1. Start at https://hummbl.vercel.app
 2. Click "Analytics" in sidebar
 3. Click "Token Usage" in Analytics page
@@ -159,6 +176,7 @@
 8. Refresh each page
 
 **Red flags** 🚩:
+
 - 404 errors
 - Broken navigation
 - Pages crash on refresh
@@ -169,6 +187,7 @@
 ## 🔍 HOW TO CHECK IF DATA IS REAL
 
 ### **Real Data Signs** ✅
+
 - Numbers are small or zero (0-100 range)
 - Data changes when you interact with app
 - Time ranges show different numbers
@@ -176,6 +195,7 @@
 - Empty states show when no data
 
 ### **Fake Data Signs** ❌
+
 - Suspiciously round numbers (exactly 1,000,000)
 - Numbers never change
 - Perfect percentages (exactly 50%)
@@ -191,6 +211,7 @@
 **Error**: "Failed to Load Analytics"
 
 **What to check**:
+
 1. Open browser console (F12)
 2. Look for red errors
 3. Check if error says:
@@ -200,6 +221,7 @@
    - Network error → Backend down
 
 **How to fix**:
+
 1. Copy the error message
 2. Send to me
 3. I'll debug and fix
@@ -209,11 +231,13 @@
 ### **If Token Page Shows Empty**
 
 **This is NORMAL if**:
+
 - You haven't executed any workflows
 - No API calls have been made
 - Brand new installation
 
 **This is a BUG if**:
+
 - You HAVE executed workflows
 - Shows error instead of empty state
 - Console shows API errors
@@ -223,12 +247,14 @@
 ### **If Notifications Don't Update**
 
 **Check**:
+
 1. Click "Mark as Read" on a notification
 2. Does the notification change appearance?
 3. Does the unread count decrease?
 4. If NO → Report the bug
 
 **Expected**:
+
 - Notification background changes
 - Blue dot disappears
 - Unread count decreases by 1
@@ -238,18 +264,21 @@
 ## 📊 SUCCESS CRITERIA
 
 ### **Minimum Success** (Phase continues)
+
 - ✅ All 3 pages load without crashing
 - ✅ No critical console errors
 - ✅ Basic navigation works
 - ✅ Shows real data OR proper empty states
 
 ### **Good Success** (Proceed confidently)
+
 - ✅ All features work as expected
 - ✅ Data updates correctly
 - ✅ No data is obviously fake
 - ✅ Error states have retry buttons
 
 ### **Excellent Success** (Production ready)
+
 - ✅ Everything works perfectly
 - ✅ Fast loading times (<2s)
 - ✅ Smooth interactions
@@ -270,27 +299,32 @@ After testing, fill this out:
 **Duration**: [How long you tested]
 
 ### Analytics Dashboard
+
 - **Status**: ✅ Pass / ⚠️ Issues / ❌ Fail
 - **Notes**: [What worked, what didn't]
 - **Bugs found**: [List any bugs]
 
 ### Token Usage
+
 - **Status**: ✅ Pass / ⚠️ Issues / ❌ Fail
 - **Notes**: [What worked, what didn't]
 - **Bugs found**: [List any bugs]
 
 ### Notifications
+
 - **Status**: ✅ Pass / ⚠️ Issues / ❌ Fail
 - **Notes**: [What worked, what didn't]
 - **Bugs found**: [List any bugs]
 
 ### Overall Assessment
+
 - **Ready for Phase 2.3?**: Yes / No / Maybe
 - **Critical bugs**: [List P0 bugs]
 - **Nice-to-fix bugs**: [List P1/P2 bugs]
 - **Suggestions**: [Any improvements]
 
 ### Decision
+
 - [ ] Continue to Phase 2.3 (API Keys)
 - [ ] Fix bugs first
 - [ ] Rethink approach
@@ -301,16 +335,19 @@ After testing, fill this out:
 ## 🚀 NEXT STEPS (After Testing)
 
 ### **If Testing Passes** ✅
+
 1. Report: "Tests passed, continue"
 2. I'll start Phase 2.3 (API Keys) - 2-3h
 3. Keep building toward production
 
 ### **If Minor Issues Found** ⚠️
+
 1. Report: "Found bugs: [list]"
 2. I'll fix critical bugs first
 3. Then continue Phase 2.3
 
 ### **If Major Issues Found** ❌
+
 1. Report: "Critical problems: [list]"
 2. Pause and fix everything
 3. Re-test before continuing
@@ -333,14 +370,16 @@ After testing, fill this out:
 **Hours Spent**: 4h  
 **Features Built**: 3/11 pages  
 **Completion**: ~25%  
-**Remaining**: 15-20h estimated  
+**Remaining**: 15-20h estimated
 
 **Built**:
+
 - ✅ Analytics Dashboard (real data)
 - ✅ Token Usage (real data)
 - ✅ Notifications (real data)
 
 **Not Built Yet**:
+
 - ⏸️ API Keys (Phase 2.3)
 - ⏸️ Team Management (Phase 3)
 - ⏸️ Execution Monitor (Phase 1.2)
@@ -362,11 +401,13 @@ After testing, fill this out:
    - Major bugs → Stop and debug
 
 **Don't over-test**:
+
 - This is still a work-in-progress
 - Some features missing is expected
 - Goal is to verify the 3 built features work
 
 **Focus on**:
+
 - Does it crash?
 - Is data real or fake?
 - Do buttons work?
@@ -377,11 +418,13 @@ After testing, fill this out:
 ## ✅ READY TO TEST
 
 **Live URLs**:
+
 - https://hummbl.vercel.app/analytics
 - https://hummbl.vercel.app/analytics/tokens
 - https://hummbl.vercel.app/notifications
 
 **Backend API**:
+
 - https://hummbl-backend.hummbl.workers.dev
 
 **When ready, report back**: "Tests complete, results: [summary]"

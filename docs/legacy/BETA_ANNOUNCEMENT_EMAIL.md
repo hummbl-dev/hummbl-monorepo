@@ -11,7 +11,7 @@
 ```
 Hi [First Name],
 
-You're one of 5 pioneers invited to test HUMMBL's Visual Workflow Builder — 
+You're one of 5 pioneers invited to test HUMMBL's Visual Workflow Builder —
 a revolutionary way to orchestrate multi-agent AI workflows without code.
 
 🎯 WHAT YOU GET
@@ -38,7 +38,7 @@ Submit via feedback button (bottom-right) or reply to this email.
 
 🎁 BETA PERKS
 - Early access to all features
-- Direct line to engineering team  
+- Direct line to engineering team
 - Shape the product roadmap
 - Lifetime pro features when we launch
 
@@ -77,7 +77,7 @@ Hi [First Name],
 
 Just checking in — did you get a chance to test the Visual Workflow Builder?
 
-If you hit any blockers or have questions, I'm here to help. 
+If you hit any blockers or have questions, I'm here to help.
 Reply to this email or [Slack/Discord link].
 
 If you haven't tried it yet, no worries! Here's a super quick start:
@@ -154,7 +154,7 @@ Beta window closed! Here's what we learned:
 🚀 WHAT'S NEXT
 Based on your feedback, we're prioritizing:
 1. [Top request 1]
-2. [Top request 2]  
+2. [Top request 2]
 3. [Top request 3]
 
 ETA for next release: [Date]
@@ -176,21 +176,25 @@ HUMMBL Systems
 ## Sending Strategy
 
 ### Batch 1 (2 pioneers) - Day 1, 9 AM
+
 - Send to most technical/engaged users first
 - Watch for immediate issues
 - Be ready to respond quickly
 
 ### Batch 2 (2 pioneers) - Day 1, 11 AM
+
 - If no major issues from Batch 1
 - Send to next tier
 - Monitor feedback
 
 ### Batch 3 (1 pioneer) - Day 1, 2 PM
+
 - Final user
 - By now, any critical bugs should be caught
 - Less hand-holding needed
 
 ### Follow-Up Schedule
+
 - Day 2: Check-in with non-responders
 - Day 5: Reminder about closing window
 - Day 7: Thank you + results summary
@@ -200,6 +204,7 @@ HUMMBL Systems
 ## Personalization Checklist
 
 For each email:
+
 - [ ] Use first name
 - [ ] Reference how you know them
 - [ ] Mention their specific interests/background
@@ -211,6 +216,7 @@ For each email:
 ## Response Templates
 
 ### If they can't access the site:
+
 ```
 Hmm, that's odd. Can you try:
 1. Different browser
@@ -221,6 +227,7 @@ Still not working? Send me a screenshot and I'll debug ASAP.
 ```
 
 ### If they're confused about features:
+
 ```
 Great question! [Explanation]
 
@@ -230,6 +237,7 @@ Or hop on a 10-min call: [Cal.com link]
 ```
 
 ### If they found a bug:
+
 ```
 Thanks for reporting! This is super valuable.
 
@@ -242,6 +250,7 @@ I'll prioritize the fix.
 ```
 
 ### If they love it:
+
 ```
 Amazing! So glad to hear it!
 
@@ -260,6 +269,7 @@ No pressure, but I'd love to amplify your experience!
 ## Success Metrics to Share
 
 After beta closes, compile:
+
 - Total workflows created
 - TTFW distribution (chart)
 - Delight score breakdown
@@ -268,6 +278,7 @@ After beta closes, compile:
 - User quotes/testimonials
 
 Share via:
+
 - Email to beta users
 - Blog post
 - Twitter thread
@@ -280,8 +291,8 @@ Share via:
 Include in first email (footer):
 
 ```
-Privacy: We collect minimal analytics (workflow count, timing, errors). 
-No personal data or workflow content is stored on our servers. 
+Privacy: We collect minimal analytics (workflow count, timing, errors).
+No personal data or workflow content is stored on our servers.
 Everything stays in your browser's localStorage.
 
 Unsubscribe: Reply with "unsubscribe" and we'll remove you.

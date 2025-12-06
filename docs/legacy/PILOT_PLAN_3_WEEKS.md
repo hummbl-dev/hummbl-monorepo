@@ -1,4 +1,5 @@
 # HUMMBL PILOT: 8 Pages in 3 Weeks
+
 **BaseN Model Validation** | **Option C → A Strategy**  
 **Start**: 2025-11-08 | **End**: 2025-11-29  
 **Decision Point**: 2025-12-02 (Go/No-Go for Phase 1)
@@ -16,14 +17,14 @@
 
 ## 📊 Success Criteria
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| **Pages Built** | 8/8 | Count |
-| **Build Time** | <120 hours | Time tracking |
-| **Code Reuse** | >70% | Component analysis |
-| **User Adoption** | >60% use analytics | Telemetry data |
-| **Performance** | <1s page load | Metrics |
-| **Error Rate** | <1% | Error logs |
+| Metric            | Target             | Measurement        |
+| ----------------- | ------------------ | ------------------ |
+| **Pages Built**   | 8/8                | Count              |
+| **Build Time**    | <120 hours         | Time tracking      |
+| **Code Reuse**    | >70%               | Component analysis |
+| **User Adoption** | >60% use analytics | Telemetry data     |
+| **Performance**   | <1s page load      | Metrics            |
+| **Error Rate**    | <1%                | Error logs         |
 
 **Go/No-Go Decision**: If ≥5/6 metrics hit target → Phase 1
 
@@ -148,6 +149,7 @@ export class HUMMBLTelemetry {
 ### Day 1-2: Infrastructure Setup
 
 **Backend (Cloudflare Workers)**:
+
 ```typescript
 // workers/src/routes/telemetry.ts
 import { Hono } from 'hono';
@@ -156,45 +158,51 @@ import type { Env } from '../types';
 const telemetry = new Hono<{ Bindings: Env }>();
 
 // Track event
-telemetry.post('/track', async (c) => {
+telemetry.post('/track', async c => {
   const event = await c.req.json();
-  
+
   // Store in D1
-  await c.env.DB.prepare(`
+  await c.env.DB.prepare(
+    `
     INSERT INTO user_actions (id, user_id, action_type, component_id, payload, timestamp)
     VALUES (?, ?, ?, ?, ?, ?)
-  `).bind(
-    crypto.randomUUID(),
-    event.userId,
-    event.action,
-    event.component,
-    JSON.stringify(event.properties),
-    event.timestamp
-  ).run();
-  
+  `
+  )
+    .bind(
+      crypto.randomUUID(),
+      event.userId,
+      event.action,
+      event.component,
+      JSON.stringify(event.properties),
+      event.timestamp
+    )
+    .run();
+
   // Also cache in KV for real-time access
-  await c.env.CACHE.put(
-    `event:${event.userId}:${Date.now()}`,
-    JSON.stringify(event),
-    { expirationTtl: 3600 }
-  );
-  
+  await c.env.CACHE.put(`event:${event.userId}:${Date.now()}`, JSON.stringify(event), {
+    expirationTtl: 3600,
+  });
+
   return c.json({ success: true });
 });
 
 // Get metrics
-telemetry.get('/metrics/:componentId', async (c) => {
+telemetry.get('/metrics/:componentId', async c => {
   const componentId = c.req.param('componentId');
   const since = c.req.query('since') || Date.now() - 86400000; // 24h default
-  
-  const results = await c.env.DB.prepare(`
+
+  const results = await c.env.DB.prepare(
+    `
     SELECT metric_name, value, timestamp
     FROM component_metrics
     WHERE component_id = ? AND timestamp > ?
     ORDER BY timestamp DESC
     LIMIT 1000
-  `).bind(componentId, since).all();
-  
+  `
+  )
+    .bind(componentId, since)
+    .all();
+
   return c.json(results);
 });
 
@@ -202,6 +210,7 @@ export default telemetry;
 ```
 
 **Deliverables**:
+
 - ✅ D1 schema deployed
 - ✅ Telemetry API endpoints
 - ✅ Frontend SDK wrapper
@@ -215,6 +224,7 @@ export default telemetry;
 **Purpose**: High-level metrics overview
 
 **Features**:
+
 - Total workflows executed (last 7/30 days)
 - Success rate trend
 - Token usage summary
@@ -224,6 +234,7 @@ export default telemetry;
 - Peak execution times
 
 **Component**:
+
 ```typescript
 // src/pages/Analytics.tsx
 import { useState, useEffect } from 'react';
@@ -252,10 +263,10 @@ export const Analytics: React.FC = () => {
   return (
     <div className="space-y-6">
       <h1>Analytics Dashboard</h1>
-      
+
       {/* Summary Cards */}
       <div className="grid grid-cols-4 gap-4">
-        <MetricCard 
+        <MetricCard
           title="Workflows Executed"
           value={metrics.workflowsExecuted}
           trend="+12%"
@@ -264,7 +275,7 @@ export const Analytics: React.FC = () => {
       </div>
 
       {/* Charts */}
-      <LineChart 
+      <LineChart
         title="Executions Over Time"
         data={executionTrend}
       />
@@ -284,6 +295,7 @@ export const Analytics: React.FC = () => {
 **Purpose**: Track AI API token consumption
 
 **Features**:
+
 - Tokens by model (pie chart)
 - Tokens by agent (bar chart)
 - Cost breakdown
@@ -291,10 +303,12 @@ export const Analytics: React.FC = () => {
 - Export CSV
 
 **Backend**:
+
 ```typescript
 // Aggregate token usage from execution logs
-telemetry.get('/tokens/summary', async (c) => {
-  const results = await c.env.DB.prepare(`
+telemetry.get('/tokens/summary', async c => {
+  const results = await c.env.DB.prepare(
+    `
     SELECT 
       tr.agent_id,
       COUNT(*) as executions,
@@ -302,8 +316,11 @@ telemetry.get('/tokens/summary', async (c) => {
     FROM task_results tr
     WHERE tr.completed_at > ?
     GROUP BY tr.agent_id
-  `).bind(Date.now() - 2592000000).all(); // 30 days
-  
+  `
+  )
+    .bind(Date.now() - 2592000000)
+    .all(); // 30 days
+
   return c.json(results);
 });
 ```
@@ -319,6 +336,7 @@ telemetry.get('/tokens/summary', async (c) => {
 **Purpose**: Real-time workflow execution viewer
 
 **Features**:
+
 - Live execution list (auto-refresh every 5s)
 - Execution details modal
 - Filter by status/user/workflow
@@ -326,11 +344,12 @@ telemetry.get('/tokens/summary', async (c) => {
 - Retry failed execution
 
 **Implementation**:
+
 ```typescript
 // src/pages/ExecutionMonitor.tsx
 export const ExecutionMonitor: React.FC = () => {
   const [executions, setExecutions] = useState([]);
-  
+
   // Poll every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
@@ -377,6 +396,7 @@ export const ExecutionMonitor: React.FC = () => {
 **Purpose**: Centralized error tracking
 
 **Features**:
+
 - All errors from executions
 - Filter by date/workflow/agent
 - Error details modal
@@ -384,10 +404,12 @@ export const ExecutionMonitor: React.FC = () => {
 - Export for debugging
 
 **Backend**:
+
 ```typescript
 // Query failed executions and task results
-telemetry.get('/errors', async (c) => {
-  const errors = await c.env.DB.prepare(`
+telemetry.get('/errors', async c => {
+  const errors = await c.env.DB.prepare(
+    `
     SELECT 
       tr.id,
       tr.task_name,
@@ -399,8 +421,9 @@ telemetry.get('/errors', async (c) => {
     WHERE tr.status = 'failed'
     ORDER BY tr.completed_at DESC
     LIMIT 100
-  `).all();
-  
+  `
+  ).all();
+
   return c.json(errors);
 });
 ```
@@ -418,6 +441,7 @@ telemetry.get('/errors', async (c) => {
 **Purpose**: Manage team members and permissions
 
 **Database Schema**:
+
 ```sql
 CREATE TABLE teams (
   id TEXT PRIMARY KEY,
@@ -438,6 +462,7 @@ CREATE TABLE team_members (
 ```
 
 **Features**:
+
 - Invite members (email)
 - Assign roles (owner/admin/member/viewer)
 - Remove members
@@ -455,6 +480,7 @@ CREATE TABLE team_members (
 **Purpose**: Secure API key storage and management
 
 **Database Schema**:
+
 ```sql
 CREATE TABLE api_keys_secure (
   id TEXT PRIMARY KEY,
@@ -468,6 +494,7 @@ CREATE TABLE api_keys_secure (
 ```
 
 **Features**:
+
 - Add/edit/delete API keys
 - Show last 4 chars only
 - Test key validity
@@ -475,6 +502,7 @@ CREATE TABLE api_keys_secure (
 - Encrypted storage
 
 **Security**:
+
 ```typescript
 // Encrypt keys before storing
 import { webcrypto } from 'crypto';
@@ -489,14 +517,10 @@ async function encryptApiKey(key: string, masterKey: string): Promise<string> {
     false,
     ['encrypt']
   );
-  
+
   const iv = webcrypto.getRandomValues(new Uint8Array(12));
-  const encrypted = await webcrypto.subtle.encrypt(
-    { name: 'AES-GCM', iv },
-    cryptoKey,
-    data
-  );
-  
+  const encrypted = await webcrypto.subtle.encrypt({ name: 'AES-GCM', iv }, cryptoKey, data);
+
   return Buffer.from(encrypted).toString('base64');
 }
 ```
@@ -514,6 +538,7 @@ async function encryptApiKey(key: string, masterKey: string): Promise<string> {
 **Purpose**: Schedule workflows with cron
 
 **Database Schema**:
+
 ```sql
 CREATE TABLE scheduled_workflows (
   id TEXT PRIMARY KEY,
@@ -529,6 +554,7 @@ CREATE TABLE scheduled_workflows (
 ```
 
 **Features**:
+
 - Create schedule (cron syntax)
 - Visual cron builder
 - Enable/disable schedules
@@ -536,6 +562,7 @@ CREATE TABLE scheduled_workflows (
 - Next run time preview
 
 **Cloudflare Cron Triggers**:
+
 ```toml
 # workers/wrangler.toml
 [triggers]
@@ -548,25 +575,33 @@ export default {
   async scheduled(event: ScheduledEvent, env: Env) {
     // Get all enabled schedules due to run
     const now = Date.now();
-    const schedules = await env.DB.prepare(`
+    const schedules = await env.DB.prepare(
+      `
       SELECT id, workflow_id, user_id
       FROM scheduled_workflows
       WHERE enabled = true AND next_run_at <= ?
-    `).bind(now).all();
-    
+    `
+    )
+      .bind(now)
+      .all();
+
     // Execute each workflow
     for (const schedule of schedules.results) {
       await executeWorkflow(env, schedule.workflow_id, schedule.user_id);
-      
+
       // Update next_run_at based on cron expression
       const nextRun = calculateNextRun(schedule.cron_expression);
-      await env.DB.prepare(`
+      await env.DB.prepare(
+        `
         UPDATE scheduled_workflows
         SET last_run_at = ?, next_run_at = ?
         WHERE id = ?
-      `).bind(now, nextRun, schedule.id).run();
+      `
+      )
+        .bind(now, nextRun, schedule.id)
+        .run();
     }
-  }
+  },
 };
 ```
 
@@ -581,6 +616,7 @@ export default {
 **Purpose**: Centralized notification hub
 
 **Database Schema**:
+
 ```sql
 CREATE TABLE notifications (
   id TEXT PRIMARY KEY,
@@ -595,6 +631,7 @@ CREATE TABLE notifications (
 ```
 
 **Features**:
+
 - All notifications in one place
 - Mark as read/unread
 - Filter by type
@@ -602,20 +639,25 @@ CREATE TABLE notifications (
 - Email digest settings
 
 **Backend (Server-Sent Events)**:
+
 ```typescript
 // Real-time notification stream
-telemetry.get('/notifications/stream', async (c) => {
+telemetry.get('/notifications/stream', async c => {
   const userId = c.req.header('X-User-ID');
-  
-  return c.stream(async (stream) => {
+
+  return c.stream(async stream => {
     while (true) {
-      const notifications = await c.env.DB.prepare(`
+      const notifications = await c.env.DB.prepare(
+        `
         SELECT * FROM notifications
         WHERE user_id = ? AND read = false
         ORDER BY created_at DESC
         LIMIT 10
-      `).bind(userId).all();
-      
+      `
+      )
+        .bind(userId)
+        .all();
+
       await stream.write(`data: ${JSON.stringify(notifications)}\n\n`);
       await new Promise(resolve => setTimeout(resolve, 5000));
     }
@@ -633,7 +675,7 @@ telemetry.get('/notifications/stream', async (c) => {
 
 ```sql
 -- Query pilot success metrics
-SELECT 
+SELECT
   COUNT(DISTINCT component_id) as pages_built,
   SUM(CASE WHEN component_id LIKE 'analytics%' THEN 1 ELSE 0 END) as analytics_usage,
   AVG(value) as avg_page_load_time
@@ -643,14 +685,14 @@ WHERE timestamp > [pilot_start_timestamp];
 
 ### Decision Framework
 
-| Metric | Target | Actual | Status |
-|--------|--------|--------|--------|
-| Pages Built | 8 | ? | ? |
-| Build Hours | <120 | ? | ? |
-| Code Reuse | >70% | ? | ? |
-| User Adoption | >60% | ? | ? |
-| Performance | <1s | ? | ? |
-| Error Rate | <1% | ? | ? |
+| Metric        | Target | Actual | Status |
+| ------------- | ------ | ------ | ------ |
+| Pages Built   | 8      | ?      | ?      |
+| Build Hours   | <120   | ?      | ?      |
+| Code Reuse    | >70%   | ?      | ?      |
+| User Adoption | >60%   | ?      | ?      |
+| Performance   | <1s    | ?      | ?      |
+| Error Rate    | <1%    | ?      | ?      |
 
 **If ≥5 metrics pass** → **GO TO PHASE 1** (32 pages, 12 weeks)  
 **If 3-4 metrics pass** → **REFINE & RETRY** (adjust strategy)  
@@ -661,6 +703,7 @@ WHERE timestamp > [pilot_start_timestamp];
 ## 📦 Deliverables Checklist
 
 ### Week 1
+
 - [ ] D1 schema deployed
 - [ ] Telemetry SDK working
 - [ ] Analytics Dashboard live
@@ -669,6 +712,7 @@ WHERE timestamp > [pilot_start_timestamp];
 - [ ] Error Logs live
 
 ### Week 2
+
 - [ ] Team data model deployed
 - [ ] Team Members page live
 - [ ] API Keys Management live
@@ -676,6 +720,7 @@ WHERE timestamp > [pilot_start_timestamp];
 - [ ] Key encryption working
 
 ### Week 3
+
 - [ ] Scheduler data model deployed
 - [ ] Workflow Scheduler live
 - [ ] Cron triggers working

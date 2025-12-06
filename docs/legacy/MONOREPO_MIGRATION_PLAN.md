@@ -8,13 +8,13 @@
 
 ## Current Repository Inventory
 
-| Repo | Path | Remote | Purpose | Status |
-|------|------|--------|---------|--------|
-| **hummbl** | `/Users/others/hummbl` | `hummbl-dev/hummbl` | Target monorepo | ⚠️ Broken builds, 227 uncommitted files |
-| **hummbl-1** | `/Users/others/hummbl-1` | `hummbl-dev/hummbl` | Duplicate clone | ✅ Clean, can delete |
-| **hummbl-io** | `/Users/others/hummbl-io` | `hummbl-dev/hummbl-io` | Legacy frontend | ✅ Committed, on staging branch |
-| **hummbl-research** | `/Users/others/hummbl-research` | `hummbl-dev/hummbl-research` | Working MCP server | ✅ Committed |
-| **hummbl-bibliography** | `/Users/others/hummbl-bibliography` | `hummbl-dev/hummbl-bibliography` | Documentation/research | ⚠️ 12 uncommitted files |
+| Repo                    | Path                                | Remote                           | Purpose                | Status                                  |
+| ----------------------- | ----------------------------------- | -------------------------------- | ---------------------- | --------------------------------------- |
+| **hummbl**              | `/Users/others/hummbl`              | `hummbl-dev/hummbl`              | Target monorepo        | ⚠️ Broken builds, 227 uncommitted files |
+| **hummbl-1**            | `/Users/others/hummbl-1`            | `hummbl-dev/hummbl`              | Duplicate clone        | ✅ Clean, can delete                    |
+| **hummbl-io**           | `/Users/others/hummbl-io`           | `hummbl-dev/hummbl-io`           | Legacy frontend        | ✅ Committed, on staging branch         |
+| **hummbl-research**     | `/Users/others/hummbl-research`     | `hummbl-dev/hummbl-research`     | Working MCP server     | ✅ Committed                            |
+| **hummbl-bibliography** | `/Users/others/hummbl-bibliography` | `hummbl-dev/hummbl-bibliography` | Documentation/research | ⚠️ 12 uncommitted files                 |
 
 ---
 
@@ -45,32 +45,38 @@ hummbl/
 ## Migration Strategy
 
 ### Phase 1: Stabilize (Pre-Migration)
+
 - [ ] Commit/stash uncommitted changes in hummbl-bibliography
 - [ ] Delete duplicate hummbl-1 clone
 - [ ] Reset hummbl monorepo to clean state (git stash or reset)
 
 ### Phase 2: Core Package
+
 - [ ] Create `packages/core` with shared types
 - [ ] Define MentalModel, Transformation, Result types
 - [ ] Export from @hummbl/core
 
 ### Phase 3: MCP Server Migration
+
 - [ ] Copy working code from hummbl-research → apps/mcp-server
 - [ ] Update imports to use @hummbl/core
 - [ ] Verify build passes
 - [ ] Update package.json to @hummbl/mcp-server
 
 ### Phase 4: Frontend Consolidation
+
 - [ ] Decide: keep web-legacy OR migrate to web
 - [ ] Update imports and paths
 - [ ] Verify build passes
 
 ### Phase 5: CI/CD
+
 - [ ] Create unified GitHub Actions workflow
 - [ ] Configure Vercel/Cloudflare deployments
 - [ ] Set up workspace-aware caching
 
 ### Phase 6: Cleanup
+
 - [ ] Archive old repos (hummbl-io, hummbl-research, hummbl-bibliography)
 - [ ] Update all documentation
 - [ ] Publish @hummbl/mcp-server to npm
@@ -79,13 +85,13 @@ hummbl/
 
 ## Source of Truth Mapping
 
-| Component | Source Repo | Target Location |
-|-----------|-------------|-----------------|
-| MCP Server (working) | hummbl-research | apps/mcp-server |
-| Frontend (React) | hummbl-io | apps/web-legacy OR apps/web |
-| API/Workers | hummbl (existing) | apps/api, apps/workers |
-| Bibliography/Docs | hummbl-bibliography | docs/ |
-| Shared Types | NEW | packages/core |
+| Component            | Source Repo         | Target Location             |
+| -------------------- | ------------------- | --------------------------- |
+| MCP Server (working) | hummbl-research     | apps/mcp-server             |
+| Frontend (React)     | hummbl-io           | apps/web-legacy OR apps/web |
+| API/Workers          | hummbl (existing)   | apps/api, apps/workers      |
+| Bibliography/Docs    | hummbl-bibliography | docs/                       |
+| Shared Types         | NEW                 | packages/core               |
 
 ---
 

@@ -13,11 +13,11 @@ This guide explains how strategists, operators, and engineers can install, confi
 
 ## 3. Installation Options
 
-| Scenario | Command | Notes |
-| --- | --- | --- |
-| Global install (recommended) | `npm install -g @hummbl/mcp-server` | Makes `hummbl-mcp` CLI available system-wide |
-| On-demand | `npx @hummbl/mcp-server` | Pulls latest version without persistent install |
-| Project dependency | `npm install @hummbl/mcp-server --save-dev` | Useful when bundling with bespoke tooling |
+| Scenario                     | Command                                     | Notes                                           |
+| ---------------------------- | ------------------------------------------- | ----------------------------------------------- |
+| Global install (recommended) | `npm install -g @hummbl/mcp-server`         | Makes `hummbl-mcp` CLI available system-wide    |
+| On-demand                    | `npx @hummbl/mcp-server`                    | Pulls latest version without persistent install |
+| Project dependency           | `npm install @hummbl/mcp-server --save-dev` | Useful when bundling with bespoke tooling       |
 
 After installation, run `hummbl-mcp --help` to confirm availability.
 
@@ -69,16 +69,16 @@ This enables batch audits of model references or automated methodology exports.
 
 ## 5. Using HUMMBL Tools (Base120)
 
-| Tool | Purpose | Minimal Params |
-| --- | --- | --- |
-| `get_model` | Fetch a single model with description, example, tags | `{ "code": "P1" }` |
-| `list_all_models` | Enumerate the 120 models or filter by transformation | `{ "transformation_filter": "IN" }` (optional) |
-| `search_models` | Keyword search across names, descriptions, examples | `{ "query": "decision" }` |
-| `recommend_models` | Receive recommendations based on a problem statement | `{ "problem_description": "Scaling ops" }` |
-| `get_transformation` | Return all models within a transformation (P/IN/CO/DE/RE/SY) | `{ "type": "SY" }` |
-| `search_problem_patterns` | Retrieve HUMMBL problem patterns plus suggested models | `{ "query": "ethics" }` |
-| `get_methodology` | Download the Self-Dialectical AI methodology bundle | `{}` |
-| `audit_model_references` | Validate lists of model references in briefs | `{ "items": [{"code": "IN11"}] }` |
+| Tool                      | Purpose                                                      | Minimal Params                                 |
+| ------------------------- | ------------------------------------------------------------ | ---------------------------------------------- |
+| `get_model`               | Fetch a single model with description, example, tags         | `{ "code": "P1" }`                             |
+| `list_all_models`         | Enumerate the 120 models or filter by transformation         | `{ "transformation_filter": "IN" }` (optional) |
+| `search_models`           | Keyword search across names, descriptions, examples          | `{ "query": "decision" }`                      |
+| `recommend_models`        | Receive recommendations based on a problem statement         | `{ "problem_description": "Scaling ops" }`     |
+| `get_transformation`      | Return all models within a transformation (P/IN/CO/DE/RE/SY) | `{ "type": "SY" }`                             |
+| `search_problem_patterns` | Retrieve HUMMBL problem patterns plus suggested models       | `{ "query": "ethics" }`                        |
+| `get_methodology`         | Download the Self-Dialectical AI methodology bundle          | `{}`                                           |
+| `audit_model_references`  | Validate lists of model references in briefs                 | `{ "items": [{"code": "IN11"}] }`              |
 
 > All responses follow the HUMMBL Result pattern with explicit `ok`/`error` fields. Handle errors by inspecting `error.code` and `error.message`.
 

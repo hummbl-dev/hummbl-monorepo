@@ -1,4 +1,5 @@
 # AI Model Management Guide
+
 **HUMMBL Systems** | Version 1.0.0 | Updated: 2025-11-08
 
 ---
@@ -16,6 +17,7 @@ HUMMBL supports **ALL models** from Claude (Anthropic) and OpenAI that users hav
 ### 2. Add to the appropriate array
 
 **For Claude models**, add to `CLAUDE_MODELS`:
+
 ```typescript
 {
   id: 'claude-5-sonnet',  // API model ID
@@ -34,6 +36,7 @@ HUMMBL supports **ALL models** from Claude (Anthropic) and OpenAI that users hav
 ```
 
 **For OpenAI models**, add to `OPENAI_MODELS`:
+
 ```typescript
 {
   id: 'gpt-5',
@@ -54,6 +57,7 @@ HUMMBL supports **ALL models** from Claude (Anthropic) and OpenAI that users hav
 ### 3. That's it!
 
 The model is now available:
+
 - ✅ In agent creation dropdown
 - ✅ In settings/preferences
 - ✅ In AI-assisted features
@@ -65,24 +69,24 @@ The model is now available:
 
 ### Required Fields
 
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `id` | string | API model identifier | `'claude-4-sonnet'` |
-| `name` | string | Human-readable name | `'Claude Sonnet 4'` |
-| `provider` | string | `'anthropic'` or `'openai'` | `'anthropic'` |
-| `family` | string | Model family/generation | `'Claude 4'` |
-| `description` | string | Brief description | `'Best balanced performance'` |
-| `contextWindow` | number | Max tokens (input + output) | `200000` |
-| `inputCost` | number | Cost per 1M input tokens (USD) | `3` |
-| `outputCost` | number | Cost per 1M output tokens (USD) | `15` |
-| `speed` | string | Relative speed tier | `'fast'` |
-| `capabilities` | string[] | What the model can do | `['coding', 'reasoning']` |
-| `released` | string | Release date (YYYY-MM) | `'2024-11'` |
+| Field           | Type     | Description                     | Example                       |
+| --------------- | -------- | ------------------------------- | ----------------------------- |
+| `id`            | string   | API model identifier            | `'claude-4-sonnet'`           |
+| `name`          | string   | Human-readable name             | `'Claude Sonnet 4'`           |
+| `provider`      | string   | `'anthropic'` or `'openai'`     | `'anthropic'`                 |
+| `family`        | string   | Model family/generation         | `'Claude 4'`                  |
+| `description`   | string   | Brief description               | `'Best balanced performance'` |
+| `contextWindow` | number   | Max tokens (input + output)     | `200000`                      |
+| `inputCost`     | number   | Cost per 1M input tokens (USD)  | `3`                           |
+| `outputCost`    | number   | Cost per 1M output tokens (USD) | `15`                          |
+| `speed`         | string   | Relative speed tier             | `'fast'`                      |
+| `capabilities`  | string[] | What the model can do           | `['coding', 'reasoning']`     |
+| `released`      | string   | Release date (YYYY-MM)          | `'2024-11'`                   |
 
 ### Optional Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
+| Field         | Type    | Description                |
+| ------------- | ------- | -------------------------- |
 | `recommended` | boolean | Show as recommended choice |
 
 ### Speed Tiers
@@ -111,11 +115,13 @@ The model is now available:
 ### Anthropic Models
 
 **Where to find**:
+
 1. Official Docs: https://docs.anthropic.com/claude/docs/models-overview
 2. API Console: https://console.anthropic.com/
 3. Announcement: Usually on their blog
 
 **What to check**:
+
 - Model ID (for `id` field)
 - Context window
 - Pricing (input/output per 1M tokens)
@@ -125,11 +131,13 @@ The model is now available:
 ### OpenAI Models
 
 **Where to find**:
+
 1. Official Docs: https://platform.openai.com/docs/models
 2. API Platform: https://platform.openai.com/
 3. Pricing: https://openai.com/api/pricing/
 
 **What to check**:
+
 - Model ID (for `id` field)
 - Context window
 - Pricing (input/output per 1M tokens)
@@ -215,27 +223,33 @@ When a completely new model family launches:
 ### When to Update `DEFAULT_MODELS`
 
 Update `/src/config/aiModels.ts` → `DEFAULT_MODELS` when:
+
 - A new flagship model is released
 - Pricing changes significantly
 - A faster model with same quality is available
 
 ```typescript
 export const DEFAULT_MODELS = {
-  general: 'claude-5-sonnet',  // Update when new flagship
-  fast: 'claude-5-haiku',       // Update when faster model
-  quality: 'claude-5-opus',     // Update when better model
-  budget: 'gpt-4o-mini',        // Update if cheaper alternative
-  reasoning: 'o2',              // Update when new reasoning model
+  general: 'claude-5-sonnet', // Update when new flagship
+  fast: 'claude-5-haiku', // Update when faster model
+  quality: 'claude-5-opus', // Update when better model
+  budget: 'gpt-4o-mini', // Update if cheaper alternative
+  reasoning: 'o2', // Update when new reasoning model
 };
 ```
 
 ### Impact of Updating Defaults
 
 **Agent Presets (`agentPresets.ts`) automatically use new defaults**:
+
 ```typescript
 // No changes needed! These reference DEFAULT_MODELS
-researcher: { model: DEFAULT_MODELS.fast }
-analyst: { model: DEFAULT_MODELS.general }
+researcher: {
+  model: DEFAULT_MODELS.fast;
+}
+analyst: {
+  model: DEFAULT_MODELS.general;
+}
 ```
 
 ---
@@ -245,6 +259,7 @@ analyst: { model: DEFAULT_MODELS.general }
 ### Before Deploying
 
 1. **Verify API Access**
+
    ```bash
    # Test with curl
    curl https://api.anthropic.com/v1/messages \
@@ -289,6 +304,7 @@ analyst: { model: DEFAULT_MODELS.general }
 ### How to Deprecate
 
 **Option A: Mark as Deprecated (Recommended)**
+
 ```typescript
 {
   id: 'claude-3-haiku-20240307',
@@ -299,6 +315,7 @@ analyst: { model: DEFAULT_MODELS.general }
 ```
 
 **Option B: Remove Entirely**
+
 ```typescript
 // Just delete the model object from array
 // Users with this model saved will see error
@@ -314,6 +331,7 @@ analyst: { model: DEFAULT_MODELS.general }
 **Format**: `claude-{generation}-{tier}-{release-date}`
 
 Examples:
+
 - `claude-3-opus-20240229`
 - `claude-3-5-sonnet-20241022`
 - `claude-4-sonnet`
@@ -337,6 +355,7 @@ Examples:
 ### Q: Do I need to update the code when users get access to new models?
 
 **A: No!** Users automatically get access to any model their API key supports. You only need to update `aiModels.ts` so:
+
 1. The model appears in dropdowns with correct info
 2. Cost calculations are accurate
 3. Smart defaults stay current
@@ -348,6 +367,7 @@ Examples:
 ### Q: Should I add every single model variant?
 
 **A: Add the most relevant ones**:
+
 - ✅ Latest version of each tier (Opus, Sonnet, Haiku)
 - ✅ Models with unique capabilities (vision, audio, reasoning)
 - ❌ Old deprecated versions (unless users still use them)
@@ -356,12 +376,14 @@ Examples:
 ### Q: How do I know the exact model IDs?
 
 **A: Check the provider docs**:
+
 - Anthropic: https://docs.anthropic.com/claude/docs/models-overview
 - OpenAI: https://platform.openai.com/docs/models
 
 ### Q: Can I add models from other providers (Gemini, Mistral, etc.)?
 
 **A: Yes!** The architecture supports it:
+
 1. Add new provider type to `AIProvider` union
 2. Add new array like `GEMINI_MODELS`
 3. Update `getAllModels()` to include new array
@@ -393,9 +415,9 @@ Examples:
 
 ## Change Log
 
-| Date | Version | Changes |
-|------|---------|---------|
-| 2025-11-08 | 1.0.0 | Initial model catalog with Claude 4.x and all GPT models |
+| Date       | Version | Changes                                                  |
+| ---------- | ------- | -------------------------------------------------------- |
+| 2025-11-08 | 1.0.0   | Initial model catalog with Claude 4.x and all GPT models |
 
 ---
 

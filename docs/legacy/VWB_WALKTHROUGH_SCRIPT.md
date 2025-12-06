@@ -1,7 +1,8 @@
 # Visual Workflow Builder - Video Walkthrough Script
+
 **Project**: HUMMBL-VWB-MVP-1.0  
 **Duration**: 5-7 minutes  
-**URL**: https://hummbl.vercel.app  
+**URL**: https://hummbl.vercel.app
 
 ---
 
@@ -31,7 +32,8 @@
 
 > "Starting with 'New Workflow'. We have workflow details, visual canvas, and editors. Let's name this 'Content Research Pipeline'..."
 
-**[Actions]**: 
+**[Actions]**:
+
 - Name: "Content Research Pipeline"
 - Description: "Automated research workflow"
 - Tags: "research", "content"
@@ -45,6 +47,7 @@
 > "HUMMBL provides five intelligent presets, each optimized for specific roles. Researcher for fast info gathering, Analyst for data analysis, Executor for content creation, Reviewer for quality control, and Custom for specialized needs."
 
 **[Actions]**:
+
 - Add Researcher → appears on canvas
 - Add Executor → appears
 - Add Reviewer → appears
@@ -58,6 +61,7 @@
 > "Now we need tasks. 'Add Task' is enabled once we have agents."
 
 **[Actions]**:
+
 - Add 3 tasks
 - Switch to Text mode
 - Name: "Gather Research", "Write Draft", "Review"
@@ -66,6 +70,7 @@
 > "Back in visual mode, we connect agents to tasks by dragging from blue handles..."
 
 **[Actions]**:
+
 - Drag Researcher → Gather Research (blue edge)
 - Drag Executor → Write Draft (blue edge)
 - Drag Reviewer → Review (blue edge)
@@ -73,6 +78,7 @@
 > "Blue edges show agent assignments. Green edges create dependencies between tasks..."
 
 **[Actions]**:
+
 - Connect Gather → Write (green edge)
 - Connect Write → Review (green edge)
 
@@ -125,12 +131,15 @@
 ## Quick Demo (2 Minutes)
 
 ### Hook (0:00 - 0:10)
+
 > "Multi-agent workflow in under 2 minutes? Watch."
 
 ### Speed-Run (0:10 - 1:45)
+
 **[Fast motion]**: Create → Presets → Connect → Save
 
 ### Close (1:45 - 2:00)
+
 > "Complete workflow. No code. 90 seconds. That's HUMMBL."
 
 ---
@@ -138,6 +147,7 @@
 ## Post-Production
 
 ### Add
+
 - Subtle background music
 - Cursor highlights
 - Text overlays: "Agent Presets", "TTFW: 1:18"
@@ -145,6 +155,7 @@
 - Captions
 
 ### Export
+
 - 1080p minimum
 - Platform-specific versions (YouTube 7min, Twitter 2min, LinkedIn 4min)
 
@@ -153,17 +164,20 @@
 ## Recording Checklist
 
 ### Before
+
 - [ ] Test equipment
 - [ ] Clear cache
 - [ ] Review script
 - [ ] Timer ready
 
 ### During
+
 - [ ] Speak clearly
 - [ ] Smooth cursor movements
 - [ ] Pause between sections
 
 ### After
+
 - [ ] Review recording
 - [ ] Check audio sync
 - [ ] Back up files

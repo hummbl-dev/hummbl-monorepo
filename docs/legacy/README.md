@@ -3,8 +3,9 @@
 A comprehensive dashboard for managing agentic workflows with AI-powered agents, built with React, TypeScript, and modern web technologies.
 
 > **🚧 Preview Build Notice**
-> 
+>
 > This is a **preview demonstration** of the HUMMBL interface and design system. The current deployment showcases:
+>
 > - ✅ Full UI/UX design and navigation
 > - ✅ Workflow creation and editing interfaces (localStorage-based)
 > - ✅ 120+ mental model framework database
@@ -33,6 +34,7 @@ HUMMBL is an intuitive workflow management system that allows you to create, con
 ## Tech Stack
 
 ### Frontend
+
 - **Framework**: React 18 with TypeScript
 - **Build Tool**: Vite
 - **Routing**: React Router v6
@@ -42,6 +44,7 @@ HUMMBL is an intuitive workflow management system that allows you to create, con
 - **Date Utilities**: date-fns
 
 ### Backend
+
 - **Runtime**: Cloudflare Workers
 - **Framework**: Hono.js
 - **Database**: Cloudflare D1 (SQLite)
@@ -71,17 +74,20 @@ HUMMBL is an intuitive workflow management system that allows you to create, con
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd hummbl
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -170,6 +176,7 @@ hummbl/
 ### Workflows
 
 A workflow is a collection of tasks executed by agents to achieve a specific goal. Each workflow has:
+
 - **Status**: draft, active, paused, completed, or failed
 - **Tasks**: Individual units of work
 - **Agents**: AI agents that execute tasks
@@ -178,6 +185,7 @@ A workflow is a collection of tasks executed by agents to achieve a specific goa
 ### Agents
 
 Agents are AI-powered entities that perform tasks. Each agent has:
+
 - **Role**: researcher, analyst, executor, reviewer, or custom
 - **Capabilities**: List of what the agent can do
 - **Model Configuration**: AI model, temperature, and token limits
@@ -185,6 +193,7 @@ Agents are AI-powered entities that perform tasks. Each agent has:
 ### Tasks
 
 Tasks are individual steps in a workflow. Each task includes:
+
 - **Dependencies**: Other tasks that must complete first
 - **Agent Assignment**: Which agent executes the task
 - **Status Tracking**: pending, running, completed, failed, or skipped
@@ -193,6 +202,7 @@ Tasks are individual steps in a workflow. Each task includes:
 ### Templates
 
 Pre-configured workflows with agents and tasks ready to use:
+
 - **Research & Analysis Pipeline**: Multi-stage research workflow
 - **Content Creation Workflow**: Writing, editing, and SEO optimization
 - **Data Processing Pipeline**: ETL workflow with validation
@@ -203,23 +213,27 @@ Pre-configured workflows with agents and tasks ready to use:
 The application uses Zustand for state management. Key store methods:
 
 ### Workflow Operations
+
 - `addWorkflow(workflow)`: Create new workflow
 - `updateWorkflow(id, updates)`: Update existing workflow
 - `deleteWorkflow(id)`: Delete workflow
 - `getWorkflow(id)`: Retrieve workflow by ID
 
 ### Agent Operations
+
 - `addAgent(agent)`: Create new agent
 - `updateAgent(id, updates)`: Update agent
 - `deleteAgent(id)`: Delete agent
 - `getAgent(id)`: Retrieve agent by ID
 
 ### Execution Operations
+
 - `startWorkflow(id)`: Start workflow execution
 - `pauseWorkflow(id)`: Pause workflow
 - `stopWorkflow(id)`: Stop workflow
 
 ### Log Operations
+
 - `addLog(log)`: Add execution log
 - `getWorkflowLogs(workflowId)`: Get logs for workflow
 
@@ -244,6 +258,7 @@ Edit `src/data/templates.ts` to add custom workflow templates:
 ### Styling
 
 The application uses Tailwind CSS. Custom styles are defined in:
+
 - `src/index.css`: Global styles and custom components
 - `tailwind.config.js`: Theme configuration
 

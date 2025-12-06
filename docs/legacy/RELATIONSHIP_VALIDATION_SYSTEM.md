@@ -10,8 +10,10 @@ This system enables systematic classification of all 7,140 possible model-pair r
 ## Components Created
 
 ### 1. Candidate Pair Generator (`generate-pairs.py`)
+
 **Location:** Downloaded files
-**Output:** 
+**Output:**
+
 - `relationship-candidates.json` (1.6MB, 7,140 pairs)
 - `relationship-candidates.csv` (306KB, flat format)
 
@@ -25,9 +27,11 @@ This system enables systematic classification of all 7,140 possible model-pair r
 | 0-2 | Standard cross-transformation | 3,933 |
 
 ### 2. Validation Service (`apps/mcp-server/src/tools/validation-service.ts`)
+
 **Purpose:** Core logic for classification workflow
 
 **Key Methods:**
+
 - `loadCandidates()` - Load JSON data
 - `getNextBatch()` - Get filtered pairs for validation
 - `buildContext()` - Build AI classification context
@@ -36,9 +40,11 @@ This system enables systematic classification of all 7,140 possible model-pair r
 - `exportRelationships()` - Export as ModelRelationship[]
 
 ### 3. MCP Tools (`apps/mcp-server/src/tools/validation-tools.ts`)
+
 **Purpose:** Claude Desktop integration
 
 **Available Tools:**
+
 - `load_candidates` - Initialize validation session
 - `get_validation_stats` - Progress statistics
 - `get_next_batch` - Get pairs to classify
@@ -48,9 +54,11 @@ This system enables systematic classification of all 7,140 possible model-pair r
 - `get_priority_tiers` - Strategic planning view
 
 ### 4. CLI Tool (`scripts/validate-relationships.ts`)
+
 **Purpose:** Batch processing from terminal
 
 **Commands:**
+
 ```bash
 npx tsx scripts/validate-relationships.ts --progress
 npx tsx scripts/validate-relationships.ts --batch 20 --tier 1
@@ -59,9 +67,11 @@ npx tsx scripts/validate-relationships.ts --export
 ```
 
 ### 5. Web Validator (`public/validator.html`)
+
 **Purpose:** Interactive browser-based validation UI
 
 **Features:**
+
 - Load candidates from JSON file
 - Filter by priority tier
 - One-click relationship type selection
@@ -71,15 +81,15 @@ npx tsx scripts/validate-relationships.ts --export
 
 ## Relationship Types
 
-| Type | Definition | Typical Direction |
-|------|------------|-------------------|
-| **enables** | A is prerequisite for effective use of B | a→b or b→a |
-| **reinforces** | Using A makes B more effective (mutual) | bidirectional |
-| **conflicts** | A and B suggest opposite actions | bidirectional |
-| **contains** | A is a subset or special case of B | a→b or b→a |
-| **sequences** | A typically precedes B in reasoning | a→b or b→a |
-| **complements** | A and B address different aspects | bidirectional |
-| **none** | No meaningful relationship exists | N/A |
+| Type            | Definition                               | Typical Direction |
+| --------------- | ---------------------------------------- | ----------------- |
+| **enables**     | A is prerequisite for effective use of B | a→b or b→a        |
+| **reinforces**  | Using A makes B more effective (mutual)  | bidirectional     |
+| **conflicts**   | A and B suggest opposite actions         | bidirectional     |
+| **contains**    | A is a subset or special case of B       | a→b or b→a        |
+| **sequences**   | A typically precedes B in reasoning      | a→b or b→a        |
+| **complements** | A and B address different aspects        | bidirectional     |
+| **none**        | No meaningful relationship exists        | N/A               |
 
 ## Validation Strategy
 
@@ -107,15 +117,16 @@ npx tsx scripts/validate-relationships.ts --export
 
 ### Time Estimates
 
-| Approach | Tier 1 | All Tiers |
-|----------|--------|-----------|
-| Manual (2 min/pair) | 4 hours | 240 hours |
-| AI-assisted (30 sec/pair) | 1 hour | 60 hours |
-| Batch AI + review | 30 min | 15 hours |
+| Approach                  | Tier 1  | All Tiers |
+| ------------------------- | ------- | --------- |
+| Manual (2 min/pair)       | 4 hours | 240 hours |
+| AI-assisted (30 sec/pair) | 1 hour  | 60 hours  |
+| Batch AI + review         | 30 min  | 15 hours  |
 
 ## Next Steps
 
 1. **Copy downloaded files to project:**
+
    ```bash
    cp ~/Downloads/relationship-candidates.json apps/mcp-server/src/data/candidates/
    ```
@@ -157,11 +168,13 @@ scripts/
 ## Integration with Existing System
 
 The validation system produces `ModelRelationship[]` compatible with:
+
 - `apps/mcp-server/src/types/relationships.ts`
 - `apps/mcp-server/src/data/seed-relationships.ts`
 - REST API endpoints at `/api/relationships`
 
 After validation, relationships can be:
+
 1. Added to `seed-relationships.ts` for static deployment
 2. Stored in D1 database via API
 3. Exported for external tools/analysis

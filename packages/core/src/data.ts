@@ -15,25 +15,29 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'P1',
         name: 'First Principles Framing',
         transformation: 'P',
-        definition: 'Reduce complex problems to foundational truths that cannot be further simplified',
+        definition:
+          'Reduce complex problems to foundational truths that cannot be further simplified',
         priority: 1,
         whenToUse: 'When solving new problems where analogy might mislead',
-        example: 'Elon Musk reasoning about battery costs by raw material prices rather than market history'
+        example:
+          'Elon Musk reasoning about battery costs by raw material prices rather than market history',
       },
       {
         code: 'P2',
         name: 'Stakeholder Mapping',
         transformation: 'P',
-        definition: 'Identify all parties with interest, influence, or impact in a system or decision',
+        definition:
+          'Identify all parties with interest, influence, or impact in a system or decision',
         priority: 1,
         whenToUse: 'When launching a product or changing a policy',
-        example: 'Mapping users, buyers, regulators, and internal teams for a software launch'
+        example: 'Mapping users, buyers, regulators, and internal teams for a software launch',
       },
       {
         code: 'P3',
         name: 'Identity Stack',
         transformation: 'P',
-        definition: 'Recognize that individuals operate from multiple nested identities simultaneously',
+        definition:
+          'Recognize that individuals operate from multiple nested identities simultaneously',
         priority: 2,
         whenToUse: 'When understanding user motivations or organizational behavior',
       },
@@ -49,7 +53,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'P5',
         name: 'Empathy Mapping',
         transformation: 'P',
-        definition: 'Systematically capture what stakeholders see, think, feel, and do in their context',
+        definition:
+          'Systematically capture what stakeholders see, think, feel, and do in their context',
         priority: 2,
         whenToUse: 'During user research or product design',
       },
@@ -73,7 +78,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'P8',
         name: 'Narrative Framing',
         transformation: 'P',
-        definition: 'Structure information as causal stories with conflict, choice, and consequence',
+        definition:
+          'Structure information as causal stories with conflict, choice, and consequence',
         priority: 3,
         whenToUse: 'When communicating complex ideas or strategies',
       },
@@ -81,7 +87,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'P9',
         name: 'Cultural Lens Shifting',
         transformation: 'P',
-        definition: 'Adjust communication and interpretation for different cultural contexts and norms',
+        definition:
+          'Adjust communication and interpretation for different cultural contexts and norms',
         priority: 4,
         whenToUse: 'In cross-cultural or international contexts',
       },
@@ -105,7 +112,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'P12',
         name: 'Temporal Framing',
         transformation: 'P',
-        definition: 'Organize understanding across past causes, present states, and future implications',
+        definition:
+          'Organize understanding across past causes, present states, and future implications',
         priority: 3,
         whenToUse: 'For strategic planning or historical analysis',
       },
@@ -137,7 +145,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'P16',
         name: 'Identity-Context Reciprocity',
         transformation: 'P',
-        definition: 'Recognize how identities shape interpretations and contexts reinforce identities',
+        definition:
+          'Recognize how identities shape interpretations and contexts reinforce identities',
         priority: 5,
         whenToUse: 'In organizational change or culture work',
       },
@@ -153,7 +162,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'P18',
         name: 'Boundary Object Selection',
         transformation: 'P',
-        definition: 'Choose representations that bridge multiple perspectives while remaining meaningful',
+        definition:
+          'Choose representations that bridge multiple perspectives while remaining meaningful',
         priority: 4,
         whenToUse: 'In cross-functional collaboration',
       },
@@ -161,7 +171,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'P19',
         name: 'Sensemaking Canvases',
         transformation: 'P',
-        definition: 'Deploy structured templates to systematically capture and organize observations',
+        definition:
+          'Deploy structured templates to systematically capture and organize observations',
         priority: 3,
         whenToUse: 'During discovery or research phases',
       },
@@ -169,7 +180,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'P20',
         name: 'Worldview Articulation',
         transformation: 'P',
-        definition: 'Make explicit the fundamental beliefs and values that drive interpretation and action',
+        definition:
+          'Make explicit the fundamental beliefs and values that drive interpretation and action',
         priority: 4,
         whenToUse: 'For deep organizational or personal alignment',
       },
@@ -187,7 +199,7 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         definition: 'Improve systems by removing elements rather than adding complexity',
         priority: 1,
         whenToUse: 'When a system is sluggish or over-complicated',
-        example: 'Removing meetings to improve productivity instead of adding coordination tools'
+        example: 'Removing meetings to improve productivity instead of adding coordination tools',
       },
       {
         code: 'IN2',
@@ -209,7 +221,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'IN4',
         name: 'Contra-Logic',
         transformation: 'IN',
-        definition: 'Argue the opposite position to stress-test assumptions and expose weak reasoning',
+        definition:
+          'Argue the opposite position to stress-test assumptions and expose weak reasoning',
         priority: 2,
         whenToUse: 'During strategic planning or critical decisions',
       },
@@ -225,7 +238,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'IN6',
         name: 'Inverse/Proof by Contradiction',
         transformation: 'IN',
-        definition: 'Assume a claim is false, derive logical impossibility, thus proving the claim true',
+        definition:
+          'Assume a claim is false, derive logical impossibility, thus proving the claim true',
         priority: 3,
         whenToUse: 'For rigorous logical validation',
       },
@@ -273,7 +287,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'IN12',
         name: 'Failure First Design',
         transformation: 'IN',
-        definition: 'Begin planning by identifying all possible failure modes and designing to prevent them',
+        definition:
+          'Begin planning by identifying all possible failure modes and designing to prevent them',
         priority: 3,
         whenToUse: 'For safety-critical systems',
       },
@@ -416,7 +431,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'CO9',
         name: 'Interface Contracts',
         transformation: 'CO',
-        definition: 'Define explicit agreements about data structures and behavior between components',
+        definition:
+          'Define explicit agreements about data structures and behavior between components',
         priority: 3,
         whenToUse: 'For API design or team coordination',
       },
@@ -456,7 +472,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'CO14',
         name: 'Platformization',
         transformation: 'CO',
-        definition: 'Extract common capabilities into reusable infrastructure serving multiple use cases',
+        definition:
+          'Extract common capabilities into reusable infrastructure serving multiple use cases',
         priority: 3,
         whenToUse: 'When building scalable systems',
       },
@@ -480,7 +497,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'CO17',
         name: 'Orchestration vs Choreography',
         transformation: 'CO',
-        definition: 'Choose between centralized coordination or distributed peer-to-peer interaction',
+        definition:
+          'Choose between centralized coordination or distributed peer-to-peer interaction',
         priority: 4,
         whenToUse: 'For distributed system design',
       },
@@ -504,7 +522,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'CO20',
         name: 'Holistic Integration',
         transformation: 'CO',
-        definition: 'Unify disparate elements into coherent, seamless whole where boundaries dissolve',
+        definition:
+          'Unify disparate elements into coherent, seamless whole where boundaries dissolve',
         priority: 4,
         whenToUse: 'For mature system design',
       },
@@ -527,7 +546,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'DE2',
         name: 'Factorization',
         transformation: 'DE',
-        definition: 'Separate multiplicative components to understand relative contribution of each factor',
+        definition:
+          'Separate multiplicative components to understand relative contribution of each factor',
         priority: 2,
         whenToUse: 'For performance analysis or attribution',
       },
@@ -575,7 +595,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'DE8',
         name: 'Work Breakdown Structure',
         transformation: 'DE',
-        definition: 'Hierarchically divide project into deliverable-oriented components with clear ownership',
+        definition:
+          'Hierarchically divide project into deliverable-oriented components with clear ownership',
         priority: 2,
         whenToUse: 'For project planning',
       },
@@ -599,7 +620,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'DE11',
         name: 'Scope Delimitation',
         transformation: 'DE',
-        definition: 'Define precise boundaries of what is included versus excluded from consideration',
+        definition:
+          'Define precise boundaries of what is included versus excluded from consideration',
         priority: 2,
         whenToUse: 'At project initiation',
       },
@@ -615,7 +637,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'DE13',
         name: 'Failure Mode Analysis (FMEA)',
         transformation: 'DE',
-        definition: 'Enumerate potential failure points with severity, likelihood, and detectability ratings',
+        definition:
+          'Enumerate potential failure points with severity, likelihood, and detectability ratings',
         priority: 3,
         whenToUse: 'For risk management',
       },
@@ -623,7 +646,7 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'DE14',
         name: 'Variable Control & Isolation',
         transformation: 'DE',
-        definition: 'Hold factors constant to measure single variable\'s causal impact',
+        definition: "Hold factors constant to measure single variable's causal impact",
         priority: 3,
         whenToUse: 'For experimentation or testing',
       },
@@ -663,7 +686,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'DE19',
         name: 'Critical Path Unwinding',
         transformation: 'DE',
-        definition: 'Trace longest sequence of dependent tasks determining minimum project duration',
+        definition:
+          'Trace longest sequence of dependent tasks determining minimum project duration',
         priority: 3,
         whenToUse: 'For project scheduling',
       },
@@ -742,7 +766,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'RE8',
         name: 'Bootstrapping',
         transformation: 'RE',
-        definition: 'Build capability using currently available resources, then use that to build more',
+        definition:
+          'Build capability using currently available resources, then use that to build more',
         priority: 2,
         whenToUse: 'When starting with minimal resources',
       },
@@ -782,7 +807,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'RE13',
         name: 'Gradient Descent Heuristic',
         transformation: 'RE',
-        definition: 'Iteratively adjust toward improvement, even without perfect knowledge of optimal direction',
+        definition:
+          'Iteratively adjust toward improvement, even without perfect knowledge of optimal direction',
         priority: 3,
         whenToUse: 'For optimization',
       },
@@ -853,7 +879,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY1',
         name: 'Leverage Points',
         transformation: 'SY',
-        definition: 'Identify intervention points where small changes produce disproportionate effects',
+        definition:
+          'Identify intervention points where small changes produce disproportionate effects',
         priority: 1,
         whenToUse: 'For strategic intervention',
       },
@@ -877,7 +904,7 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY4',
         name: 'Requisite Variety',
         transformation: 'SY',
-        definition: 'Match control system\'s complexity to system being controlled',
+        definition: "Match control system's complexity to system being controlled",
         priority: 3,
         whenToUse: 'For governance design',
       },
@@ -901,7 +928,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY7',
         name: 'Path Dependence',
         transformation: 'SY',
-        definition: 'Acknowledge how early decisions constrain future options through accumulated consequences',
+        definition:
+          'Acknowledge how early decisions constrain future options through accumulated consequences',
         priority: 2,
         whenToUse: 'For strategic planning',
       },
@@ -909,7 +937,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY8',
         name: 'Homeostasis/Dynamic Equilibrium',
         transformation: 'SY',
-        definition: 'Understand self-regulating mechanisms maintaining stable states despite disturbances',
+        definition:
+          'Understand self-regulating mechanisms maintaining stable states despite disturbances',
         priority: 3,
         whenToUse: 'For stability analysis',
       },
@@ -925,7 +954,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY10',
         name: 'Causal Loop Diagrams',
         transformation: 'SY',
-        definition: 'Visualize circular cause-effect relationships with reinforcing and balancing dynamics',
+        definition:
+          'Visualize circular cause-effect relationships with reinforcing and balancing dynamics',
         priority: 3,
         whenToUse: 'For systems thinking',
       },
@@ -933,7 +963,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY11',
         name: 'Governance Patterns',
         transformation: 'SY',
-        definition: 'Design decision rights, accountability structures, and coordination mechanisms',
+        definition:
+          'Design decision rights, accountability structures, and coordination mechanisms',
         priority: 2,
         whenToUse: 'For organizational design',
       },
@@ -949,7 +980,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY13',
         name: 'Incentive Architecture',
         transformation: 'SY',
-        definition: 'Design reward and penalty structures aligning individual actions with system goals',
+        definition:
+          'Design reward and penalty structures aligning individual actions with system goals',
         priority: 2,
         whenToUse: 'For behavior design',
       },
@@ -965,7 +997,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY15',
         name: 'Multi-Scale Alignment',
         transformation: 'SY',
-        definition: 'Ensure strategy, operations, and execution cohere across organizational levels',
+        definition:
+          'Ensure strategy, operations, and execution cohere across organizational levels',
         priority: 3,
         whenToUse: 'For organizational coherence',
       },
@@ -973,7 +1006,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY16',
         name: 'Ecosystem Strategy',
         transformation: 'SY',
-        definition: 'Position organization within network of partners, competitors, and stakeholders',
+        definition:
+          'Position organization within network of partners, competitors, and stakeholders',
         priority: 3,
         whenToUse: 'For competitive strategy',
       },
@@ -981,7 +1015,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY17',
         name: 'Policy Feedbacks',
         transformation: 'SY',
-        definition: 'Anticipate how rules shape behavior, which creates conditions affecting future rules',
+        definition:
+          'Anticipate how rules shape behavior, which creates conditions affecting future rules',
         priority: 4,
         whenToUse: 'For policy design',
       },
@@ -989,7 +1024,8 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         code: 'SY18',
         name: 'Measurement & Telemetry',
         transformation: 'SY',
-        definition: 'Instrument systems to capture state, changes, and anomalies for informed response',
+        definition:
+          'Instrument systems to capture state, changes, and anomalies for informed response',
         priority: 2,
         whenToUse: 'For system monitoring',
       },

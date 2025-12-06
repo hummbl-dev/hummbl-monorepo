@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { createServer } from '../server.js';
 
-const packageJson = JSON.parse(
-  readFileSync(new URL('../../package.json', import.meta.url), 'utf-8')
-);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const projectRoot = resolve(__dirname, '../..');
+
+const packageJson = JSON.parse(readFileSync(resolve(projectRoot, 'package.json'), 'utf-8'));
 const packageVersion: string = packageJson.version;
 
 const getServerVersion = (): string => {
@@ -20,7 +23,7 @@ describe('Server version contract', () => {
   });
 
   it('ensures index banner string stays in sync with package.json version', () => {
-    const indexSource = readFileSync(new URL('../index.ts', import.meta.url), 'utf-8');
+    const indexSource = readFileSync(resolve(projectRoot, 'src/index.ts'), 'utf-8');
     const expectedBanner = `HUMMBL MCP Server v${packageVersion} running on stdio`;
     expect(indexSource.includes(expectedBanner)).toBe(true);
   });

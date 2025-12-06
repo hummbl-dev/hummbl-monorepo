@@ -106,17 +106,19 @@ npm run deploy
 ✅ All endpoints documented with examples  
 ✅ Interactive "Try it out" functionality works  
 ✅ Authentication flow clearly explained  
-✅ TypeScript type generation documented  
+✅ TypeScript type generation documented
 
 ## Files Created/Modified
 
 **New Files**:
+
 - `workers/openapi.yaml` (500 lines) - Complete OpenAPI 3.0 specification
 - `workers/src/lib/openapiSpec.ts` (502 lines) - Embedded spec for Workers
 - `workers/src/routes/docs.ts` (67 lines) - Swagger UI endpoint
 - `workers/API_DOCUMENTATION.md` (280 lines) - Developer usage guide
 
 **Modified Files**:
+
 - `workers/src/index.ts` - Added `/api/docs` route mounting
 - `README.md` - Added Quick Links and Documentation sections
 
@@ -134,23 +136,27 @@ npm run deploy
 ## Usage Examples
 
 ### View Interactive Docs
+
 ```
 https://hummbl-backend.hummbl.workers.dev/api/docs
 ```
 
 ### Generate TypeScript Types
+
 ```bash
 npx openapi-typescript https://hummbl-backend.hummbl.workers.dev/api/docs/openapi.yaml \
   -o src/types/api.ts
 ```
 
 ### Import into Postman
+
 1. Open Postman
 2. Import → Link
 3. Paste: `https://hummbl-backend.hummbl.workers.dev/api/docs/openapi.yaml`
 4. Import as Collection
 
 ### Test with cURL
+
 ```bash
 # Health check
 curl https://hummbl-backend.hummbl.workers.dev/

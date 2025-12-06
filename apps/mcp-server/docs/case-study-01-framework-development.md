@@ -75,14 +75,14 @@ A solo founder used the HUMMBL Base120 mental models framework to architect, val
 
 **Pivot Point:** Shifted from subjective tier classification to quantitative scoring:
 
-| Dimension | Score Range |
-|-----------|-------------|
-| Variables | 0-5 |
-| Stakeholders | 0-5 |
-| Predictability | 0-5 |
-| Interdependencies | 0-5 |
-| Reversibility | 0-5 |
-| **Total** | **0-30** |
+| Dimension         | Score Range |
+| ----------------- | ----------- |
+| Variables         | 0-5         |
+| Stakeholders      | 0-5         |
+| Predictability    | 0-5         |
+| Interdependencies | 0-5         |
+| Reversibility     | 0-5         |
+| **Total**         | **0-30**    |
 
 **Tier Mapping:**
 
@@ -108,12 +108,12 @@ A solo founder used the HUMMBL Base120 mental models framework to architect, val
 
 Developed SITREP protocol for parallel AI execution:
 
-| Agent | Role | Capabilities |
-|-------|------|--------------|
-| Claude Sonnet 4.5 | Lead Architect | Strategic planning, documentation, orchestration |
-| ChatGPT-5 | Validator | Quality assurance, gap analysis, verification gates |
-| Windsurf Cascade | Executor | Code implementation, environment management |
-| Cursor | Specialist | Direct code execution, real-time debugging |
+| Agent             | Role           | Capabilities                                        |
+| ----------------- | -------------- | --------------------------------------------------- |
+| Claude Sonnet 4.5 | Lead Architect | Strategic planning, documentation, orchestration    |
+| ChatGPT-5         | Validator      | Quality assurance, gap analysis, verification gates |
+| Windsurf Cascade  | Executor       | Code implementation, environment management         |
+| Cursor            | Specialist     | Direct code execution, real-time debugging          |
 
 **Protocol Features:**
 
@@ -136,12 +136,12 @@ Developed SITREP protocol for parallel AI execution:
 
 **Technical Deliverables:**
 
-| Component | Status | Metrics |
-|-----------|--------|---------|
-| Web UI (hummbl.io) | Production | React + Cloudflare |
-| MCP Server | Production | 140 chaos tests, 100% pass |
-| API Layer | In Progress | Cloudflare Workers + D1 |
-| Documentation | Complete | 6 tools, full schema |
+| Component          | Status      | Metrics                    |
+| ------------------ | ----------- | -------------------------- |
+| Web UI (hummbl.io) | Production  | React + Cloudflare         |
+| MCP Server         | Production  | 140 chaos tests, 100% pass |
+| API Layer          | In Progress | Cloudflare Workers + D1    |
+| Documentation      | Complete    | 6 tools, full schema       |
 
 ---
 
@@ -149,14 +149,14 @@ Developed SITREP protocol for parallel AI execution:
 
 ### Quantitative Outcomes
 
-| Metric | Value |
-|--------|-------|
-| Models Validated | 120/120 (100%) |
-| Quality Score | 9.2/10 average |
-| Test Coverage | 140 chaos tests |
-| Pass Rate | 100% |
-| Development Time | 18 months |
-| Team Size | 1 human + 4 AI agents |
+| Metric           | Value                 |
+| ---------------- | --------------------- |
+| Models Validated | 120/120 (100%)        |
+| Quality Score    | 9.2/10 average        |
+| Test Coverage    | 140 chaos tests       |
+| Pass Rate        | 100%                  |
+| Development Time | 18 months             |
+| Team Size        | 1 human + 4 AI agents |
 
 ### Qualitative Outcomes
 
@@ -198,14 +198,14 @@ Sustainable Velocity: Solo founder maintained progress alongside full-time job a
 
 ## Models Used (Summary)
 
-| Transformation | Models Applied | Primary Use |
-|----------------|----------------|-------------|
-| P (Perspective) | P1, P8 | Problem framing, stakeholder identification |
-| IN (Inversion) | IN7 | Boundary analysis, constraint mapping |
-| CO (Composition) | CO8, CO12 | Architecture design, standardization |
-| DE (Decomposition) | DE3, DE7 | Modularization, root cause analysis |
-| RE (Recursion) | RE4, RE6, RE7 | Iteration, feedback loops, CI/CD |
-| SY (Systems) | SY18, SY19, SY20 | Measurement, meta-selection, coordination |
+| Transformation     | Models Applied   | Primary Use                                 |
+| ------------------ | ---------------- | ------------------------------------------- |
+| P (Perspective)    | P1, P8           | Problem framing, stakeholder identification |
+| IN (Inversion)     | IN7              | Boundary analysis, constraint mapping       |
+| CO (Composition)   | CO8, CO12        | Architecture design, standardization        |
+| DE (Decomposition) | DE3, DE7         | Modularization, root cause analysis         |
+| RE (Recursion)     | RE4, RE6, RE7    | Iteration, feedback loops, CI/CD            |
+| SY (Systems)       | SY18, SY19, SY20 | Measurement, meta-selection, coordination   |
 
 ---
 

@@ -74,6 +74,7 @@ wrangler d1 create hummbl-workflows
 ```
 
 Copy the database ID and update `wrangler.toml`:
+
 ```toml
 [[d1_databases]]
 binding = "DB"
@@ -88,6 +89,7 @@ wrangler kv:namespace create "CACHE"
 ```
 
 Copy the ID and update `wrangler.toml`:
+
 ```toml
 [[kv_namespaces]]
 binding = "CACHE"
@@ -158,6 +160,7 @@ CREATE INDEX idx_task_results_execution ON task_results(execution_id);
 ```
 
 Apply the schema:
+
 ```bash
 wrangler d1 execute hummbl-workflows --file=./schema.sql
 ```
@@ -167,6 +170,7 @@ wrangler d1 execute hummbl-workflows --file=./schema.sql
 ## API Endpoints to Build
 
 ### 1. Execute Workflow
+
 ```
 POST /api/workflows/:id/execute
 Body: { input?: Record<string, unknown> }
@@ -174,10 +178,11 @@ Response: { executionId: string }
 ```
 
 ### 2. Get Execution Status
+
 ```
 GET /api/executions/:id
-Response: { 
-  id, 
+Response: {
+  id,
   status,
   progress,
   taskResults: TaskResult[]
@@ -185,6 +190,7 @@ Response: {
 ```
 
 ### 3. Health Check
+
 ```
 GET /api/health
 Response: { status: "ok", timestamp: number }
@@ -223,20 +229,15 @@ Update frontend API calls to use Workers URL:
 
 ```typescript
 // src/services/api.ts (NEW FILE)
-const API_URL = import.meta.env.PROD 
-  ? 'https://api.hummbl.io'
-  : 'http://localhost:8787';
+const API_URL = import.meta.env.PROD ? 'https://api.hummbl.io' : 'http://localhost:8787';
 
-export async function executeWorkflow(
-  workflowId: string,
-  input?: Record<string, unknown>
-) {
+export async function executeWorkflow(workflowId: string, input?: Record<string, unknown>) {
   const response = await fetch(`${API_URL}/api/workflows/${workflowId}/execute`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ input }),
   });
-  
+
   return response.json();
 }
 
@@ -251,12 +252,14 @@ export async function getExecutionStatus(executionId: string) {
 ## Environment Variables
 
 ### Development (.dev.vars)
+
 ```
 ANTHROPIC_API_KEY=your_key_here
 OPENAI_API_KEY=your_key_here
 ```
 
 ### Production (Wrangler Secrets)
+
 Use `wrangler secret put` (already done in step 6)
 
 ---
@@ -288,11 +291,13 @@ Use `wrangler secret put` (already done in step 6)
 ## Need Help?
 
 ### Cloudflare Docs
+
 - Workers: https://developers.cloudflare.com/workers/
 - D1: https://developers.cloudflare.com/d1/
 - Hono.js: https://hono.dev/
 
 ### Commands Quick Reference
+
 ```bash
 wrangler login                    # Authenticate
 wrangler d1 create <name>         # Create database
@@ -330,4 +335,3 @@ wrangler kv:namespace create "CACHE"
 ```
 
 **Then let me know and I'll continue building the backend code!** 🚀
-

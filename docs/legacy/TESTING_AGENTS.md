@@ -69,7 +69,7 @@ npm run test:production
 3. TEST RESULTS
    ✅ [PASS] Production Build
       Build completed successfully
-   
+
    ✅ [PASS] File Check: index.html
       index.html exists
    ...
@@ -124,7 +124,7 @@ MANUAL TESTING CHECKLIST
 📄 Templates Page
    URL: http://localhost:4173/templates
    Status: Manual verification required
-   
+
 ...
 
 TESTING GUIDELINES:
@@ -199,14 +199,14 @@ The production test agent adds:
 ```typescript
 class ProductionTestAgent {
   // Core testing methods
-  runBuild()              // Execute npm run build
-  verifyDistStructure()   // Check files exist
-  checkBundleSize()       // Validate sizes
-  verifyBuildArtifacts()  // Parse HTML/assets
-  
+  runBuild(); // Execute npm run build
+  verifyDistStructure(); // Check files exist
+  checkBundleSize(); // Validate sizes
+  verifyBuildArtifacts(); // Parse HTML/assets
+
   // Reporting
-  generateSITREP()        // Human-readable report
-  generateJSONReport()    // Machine-readable data
+  generateSITREP(); // Human-readable report
+  generateJSONReport(); // Machine-readable data
 }
 ```
 
@@ -227,19 +227,20 @@ class ProductionTestAgent {
 ```typescript
 class VisualTestAgent {
   // Server management
-  startPreviewServer()    // Launch vite preview
-  stopPreviewServer()     // Clean shutdown
-  
+  startPreviewServer(); // Launch vite preview
+  stopPreviewServer(); // Clean shutdown
+
   // Test definition
-  getVisualTests()        // Define test cases
-  runVisualTests()        // Execute/instruct
-  
+  getVisualTests(); // Define test cases
+  runVisualTests(); // Execute/instruct
+
   // Reporting
-  generateReport()        // Testing checklist
+  generateReport(); // Testing checklist
 }
 ```
 
 **Mental Model:** P4 (Perspective)
+
 - Shifts from code → user perspective
 - Visual and functional validation
 - Human-in-the-loop for subjective quality
@@ -260,7 +261,7 @@ class VisualTestAgent {
 - ⚠️ Warning: > 40 KB
 - ❌ Fail: > 50 KB
 
-*Rationale*: Balance features vs. performance. Warn before hard limits.
+_Rationale_: Balance features vs. performance. Warn before hard limits.
 
 ### Required Files
 
@@ -284,10 +285,10 @@ class VisualTestAgent {
 // In scripts/test-production.ts
 async myNewTest(): Promise<void> {
   console.log('\n🔍 Running my test...\n');
-  
+
   // Perform check
   const result = await checkSomething();
-  
+
   // Record result
   this.addResult({
     test: 'My New Test',

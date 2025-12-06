@@ -109,8 +109,8 @@ aria-invalid={ariaInvalid}  // ariaInvalid is 'true' | 'false'
 
 ```typescript
 // Fix: Add aria-label or associated <label>
-<input 
-  type="text" 
+<input
+  type="text"
   placeholder="Task name"
   aria-label="Task name"
 />
@@ -168,13 +168,13 @@ grep -r "<select" src/ | grep -v "aria-label" | grep -v "<label"
 
 ## Priority Assessment
 
-| Issue | Count | Priority | Effort | Impact |
-|-------|-------|----------|--------|--------|
-| **ARIA type errors** | 6 | 🔴 HIGH | 30 min | Fixes lint errors |
-| **Icon button labels** | ~15 | 🟠 MEDIUM | 30 min | Screen reader UX |
-| **Select labels** | ~8 | 🟠 MEDIUM | 20 min | Screen reader UX |
-| **Form input labels** | 1-2 | 🟡 LOW | 10 min | Minor a11y |
-| **Inline styles** | ~30 | 🟢 IGNORE | - | False positive |
+| Issue                  | Count | Priority  | Effort | Impact            |
+| ---------------------- | ----- | --------- | ------ | ----------------- |
+| **ARIA type errors**   | 6     | 🔴 HIGH   | 30 min | Fixes lint errors |
+| **Icon button labels** | ~15   | 🟠 MEDIUM | 30 min | Screen reader UX  |
+| **Select labels**      | ~8    | 🟠 MEDIUM | 20 min | Screen reader UX  |
+| **Form input labels**  | 1-2   | 🟡 LOW    | 10 min | Minor a11y        |
+| **Inline styles**      | ~30   | 🟢 IGNORE | -      | False positive    |
 
 ---
 

@@ -82,7 +82,10 @@ describe('MetricsCollector', () => {
   });
 
   test('recordLatency updates histogram', () => {
-    const histogram = metrics.createHistogram('mcp_operation_duration_seconds', 'Operation duration');
+    const histogram = metrics.createHistogram(
+      'mcp_operation_duration_seconds',
+      'Operation duration'
+    );
 
     metrics.recordLatency('operation', 250); // 250ms = 0.25s
 
@@ -125,7 +128,8 @@ describe('MetricsCollector', () => {
 describe('Pre-defined metrics', () => {
   test('session metrics are properly initialized', async () => {
     // Import the pre-defined metrics
-    const { sessionCreateCounter, sessionCreateDuration, activeSessionsGauge } = await import('../src/observability/metrics.js');
+    const { sessionCreateCounter, sessionCreateDuration, activeSessionsGauge } =
+      await import('../src/observability/metrics.js');
 
     expect(sessionCreateCounter).toBeDefined();
     expect(sessionCreateDuration).toBeDefined();

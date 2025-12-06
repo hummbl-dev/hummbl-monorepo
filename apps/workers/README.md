@@ -99,6 +99,7 @@ CREATE TABLE model_relationships (
 ## Environment Variables
 
 Set in `wrangler.toml`:
+
 - `ENVIRONMENT` - "production" or "staging"
 - `API_VERSION` - API version string (default: "v1")
 

@@ -32,7 +32,7 @@ The workflows already have the required permissions:
 ```yaml
 permissions:
   contents: read
-  id-token: write  # Required for OIDC token
+  id-token: write # Required for OIDC token
 ```
 
 ### 3. No Secrets Needed!
@@ -69,7 +69,7 @@ sequenceDiagram
     participant GHA as GitHub Actions
     participant OIDC as GitHub OIDC Provider
     participant npm as npm Registry
-    
+
     GHA->>OIDC: Request OIDC token
     OIDC->>GHA: Return short-lived token
     GHA->>npm: Publish with OIDC token + provenance

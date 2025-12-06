@@ -12,16 +12,16 @@
 
 ### **Pages Using Mock Data (7/8)**
 
-| Page | Status | Mock Data Used | Real Backend Needed |
-|------|--------|----------------|---------------------|
-| Analytics Dashboard | ⚠️ Mock | Summary stats, charts, components | `/api/analytics/*` endpoints |
-| Token Usage | ⚠️ Mock | Token counts, costs, breakdowns | `/api/tokens/*` endpoints |
-| Execution Monitor | ⚠️ Mock | Execution status, progress | `/api/executions` (exists but limited) |
-| Error Logs | ⚠️ Mock | Error records, stack traces | `/api/errors/*` endpoints |
-| Team Members | ⚠️ Mock | User list, roles, invites | `/api/team/*` endpoints |
-| API Keys | ⚠️ Mock | Key list, usage stats | `/api/keys/*` endpoints |
-| Notifications | ⚠️ Mock | Notification feed | `/api/notifications/*` endpoints |
-| Infrastructure | ⚠️ Partial | Telemetry tracking | `/api/telemetry/*` (EXISTS but unused) |
+| Page                | Status     | Mock Data Used                    | Real Backend Needed                    |
+| ------------------- | ---------- | --------------------------------- | -------------------------------------- |
+| Analytics Dashboard | ⚠️ Mock    | Summary stats, charts, components | `/api/analytics/*` endpoints           |
+| Token Usage         | ⚠️ Mock    | Token counts, costs, breakdowns   | `/api/tokens/*` endpoints              |
+| Execution Monitor   | ⚠️ Mock    | Execution status, progress        | `/api/executions` (exists but limited) |
+| Error Logs          | ⚠️ Mock    | Error records, stack traces       | `/api/errors/*` endpoints              |
+| Team Members        | ⚠️ Mock    | User list, roles, invites         | `/api/team/*` endpoints                |
+| API Keys            | ⚠️ Mock    | Key list, usage stats             | `/api/keys/*` endpoints                |
+| Notifications       | ⚠️ Mock    | Notification feed                 | `/api/notifications/*` endpoints       |
+| Infrastructure      | ⚠️ Partial | Telemetry tracking                | `/api/telemetry/*` (EXISTS but unused) |
 
 **Reality Check**: 7/8 pages are UI-only with no real data connections.
 
@@ -32,14 +32,17 @@
 ### **Currently Deployed Backend** (Cloudflare Workers)
 
 ✅ **Working Endpoints**:
+
 - `/api/workflows/:id/execute` - Execute workflows
 - `/api/executions/:id` - Get execution status
 - `/api/telemetry/*` - Track events (8 endpoints built but frontend not using them)
 
 ⚠️ **Partially Working**:
+
 - Telemetry endpoints exist but pages use local mock data instead
 
 ❌ **Missing Endpoints** (Need to build):
+
 - `/api/analytics/summary` - Dashboard stats
 - `/api/analytics/components` - Component metrics
 - `/api/tokens/usage` - Token tracking
@@ -58,6 +61,7 @@
 ### **1. Analytics Dashboard** (`/analytics`)
 
 **Current State**: Mock data only
+
 ```typescript
 // In Analytics.tsx line ~70
 const mockSummary = {
@@ -68,12 +72,14 @@ const mockSummary = {
 ```
 
 **Needs**:
+
 - Real telemetry data from D1 database
 - Aggregate queries for stats
 - Time-range filtering
 - Chart data endpoints
 
 **Backend TODO**:
+
 ```typescript
 // Need to create:
 GET /api/analytics/summary?range=7d
@@ -86,6 +92,7 @@ GET /api/analytics/trends?metric=actions&range=30d
 ### **2. Token Usage** (`/analytics/tokens`)
 
 **Current State**: Mock data only
+
 ```typescript
 // In TokenUsage.tsx line ~60
 const mockData = {
@@ -96,11 +103,13 @@ const mockData = {
 ```
 
 **Needs**:
+
 - Real token tracking from workflow executions
 - Cost calculations based on actual model usage
 - Per-model and per-agent breakdowns
 
 **Backend TODO**:
+
 ```typescript
 GET /api/tokens/usage?range=30d
 GET /api/tokens/breakdown?by=model
@@ -112,6 +121,7 @@ GET /api/tokens/breakdown?by=agent
 ### **3. Execution Monitor** (`/monitor`)
 
 **Current State**: Mock data + partial real data
+
 ```typescript
 // In ExecutionMonitor.tsx line ~70
 const mockExecutions = [
@@ -121,12 +131,14 @@ const mockExecutions = [
 ```
 
 **Needs**:
+
 - Real execution list from D1
 - Live status updates
 - Filter by status/workflow
 - Auto-refresh capability
 
 **Backend TODO**:
+
 ```typescript
 GET /api/executions?status=running&limit=50
 GET /api/executions/:id (EXISTS but needs enhancement)
@@ -139,6 +151,7 @@ POST /api/executions/:id/retry
 ### **4. Error Logs** (`/logs/errors`)
 
 **Current State**: Mock data only
+
 ```typescript
 // In ErrorLogs.tsx line ~60
 const mockErrors = [
@@ -148,12 +161,14 @@ const mockErrors = [
 ```
 
 **Needs**:
+
 - Real error tracking from executions
 - Stack traces from actual failures
 - Resolution tracking
 - Error aggregation
 
 **Backend TODO**:
+
 ```typescript
 GET /api/errors?severity=high&resolved=false
 GET /api/errors/:id
@@ -166,6 +181,7 @@ GET /api/errors/stats
 ### **5. Team Members** (`/team`)
 
 **Current State**: Mock data only
+
 ```typescript
 // In TeamMembers.tsx line ~50
 const mockMembers = [
@@ -175,12 +191,14 @@ const mockMembers = [
 ```
 
 **Needs**:
+
 - Real user management system
 - Role-based access control
 - Invite workflow
 - Activity tracking
 
 **Backend TODO**:
+
 ```typescript
 GET /api/team/members
 POST /api/team/invite
@@ -194,6 +212,7 @@ GET /api/team/activity
 ### **6. API Keys** (`/settings/api-keys`)
 
 **Current State**: Mock data + localStorage
+
 ```typescript
 // In APIKeys.tsx line ~50
 const mockKeys = [
@@ -203,12 +222,14 @@ const mockKeys = [
 ```
 
 **Needs**:
+
 - Secure key storage (encrypted in D1)
 - Key rotation
 - Usage tracking per key
 - Service validation
 
 **Backend TODO**:
+
 ```typescript
 GET /api/keys
 POST /api/keys
@@ -222,6 +243,7 @@ POST /api/keys/:id/rotate
 ### **7. Notifications** (`/notifications`)
 
 **Current State**: Mock data only
+
 ```typescript
 // In Notifications.tsx line ~50
 const mockNotifications = [
@@ -231,12 +253,14 @@ const mockNotifications = [
 ```
 
 **Needs**:
+
 - Real notification system
 - Event-driven triggers
 - Read/unread tracking
 - Category filtering
 
 **Backend TODO**:
+
 ```typescript
 GET /api/notifications?unread=true
 POST /api/notifications/:id/read
@@ -249,6 +273,7 @@ DELETE /api/notifications/:id
 ### **8. Telemetry Infrastructure**
 
 **Current State**: Backend exists but not used
+
 - 8 telemetry endpoints built in workers/src/routes/telemetry.ts
 - D1 schema created with tables
 - Frontend SDK exists but pages use mock data instead
@@ -313,16 +338,16 @@ DELETE /api/notifications/:id
 
 ## 📈 Effort Estimate
 
-| Priority | Work Item | Time | Status |
-|----------|-----------|------|--------|
-| 🔴 Critical | Connect telemetry | 2-3h | ❌ Not started |
-| 🔴 Critical | Real execution data | 1-2h | ❌ Not started |
-| 🔴 Critical | Error tracking | 2-3h | ❌ Not started |
-| 🟡 High | Token usage tracking | 3-4h | ❌ Not started |
-| 🟡 High | Notification system | 4-5h | ❌ Not started |
-| 🟡 High | API key management | 2-3h | ❌ Not started |
-| 🟢 Medium | Team management | 8-10h | ❌ Not started |
-| 🟢 Medium | Full analytics | 5-6h | ❌ Not started |
+| Priority    | Work Item            | Time  | Status         |
+| ----------- | -------------------- | ----- | -------------- |
+| 🔴 Critical | Connect telemetry    | 2-3h  | ❌ Not started |
+| 🔴 Critical | Real execution data  | 1-2h  | ❌ Not started |
+| 🔴 Critical | Error tracking       | 2-3h  | ❌ Not started |
+| 🟡 High     | Token usage tracking | 3-4h  | ❌ Not started |
+| 🟡 High     | Notification system  | 4-5h  | ❌ Not started |
+| 🟡 High     | API key management   | 2-3h  | ❌ Not started |
+| 🟢 Medium   | Team management      | 8-10h | ❌ Not started |
+| 🟢 Medium   | Full analytics       | 5-6h  | ❌ Not started |
 
 **Total Estimate**: **28-36 hours** to make production-ready
 
@@ -331,6 +356,7 @@ DELETE /api/notifications/:id
 ## 🎯 Release Readiness Assessment
 
 ### **Current State**
+
 - ✅ UI/UX: Complete and polished
 - ✅ Navigation: All working
 - ✅ Components: Reusable and tested
@@ -341,9 +367,11 @@ DELETE /api/notifications/:id
 - ❌ **Authentication: Not implemented**
 
 ### **Can We Release Now?**
+
 **NO** ❌
 
 **Why Not:**
+
 1. All data is fake/mock
 2. No real analytics
 3. No real error tracking
@@ -352,7 +380,9 @@ DELETE /api/notifications/:id
 6. No authentication
 
 ### **Minimum Viable for 10 Users**
+
 **Need at minimum:**
+
 1. ✅ Telemetry connected (2-3h)
 2. ✅ Real execution data (1-2h)
 3. ✅ Error tracking (2-3h)
@@ -367,6 +397,7 @@ DELETE /api/notifications/:id
 ### **Option A: Quick MVP (9-12 hours)**
 
 **Focus**: Make core functionality real
+
 1. Connect existing telemetry (2-3h)
 2. Real execution monitor (1-2h)
 3. Basic error tracking (2-3h)
@@ -379,6 +410,7 @@ DELETE /api/notifications/:id
 ### **Option B: Production Ready (28-36 hours)**
 
 **Focus**: Complete all 8 pages
+
 1. All Option A items (9-12h)
 2. Full notification system (4-5h)
 3. API key management (2-3h)
@@ -422,6 +454,7 @@ DELETE /api/notifications/:id
 **Reality**: "8 UI pages complete, 0 backend connections = demo only"
 
 **This is actually common in product development:**
+
 - UI prototype: 1 week ✅ DONE
 - Backend integration: 1-4 weeks ❌ TODO
 - Polish & testing: 1 week ❌ TODO
@@ -433,12 +466,14 @@ DELETE /api/notifications/:id
 ## ✅ Next Actions
 
 **For you to decide:**
+
 1. Which option (A, B, or C)?
 2. How many hours can you allocate?
 3. When do you need real users?
 4. What's the priority order of features?
 
 **I can help with:**
+
 - Building any/all of the missing backend endpoints
 - Connecting pages to real data
 - Setting up authentication

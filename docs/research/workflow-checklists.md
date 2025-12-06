@@ -13,6 +13,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "What system-level patterns am I missing?"
 
 ### DE06: Failure Mode Analysis
+
 - [ ] **List all components**: Identify every service, database, cache, queue, and external dependency
 - [ ] **For each component, ask**: "How can this fail?"
   - Network timeouts, connection failures
@@ -25,6 +26,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "What's the complete failure landscape?"
 
 ### IN01: Premortem Analysis
+
 - [ ] **Invert success**: "What would have to fail for this to be working?"
 - [ ] **Worst-case scenarios**: What are the most damaging failure combinations?
 - [ ] **Hidden assumptions**: What must be true for the system to work?
@@ -33,6 +35,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "How could this get worse before we notice?"
 
 ### SY04: Cascade Analysis
+
 - [ ] **Map failure propagation**: If Component A fails, what fails next?
 - [ ] **Identify amplification points**: Where does one failure trigger many?
 - [ ] **Find critical paths**: Which failure chains cause the most damage?
@@ -43,6 +46,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 ## Architecture Design Checklist (P01 → DE01 → CO01 → SY01)
 
 ### P01: First Principles Thinking
+
 - [ ] **Strip assumptions**: What do you "know" that might not be true?
 - [ ] **Fundamental truths**: What physical, technical, or business laws apply?
 - [ ] **Core requirements**: What must the system absolutely do?
@@ -51,6 +55,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "What are the immutable truths here?"
 
 ### DE01: Root Cause Analysis
+
 - [ ] **5 Whys technique**: Ask "why" repeatedly until you reach root cause
 - [ ] **Component breakdown**: Divide system into smallest functional units
 - [ ] **Dependency mapping**: What does each component absolutely need?
@@ -59,6 +64,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "What are the fundamental building blocks?"
 
 ### CO01: Modular Design
+
 - [ ] **Single responsibility**: Each module does one thing well
 - [ ] **Interface design**: Clean contracts between modules
 - [ ] **Dependency injection**: Modules don't create their dependencies
@@ -67,6 +73,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "How do these components fit together?"
 
 ### SY01: System-of-Systems View
+
 - [ ] **Ecosystem mapping**: How does this system interact with others?
 - [ ] **Data flows**: Where does information enter/exit the system?
 - [ ] **External dependencies**: What other systems must be available?
@@ -77,6 +84,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 ## Performance Optimization Checklist (DE02 → P19 → CO03 → RE16)
 
 ### DE02: Value Stream Mapping
+
 - [ ] **Map the flow**: Trace requests from entry to completion
 - [ ] **Identify bottlenecks**: Where do requests queue or slow down?
 - [ ] **Measure latency**: Time spent in each component
@@ -85,6 +93,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "Where does time get spent?"
 
 ### P19: Opportunity Cost Analysis
+
 - [ ] **Current performance**: What's the baseline performance?
 - [ ] **Cost of optimization**: Time, complexity, risk of each improvement
 - [ ] **Expected benefit**: How much performance gain from each option?
@@ -93,6 +102,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "Is this optimization worth the cost?"
 
 ### CO03: Pipeline Design
+
 - [ ] **Stage identification**: Break work into sequential stages
 - [ ] **Parallel opportunities**: Which stages can run simultaneously?
 - [ ] **Queue management**: Where to buffer work between stages
@@ -101,6 +111,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "How can work flow more efficiently?"
 
 ### RE16: Recursive Optimization
+
 - [ ] **Meta-optimization**: Optimize the optimization process itself
 - [ ] **Measurement improvement**: Better ways to measure performance
 - [ ] **Automation**: Tools to continuously monitor and adjust
@@ -111,6 +122,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 ## Feature Development Checklist (CO04 → DE19 → IN17 → SY17)
 
 ### CO04: Interface Design
+
 - [ ] **User needs first**: Design for how people actually use the feature
 - [ ] **Progressive disclosure**: Show basic features first, advanced later
 - [ ] **Error prevention**: Design to prevent common mistakes
@@ -119,6 +131,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "How will people actually interact with this?"
 
 ### DE19: Responsibility Decomposition
+
 - [ ] **Clear ownership**: Each feature/component has one clear owner
 - [ ] **Separation of concerns**: UI, business logic, and data are separate
 - [ ] **Dependency management**: Minimize coupling between components
@@ -127,6 +140,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "Who is responsible for what?"
 
 ### IN17: Assumption Inversion
+
 - [ ] **Challenge requirements**: What if the stated needs are wrong?
 - [ ] **User behavior**: What if users behave differently than expected?
 - [ ] **Technical constraints**: What if current tech choices limit us?
@@ -135,6 +149,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "What if everything we assume is wrong?"
 
 ### SY17: Paradox Resolution
+
 - [ ] **Identify conflicts**: Where do requirements seem contradictory?
 - [ ] **Higher perspective**: Find the underlying need behind conflicting requirements
 - [ ] **Creative solutions**: Both/and solutions instead of either/or choices
@@ -145,6 +160,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 ## Incident Response Checklist (DE06 → CO17 → RE06 → SY19)
 
 ### DE06: Failure Mode Analysis
+
 - [ ] **Symptom documentation**: What exactly is failing and how?
 - [ ] **Scope assessment**: How many users/services are affected?
 - [ ] **Timeline reconstruction**: When did this start? What changed?
@@ -153,6 +169,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "What exactly is broken and why?"
 
 ### CO17: Orchestration Patterns
+
 - [ ] **Service coordination**: Which services need to work together for recovery?
 - [ ] **Rollback procedures**: How to safely undo recent changes?
 - [ ] **Traffic management**: Route traffic away from failing components
@@ -161,6 +178,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "How do we coordinate the recovery?"
 
 ### RE06: Feedback Loops
+
 - [ ] **Monitoring alerts**: Are alerts creating alert fatigue?
 - [ ] **Retry logic**: Are retries making problems worse?
 - [ ] **Auto-scaling**: Is scaling creating oscillation?
@@ -169,6 +187,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "What responses are making this worse?"
 
 ### SY19: Meta-Synthesis
+
 - [ ] **Pattern recognition**: What similar incidents have we had?
 - [ ] **Prevention effectiveness**: Did previous fixes actually help?
 - [ ] **Process improvements**: What in our incident process needs fixing?
@@ -179,6 +198,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 ## Daily Standup Integration
 
 ### Quick HUMMBL Check
+
 - [ ] **P01**: Question one assumption from yesterday's plan
 - [ ] **DE01**: Identify one potential root cause for any blocker
 - [ ] **CO01**: Ensure tasks have clear interfaces/dependencies
@@ -186,6 +206,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "What's one insight that changes how we work?"
 
 ### Sprint Planning Integration
+
 - [ ] **P18**: Consider sprint goals in system context
 - [ ] **DE02**: Map value stream for planned features
 - [ ] **CO03**: Design feature rollout pipeline
@@ -195,6 +216,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 ## Code Review Integration
 
 ### Reviewer Checklist
+
 - [ ] **CO04**: Does the interface serve user needs well?
 - [ ] **DE19**: Are responsibilities clearly separated?
 - [ ] **IN17**: What assumptions might be problematic?
@@ -202,6 +224,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 - [ ] **Question**: "Does this code make the system better?"
 
 ### Author Checklist
+
 - [ ] **P01**: Did I question assumptions in requirements?
 - [ ] **DE01**: Did I identify and address root causes?
 - [ ] **CO01**: Is the code modular and well-interfaced?
@@ -211,6 +234,7 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 ## Tool Integration Ideas
 
 ### VS Code Extension
+
 ```json
 {
   "hummbl.checklists": {
@@ -222,11 +246,13 @@ Practical checklists for applying HUMMBL operators in engineering scenarios. Eac
 ```
 
 ### GitHub Integration
+
 - PR template with HUMMBL checklist
 - Automated checklist validation
 - Integration with issue tracking
 
 ### CLI Tool
+
 ```bash
 # Start debugging workflow
 hummbl workflow start debugging --problem "API timeouts"

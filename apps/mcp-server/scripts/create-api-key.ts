@@ -5,10 +5,10 @@
  * Generate and manage API keys with tiered access
  */
 
-import { generateApiKey } from "../src/auth/api-keys.js";
-import type { ApiKeyTier } from "../src/types/domain.js";
-import { writeFileSync } from "fs";
-import { join } from "path";
+import { generateApiKey } from '../src/auth/api-keys.js';
+import type { ApiKeyTier } from '../src/types/domain.js';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 
 function printUsage() {
   console.log(`
@@ -37,30 +37,30 @@ function saveApiKeyToFile(keyInfo: any): void {
   const filename = `api-key-${keyInfo.tier}-${keyInfo.id.substring(0, 8)}.json`;
   const filepath = join(process.cwd(), filename);
 
-  writeFileSync(filepath, JSON.stringify(keyInfo, null, 2), "utf-8");
+  writeFileSync(filepath, JSON.stringify(keyInfo, null, 2), 'utf-8');
   console.log(`✅ API Key saved to: ${filename}`);
 }
 
 async function main() {
   const args = process.argv.slice(2);
 
-  if (args.length === 0 || args[0] === "--help" || args[0] === "-h") {
+  if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
     printUsage();
     return;
   }
 
   if (args.length < 2) {
-    console.error("Error: Please provide both tier and name");
+    console.error('Error: Please provide both tier and name');
     printUsage();
     process.exit(1);
   }
 
   const [tierArg, ...nameParts] = args;
-  const name = nameParts.join(" ");
+  const name = nameParts.join(' ');
 
-  const validTiers: ApiKeyTier[] = ["free", "pro", "enterprise"];
+  const validTiers: ApiKeyTier[] = ['free', 'pro', 'enterprise'];
   if (!validTiers.includes(tierArg as ApiKeyTier)) {
-    console.error(`Error: Invalid tier "${tierArg}". Must be one of: ${validTiers.join(", ")}`);
+    console.error(`Error: Invalid tier "${tierArg}". Must be one of: ${validTiers.join(', ')}`);
     process.exit(1);
   }
 
@@ -69,29 +69,31 @@ async function main() {
   // Generate the API key
   const keyInfo = generateApiKey(tier, name);
 
-  console.log("🔑 HUMMBL API Key Generated");
-  console.log("=".repeat(50));
+  console.log('🔑 HUMMBL API Key Generated');
+  console.log('='.repeat(50));
   console.log(`Name: ${keyInfo.name}`);
   console.log(`Tier: ${keyInfo.tier.toUpperCase()}`);
   console.log(`Key: ${keyInfo.key}`);
-  console.log(`Rate Limit: ${keyInfo.rateLimit.requestsPerHour}/hour, ${keyInfo.rateLimit.requestsPerDay}/day`);
-  console.log(`Permissions: ${keyInfo.permissions.join(", ")}`);
-  console.log("=".repeat(50));
+  console.log(
+    `Rate Limit: ${keyInfo.rateLimit.requestsPerHour}/hour, ${keyInfo.rateLimit.requestsPerDay}/day`
+  );
+  console.log(`Permissions: ${keyInfo.permissions.join(', ')}`);
+  console.log('='.repeat(50));
 
   // Save to file
   saveApiKeyToFile(keyInfo);
 
-  console.log("\n📋 Usage Instructions:");
+  console.log('\n📋 Usage Instructions:');
   console.log(`curl -H "Authorization: Bearer ${keyInfo.key}" https://api.hummbl.io/health`);
   console.log(`curl -H "Authorization: Bearer ${keyInfo.key}" https://api.hummbl.io/v1/models`);
 
-  console.log("\n⚠️  To activate this key in production:");
-  console.log("1. Upload the JSON file to your KV namespace");
-  console.log("2. Or use wrangler to set it directly:");
+  console.log('\n⚠️  To activate this key in production:');
+  console.log('1. Upload the JSON file to your KV namespace');
+  console.log('2. Or use wrangler to set it directly:');
   console.log(`wrangler kv:key put "${keyInfo.key}" --namespace-id=YOUR_NAMESPACE_ID`);
   console.log(`Value: ${JSON.stringify(keyInfo)}`);
 
-  console.log("\n💡 Test locally:");
+  console.log('\n💡 Test locally:');
   console.log(`wrangler kv:key put "${keyInfo.key}" --local`);
   console.log(`Value: ${JSON.stringify(keyInfo)}`);
 }

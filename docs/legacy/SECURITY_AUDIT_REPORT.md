@@ -11,7 +11,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Overall Status**: ✅ **PASS** with minor recommendations
 
 - **Critical Issues**: 0
-- **High Priority**: 0  
+- **High Priority**: 0
 - **Medium Priority**: 2
 - **Low Priority**: 3
 - **Informational**: 5
@@ -47,22 +47,21 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Priority**: Low
 
 #### Present Headers:
+
 - ✅ **Content-Security-Policy**: Configured in `vercel.json`
   - Restricts script sources
   - Allows necessary origins for backend API and analytics
   - Includes `'unsafe-eval'` for ES modules (required by Vite)
-  
 - ✅ **X-Frame-Options**: `DENY`
   - Prevents clickjacking attacks
   - Configured in Vercel headers
-  
 - ✅ **X-Content-Type-Options**: `nosniff`
   - Prevents MIME type sniffing
-  
 - ✅ **Referrer-Policy**: `origin-when-cross-origin`
   - Limits referrer information leakage
 
 #### Missing Headers:
+
 - ⚠️ **Permissions-Policy** (formerly Feature-Policy): Not configured
   - **Risk**: Low - limits browser features like camera, microphone
   - **Recommendation**: Add to `vercel.json`:
@@ -71,6 +70,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
     ```
 
 **Files Reviewed**:
+
 - `vercel.json` - Security headers configuration
 
 ---
@@ -84,7 +84,6 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
   - `Access-Control-Allow-Origin`: Restricted to known origins
   - Configured in `workers/src/index.ts` using Hono CORS middleware
   - Allows: localhost (dev), hummbl.io, vercel.app domains
-  
 - ✅ **Content-Type**: Always set for responses
   - JSON responses: `application/json`
   - Health check: Returns proper JSON
@@ -92,6 +91,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Recommendation**: CORS configuration is appropriate for API. Consider tightening origin list if specific domains are finalized.
 
 **Files Reviewed**:
+
 - `workers/src/index.ts` - CORS middleware configuration
 
 ---
@@ -102,6 +102,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Priority**: N/A
 
 #### Authentication Implementation:
+
 - ✅ **Session-based JWT tokens**
   - Tokens generated on login
   - Expiration timestamps enforced
@@ -123,6 +124,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
   - Example: `/api/workflows-protected/admin/workflows`
 
 #### Test Results:
+
 - ✅ Unauthenticated requests to `/api/auth/me` → 401
 - ✅ Invalid credentials → 401
 - ✅ Missing token → 401
@@ -131,6 +133,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Recommendation**: None - properly implemented
 
 **Files Reviewed**:
+
 - `workers/src/lib/auth.ts` - Authentication utilities
 - `workers/src/routes/auth.ts` - Auth endpoints
 - `workers/src/routes/workflows-protected.ts` - Protected routes
@@ -152,6 +155,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 - ✅ **Type validation**: Email format, password length, etc.
 
 #### Test Results:
+
 - ✅ Malformed JSON → 400
 - ✅ Missing required fields → 400
 - ✅ Invalid email format → 400
@@ -160,6 +164,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Recommendation**: None - validation is comprehensive
 
 **Files Reviewed**:
+
 - `workers/src/lib/validation.ts` - Zod schemas
 - `workers/src/routes/auth.ts` - Validation usage
 
@@ -176,11 +181,13 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
   - Returns 429 with `Retry-After` header
 
 #### Rate Limits:
+
 - Auth endpoints: **5 requests/minute** ✅
 - Execution endpoints: **10 requests/minute** ✅
 - General endpoints: **100 requests/minute** ✅
 
 #### Test Results (from load tests):
+
 - ✅ Auth endpoint enforces 5 req/min limit
 - ✅ 429 responses include `Retry-After` header
 - ✅ Rate limiting triggered correctly in automated tests
@@ -189,6 +196,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Recommendation**: None - working as designed
 
 **Files Reviewed**:
+
 - `workers/src/lib/rateLimit.ts` - Rate limiter implementation
 - `workers/src/index.ts` - Rate limit middleware application
 
@@ -208,12 +216,14 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 - ✅ **SQL injection attempts rejected**: Returns 400/401
 
 #### Test Results:
+
 - ✅ `admin' OR 1=1--` in email field → 401 (rejected safely)
 - ✅ No SQL errors exposed to client
 
 **Recommendation**: None - properly using parameterized queries
 
 **Files Reviewed**:
+
 - `workers/src/lib/auth.ts` - Database queries
 - `workers/src/routes/workflows-protected.ts` - Workflow queries
 - `workers/migrations/*.sql` - Schema definitions
@@ -226,6 +236,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Priority**: N/A
 
 #### Frontend Protection:
+
 - ✅ **React auto-escaping**: React escapes all user content by default
 - ✅ **No `dangerouslySetInnerHTML`**: Confirmed in codebase
 - ✅ **CSP configured**: Restricts inline scripts
@@ -233,6 +244,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
   - Blocks unauthorized script execution
 
 #### Backend Protection:
+
 - ✅ **JSON responses only**: No HTML rendering on backend
 - ✅ **Content-Type headers**: Always `application/json`
 - ✅ **No script injection vectors**: API returns structured data
@@ -240,6 +252,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Recommendation**: Consider removing `'unsafe-eval'` from CSP if possible by adjusting build configuration (though Vite ES modules currently require it).
 
 **Files Reviewed**:
+
 - `vercel.json` - CSP configuration
 - `src/**/*.tsx` - React components (no dangerous HTML)
 
@@ -257,6 +270,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 - ✅ **Headers controlled**: Specific allowed headers
 
 #### Allowed Origins:
+
 ```javascript
 [
   'http://localhost:3000',
@@ -264,13 +278,14 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
   'https://hummbl.io',
   'https://*.hummbl.io',
   'https://hummbl.vercel.app',
-  'https://*.vercel.app'
-]
+  'https://*.vercel.app',
+];
 ```
 
 **Recommendation**: Once production domain is finalized, remove wildcard subdomains and development origins from production build.
 
 **Files Reviewed**:
+
 - `workers/src/index.ts` - CORS middleware
 
 ---
@@ -281,6 +296,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Priority**: Low
 
 - ⚠️ **Version information in health endpoint**:
+
   ```json
   {
     "service": "hummbl-backend",
@@ -288,6 +304,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
     "status": "operational"
   }
   ```
+
   - **Risk**: Low - version disclosure could aid attackers
   - **Mitigation**: Version info is generic (1.0.0)
 
@@ -298,6 +315,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 **Recommendation**: Consider removing version from health endpoint or make it admin-only.
 
 **Files Reviewed**:
+
 - `workers/src/index.ts` - Health check endpoint
 
 ---
@@ -305,58 +323,68 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 ## OWASP Top 10 2021 Compliance
 
 ### A01:2021 - Broken Access Control ✅ PASS
+
 - Authentication required for protected endpoints
 - Role-based access control implemented
 - JWT token validation on every request
 - Admin routes protected with `requireRole('admin')`
 
 ### A02:2021 - Cryptographic Failures ✅ PASS
+
 - HTTPS enforced on all endpoints
 - Passwords hashed with SHA-256
 - JWT tokens for session management
 - No plaintext secrets in code
 
 ### A03:2021 - Injection ✅ PASS
+
 - SQL injection prevented via parameterized queries
 - Input validation with Zod schemas
 - No eval() or dangerous code execution
 - XSS prevented by React auto-escaping + CSP
 
 ### A04:2021 - Insecure Design ✅ PASS
+
 - Rate limiting prevents abuse
 - Authentication required for sensitive operations
 - Error handling doesn't leak sensitive info
 - Principle of least privilege applied
 
 ### A05:2021 - Security Misconfiguration ✅ PASS
+
 - Security headers configured
 - CORS properly restricted
 - No default credentials
 - Error messages sanitized
 
 ### A06:2021 - Vulnerable and Outdated Components ⚠️ MONITORING
+
 - Dependencies tracked in `package.json`
 - Recommend: Regular `npm audit` runs
 - Recommend: Dependabot for automated updates
 
 ### A07:2021 - Identification and Authentication Failures ✅ PASS
+
 - Session tokens with expiration
 - Password requirements enforced
 - Rate limiting on auth endpoints
 - No session fixation vulnerabilities
 
 ### A08:2021 - Software and Data Integrity Failures ✅ PASS
+
 - Code deployed via CI/CD (GitHub → Vercel/Cloudflare)
 - No unsigned code execution
 - Dependencies locked in package-lock.json
 
 ### A09:2021 - Security Logging and Monitoring Failures ⚠️ PARTIAL
+
 - Basic logging implemented (`src/utils/logger.ts`)
 - Telemetry service tracks errors
 - Recommend: Centralized log aggregation
 - Recommend: Alerting on suspicious activity
 
 ### A10:2021 - Server-Side Request Forgery (SSRF) ✅ PASS
+
 - No user-controlled URLs in backend requests
 - API calls validated and sanitized
 - Cloudflare Workers sandbox provides isolation
@@ -366,6 +394,7 @@ This security audit evaluates the HUMMBL application against OWASP Top 10 vulner
 ## Recommendations
 
 ### High Priority
+
 _None identified_
 
 ### Medium Priority
@@ -421,6 +450,7 @@ BACKEND_URL=http://localhost:8787 ./scripts/security-audit.sh
 ```
 
 Tests performed:
+
 1. HTTPS enforcement
 2. Security headers (backend & frontend)
 3. Rate limiting
@@ -435,13 +465,13 @@ Tests performed:
 
 ## Compliance Summary
 
-| Standard | Status | Notes |
-|----------|--------|-------|
-| OWASP Top 10 2021 | ✅ Compliant | See detailed breakdown above |
-| CWE Top 25 | ✅ Compliant | Injection, auth, crypto covered |
-| PCI DSS | N/A | No payment card data processed |
-| GDPR | ⚠️ Partial | User data collected, privacy policy needed |
-| SOC 2 | N/A | Not applicable for current scale |
+| Standard          | Status       | Notes                                      |
+| ----------------- | ------------ | ------------------------------------------ |
+| OWASP Top 10 2021 | ✅ Compliant | See detailed breakdown above               |
+| CWE Top 25        | ✅ Compliant | Injection, auth, crypto covered            |
+| PCI DSS           | N/A          | No payment card data processed             |
+| GDPR              | ⚠️ Partial   | User data collected, privacy policy needed |
+| SOC 2             | N/A          | Not applicable for current scale           |
 
 ---
 
