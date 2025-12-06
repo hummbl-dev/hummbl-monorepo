@@ -10,6 +10,7 @@ import {
   isConfidence,
   isReviewStatus,
 } from '../types/relationships.js';
+import type { D1Database } from '@cloudflare/workers-types';
 
 interface Env {
   DB: D1Database;
@@ -103,31 +104,15 @@ async function importRelationshipsFromCSV(env: Env, csvText: string, dryRun = fa
       }
 
       if (!dryRun) {
-        const result = await db.createRelationship({
-          id: relationship.id,
-          model_a: relationship.model_a.toUpperCase(),
-          model_b: relationship.model_b.toUpperCase(),
+        // Convert to RelationshipInput format
+        const relationshipInput = {
+          source_code: relationship.model_a.toUpperCase(),
+          target_code: relationship.model_b.toUpperCase(),
           relationship_type: relationship.relationship_type,
-          direction: relationship.direction,
-          confidence: relationship.confidence || 'U',
-          logical_derivation: relationship.logical_derivation,
-          has_literature_support:
-            relationship.has_literature_support === '1' ||
-            relationship.has_literature_support?.toLowerCase() === 'true'
-              ? 1
-              : 0,
-          literature_citation: relationship.literature_citation,
-          literature_url: relationship.literature_url,
-          empirical_observation: relationship.empirical_observation,
-          validated_by: relationship.validated_by,
-          validated_at: relationship.validated_at,
-          review_status: relationship.review_status || 'draft',
-          notes: relationship.notes,
-        });
-
-        if (!result.ok) {
-          throw new Error(result.error);
-        }
+          confidence: (relationship.confidence || 'C') as 'A' | 'B' | 'C',
+          evidence: relationship.logical_derivation,
+        };
+        await db.createRelationship(relationshipInput);
       }
 
       successCount++;

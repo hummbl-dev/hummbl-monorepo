@@ -1,19 +1,24 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerMethodologyTools } from './methodology.js';
-import { getSelfDialecticalMethodology, auditModelCodes } from '../framework/self_dialectical.js';
 
 type ToolHandler = (input?: unknown) => Promise<unknown>;
 
 vi.mock('../framework/self_dialectical.js', () => {
+  const getSelfDialecticalMethodology = vi.fn();
+  const auditModelCodes = vi.fn();
   return {
-    getSelfDialecticalMethodology: vi.fn(),
-    auditModelCodes: vi.fn(),
+    getSelfDialecticalMethodology,
+    auditModelCodes,
   };
 });
 
-const mockGetSelfDialecticalMethodology = vi.mocked(getSelfDialecticalMethodology);
-const mockAuditModelCodes = vi.mocked(auditModelCodes);
+const { getSelfDialecticalMethodology, auditModelCodes } =
+  await import('../framework/self_dialectical.js');
+
+// Type assertions for mocked functions - cast to any to allow mock methods
+const mockedGetMethodology = getSelfDialecticalMethodology as any;
+const mockedAuditCodes = auditModelCodes as any;
 
 describe('registerMethodologyTools', () => {
   let server: McpServer;
@@ -23,13 +28,15 @@ describe('registerMethodologyTools', () => {
     server = new McpServer({ name: 'test', version: '1.0.0' });
     registeredHandlers = {};
 
-    vi.spyOn(server, 'registerTool').mockImplementation((name, _config, handler) => {
-      registeredHandlers[name] = handler as unknown as ToolHandler;
-      return {} as any;
-    });
+    (vi.spyOn(server, 'registerTool') as any).mockImplementation(
+      (name: any, _config: any, handler: any) => {
+        registeredHandlers[name] = handler as unknown as ToolHandler;
+        return server;
+      }
+    );
 
-    mockGetSelfDialecticalMethodology.mockReset();
-    mockAuditModelCodes.mockReset();
+    mockedGetMethodology.mockReset();
+    mockedAuditCodes.mockReset();
     registerMethodologyTools(server);
   });
 
@@ -43,18 +50,20 @@ describe('registerMethodologyTools', () => {
       stages: [],
       metaModels: [],
     };
-    mockGetSelfDialecticalMethodology.mockReturnValue({ ok: true, value: methodology });
+    mockedGetMethodology.mockReturnValue({ ok: true, value: methodology });
 
     const handler = registeredHandlers['get_methodology'];
     const response = (await handler()) as {
       content: Array<{ text: string }>;
+      structuredContent: unknown;
     };
 
     expect(JSON.parse(response.content[0].text)).toEqual(methodology);
+    expect(response.structuredContent).toEqual(methodology);
   });
 
   it('returns error content when methodology lookup fails', async () => {
-    mockGetSelfDialecticalMethodology.mockReturnValue({
+    mockedGetMethodology.mockReturnValue({
       ok: false,
       error: { type: 'Internal', message: 'boom' },
     });
@@ -74,18 +83,16 @@ describe('registerMethodologyTools', () => {
       invalidCount: 0,
       issues: [],
     };
-    mockAuditModelCodes.mockReturnValue({ ok: true, value: auditResult });
+    mockedAuditCodes.mockReturnValue({ ok: true, value: auditResult });
 
     const handler = registeredHandlers['audit_model_references'];
-    const response = (await handler({ items: [{ code: 'P1' }] })) as {
-      content: Array<{ text: string }>;
-    };
+    const response = (await handler({ items: [{ code: 'P1' }] })) as { structuredContent: unknown };
 
-    expect(JSON.parse(response.content[0].text)).toEqual(auditResult);
+    expect(response.structuredContent).toEqual(auditResult);
   });
 
   it('surface audit errors with validation details', async () => {
-    mockAuditModelCodes.mockReturnValue({
+    mockedAuditCodes.mockReturnValue({
       ok: false,
       error: { type: 'ValidationError', message: 'bad input' },
     });
@@ -101,10 +108,7 @@ describe('registerMethodologyTools', () => {
   });
 
   it('surfaces audit errors for non-validation failures', async () => {
-    mockAuditModelCodes.mockReturnValue({
-      ok: false,
-      error: { type: 'Internal', message: 'boom' },
-    });
+    mockedAuditCodes.mockReturnValue({ ok: false, error: { type: 'Internal', message: 'boom' } });
 
     const handler = registeredHandlers['audit_model_references'];
     const response = (await handler({ items: [{ code: 'P1' }] })) as {
@@ -117,7 +121,7 @@ describe('registerMethodologyTools', () => {
   });
 
   it('handles expected transformation validation', async () => {
-    mockAuditModelCodes.mockReturnValue({
+    mockedAuditCodes.mockReturnValue({
       ok: true,
       value: {
         methodologyId: 'meth',
@@ -139,11 +143,12 @@ describe('registerMethodologyTools', () => {
 
     const handler = registeredHandlers['audit_model_references'];
     const response = (await handler({ items: [{ code: 'P1', expectedTransformation: 'IN' }] })) as {
-      content: Array<{ text: string }>;
+      structuredContent: {
+        issues: Array<{ expectedTransformation?: string; actualTransformation?: string }>;
+      };
     };
 
-    const payload = JSON.parse(response.content[0].text);
-    expect(payload.issues[0].expectedTransformation).toBe('IN');
-    expect(payload.issues[0].actualTransformation).toBe('P');
+    expect(response.structuredContent.issues[0].expectedTransformation).toBe('IN');
+    expect(response.structuredContent.issues[0].actualTransformation).toBe('P');
   });
 });

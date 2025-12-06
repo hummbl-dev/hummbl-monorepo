@@ -60,7 +60,10 @@ describe('Result Pattern', () => {
     });
 
     it('should return false for error result', () => {
-      const result: Result<number> = err<DomainError>({ type: 'Internal', message: 'test' });
+      const result: Result<number, DomainError> = err<DomainError>({
+        type: 'Internal',
+        message: 'test',
+      });
       expect(isOk(result)).toBe(false);
     });
 
@@ -75,7 +78,10 @@ describe('Result Pattern', () => {
 
   describe('isError', () => {
     it('should return true for error result', () => {
-      const result: Result<number> = err<DomainError>({ type: 'Internal', message: 'test' });
+      const result: Result<number, DomainError> = err<DomainError>({
+        type: 'Internal',
+        message: 'test',
+      });
       expect(isError(result)).toBe(true);
     });
 
@@ -85,7 +91,10 @@ describe('Result Pattern', () => {
     });
 
     it('should narrow type correctly', () => {
-      const result: Result<number> = err<DomainError>({ type: 'Internal', message: 'test' });
+      const result: Result<number, DomainError> = err<DomainError>({
+        type: 'Internal',
+        message: 'test',
+      });
       if (isError(result)) {
         const error: DomainError = result.error;
         if (error.type === 'Internal') {

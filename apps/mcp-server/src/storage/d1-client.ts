@@ -10,6 +10,8 @@ import type {
   ModelRelationship,
 } from '../types/relationships.js';
 
+// D1 types are inferred from usage, interfaces removed to avoid unused variable errors
+
 export class D1Client {
   private db: any;
 
@@ -41,7 +43,7 @@ export class D1Client {
    */
   async query<T>(sql: string, ...params: unknown[]): Promise<T[]> {
     try {
-      const result = await this.db
+      const result = await (this.db as any)
         .prepare(sql)
         .bind(...params)
         .all();
@@ -60,7 +62,7 @@ export class D1Client {
    */
   async queryOne<T>(sql: string, ...params: unknown[]): Promise<T | null> {
     try {
-      const result = await this.db
+      const result = await (this.db as any)
         .prepare(sql)
         .bind(...params)
         .first();
@@ -189,7 +191,7 @@ export class D1Client {
   /**
    * Get relationships for a specific model (simplified)
    */
-  async getRelationshipsByCode(
+  async getRelationshipsForModel(
     code: string
   ): Promise<SimpleRelationshipResult<SimpleRelationship[]>> {
     try {
@@ -200,8 +202,8 @@ export class D1Client {
         ORDER BY confidence DESC, created_at DESC
       `;
 
-      const relationships = (await this.query(sql, code, code)) as SimpleRelationship[];
-      return { ok: true, value: relationships };
+      const relationships = await this.query<SimpleRelationship>(sql, code, code);
+      return { ok: true as const, value: relationships };
     } catch (error) {
       return { ok: false, error: `Failed to get relationships: ${error}` };
     }
@@ -217,23 +219,25 @@ export class D1Client {
         VALUES (?, ?, ?, ?, ?)
       `;
 
-      await this.query(sql, [
+      await this.query(
+        sql,
         rel.source_code,
         rel.target_code,
         rel.relationship_type,
         rel.confidence,
-        rel.evidence || null,
-      ]);
+        rel.evidence || null
+      );
 
+      // Return a simple success result - the actual created relationship would need to be fetched
       return {
-        ok: true,
+        ok: true as const,
         value: {
-          ...rel,
-          id: 0,
-          created_at: new Date().toISOString(),
-          evidence: rel.evidence || '',
-        },
-      } as SimpleRelationshipResult;
+          source_code: rel.source_code,
+          target_code: rel.target_code,
+          relationship_type: rel.relationship_type,
+          confidence: rel.confidence,
+        } as SimpleRelationship,
+      };
     } catch (error) {
       return { ok: false, error: `Failed to create relationship: ${error}` };
     }
@@ -315,9 +319,9 @@ export class D1Client {
   }
 
   /**
-   * Get all relationships for a specific model
+   * Get all relationships for a specific model (using filters)
    */
-  async getRelationshipsForModel(code: string): Promise<ModelRelationship[]> {
+  async getRelationshipsForModelWithFilters(code: string): Promise<ModelRelationship[]> {
     return this.getRelationships({ model: code });
   }
 
@@ -331,13 +335,14 @@ export class D1Client {
         VALUES (?, ?, ?, ?, ?)
       `;
 
-      await this.query(sql, [
+      await this.query(
+        sql,
         input.source_code,
         input.target_code,
         input.relationship_type,
         input.confidence,
-        input.evidence || null,
-      ]);
+        input.evidence || null
+      );
 
       // Get the created relationship
       const selectSql = `
@@ -396,7 +401,7 @@ export class D1Client {
       params.push(id);
 
       const sql = `UPDATE model_relationships SET ${setParts.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`;
-      await this.query(sql, params);
+      await this.query(sql, ...params);
 
       // Return the updated relationship
       const result = await this.getRelationship(id);

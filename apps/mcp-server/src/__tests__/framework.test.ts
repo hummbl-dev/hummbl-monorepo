@@ -82,7 +82,7 @@ describe('Framework Utilities', () => {
       const result = getTransformationByKey('P' as any);
       expect(isOk(result)).toBe(true);
       if (isOk(result)) {
-        expect(result.value.key).toBe('P');
+        expect(result.value.code).toBe('P');
         expect(result.value.models.length).toBeGreaterThan(0);
       }
     });
@@ -98,7 +98,7 @@ describe('Framework Utilities', () => {
         const result = getTransformationByKey(key as any);
         expect(isOk(result)).toBe(true);
         if (isOk(result)) {
-          expect(result.value.key).toBe(key);
+          expect(result.value.code).toBe(key);
         }
       });
     });

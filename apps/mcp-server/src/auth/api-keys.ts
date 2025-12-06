@@ -4,9 +4,7 @@
  */
 
 import type { ApiKeyInfo, ApiKeyTier, AuthResult } from '../types/domain.js';
-
-// Cloudflare Workers types
-// declare const KVNamespace: any;
+import type { KVNamespace } from '@cloudflare/workers-types';
 
 /**
  * Rate limits by tier
@@ -73,7 +71,7 @@ export function generateApiKey(tier: ApiKeyTier, name: string): ApiKeyInfo {
 /**
  * Validate API key against KV store
  */
-export async function validateApiKey(kv: any, apiKey: string): Promise<AuthResult> {
+export async function validateApiKey(kv: KVNamespace, apiKey: string): Promise<AuthResult> {
   try {
     if (!isValidApiKeyFormat(apiKey)) {
       return {
@@ -130,7 +128,7 @@ export async function validateApiKey(kv: any, apiKey: string): Promise<AuthResul
 /**
  * Store API key in KV store
  */
-export async function storeApiKey(kv: any, keyInfo: ApiKeyInfo): Promise<boolean> {
+export async function storeApiKey(kv: KVNamespace, keyInfo: ApiKeyInfo): Promise<boolean> {
   try {
     await kv.put(keyInfo.key, JSON.stringify(keyInfo));
     return true;
@@ -143,7 +141,7 @@ export async function storeApiKey(kv: any, keyInfo: ApiKeyInfo): Promise<boolean
 /**
  * List all API keys (admin function)
  */
-export async function listApiKeys(kv: any): Promise<ApiKeyInfo[]> {
+export async function listApiKeys(kv: KVNamespace): Promise<ApiKeyInfo[]> {
   try {
     const keys = await kv.list({ prefix: 'hummbl_' });
     const keyInfos: ApiKeyInfo[] = [];

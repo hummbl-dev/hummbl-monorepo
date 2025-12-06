@@ -4,6 +4,8 @@
  * Hybrid architecture: Local data for fast lookups, REST API for recommendations
  */
 
+// fetch is a global in Cloudflare Workers environment
+
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
@@ -85,6 +87,7 @@ export function registerModelTools(server: McpServer): void {
             text: JSON.stringify({ model: payload }, null, 2),
           },
         ],
+        structuredContent: payload,
       } as const;
     }
   );
@@ -159,6 +162,7 @@ export function registerModelTools(server: McpServer): void {
             text: JSON.stringify(payload, null, 2),
           },
         ],
+        structuredContent: payload,
       } as const;
     }
   );
@@ -227,6 +231,7 @@ export function registerModelTools(server: McpServer): void {
             text: JSON.stringify(payload, null, 2),
           },
         ],
+        structuredContent: payload,
       } as const;
     }
   );
@@ -395,7 +400,7 @@ export function registerModelTools(server: McpServer): void {
           };
         }
 
-        const payload = await response.json();
+        const payload = (await response.json()) as Record<string, unknown>;
 
         return {
           content: [
@@ -404,7 +409,7 @@ export function registerModelTools(server: McpServer): void {
               text: JSON.stringify(payload, null, 2),
             },
           ],
-  
+          structuredContent: payload,
         };
       } catch (error) {
         return {
@@ -563,7 +568,7 @@ export function registerModelTools(server: McpServer): void {
               text: JSON.stringify(payload, null, 2),
             },
           ],
-  
+          structuredContent: payload,
         } as const;
       } catch (error) {
         return {
@@ -690,7 +695,7 @@ export function registerModelTools(server: McpServer): void {
               text: JSON.stringify(payload, null, 2),
             },
           ],
-  
+          structuredContent: payload,
         } as const;
       } catch (error) {
         return {
@@ -740,7 +745,7 @@ export function registerModelTools(server: McpServer): void {
           };
         }
 
-        const payload = await response.json();
+        const payload = (await response.json()) as Record<string, unknown>;
 
         return {
           content: [
@@ -749,6 +754,7 @@ export function registerModelTools(server: McpServer): void {
               text: JSON.stringify(payload, null, 2),
             },
           ],
+          structuredContent: payload,
         };
       } catch (error) {
         return {
@@ -853,7 +859,7 @@ export function registerModelTools(server: McpServer): void {
                   text: JSON.stringify(payload, null, 2),
                 },
               ],
-      
+              structuredContent: payload,
             };
           }
 
@@ -972,7 +978,7 @@ export function registerModelTools(server: McpServer): void {
           };
         }
 
-        const payload = await response.json();
+        const payload = (await response.json()) as Record<string, unknown>;
 
         return {
           content: [
@@ -981,6 +987,7 @@ export function registerModelTools(server: McpServer): void {
               text: JSON.stringify(payload, null, 2),
             },
           ],
+          structuredContent: payload,
         };
       } catch (error) {
         return {

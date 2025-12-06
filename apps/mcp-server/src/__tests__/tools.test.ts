@@ -162,7 +162,7 @@ describe('MCP Tools Integration', () => {
       const tool = mockServer.getTool('get_transformation');
       const result = await tool.handler({ key: 'P' });
 
-      expect(result.structuredContent.key).toBe('P');
+      expect(result.structuredContent.code).toBe('P');
       expect(result.structuredContent.name).toBeTruthy();
       expect(result.structuredContent.description).toBeTruthy();
       expect(result.structuredContent.modelCount).toBe(20);
@@ -183,7 +183,7 @@ describe('MCP Tools Integration', () => {
 
       for (const key of keys) {
         const result = await tool.handler({ key });
-        expect(result.structuredContent.key).toBe(key);
+        expect(result.structuredContent.code).toBe(key);
         expect(result.structuredContent.modelCount).toBe(20);
       }
     });

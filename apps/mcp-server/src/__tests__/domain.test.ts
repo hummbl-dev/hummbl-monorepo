@@ -25,7 +25,8 @@ describe('domain type helpers', () => {
   });
 
   describe('Result helpers', () => {
-    it('creates ok result and passes through isOk/isError guards', () => { // Updated description
+    it('creates ok result and passes through isOk/isError guards', () => {
+      // Updated description
       const value = 'success'; // Original value
       const valueResult = ok(value); // Original ok call
 
