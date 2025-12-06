@@ -1,40 +1,42 @@
 var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defNormalProp = (obj, key, value) =>
+  key in obj
+    ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value })
+    : (obj[key] = value);
+var __name = (target, value) => __defProp(target, 'name', { value, configurable: true });
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __publicField = (obj, key, value) => {
-  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+  __defNormalProp(obj, typeof key !== 'symbol' ? key + '' : key, value);
   return value;
 };
 
 // .wrangler/tmp/bundle-O6A26N/strip-cf-connecting-ip-header.js
 function stripCfConnectingIPHeader(input, init) {
   const request = new Request(input, init);
-  request.headers.delete("CF-Connecting-IP");
+  request.headers.delete('CF-Connecting-IP');
   return request;
 }
-__name(stripCfConnectingIPHeader, "stripCfConnectingIPHeader");
+__name(stripCfConnectingIPHeader, 'stripCfConnectingIPHeader');
 globalThis.fetch = new Proxy(globalThis.fetch, {
   apply(target, thisArg, argArray) {
     return Reflect.apply(target, thisArg, [stripCfConnectingIPHeader.apply(null, argArray)]);
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/unenv@2.0.0-rc.14/node_modules/unenv/dist/runtime/_internal/utils.mjs
 function createNotImplementedError(name) {
   return new Error(`[unenv] ${name} is not implemented yet!`);
 }
-__name(createNotImplementedError, "createNotImplementedError");
+__name(createNotImplementedError, 'createNotImplementedError');
 function notImplemented(name) {
   const fn = /* @__PURE__ */ __name(() => {
     throw createNotImplementedError(name);
-  }, "fn");
+  }, 'fn');
   return Object.assign(fn, { __unenv__: true });
 }
-__name(notImplemented, "notImplemented");
+__name(notImplemented, 'notImplemented');
 function notImplementedClass(name) {
   return class {
     __unenv__ = true;
@@ -43,14 +45,16 @@ function notImplementedClass(name) {
     }
   };
 }
-__name(notImplementedClass, "notImplementedClass");
+__name(notImplementedClass, 'notImplementedClass');
 
 // ../../node_modules/.pnpm/unenv@2.0.0-rc.14/node_modules/unenv/dist/runtime/node/internal/perf_hooks/performance.mjs
 var _timeOrigin = globalThis.performance?.timeOrigin ?? Date.now();
-var _performanceNow = globalThis.performance?.now ? globalThis.performance.now.bind(globalThis.performance) : () => Date.now() - _timeOrigin;
+var _performanceNow = globalThis.performance?.now
+  ? globalThis.performance.now.bind(globalThis.performance)
+  : () => Date.now() - _timeOrigin;
 var nodeTiming = {
-  name: "node",
-  entryType: "node",
+  name: 'node',
+  entryType: 'node',
   startTime: 0,
   duration: 0,
   nodeStart: 0,
@@ -63,17 +67,17 @@ var nodeTiming = {
   uvMetricsInfo: {
     loopCount: 0,
     events: 0,
-    eventsWaiting: 0
+    eventsWaiting: 0,
   },
   detail: void 0,
   toJSON() {
     return this;
-  }
+  },
 };
 var PerformanceEntry = class {
   __unenv__ = true;
   detail;
-  entryType = "event";
+  entryType = 'event';
   name;
   startTime;
   constructor(name, options) {
@@ -90,26 +94,29 @@ var PerformanceEntry = class {
       entryType: this.entryType,
       startTime: this.startTime,
       duration: this.duration,
-      detail: this.detail
+      detail: this.detail,
     };
   }
 };
-__name(PerformanceEntry, "PerformanceEntry");
-var PerformanceMark = /* @__PURE__ */ __name(class PerformanceMark2 extends PerformanceEntry {
-  entryType = "mark";
-  constructor() {
-    super(...arguments);
-  }
-  get duration() {
-    return 0;
-  }
-}, "PerformanceMark");
+__name(PerformanceEntry, 'PerformanceEntry');
+var PerformanceMark = /* @__PURE__ */ __name(
+  class PerformanceMark2 extends PerformanceEntry {
+    entryType = 'mark';
+    constructor() {
+      super(...arguments);
+    }
+    get duration() {
+      return 0;
+    }
+  },
+  'PerformanceMark'
+);
 var PerformanceMeasure = class extends PerformanceEntry {
-  entryType = "measure";
+  entryType = 'measure';
 };
-__name(PerformanceMeasure, "PerformanceMeasure");
+__name(PerformanceMeasure, 'PerformanceMeasure');
 var PerformanceResourceTiming = class extends PerformanceEntry {
-  entryType = "resource";
+  entryType = 'resource';
   serverTiming = [];
   connectEnd = 0;
   connectStart = 0;
@@ -118,9 +125,9 @@ var PerformanceResourceTiming = class extends PerformanceEntry {
   domainLookupStart = 0;
   encodedBodySize = 0;
   fetchStart = 0;
-  initiatorType = "";
-  name = "";
-  nextHopProtocol = "";
+  initiatorType = '';
+  name = '';
+  nextHopProtocol = '';
   redirectEnd = 0;
   redirectStart = 0;
   requestStart = 0;
@@ -132,7 +139,7 @@ var PerformanceResourceTiming = class extends PerformanceEntry {
   workerStart = 0;
   responseStatus = 0;
 };
-__name(PerformanceResourceTiming, "PerformanceResourceTiming");
+__name(PerformanceResourceTiming, 'PerformanceResourceTiming');
 var PerformanceObserverEntryList = class {
   __unenv__ = true;
   getEntries() {
@@ -145,7 +152,7 @@ var PerformanceObserverEntryList = class {
     return [];
   }
 };
-__name(PerformanceObserverEntryList, "PerformanceObserverEntryList");
+__name(PerformanceObserverEntryList, 'PerformanceObserverEntryList');
 var Performance = class {
   __unenv__ = true;
   timeOrigin = _timeOrigin;
@@ -155,7 +162,7 @@ var Performance = class {
   navigation = void 0;
   timing = void 0;
   timerify(_fn, _options) {
-    throw createNotImplementedError("Performance.timerify");
+    throw createNotImplementedError('Performance.timerify');
   }
   get nodeTiming() {
     return nodeTiming;
@@ -164,7 +171,7 @@ var Performance = class {
     return {};
   }
   markResourceTiming() {
-    return new PerformanceResourceTiming("");
+    return new PerformanceResourceTiming('');
   }
   onresourcetimingbufferfull = null;
   now() {
@@ -174,22 +181,28 @@ var Performance = class {
     return Date.now() - this.timeOrigin;
   }
   clearMarks(markName) {
-    this._entries = markName ? this._entries.filter((e) => e.name !== markName) : this._entries.filter((e) => e.entryType !== "mark");
+    this._entries = markName
+      ? this._entries.filter(e => e.name !== markName)
+      : this._entries.filter(e => e.entryType !== 'mark');
   }
   clearMeasures(measureName) {
-    this._entries = measureName ? this._entries.filter((e) => e.name !== measureName) : this._entries.filter((e) => e.entryType !== "measure");
+    this._entries = measureName
+      ? this._entries.filter(e => e.name !== measureName)
+      : this._entries.filter(e => e.entryType !== 'measure');
   }
   clearResourceTimings() {
-    this._entries = this._entries.filter((e) => e.entryType !== "resource" || e.entryType !== "navigation");
+    this._entries = this._entries.filter(
+      e => e.entryType !== 'resource' || e.entryType !== 'navigation'
+    );
   }
   getEntries() {
     return this._entries;
   }
   getEntriesByName(name, type) {
-    return this._entries.filter((e) => e.name === name && (!type || e.entryType === type));
+    return this._entries.filter(e => e.name === name && (!type || e.entryType === type));
   }
   getEntriesByType(type) {
-    return this._entries.filter((e) => e.entryType === type);
+    return this._entries.filter(e => e.entryType === type);
   }
   mark(name, options) {
     const entry = new PerformanceMark(name, options);
@@ -199,9 +212,9 @@ var Performance = class {
   measure(measureName, startOrMeasureOptions, endMark) {
     let start;
     let end;
-    if (typeof startOrMeasureOptions === "string") {
-      start = this.getEntriesByName(startOrMeasureOptions, "mark")[0]?.startTime;
-      end = this.getEntriesByName(endMark, "mark")[0]?.startTime;
+    if (typeof startOrMeasureOptions === 'string') {
+      start = this.getEntriesByName(startOrMeasureOptions, 'mark')[0]?.startTime;
+      end = this.getEntriesByName(endMark, 'mark')[0]?.startTime;
     } else {
       start = Number.parseFloat(startOrMeasureOptions?.start) || this.now();
       end = Number.parseFloat(startOrMeasureOptions?.end) || this.now();
@@ -210,8 +223,8 @@ var Performance = class {
       startTime: start,
       detail: {
         start,
-        end
-      }
+        end,
+      },
     });
     this._entries.push(entry);
     return entry;
@@ -220,19 +233,19 @@ var Performance = class {
     this._resourceTimingBufferSize = maxSize;
   }
   addEventListener(type, listener, options) {
-    throw createNotImplementedError("Performance.addEventListener");
+    throw createNotImplementedError('Performance.addEventListener');
   }
   removeEventListener(type, listener, options) {
-    throw createNotImplementedError("Performance.removeEventListener");
+    throw createNotImplementedError('Performance.removeEventListener');
   }
   dispatchEvent(event) {
-    throw createNotImplementedError("Performance.dispatchEvent");
+    throw createNotImplementedError('Performance.dispatchEvent');
   }
   toJSON() {
     return this;
   }
 };
-__name(Performance, "Performance");
+__name(Performance, 'Performance');
 var PerformanceObserver = class {
   __unenv__ = true;
   _callback = null;
@@ -243,10 +256,10 @@ var PerformanceObserver = class {
     return [];
   }
   disconnect() {
-    throw createNotImplementedError("PerformanceObserver.disconnect");
+    throw createNotImplementedError('PerformanceObserver.disconnect');
   }
   observe(options) {
-    throw createNotImplementedError("PerformanceObserver.observe");
+    throw createNotImplementedError('PerformanceObserver.observe');
   }
   bind(fn) {
     return fn;
@@ -264,9 +277,12 @@ var PerformanceObserver = class {
     return this;
   }
 };
-__name(PerformanceObserver, "PerformanceObserver");
-__publicField(PerformanceObserver, "supportedEntryTypes", []);
-var performance = globalThis.performance && "addEventListener" in globalThis.performance ? globalThis.performance : new Performance();
+__name(PerformanceObserver, 'PerformanceObserver');
+__publicField(PerformanceObserver, 'supportedEntryTypes', []);
+var performance =
+  globalThis.performance && 'addEventListener' in globalThis.performance
+    ? globalThis.performance
+    : new Performance();
 
 // ../../node_modules/.pnpm/@cloudflare+unenv-preset@2.0.2_unenv@2.0.0-rc.14_workerd@1.20250718.0/node_modules/@cloudflare/unenv-preset/dist/runtime/polyfill/performance.mjs
 globalThis.performance = performance;
@@ -279,11 +295,10 @@ globalThis.PerformanceObserverEntryList = PerformanceObserverEntryList;
 globalThis.PerformanceResourceTiming = PerformanceResourceTiming;
 
 // ../../node_modules/.pnpm/unenv@2.0.0-rc.14/node_modules/unenv/dist/runtime/node/console.mjs
-import { Writable } from "node:stream";
+import { Writable } from 'node:stream';
 
 // ../../node_modules/.pnpm/unenv@2.0.0-rc.14/node_modules/unenv/dist/runtime/mock/noop.mjs
-var noop_default = Object.assign(() => {
-}, { __unenv__: true });
+var noop_default = Object.assign(() => {}, { __unenv__: true });
 
 // ../../node_modules/.pnpm/unenv@2.0.0-rc.14/node_modules/unenv/dist/runtime/node/console.mjs
 var _console = globalThis.console;
@@ -297,7 +312,7 @@ var debug = _console?.debug ?? log;
 var table = _console?.table ?? log;
 var error = _console?.error ?? log;
 var warn = _console?.warn ?? error;
-var createTask = _console?.createTask ?? /* @__PURE__ */ notImplemented("console.createTask");
+var createTask = _console?.createTask ?? /* @__PURE__ */ notImplemented('console.createTask');
 var clear = _console?.clear ?? noop_default;
 var count = _console?.count ?? noop_default;
 var countReset = _console?.countReset ?? noop_default;
@@ -312,13 +327,13 @@ var time = _console?.time ?? noop_default;
 var timeEnd = _console?.timeEnd ?? noop_default;
 var timeLog = _console?.timeLog ?? noop_default;
 var timeStamp = _console?.timeStamp ?? noop_default;
-var Console = _console?.Console ?? /* @__PURE__ */ notImplementedClass("console.Console");
+var Console = _console?.Console ?? /* @__PURE__ */ notImplementedClass('console.Console');
 var _times = /* @__PURE__ */ new Map();
 var _stdoutErrorHandler = noop_default;
 var _stderrErrorHandler = noop_default;
 
 // ../../node_modules/.pnpm/@cloudflare+unenv-preset@2.0.2_unenv@2.0.0-rc.14_workerd@1.20250718.0/node_modules/@cloudflare/unenv-preset/dist/runtime/node/console.mjs
-var workerdConsole = globalThis["console"];
+var workerdConsole = globalThis['console'];
 var {
   assert,
   clear: clear2,
@@ -345,7 +360,7 @@ var {
   timeLog: timeLog2,
   timeStamp: timeStamp2,
   trace: trace2,
-  warn: warn2
+  warn: warn2,
 } = workerdConsole;
 Object.assign(workerdConsole, {
   Console,
@@ -354,7 +369,7 @@ Object.assign(workerdConsole, {
   _stderrErrorHandler,
   _stdout,
   _stdoutErrorHandler,
-  _times
+  _times,
 });
 var console_default = workerdConsole;
 
@@ -362,29 +377,34 @@ var console_default = workerdConsole;
 globalThis.console = console_default;
 
 // ../../node_modules/.pnpm/unenv@2.0.0-rc.14/node_modules/unenv/dist/runtime/node/internal/process/hrtime.mjs
-var hrtime = /* @__PURE__ */ Object.assign(/* @__PURE__ */ __name(function hrtime2(startTime) {
-  const now = Date.now();
-  const seconds = Math.trunc(now / 1e3);
-  const nanos = now % 1e3 * 1e6;
-  if (startTime) {
-    let diffSeconds = seconds - startTime[0];
-    let diffNanos = nanos - startTime[0];
-    if (diffNanos < 0) {
-      diffSeconds = diffSeconds - 1;
-      diffNanos = 1e9 + diffNanos;
+var hrtime = /* @__PURE__ */ Object.assign(
+  /* @__PURE__ */ __name(function hrtime2(startTime) {
+    const now = Date.now();
+    const seconds = Math.trunc(now / 1e3);
+    const nanos = (now % 1e3) * 1e6;
+    if (startTime) {
+      let diffSeconds = seconds - startTime[0];
+      let diffNanos = nanos - startTime[0];
+      if (diffNanos < 0) {
+        diffSeconds = diffSeconds - 1;
+        diffNanos = 1e9 + diffNanos;
+      }
+      return [diffSeconds, diffNanos];
     }
-    return [diffSeconds, diffNanos];
+    return [seconds, nanos];
+  }, 'hrtime'),
+  {
+    bigint: /* @__PURE__ */ __name(function bigint() {
+      return BigInt(Date.now() * 1e6);
+    }, 'bigint'),
   }
-  return [seconds, nanos];
-}, "hrtime"), { bigint: /* @__PURE__ */ __name(function bigint() {
-  return BigInt(Date.now() * 1e6);
-}, "bigint") });
+);
 
 // ../../node_modules/.pnpm/unenv@2.0.0-rc.14/node_modules/unenv/dist/runtime/node/internal/process/process.mjs
-import { EventEmitter } from "node:events";
+import { EventEmitter } from 'node:events';
 
 // ../../node_modules/.pnpm/unenv@2.0.0-rc.14/node_modules/unenv/dist/runtime/node/internal/tty/read-stream.mjs
-import { Socket } from "node:net";
+import { Socket } from 'node:net';
 var ReadStream = class extends Socket {
   fd;
   constructor(fd) {
@@ -398,10 +418,10 @@ var ReadStream = class extends Socket {
   }
   isTTY = false;
 };
-__name(ReadStream, "ReadStream");
+__name(ReadStream, 'ReadStream');
 
 // ../../node_modules/.pnpm/unenv@2.0.0-rc.14/node_modules/unenv/dist/runtime/node/internal/tty/write-stream.mjs
-import { Socket as Socket2 } from "node:net";
+import { Socket as Socket2 } from 'node:net';
 var WriteStream = class extends Socket2 {
   fd;
   constructor(fd) {
@@ -417,7 +437,7 @@ var WriteStream = class extends Socket2 {
     return false;
   }
   cursorTo(x, y, callback) {
-    callback && typeof callback === "function" && callback();
+    callback && typeof callback === 'function' && callback();
     return false;
   }
   moveCursor(dx, dy, callback) {
@@ -437,7 +457,7 @@ var WriteStream = class extends Socket2 {
   rows = 24;
   isTTY = false;
 };
-__name(WriteStream, "WriteStream");
+__name(WriteStream, 'WriteStream');
 
 // ../../node_modules/.pnpm/unenv@2.0.0-rc.14/node_modules/unenv/dist/runtime/node/internal/process/process.mjs
 var Process = class extends EventEmitter {
@@ -449,15 +469,18 @@ var Process = class extends EventEmitter {
     this.env = impl.env;
     this.hrtime = impl.hrtime;
     this.nextTick = impl.nextTick;
-    for (const prop of [...Object.getOwnPropertyNames(Process.prototype), ...Object.getOwnPropertyNames(EventEmitter.prototype)]) {
+    for (const prop of [
+      ...Object.getOwnPropertyNames(Process.prototype),
+      ...Object.getOwnPropertyNames(EventEmitter.prototype),
+    ]) {
       const value = this[prop];
-      if (typeof value === "function") {
+      if (typeof value === 'function') {
         this[prop] = value.bind(this);
       }
     }
   }
   emitWarning(warning, type, code) {
-    console.warn(`${code ? `[${code}] ` : ""}${type ? `${type}: ` : ""}${warning}`);
+    console.warn(`${code ? `[${code}] ` : ''}${type ? `${type}: ` : ''}${warning}`);
   }
   emit(...args) {
     return super.emit(...args);
@@ -469,32 +492,32 @@ var Process = class extends EventEmitter {
   #stdout;
   #stderr;
   get stdin() {
-    return this.#stdin ??= new ReadStream(0);
+    return (this.#stdin ??= new ReadStream(0));
   }
   get stdout() {
-    return this.#stdout ??= new WriteStream(1);
+    return (this.#stdout ??= new WriteStream(1));
   }
   get stderr() {
-    return this.#stderr ??= new WriteStream(2);
+    return (this.#stderr ??= new WriteStream(2));
   }
-  #cwd = "/";
+  #cwd = '/';
   chdir(cwd2) {
     this.#cwd = cwd2;
   }
   cwd() {
     return this.#cwd;
   }
-  arch = "";
-  platform = "";
+  arch = '';
+  platform = '';
   argv = [];
-  argv0 = "";
+  argv0 = '';
   execArgv = [];
-  execPath = "";
-  title = "";
+  execPath = '';
+  title = '';
   pid = 200;
   ppid = 100;
   get version() {
-    return "";
+    return '';
   }
   get versions() {
     return {};
@@ -541,88 +564,89 @@ var Process = class extends EventEmitter {
   resourceUsage() {
     return {};
   }
-  ref() {
-  }
-  unref() {
-  }
+  ref() {}
+  unref() {}
   umask() {
-    throw createNotImplementedError("process.umask");
+    throw createNotImplementedError('process.umask');
   }
   getBuiltinModule() {
     return void 0;
   }
   getActiveResourcesInfo() {
-    throw createNotImplementedError("process.getActiveResourcesInfo");
+    throw createNotImplementedError('process.getActiveResourcesInfo');
   }
   exit() {
-    throw createNotImplementedError("process.exit");
+    throw createNotImplementedError('process.exit');
   }
   reallyExit() {
-    throw createNotImplementedError("process.reallyExit");
+    throw createNotImplementedError('process.reallyExit');
   }
   kill() {
-    throw createNotImplementedError("process.kill");
+    throw createNotImplementedError('process.kill');
   }
   abort() {
-    throw createNotImplementedError("process.abort");
+    throw createNotImplementedError('process.abort');
   }
   dlopen() {
-    throw createNotImplementedError("process.dlopen");
+    throw createNotImplementedError('process.dlopen');
   }
   setSourceMapsEnabled() {
-    throw createNotImplementedError("process.setSourceMapsEnabled");
+    throw createNotImplementedError('process.setSourceMapsEnabled');
   }
   loadEnvFile() {
-    throw createNotImplementedError("process.loadEnvFile");
+    throw createNotImplementedError('process.loadEnvFile');
   }
   disconnect() {
-    throw createNotImplementedError("process.disconnect");
+    throw createNotImplementedError('process.disconnect');
   }
   cpuUsage() {
-    throw createNotImplementedError("process.cpuUsage");
+    throw createNotImplementedError('process.cpuUsage');
   }
   setUncaughtExceptionCaptureCallback() {
-    throw createNotImplementedError("process.setUncaughtExceptionCaptureCallback");
+    throw createNotImplementedError('process.setUncaughtExceptionCaptureCallback');
   }
   hasUncaughtExceptionCaptureCallback() {
-    throw createNotImplementedError("process.hasUncaughtExceptionCaptureCallback");
+    throw createNotImplementedError('process.hasUncaughtExceptionCaptureCallback');
   }
   initgroups() {
-    throw createNotImplementedError("process.initgroups");
+    throw createNotImplementedError('process.initgroups');
   }
   openStdin() {
-    throw createNotImplementedError("process.openStdin");
+    throw createNotImplementedError('process.openStdin');
   }
   assert() {
-    throw createNotImplementedError("process.assert");
+    throw createNotImplementedError('process.assert');
   }
   binding() {
-    throw createNotImplementedError("process.binding");
+    throw createNotImplementedError('process.binding');
   }
-  permission = { has: /* @__PURE__ */ notImplemented("process.permission.has") };
+  permission = { has: /* @__PURE__ */ notImplemented('process.permission.has') };
   report = {
-    directory: "",
-    filename: "",
-    signal: "SIGUSR2",
+    directory: '',
+    filename: '',
+    signal: 'SIGUSR2',
     compact: false,
     reportOnFatalError: false,
     reportOnSignal: false,
     reportOnUncaughtException: false,
-    getReport: /* @__PURE__ */ notImplemented("process.report.getReport"),
-    writeReport: /* @__PURE__ */ notImplemented("process.report.writeReport")
+    getReport: /* @__PURE__ */ notImplemented('process.report.getReport'),
+    writeReport: /* @__PURE__ */ notImplemented('process.report.writeReport'),
   };
   finalization = {
-    register: /* @__PURE__ */ notImplemented("process.finalization.register"),
-    unregister: /* @__PURE__ */ notImplemented("process.finalization.unregister"),
-    registerBeforeExit: /* @__PURE__ */ notImplemented("process.finalization.registerBeforeExit")
+    register: /* @__PURE__ */ notImplemented('process.finalization.register'),
+    unregister: /* @__PURE__ */ notImplemented('process.finalization.unregister'),
+    registerBeforeExit: /* @__PURE__ */ notImplemented('process.finalization.registerBeforeExit'),
   };
-  memoryUsage = Object.assign(() => ({
-    arrayBuffers: 0,
-    rss: 0,
-    external: 0,
-    heapTotal: 0,
-    heapUsed: 0
-  }), { rss: () => 0 });
+  memoryUsage = Object.assign(
+    () => ({
+      arrayBuffers: 0,
+      rss: 0,
+      external: 0,
+      heapTotal: 0,
+      heapUsed: 0,
+    }),
+    { rss: () => 0 }
+  );
   mainModule = void 0;
   domain = void 0;
   send = void 0;
@@ -660,18 +684,16 @@ var Process = class extends EventEmitter {
   _send = void 0;
   _linkedBinding = void 0;
 };
-__name(Process, "Process");
+__name(Process, 'Process');
 
 // ../../node_modules/.pnpm/@cloudflare+unenv-preset@2.0.2_unenv@2.0.0-rc.14_workerd@1.20250718.0/node_modules/@cloudflare/unenv-preset/dist/runtime/node/process.mjs
-var globalProcess = globalThis["process"];
+var globalProcess = globalThis['process'];
 var getBuiltinModule = globalProcess.getBuiltinModule;
-var { exit, platform, nextTick } = getBuiltinModule(
-  "node:process"
-);
+var { exit, platform, nextTick } = getBuiltinModule('node:process');
 var unenvProcess = new Process({
   env: globalProcess.env,
   hrtime,
-  nextTick
+  nextTick,
 });
 var {
   abort,
@@ -776,7 +798,7 @@ var {
   _pendingMessage,
   _channel,
   _send,
-  _linkedBinding
+  _linkedBinding,
 } = unenvProcess;
 var _process = {
   abort,
@@ -886,7 +908,7 @@ var _process = {
   _pendingMessage,
   _channel,
   _send,
-  _linkedBinding
+  _linkedBinding,
 };
 var process_default = _process;
 
@@ -900,7 +922,7 @@ var compose = /* @__PURE__ */ __name((middleware, onError, onNotFound) => {
     return dispatch(0);
     async function dispatch(i) {
       if (i <= index) {
-        throw new Error("next() called multiple times");
+        throw new Error('next() called multiple times');
       }
       index = i;
       let res;
@@ -910,7 +932,7 @@ var compose = /* @__PURE__ */ __name((middleware, onError, onNotFound) => {
         handler = middleware[i][0][0];
         context2.req.routeIndex = i;
       } else {
-        handler = i === middleware.length && next || void 0;
+        handler = (i === middleware.length && next) || void 0;
       }
       if (handler) {
         try {
@@ -934,23 +956,29 @@ var compose = /* @__PURE__ */ __name((middleware, onError, onNotFound) => {
       }
       return context2;
     }
-    __name(dispatch, "dispatch");
+    __name(dispatch, 'dispatch');
   };
-}, "compose");
+}, 'compose');
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/request/constants.js
 var GET_MATCH_RESULT = Symbol();
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/utils/body.js
-var parseBody = /* @__PURE__ */ __name(async (request, options = /* @__PURE__ */ Object.create(null)) => {
-  const { all = false, dot = false } = options;
-  const headers = request instanceof HonoRequest ? request.raw.headers : request.headers;
-  const contentType = headers.get("Content-Type");
-  if (contentType?.startsWith("multipart/form-data") || contentType?.startsWith("application/x-www-form-urlencoded")) {
-    return parseFormData(request, { all, dot });
-  }
-  return {};
-}, "parseBody");
+var parseBody = /* @__PURE__ */ __name(
+  async (request, options = /* @__PURE__ */ Object.create(null)) => {
+    const { all = false, dot = false } = options;
+    const headers = request instanceof HonoRequest ? request.raw.headers : request.headers;
+    const contentType = headers.get('Content-Type');
+    if (
+      contentType?.startsWith('multipart/form-data') ||
+      contentType?.startsWith('application/x-www-form-urlencoded')
+    ) {
+      return parseFormData(request, { all, dot });
+    }
+    return {};
+  },
+  'parseBody'
+);
 async function parseFormData(request, options) {
   const formData = await request.formData();
   if (formData) {
@@ -958,11 +986,11 @@ async function parseFormData(request, options) {
   }
   return {};
 }
-__name(parseFormData, "parseFormData");
+__name(parseFormData, 'parseFormData');
 function convertFormDataToBodyData(formData, options) {
   const form = /* @__PURE__ */ Object.create(null);
   formData.forEach((value, key) => {
-    const shouldParseAllValues = options.all || key.endsWith("[]");
+    const shouldParseAllValues = options.all || key.endsWith('[]');
     if (!shouldParseAllValues) {
       form[key] = value;
     } else {
@@ -971,7 +999,7 @@ function convertFormDataToBodyData(formData, options) {
   });
   if (options.dot) {
     Object.entries(form).forEach(([key, value]) => {
-      const shouldParseDotValues = key.includes(".");
+      const shouldParseDotValues = key.includes('.');
       if (shouldParseDotValues) {
         handleParsingNestedValues(form, key, value);
         delete form[key];
@@ -980,52 +1008,56 @@ function convertFormDataToBodyData(formData, options) {
   }
   return form;
 }
-__name(convertFormDataToBodyData, "convertFormDataToBodyData");
+__name(convertFormDataToBodyData, 'convertFormDataToBodyData');
 var handleParsingAllValues = /* @__PURE__ */ __name((form, key, value) => {
   if (form[key] !== void 0) {
     if (Array.isArray(form[key])) {
-      ;
       form[key].push(value);
     } else {
       form[key] = [form[key], value];
     }
   } else {
-    if (!key.endsWith("[]")) {
+    if (!key.endsWith('[]')) {
       form[key] = value;
     } else {
       form[key] = [value];
     }
   }
-}, "handleParsingAllValues");
+}, 'handleParsingAllValues');
 var handleParsingNestedValues = /* @__PURE__ */ __name((form, key, value) => {
   let nestedForm = form;
-  const keys = key.split(".");
+  const keys = key.split('.');
   keys.forEach((key2, index) => {
     if (index === keys.length - 1) {
       nestedForm[key2] = value;
     } else {
-      if (!nestedForm[key2] || typeof nestedForm[key2] !== "object" || Array.isArray(nestedForm[key2]) || nestedForm[key2] instanceof File) {
+      if (
+        !nestedForm[key2] ||
+        typeof nestedForm[key2] !== 'object' ||
+        Array.isArray(nestedForm[key2]) ||
+        nestedForm[key2] instanceof File
+      ) {
         nestedForm[key2] = /* @__PURE__ */ Object.create(null);
       }
       nestedForm = nestedForm[key2];
     }
   });
-}, "handleParsingNestedValues");
+}, 'handleParsingNestedValues');
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/utils/url.js
-var splitPath = /* @__PURE__ */ __name((path) => {
-  const paths = path.split("/");
-  if (paths[0] === "") {
+var splitPath = /* @__PURE__ */ __name(path => {
+  const paths = path.split('/');
+  if (paths[0] === '') {
     paths.shift();
   }
   return paths;
-}, "splitPath");
-var splitRoutingPath = /* @__PURE__ */ __name((routePath) => {
+}, 'splitPath');
+var splitRoutingPath = /* @__PURE__ */ __name(routePath => {
   const { groups, path } = extractGroupsFromPath(routePath);
   const paths = splitPath(path);
   return replaceGroupMarks(paths, groups);
-}, "splitRoutingPath");
-var extractGroupsFromPath = /* @__PURE__ */ __name((path) => {
+}, 'splitRoutingPath');
+var extractGroupsFromPath = /* @__PURE__ */ __name(path => {
   const groups = [];
   path = path.replace(/\{[^}]+\}/g, (match2, index) => {
     const mark = `@${index}`;
@@ -1033,7 +1065,7 @@ var extractGroupsFromPath = /* @__PURE__ */ __name((path) => {
     return mark;
   });
   return { groups, path };
-}, "extractGroupsFromPath");
+}, 'extractGroupsFromPath');
 var replaceGroupMarks = /* @__PURE__ */ __name((paths, groups) => {
   for (let i = groups.length - 1; i >= 0; i--) {
     const [mark] = groups[i];
@@ -1045,18 +1077,21 @@ var replaceGroupMarks = /* @__PURE__ */ __name((paths, groups) => {
     }
   }
   return paths;
-}, "replaceGroupMarks");
+}, 'replaceGroupMarks');
 var patternCache = {};
 var getPattern = /* @__PURE__ */ __name((label, next) => {
-  if (label === "*") {
-    return "*";
+  if (label === '*') {
+    return '*';
   }
   const match2 = label.match(/^\:([^\{\}]+)(?:\{(.+)\})?$/);
   if (match2) {
     const cacheKey = `${label}#${next}`;
     if (!patternCache[cacheKey]) {
       if (match2[2]) {
-        patternCache[cacheKey] = next && next[0] !== ":" && next[0] !== "*" ? [cacheKey, match2[1], new RegExp(`^${match2[2]}(?=/${next})`)] : [label, match2[1], new RegExp(`^${match2[2]}$`)];
+        patternCache[cacheKey] =
+          next && next[0] !== ':' && next[0] !== '*'
+            ? [cacheKey, match2[1], new RegExp(`^${match2[2]}(?=/${next})`)]
+            : [label, match2[1], new RegExp(`^${match2[2]}$`)];
       } else {
         patternCache[cacheKey] = [label, match2[1], true];
       }
@@ -1064,12 +1099,12 @@ var getPattern = /* @__PURE__ */ __name((label, next) => {
     return patternCache[cacheKey];
   }
   return null;
-}, "getPattern");
+}, 'getPattern');
 var tryDecode = /* @__PURE__ */ __name((str, decoder) => {
   try {
     return decoder(str);
   } catch {
-    return str.replace(/(?:%[0-9A-Fa-f]{2})+/g, (match2) => {
+    return str.replace(/(?:%[0-9A-Fa-f]{2})+/g, match2 => {
       try {
         return decoder(match2);
       } catch {
@@ -1077,74 +1112,74 @@ var tryDecode = /* @__PURE__ */ __name((str, decoder) => {
       }
     });
   }
-}, "tryDecode");
-var tryDecodeURI = /* @__PURE__ */ __name((str) => tryDecode(str, decodeURI), "tryDecodeURI");
-var getPath = /* @__PURE__ */ __name((request) => {
+}, 'tryDecode');
+var tryDecodeURI = /* @__PURE__ */ __name(str => tryDecode(str, decodeURI), 'tryDecodeURI');
+var getPath = /* @__PURE__ */ __name(request => {
   const url = request.url;
-  const start = url.indexOf("/", url.indexOf(":") + 4);
+  const start = url.indexOf('/', url.indexOf(':') + 4);
   let i = start;
   for (; i < url.length; i++) {
     const charCode = url.charCodeAt(i);
     if (charCode === 37) {
-      const queryIndex = url.indexOf("?", i);
+      const queryIndex = url.indexOf('?', i);
       const path = url.slice(start, queryIndex === -1 ? void 0 : queryIndex);
-      return tryDecodeURI(path.includes("%25") ? path.replace(/%25/g, "%2525") : path);
+      return tryDecodeURI(path.includes('%25') ? path.replace(/%25/g, '%2525') : path);
     } else if (charCode === 63) {
       break;
     }
   }
   return url.slice(start, i);
-}, "getPath");
-var getPathNoStrict = /* @__PURE__ */ __name((request) => {
+}, 'getPath');
+var getPathNoStrict = /* @__PURE__ */ __name(request => {
   const result = getPath(request);
-  return result.length > 1 && result.at(-1) === "/" ? result.slice(0, -1) : result;
-}, "getPathNoStrict");
+  return result.length > 1 && result.at(-1) === '/' ? result.slice(0, -1) : result;
+}, 'getPathNoStrict');
 var mergePath = /* @__PURE__ */ __name((base, sub, ...rest) => {
   if (rest.length) {
     sub = mergePath(sub, ...rest);
   }
-  return `${base?.[0] === "/" ? "" : "/"}${base}${sub === "/" ? "" : `${base?.at(-1) === "/" ? "" : "/"}${sub?.[0] === "/" ? sub.slice(1) : sub}`}`;
-}, "mergePath");
-var checkOptionalParameter = /* @__PURE__ */ __name((path) => {
-  if (path.charCodeAt(path.length - 1) !== 63 || !path.includes(":")) {
+  return `${base?.[0] === '/' ? '' : '/'}${base}${sub === '/' ? '' : `${base?.at(-1) === '/' ? '' : '/'}${sub?.[0] === '/' ? sub.slice(1) : sub}`}`;
+}, 'mergePath');
+var checkOptionalParameter = /* @__PURE__ */ __name(path => {
+  if (path.charCodeAt(path.length - 1) !== 63 || !path.includes(':')) {
     return null;
   }
-  const segments = path.split("/");
+  const segments = path.split('/');
   const results = [];
-  let basePath = "";
-  segments.forEach((segment) => {
-    if (segment !== "" && !/\:/.test(segment)) {
-      basePath += "/" + segment;
+  let basePath = '';
+  segments.forEach(segment => {
+    if (segment !== '' && !/\:/.test(segment)) {
+      basePath += '/' + segment;
     } else if (/\:/.test(segment)) {
       if (/\?/.test(segment)) {
-        if (results.length === 0 && basePath === "") {
-          results.push("/");
+        if (results.length === 0 && basePath === '') {
+          results.push('/');
         } else {
           results.push(basePath);
         }
-        const optionalSegment = segment.replace("?", "");
-        basePath += "/" + optionalSegment;
+        const optionalSegment = segment.replace('?', '');
+        basePath += '/' + optionalSegment;
         results.push(basePath);
       } else {
-        basePath += "/" + segment;
+        basePath += '/' + segment;
       }
     }
   });
   return results.filter((v, i, a) => a.indexOf(v) === i);
-}, "checkOptionalParameter");
-var _decodeURI = /* @__PURE__ */ __name((value) => {
+}, 'checkOptionalParameter');
+var _decodeURI = /* @__PURE__ */ __name(value => {
   if (!/[%+]/.test(value)) {
     return value;
   }
-  if (value.indexOf("+") !== -1) {
-    value = value.replace(/\+/g, " ");
+  if (value.indexOf('+') !== -1) {
+    value = value.replace(/\+/g, ' ');
   }
-  return value.indexOf("%") !== -1 ? tryDecode(value, decodeURIComponent_) : value;
-}, "_decodeURI");
+  return value.indexOf('%') !== -1 ? tryDecode(value, decodeURIComponent_) : value;
+}, '_decodeURI');
 var _getQueryParam = /* @__PURE__ */ __name((url, key, multiple) => {
   let encoded;
   if (!multiple && key && !/[%+]/.test(key)) {
-    let keyIndex2 = url.indexOf("?", 8);
+    let keyIndex2 = url.indexOf('?', 8);
     if (keyIndex2 === -1) {
       return void 0;
     }
@@ -1155,10 +1190,10 @@ var _getQueryParam = /* @__PURE__ */ __name((url, key, multiple) => {
       const trailingKeyCode = url.charCodeAt(keyIndex2 + key.length + 1);
       if (trailingKeyCode === 61) {
         const valueIndex = keyIndex2 + key.length + 2;
-        const endIndex = url.indexOf("&", valueIndex);
+        const endIndex = url.indexOf('&', valueIndex);
         return _decodeURI(url.slice(valueIndex, endIndex === -1 ? void 0 : endIndex));
       } else if (trailingKeyCode == 38 || isNaN(trailingKeyCode)) {
-        return "";
+        return '';
       }
       keyIndex2 = url.indexOf(`&${key}`, keyIndex2 + 1);
     }
@@ -1169,27 +1204,27 @@ var _getQueryParam = /* @__PURE__ */ __name((url, key, multiple) => {
   }
   const results = {};
   encoded ??= /[%+]/.test(url);
-  let keyIndex = url.indexOf("?", 8);
+  let keyIndex = url.indexOf('?', 8);
   while (keyIndex !== -1) {
-    const nextKeyIndex = url.indexOf("&", keyIndex + 1);
-    let valueIndex = url.indexOf("=", keyIndex);
+    const nextKeyIndex = url.indexOf('&', keyIndex + 1);
+    let valueIndex = url.indexOf('=', keyIndex);
     if (valueIndex > nextKeyIndex && nextKeyIndex !== -1) {
       valueIndex = -1;
     }
     let name = url.slice(
       keyIndex + 1,
-      valueIndex === -1 ? nextKeyIndex === -1 ? void 0 : nextKeyIndex : valueIndex
+      valueIndex === -1 ? (nextKeyIndex === -1 ? void 0 : nextKeyIndex) : valueIndex
     );
     if (encoded) {
       name = _decodeURI(name);
     }
     keyIndex = nextKeyIndex;
-    if (name === "") {
+    if (name === '') {
       continue;
     }
     let value;
     if (valueIndex === -1) {
-      value = "";
+      value = '';
     } else {
       value = url.slice(valueIndex + 1, nextKeyIndex === -1 ? void 0 : nextKeyIndex);
       if (encoded) {
@@ -1200,591 +1235,619 @@ var _getQueryParam = /* @__PURE__ */ __name((url, key, multiple) => {
       if (!(results[name] && Array.isArray(results[name]))) {
         results[name] = [];
       }
-      ;
       results[name].push(value);
     } else {
       results[name] ??= value;
     }
   }
   return key ? results[key] : results;
-}, "_getQueryParam");
+}, '_getQueryParam');
 var getQueryParam = _getQueryParam;
 var getQueryParams = /* @__PURE__ */ __name((url, key) => {
   return _getQueryParam(url, key, true);
-}, "getQueryParams");
+}, 'getQueryParams');
 var decodeURIComponent_ = decodeURIComponent;
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/request.js
-var tryDecodeURIComponent = /* @__PURE__ */ __name((str) => tryDecode(str, decodeURIComponent_), "tryDecodeURIComponent");
-var HonoRequest = /* @__PURE__ */ __name(class {
-  raw;
-  #validatedData;
-  #matchResult;
-  routeIndex = 0;
-  path;
-  bodyCache = {};
-  constructor(request, path = "/", matchResult = [[]]) {
-    this.raw = request;
-    this.path = path;
-    this.#matchResult = matchResult;
-    this.#validatedData = {};
-  }
-  param(key) {
-    return key ? this.#getDecodedParam(key) : this.#getAllDecodedParams();
-  }
-  #getDecodedParam(key) {
-    const paramKey = this.#matchResult[0][this.routeIndex][1][key];
-    const param = this.#getParamValue(paramKey);
-    return param && /\%/.test(param) ? tryDecodeURIComponent(param) : param;
-  }
-  #getAllDecodedParams() {
-    const decoded = {};
-    const keys = Object.keys(this.#matchResult[0][this.routeIndex][1]);
-    for (const key of keys) {
-      const value = this.#getParamValue(this.#matchResult[0][this.routeIndex][1][key]);
-      if (value !== void 0) {
-        decoded[key] = /\%/.test(value) ? tryDecodeURIComponent(value) : value;
-      }
+var tryDecodeURIComponent = /* @__PURE__ */ __name(
+  str => tryDecode(str, decodeURIComponent_),
+  'tryDecodeURIComponent'
+);
+var HonoRequest = /* @__PURE__ */ __name(
+  class {
+    raw;
+    #validatedData;
+    #matchResult;
+    routeIndex = 0;
+    path;
+    bodyCache = {};
+    constructor(request, path = '/', matchResult = [[]]) {
+      this.raw = request;
+      this.path = path;
+      this.#matchResult = matchResult;
+      this.#validatedData = {};
     }
-    return decoded;
-  }
-  #getParamValue(paramKey) {
-    return this.#matchResult[1] ? this.#matchResult[1][paramKey] : paramKey;
-  }
-  query(key) {
-    return getQueryParam(this.url, key);
-  }
-  queries(key) {
-    return getQueryParams(this.url, key);
-  }
-  header(name) {
-    if (name) {
-      return this.raw.headers.get(name) ?? void 0;
+    param(key) {
+      return key ? this.#getDecodedParam(key) : this.#getAllDecodedParams();
     }
-    const headerData = {};
-    this.raw.headers.forEach((value, key) => {
-      headerData[key] = value;
-    });
-    return headerData;
-  }
-  async parseBody(options) {
-    return this.bodyCache.parsedBody ??= await parseBody(this, options);
-  }
-  #cachedBody = (key) => {
-    const { bodyCache, raw: raw2 } = this;
-    const cachedBody = bodyCache[key];
-    if (cachedBody) {
-      return cachedBody;
+    #getDecodedParam(key) {
+      const paramKey = this.#matchResult[0][this.routeIndex][1][key];
+      const param = this.#getParamValue(paramKey);
+      return param && /\%/.test(param) ? tryDecodeURIComponent(param) : param;
     }
-    const anyCachedKey = Object.keys(bodyCache)[0];
-    if (anyCachedKey) {
-      return bodyCache[anyCachedKey].then((body) => {
-        if (anyCachedKey === "json") {
-          body = JSON.stringify(body);
+    #getAllDecodedParams() {
+      const decoded = {};
+      const keys = Object.keys(this.#matchResult[0][this.routeIndex][1]);
+      for (const key of keys) {
+        const value = this.#getParamValue(this.#matchResult[0][this.routeIndex][1][key]);
+        if (value !== void 0) {
+          decoded[key] = /\%/.test(value) ? tryDecodeURIComponent(value) : value;
         }
-        return new Response(body)[key]();
-      });
+      }
+      return decoded;
     }
-    return bodyCache[key] = raw2[key]();
-  };
-  json() {
-    return this.#cachedBody("text").then((text) => JSON.parse(text));
-  }
-  text() {
-    return this.#cachedBody("text");
-  }
-  arrayBuffer() {
-    return this.#cachedBody("arrayBuffer");
-  }
-  blob() {
-    return this.#cachedBody("blob");
-  }
-  formData() {
-    return this.#cachedBody("formData");
-  }
-  addValidatedData(target, data) {
-    this.#validatedData[target] = data;
-  }
-  valid(target) {
-    return this.#validatedData[target];
-  }
-  get url() {
-    return this.raw.url;
-  }
-  get method() {
-    return this.raw.method;
-  }
-  get [GET_MATCH_RESULT]() {
-    return this.#matchResult;
-  }
-  get matchedRoutes() {
-    return this.#matchResult[0].map(([[, route]]) => route);
-  }
-  get routePath() {
-    return this.#matchResult[0].map(([[, route]]) => route)[this.routeIndex].path;
-  }
-}, "HonoRequest");
+    #getParamValue(paramKey) {
+      return this.#matchResult[1] ? this.#matchResult[1][paramKey] : paramKey;
+    }
+    query(key) {
+      return getQueryParam(this.url, key);
+    }
+    queries(key) {
+      return getQueryParams(this.url, key);
+    }
+    header(name) {
+      if (name) {
+        return this.raw.headers.get(name) ?? void 0;
+      }
+      const headerData = {};
+      this.raw.headers.forEach((value, key) => {
+        headerData[key] = value;
+      });
+      return headerData;
+    }
+    async parseBody(options) {
+      return (this.bodyCache.parsedBody ??= await parseBody(this, options));
+    }
+    #cachedBody = key => {
+      const { bodyCache, raw: raw2 } = this;
+      const cachedBody = bodyCache[key];
+      if (cachedBody) {
+        return cachedBody;
+      }
+      const anyCachedKey = Object.keys(bodyCache)[0];
+      if (anyCachedKey) {
+        return bodyCache[anyCachedKey].then(body => {
+          if (anyCachedKey === 'json') {
+            body = JSON.stringify(body);
+          }
+          return new Response(body)[key]();
+        });
+      }
+      return (bodyCache[key] = raw2[key]());
+    };
+    json() {
+      return this.#cachedBody('text').then(text => JSON.parse(text));
+    }
+    text() {
+      return this.#cachedBody('text');
+    }
+    arrayBuffer() {
+      return this.#cachedBody('arrayBuffer');
+    }
+    blob() {
+      return this.#cachedBody('blob');
+    }
+    formData() {
+      return this.#cachedBody('formData');
+    }
+    addValidatedData(target, data) {
+      this.#validatedData[target] = data;
+    }
+    valid(target) {
+      return this.#validatedData[target];
+    }
+    get url() {
+      return this.raw.url;
+    }
+    get method() {
+      return this.raw.method;
+    }
+    get [GET_MATCH_RESULT]() {
+      return this.#matchResult;
+    }
+    get matchedRoutes() {
+      return this.#matchResult[0].map(([[, route]]) => route);
+    }
+    get routePath() {
+      return this.#matchResult[0].map(([[, route]]) => route)[this.routeIndex].path;
+    }
+  },
+  'HonoRequest'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/utils/html.js
 var HtmlEscapedCallbackPhase = {
   Stringify: 1,
   BeforeStream: 2,
-  Stream: 3
+  Stream: 3,
 };
 var raw = /* @__PURE__ */ __name((value, callbacks) => {
   const escapedString = new String(value);
   escapedString.isEscaped = true;
   escapedString.callbacks = callbacks;
   return escapedString;
-}, "raw");
-var resolveCallback = /* @__PURE__ */ __name(async (str, phase, preserveCallbacks, context2, buffer) => {
-  if (typeof str === "object" && !(str instanceof String)) {
-    if (!(str instanceof Promise)) {
-      str = str.toString();
+}, 'raw');
+var resolveCallback = /* @__PURE__ */ __name(
+  async (str, phase, preserveCallbacks, context2, buffer) => {
+    if (typeof str === 'object' && !(str instanceof String)) {
+      if (!(str instanceof Promise)) {
+        str = str.toString();
+      }
+      if (str instanceof Promise) {
+        str = await str;
+      }
     }
-    if (str instanceof Promise) {
-      str = await str;
+    const callbacks = str.callbacks;
+    if (!callbacks?.length) {
+      return Promise.resolve(str);
     }
-  }
-  const callbacks = str.callbacks;
-  if (!callbacks?.length) {
-    return Promise.resolve(str);
-  }
-  if (buffer) {
-    buffer[0] += str;
-  } else {
-    buffer = [str];
-  }
-  const resStr = Promise.all(callbacks.map((c) => c({ phase, buffer, context: context2 }))).then(
-    (res) => Promise.all(
-      res.filter(Boolean).map((str2) => resolveCallback(str2, phase, false, context2, buffer))
-    ).then(() => buffer[0])
-  );
-  if (preserveCallbacks) {
-    return raw(await resStr, callbacks);
-  } else {
-    return resStr;
-  }
-}, "resolveCallback");
+    if (buffer) {
+      buffer[0] += str;
+    } else {
+      buffer = [str];
+    }
+    const resStr = Promise.all(callbacks.map(c => c({ phase, buffer, context: context2 }))).then(
+      res =>
+        Promise.all(
+          res.filter(Boolean).map(str2 => resolveCallback(str2, phase, false, context2, buffer))
+        ).then(() => buffer[0])
+    );
+    if (preserveCallbacks) {
+      return raw(await resStr, callbacks);
+    } else {
+      return resStr;
+    }
+  },
+  'resolveCallback'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/context.js
-var TEXT_PLAIN = "text/plain; charset=UTF-8";
+var TEXT_PLAIN = 'text/plain; charset=UTF-8';
 var setDefaultContentType = /* @__PURE__ */ __name((contentType, headers) => {
   return {
-    "Content-Type": contentType,
-    ...headers
+    'Content-Type': contentType,
+    ...headers,
   };
-}, "setDefaultContentType");
-var Context = /* @__PURE__ */ __name(class {
-  #rawRequest;
-  #req;
-  env = {};
-  #var;
-  finalized = false;
-  error;
-  #status;
-  #executionCtx;
-  #res;
-  #layout;
-  #renderer;
-  #notFoundHandler;
-  #preparedHeaders;
-  #matchResult;
-  #path;
-  constructor(req, options) {
-    this.#rawRequest = req;
-    if (options) {
-      this.#executionCtx = options.executionCtx;
-      this.env = options.env;
-      this.#notFoundHandler = options.notFoundHandler;
-      this.#path = options.path;
-      this.#matchResult = options.matchResult;
+}, 'setDefaultContentType');
+var Context = /* @__PURE__ */ __name(
+  class {
+    #rawRequest;
+    #req;
+    env = {};
+    #var;
+    finalized = false;
+    error;
+    #status;
+    #executionCtx;
+    #res;
+    #layout;
+    #renderer;
+    #notFoundHandler;
+    #preparedHeaders;
+    #matchResult;
+    #path;
+    constructor(req, options) {
+      this.#rawRequest = req;
+      if (options) {
+        this.#executionCtx = options.executionCtx;
+        this.env = options.env;
+        this.#notFoundHandler = options.notFoundHandler;
+        this.#path = options.path;
+        this.#matchResult = options.matchResult;
+      }
     }
-  }
-  get req() {
-    this.#req ??= new HonoRequest(this.#rawRequest, this.#path, this.#matchResult);
-    return this.#req;
-  }
-  get event() {
-    if (this.#executionCtx && "respondWith" in this.#executionCtx) {
-      return this.#executionCtx;
-    } else {
-      throw Error("This context has no FetchEvent");
+    get req() {
+      this.#req ??= new HonoRequest(this.#rawRequest, this.#path, this.#matchResult);
+      return this.#req;
     }
-  }
-  get executionCtx() {
-    if (this.#executionCtx) {
-      return this.#executionCtx;
-    } else {
-      throw Error("This context has no ExecutionContext");
+    get event() {
+      if (this.#executionCtx && 'respondWith' in this.#executionCtx) {
+        return this.#executionCtx;
+      } else {
+        throw Error('This context has no FetchEvent');
+      }
     }
-  }
-  get res() {
-    return this.#res ||= new Response(null, {
-      headers: this.#preparedHeaders ??= new Headers()
-    });
-  }
-  set res(_res) {
-    if (this.#res && _res) {
-      _res = new Response(_res.body, _res);
-      for (const [k, v] of this.#res.headers.entries()) {
-        if (k === "content-type") {
-          continue;
-        }
-        if (k === "set-cookie") {
-          const cookies = this.#res.headers.getSetCookie();
-          _res.headers.delete("set-cookie");
-          for (const cookie of cookies) {
-            _res.headers.append("set-cookie", cookie);
+    get executionCtx() {
+      if (this.#executionCtx) {
+        return this.#executionCtx;
+      } else {
+        throw Error('This context has no ExecutionContext');
+      }
+    }
+    get res() {
+      return (this.#res ||= new Response(null, {
+        headers: (this.#preparedHeaders ??= new Headers()),
+      }));
+    }
+    set res(_res) {
+      if (this.#res && _res) {
+        _res = new Response(_res.body, _res);
+        for (const [k, v] of this.#res.headers.entries()) {
+          if (k === 'content-type') {
+            continue;
           }
-        } else {
-          _res.headers.set(k, v);
-        }
-      }
-    }
-    this.#res = _res;
-    this.finalized = true;
-  }
-  render = (...args) => {
-    this.#renderer ??= (content) => this.html(content);
-    return this.#renderer(...args);
-  };
-  setLayout = (layout) => this.#layout = layout;
-  getLayout = () => this.#layout;
-  setRenderer = (renderer) => {
-    this.#renderer = renderer;
-  };
-  header = (name, value, options) => {
-    if (this.finalized) {
-      this.#res = new Response(this.#res.body, this.#res);
-    }
-    const headers = this.#res ? this.#res.headers : this.#preparedHeaders ??= new Headers();
-    if (value === void 0) {
-      headers.delete(name);
-    } else if (options?.append) {
-      headers.append(name, value);
-    } else {
-      headers.set(name, value);
-    }
-  };
-  status = (status) => {
-    this.#status = status;
-  };
-  set = (key, value) => {
-    this.#var ??= /* @__PURE__ */ new Map();
-    this.#var.set(key, value);
-  };
-  get = (key) => {
-    return this.#var ? this.#var.get(key) : void 0;
-  };
-  get var() {
-    if (!this.#var) {
-      return {};
-    }
-    return Object.fromEntries(this.#var);
-  }
-  #newResponse(data, arg, headers) {
-    const responseHeaders = this.#res ? new Headers(this.#res.headers) : this.#preparedHeaders ?? new Headers();
-    if (typeof arg === "object" && "headers" in arg) {
-      const argHeaders = arg.headers instanceof Headers ? arg.headers : new Headers(arg.headers);
-      for (const [key, value] of argHeaders) {
-        if (key.toLowerCase() === "set-cookie") {
-          responseHeaders.append(key, value);
-        } else {
-          responseHeaders.set(key, value);
-        }
-      }
-    }
-    if (headers) {
-      for (const [k, v] of Object.entries(headers)) {
-        if (typeof v === "string") {
-          responseHeaders.set(k, v);
-        } else {
-          responseHeaders.delete(k);
-          for (const v2 of v) {
-            responseHeaders.append(k, v2);
+          if (k === 'set-cookie') {
+            const cookies = this.#res.headers.getSetCookie();
+            _res.headers.delete('set-cookie');
+            for (const cookie of cookies) {
+              _res.headers.append('set-cookie', cookie);
+            }
+          } else {
+            _res.headers.set(k, v);
           }
         }
       }
+      this.#res = _res;
+      this.finalized = true;
     }
-    const status = typeof arg === "number" ? arg : arg?.status ?? this.#status;
-    return new Response(data, { status, headers: responseHeaders });
-  }
-  newResponse = (...args) => this.#newResponse(...args);
-  body = (data, arg, headers) => this.#newResponse(data, arg, headers);
-  text = (text, arg, headers) => {
-    return !this.#preparedHeaders && !this.#status && !arg && !headers && !this.finalized ? new Response(text) : this.#newResponse(
-      text,
-      arg,
-      setDefaultContentType(TEXT_PLAIN, headers)
-    );
-  };
-  json = (object, arg, headers) => {
-    return this.#newResponse(
-      JSON.stringify(object),
-      arg,
-      setDefaultContentType("application/json", headers)
-    );
-  };
-  html = (html, arg, headers) => {
-    const res = /* @__PURE__ */ __name((html2) => this.#newResponse(html2, arg, setDefaultContentType("text/html; charset=UTF-8", headers)), "res");
-    return typeof html === "object" ? resolveCallback(html, HtmlEscapedCallbackPhase.Stringify, false, {}).then(res) : res(html);
-  };
-  redirect = (location, status) => {
-    const locationString = String(location);
-    this.header(
-      "Location",
-      !/[^\x00-\xFF]/.test(locationString) ? locationString : encodeURI(locationString)
-    );
-    return this.newResponse(null, status ?? 302);
-  };
-  notFound = () => {
-    this.#notFoundHandler ??= () => new Response();
-    return this.#notFoundHandler(this);
-  };
-}, "Context");
+    render = (...args) => {
+      this.#renderer ??= content => this.html(content);
+      return this.#renderer(...args);
+    };
+    setLayout = layout => (this.#layout = layout);
+    getLayout = () => this.#layout;
+    setRenderer = renderer => {
+      this.#renderer = renderer;
+    };
+    header = (name, value, options) => {
+      if (this.finalized) {
+        this.#res = new Response(this.#res.body, this.#res);
+      }
+      const headers = this.#res ? this.#res.headers : (this.#preparedHeaders ??= new Headers());
+      if (value === void 0) {
+        headers.delete(name);
+      } else if (options?.append) {
+        headers.append(name, value);
+      } else {
+        headers.set(name, value);
+      }
+    };
+    status = status => {
+      this.#status = status;
+    };
+    set = (key, value) => {
+      this.#var ??= /* @__PURE__ */ new Map();
+      this.#var.set(key, value);
+    };
+    get = key => {
+      return this.#var ? this.#var.get(key) : void 0;
+    };
+    get var() {
+      if (!this.#var) {
+        return {};
+      }
+      return Object.fromEntries(this.#var);
+    }
+    #newResponse(data, arg, headers) {
+      const responseHeaders = this.#res
+        ? new Headers(this.#res.headers)
+        : (this.#preparedHeaders ?? new Headers());
+      if (typeof arg === 'object' && 'headers' in arg) {
+        const argHeaders = arg.headers instanceof Headers ? arg.headers : new Headers(arg.headers);
+        for (const [key, value] of argHeaders) {
+          if (key.toLowerCase() === 'set-cookie') {
+            responseHeaders.append(key, value);
+          } else {
+            responseHeaders.set(key, value);
+          }
+        }
+      }
+      if (headers) {
+        for (const [k, v] of Object.entries(headers)) {
+          if (typeof v === 'string') {
+            responseHeaders.set(k, v);
+          } else {
+            responseHeaders.delete(k);
+            for (const v2 of v) {
+              responseHeaders.append(k, v2);
+            }
+          }
+        }
+      }
+      const status = typeof arg === 'number' ? arg : (arg?.status ?? this.#status);
+      return new Response(data, { status, headers: responseHeaders });
+    }
+    newResponse = (...args) => this.#newResponse(...args);
+    body = (data, arg, headers) => this.#newResponse(data, arg, headers);
+    text = (text, arg, headers) => {
+      return !this.#preparedHeaders && !this.#status && !arg && !headers && !this.finalized
+        ? new Response(text)
+        : this.#newResponse(text, arg, setDefaultContentType(TEXT_PLAIN, headers));
+    };
+    json = (object, arg, headers) => {
+      return this.#newResponse(
+        JSON.stringify(object),
+        arg,
+        setDefaultContentType('application/json', headers)
+      );
+    };
+    html = (html, arg, headers) => {
+      const res = /* @__PURE__ */ __name(
+        html2 =>
+          this.#newResponse(html2, arg, setDefaultContentType('text/html; charset=UTF-8', headers)),
+        'res'
+      );
+      return typeof html === 'object'
+        ? resolveCallback(html, HtmlEscapedCallbackPhase.Stringify, false, {}).then(res)
+        : res(html);
+    };
+    redirect = (location, status) => {
+      const locationString = String(location);
+      this.header(
+        'Location',
+        !/[^\x00-\xFF]/.test(locationString) ? locationString : encodeURI(locationString)
+      );
+      return this.newResponse(null, status ?? 302);
+    };
+    notFound = () => {
+      this.#notFoundHandler ??= () => new Response();
+      return this.#notFoundHandler(this);
+    };
+  },
+  'Context'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/router.js
-var METHOD_NAME_ALL = "ALL";
-var METHOD_NAME_ALL_LOWERCASE = "all";
-var METHODS = ["get", "post", "put", "delete", "options", "patch"];
-var MESSAGE_MATCHER_IS_ALREADY_BUILT = "Can not add a route since the matcher is already built.";
-var UnsupportedPathError = /* @__PURE__ */ __name(class extends Error {
-}, "UnsupportedPathError");
+var METHOD_NAME_ALL = 'ALL';
+var METHOD_NAME_ALL_LOWERCASE = 'all';
+var METHODS = ['get', 'post', 'put', 'delete', 'options', 'patch'];
+var MESSAGE_MATCHER_IS_ALREADY_BUILT = 'Can not add a route since the matcher is already built.';
+var UnsupportedPathError = /* @__PURE__ */ __name(class extends Error {}, 'UnsupportedPathError');
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/utils/constants.js
-var COMPOSED_HANDLER = "__COMPOSED_HANDLER";
+var COMPOSED_HANDLER = '__COMPOSED_HANDLER';
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/hono-base.js
-var notFoundHandler = /* @__PURE__ */ __name((c) => {
-  return c.text("404 Not Found", 404);
-}, "notFoundHandler");
+var notFoundHandler = /* @__PURE__ */ __name(c => {
+  return c.text('404 Not Found', 404);
+}, 'notFoundHandler');
 var errorHandler = /* @__PURE__ */ __name((err, c) => {
-  if ("getResponse" in err) {
+  if ('getResponse' in err) {
     const res = err.getResponse();
     return c.newResponse(res.body, res);
   }
   console.error(err);
-  return c.text("Internal Server Error", 500);
-}, "errorHandler");
-var Hono = /* @__PURE__ */ __name(class {
-  get;
-  post;
-  put;
-  delete;
-  options;
-  patch;
-  all;
-  on;
-  use;
-  router;
-  getPath;
-  _basePath = "/";
-  #path = "/";
-  routes = [];
-  constructor(options = {}) {
-    const allMethods = [...METHODS, METHOD_NAME_ALL_LOWERCASE];
-    allMethods.forEach((method) => {
-      this[method] = (args1, ...args) => {
-        if (typeof args1 === "string") {
-          this.#path = args1;
-        } else {
-          this.#addRoute(method, this.#path, args1);
+  return c.text('Internal Server Error', 500);
+}, 'errorHandler');
+var Hono = /* @__PURE__ */ __name(
+  class {
+    get;
+    post;
+    put;
+    delete;
+    options;
+    patch;
+    all;
+    on;
+    use;
+    router;
+    getPath;
+    _basePath = '/';
+    #path = '/';
+    routes = [];
+    constructor(options = {}) {
+      const allMethods = [...METHODS, METHOD_NAME_ALL_LOWERCASE];
+      allMethods.forEach(method => {
+        this[method] = (args1, ...args) => {
+          if (typeof args1 === 'string') {
+            this.#path = args1;
+          } else {
+            this.#addRoute(method, this.#path, args1);
+          }
+          args.forEach(handler => {
+            this.#addRoute(method, this.#path, handler);
+          });
+          return this;
+        };
+      });
+      this.on = (method, path, ...handlers) => {
+        for (const p of [path].flat()) {
+          this.#path = p;
+          for (const m of [method].flat()) {
+            handlers.map(handler => {
+              this.#addRoute(m.toUpperCase(), this.#path, handler);
+            });
+          }
         }
-        args.forEach((handler) => {
-          this.#addRoute(method, this.#path, handler);
+        return this;
+      };
+      this.use = (arg1, ...handlers) => {
+        if (typeof arg1 === 'string') {
+          this.#path = arg1;
+        } else {
+          this.#path = '*';
+          handlers.unshift(arg1);
+        }
+        handlers.forEach(handler => {
+          this.#addRoute(METHOD_NAME_ALL, this.#path, handler);
         });
         return this;
       };
-    });
-    this.on = (method, path, ...handlers) => {
-      for (const p of [path].flat()) {
-        this.#path = p;
-        for (const m of [method].flat()) {
-          handlers.map((handler) => {
-            this.#addRoute(m.toUpperCase(), this.#path, handler);
-          });
+      const { strict, ...optionsWithoutStrict } = options;
+      Object.assign(this, optionsWithoutStrict);
+      this.getPath = (strict ?? true) ? (options.getPath ?? getPath) : getPathNoStrict;
+    }
+    #clone() {
+      const clone = new Hono({
+        router: this.router,
+        getPath: this.getPath,
+      });
+      clone.errorHandler = this.errorHandler;
+      clone.#notFoundHandler = this.#notFoundHandler;
+      clone.routes = this.routes;
+      return clone;
+    }
+    #notFoundHandler = notFoundHandler;
+    errorHandler = errorHandler;
+    route(path, app2) {
+      const subApp = this.basePath(path);
+      app2.routes.map(r => {
+        let handler;
+        if (app2.errorHandler === errorHandler) {
+          handler = r.handler;
+        } else {
+          handler = /* @__PURE__ */ __name(
+            async (c, next) =>
+              (await compose([], app2.errorHandler)(c, () => r.handler(c, next))).res,
+            'handler'
+          );
+          handler[COMPOSED_HANDLER] = r.handler;
         }
-      }
-      return this;
-    };
-    this.use = (arg1, ...handlers) => {
-      if (typeof arg1 === "string") {
-        this.#path = arg1;
-      } else {
-        this.#path = "*";
-        handlers.unshift(arg1);
-      }
-      handlers.forEach((handler) => {
-        this.#addRoute(METHOD_NAME_ALL, this.#path, handler);
+        subApp.#addRoute(r.method, r.path, handler);
       });
       return this;
+    }
+    basePath(path) {
+      const subApp = this.#clone();
+      subApp._basePath = mergePath(this._basePath, path);
+      return subApp;
+    }
+    onError = handler => {
+      this.errorHandler = handler;
+      return this;
     };
-    const { strict, ...optionsWithoutStrict } = options;
-    Object.assign(this, optionsWithoutStrict);
-    this.getPath = strict ?? true ? options.getPath ?? getPath : getPathNoStrict;
-  }
-  #clone() {
-    const clone = new Hono({
-      router: this.router,
-      getPath: this.getPath
-    });
-    clone.errorHandler = this.errorHandler;
-    clone.#notFoundHandler = this.#notFoundHandler;
-    clone.routes = this.routes;
-    return clone;
-  }
-  #notFoundHandler = notFoundHandler;
-  errorHandler = errorHandler;
-  route(path, app2) {
-    const subApp = this.basePath(path);
-    app2.routes.map((r) => {
-      let handler;
-      if (app2.errorHandler === errorHandler) {
-        handler = r.handler;
-      } else {
-        handler = /* @__PURE__ */ __name(async (c, next) => (await compose([], app2.errorHandler)(c, () => r.handler(c, next))).res, "handler");
-        handler[COMPOSED_HANDLER] = r.handler;
-      }
-      subApp.#addRoute(r.method, r.path, handler);
-    });
-    return this;
-  }
-  basePath(path) {
-    const subApp = this.#clone();
-    subApp._basePath = mergePath(this._basePath, path);
-    return subApp;
-  }
-  onError = (handler) => {
-    this.errorHandler = handler;
-    return this;
-  };
-  notFound = (handler) => {
-    this.#notFoundHandler = handler;
-    return this;
-  };
-  mount(path, applicationHandler, options) {
-    let replaceRequest;
-    let optionHandler;
-    if (options) {
-      if (typeof options === "function") {
-        optionHandler = options;
-      } else {
-        optionHandler = options.optionHandler;
-        if (options.replaceRequest === false) {
-          replaceRequest = /* @__PURE__ */ __name((request) => request, "replaceRequest");
+    notFound = handler => {
+      this.#notFoundHandler = handler;
+      return this;
+    };
+    mount(path, applicationHandler, options) {
+      let replaceRequest;
+      let optionHandler;
+      if (options) {
+        if (typeof options === 'function') {
+          optionHandler = options;
         } else {
-          replaceRequest = options.replaceRequest;
+          optionHandler = options.optionHandler;
+          if (options.replaceRequest === false) {
+            replaceRequest = /* @__PURE__ */ __name(request => request, 'replaceRequest');
+          } else {
+            replaceRequest = options.replaceRequest;
+          }
         }
       }
+      const getOptions = optionHandler
+        ? c => {
+            const options2 = optionHandler(c);
+            return Array.isArray(options2) ? options2 : [options2];
+          }
+        : c => {
+            let executionContext = void 0;
+            try {
+              executionContext = c.executionCtx;
+            } catch {}
+            return [c.env, executionContext];
+          };
+      replaceRequest ||= (() => {
+        const mergedPath = mergePath(this._basePath, path);
+        const pathPrefixLength = mergedPath === '/' ? 0 : mergedPath.length;
+        return request => {
+          const url = new URL(request.url);
+          url.pathname = url.pathname.slice(pathPrefixLength) || '/';
+          return new Request(url, request);
+        };
+      })();
+      const handler = /* @__PURE__ */ __name(async (c, next) => {
+        const res = await applicationHandler(replaceRequest(c.req.raw), ...getOptions(c));
+        if (res) {
+          return res;
+        }
+        await next();
+      }, 'handler');
+      this.#addRoute(METHOD_NAME_ALL, mergePath(path, '*'), handler);
+      return this;
     }
-    const getOptions = optionHandler ? (c) => {
-      const options2 = optionHandler(c);
-      return Array.isArray(options2) ? options2 : [options2];
-    } : (c) => {
-      let executionContext = void 0;
-      try {
-        executionContext = c.executionCtx;
-      } catch {
+    #addRoute(method, path, handler) {
+      method = method.toUpperCase();
+      path = mergePath(this._basePath, path);
+      const r = { basePath: this._basePath, path, method, handler };
+      this.router.add(method, path, [handler, r]);
+      this.routes.push(r);
+    }
+    #handleError(err, c) {
+      if (err instanceof Error) {
+        return this.errorHandler(err, c);
       }
-      return [c.env, executionContext];
+      throw err;
+    }
+    #dispatch(request, executionCtx, env2, method) {
+      if (method === 'HEAD') {
+        return (async () =>
+          new Response(null, await this.#dispatch(request, executionCtx, env2, 'GET')))();
+      }
+      const path = this.getPath(request, { env: env2 });
+      const matchResult = this.router.match(method, path);
+      const c = new Context(request, {
+        path,
+        matchResult,
+        env: env2,
+        executionCtx,
+        notFoundHandler: this.#notFoundHandler,
+      });
+      if (matchResult[0].length === 1) {
+        let res;
+        try {
+          res = matchResult[0][0][0][0](c, async () => {
+            c.res = await this.#notFoundHandler(c);
+          });
+        } catch (err) {
+          return this.#handleError(err, c);
+        }
+        return res instanceof Promise
+          ? res
+              .then(resolved => resolved || (c.finalized ? c.res : this.#notFoundHandler(c)))
+              .catch(err => this.#handleError(err, c))
+          : (res ?? this.#notFoundHandler(c));
+      }
+      const composed = compose(matchResult[0], this.errorHandler, this.#notFoundHandler);
+      return (async () => {
+        try {
+          const context2 = await composed(c);
+          if (!context2.finalized) {
+            throw new Error(
+              'Context is not finalized. Did you forget to return a Response object or `await next()`?'
+            );
+          }
+          return context2.res;
+        } catch (err) {
+          return this.#handleError(err, c);
+        }
+      })();
+    }
+    fetch = (request, ...rest) => {
+      return this.#dispatch(request, rest[1], rest[0], request.method);
     };
-    replaceRequest ||= (() => {
-      const mergedPath = mergePath(this._basePath, path);
-      const pathPrefixLength = mergedPath === "/" ? 0 : mergedPath.length;
-      return (request) => {
-        const url = new URL(request.url);
-        url.pathname = url.pathname.slice(pathPrefixLength) || "/";
-        return new Request(url, request);
-      };
-    })();
-    const handler = /* @__PURE__ */ __name(async (c, next) => {
-      const res = await applicationHandler(replaceRequest(c.req.raw), ...getOptions(c));
-      if (res) {
-        return res;
+    request = (input, requestInit, Env, executionCtx) => {
+      if (input instanceof Request) {
+        return this.fetch(requestInit ? new Request(input, requestInit) : input, Env, executionCtx);
       }
-      await next();
-    }, "handler");
-    this.#addRoute(METHOD_NAME_ALL, mergePath(path, "*"), handler);
-    return this;
-  }
-  #addRoute(method, path, handler) {
-    method = method.toUpperCase();
-    path = mergePath(this._basePath, path);
-    const r = { basePath: this._basePath, path, method, handler };
-    this.router.add(method, path, [handler, r]);
-    this.routes.push(r);
-  }
-  #handleError(err, c) {
-    if (err instanceof Error) {
-      return this.errorHandler(err, c);
-    }
-    throw err;
-  }
-  #dispatch(request, executionCtx, env2, method) {
-    if (method === "HEAD") {
-      return (async () => new Response(null, await this.#dispatch(request, executionCtx, env2, "GET")))();
-    }
-    const path = this.getPath(request, { env: env2 });
-    const matchResult = this.router.match(method, path);
-    const c = new Context(request, {
-      path,
-      matchResult,
-      env: env2,
-      executionCtx,
-      notFoundHandler: this.#notFoundHandler
-    });
-    if (matchResult[0].length === 1) {
-      let res;
-      try {
-        res = matchResult[0][0][0][0](c, async () => {
-          c.res = await this.#notFoundHandler(c);
-        });
-      } catch (err) {
-        return this.#handleError(err, c);
-      }
-      return res instanceof Promise ? res.then(
-        (resolved) => resolved || (c.finalized ? c.res : this.#notFoundHandler(c))
-      ).catch((err) => this.#handleError(err, c)) : res ?? this.#notFoundHandler(c);
-    }
-    const composed = compose(matchResult[0], this.errorHandler, this.#notFoundHandler);
-    return (async () => {
-      try {
-        const context2 = await composed(c);
-        if (!context2.finalized) {
-          throw new Error(
-            "Context is not finalized. Did you forget to return a Response object or `await next()`?"
-          );
-        }
-        return context2.res;
-      } catch (err) {
-        return this.#handleError(err, c);
-      }
-    })();
-  }
-  fetch = (request, ...rest) => {
-    return this.#dispatch(request, rest[1], rest[0], request.method);
-  };
-  request = (input, requestInit, Env, executionCtx) => {
-    if (input instanceof Request) {
-      return this.fetch(requestInit ? new Request(input, requestInit) : input, Env, executionCtx);
-    }
-    input = input.toString();
-    return this.fetch(
-      new Request(
-        /^https?:\/\//.test(input) ? input : `http://localhost${mergePath("/", input)}`,
-        requestInit
-      ),
-      Env,
-      executionCtx
-    );
-  };
-  fire = () => {
-    addEventListener("fetch", (event) => {
-      event.respondWith(this.#dispatch(event.request, event, void 0, event.request.method));
-    });
-  };
-}, "Hono");
+      input = input.toString();
+      return this.fetch(
+        new Request(
+          /^https?:\/\//.test(input) ? input : `http://localhost${mergePath('/', input)}`,
+          requestInit
+        ),
+        Env,
+        executionCtx
+      );
+    };
+    fire = () => {
+      addEventListener('fetch', event => {
+        event.respondWith(this.#dispatch(event.request, event, void 0, event.request.method));
+      });
+    };
+  },
+  'Hono'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/router/reg-exp-router/matcher.js
 var emptyParam = [];
@@ -1800,23 +1863,23 @@ function match(method, path) {
     if (!match3) {
       return [[], emptyParam];
     }
-    const index = match3.indexOf("", 1);
+    const index = match3.indexOf('', 1);
     return [matcher[1][index], match3];
-  }, "match2");
+  }, 'match2');
   this.match = match2;
   return match2(method, path);
 }
-__name(match, "match");
+__name(match, 'match');
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/router/reg-exp-router/node.js
-var LABEL_REG_EXP_STR = "[^/]+";
-var ONLY_WILDCARD_REG_EXP_STR = ".*";
-var TAIL_WILDCARD_REG_EXP_STR = "(?:|/.*)";
+var LABEL_REG_EXP_STR = '[^/]+';
+var ONLY_WILDCARD_REG_EXP_STR = '.*';
+var TAIL_WILDCARD_REG_EXP_STR = '(?:|/.*)';
 var PATH_ERROR = Symbol();
-var regExpMetaChars = new Set(".\\+*[^]$()");
+var regExpMetaChars = new Set('.\\+*[^]$()');
 function compareKey(a, b) {
   if (a.length === 1) {
-    return b.length === 1 ? a < b ? -1 : 1 : -1;
+    return b.length === 1 ? (a < b ? -1 : 1) : -1;
   }
   if (b.length === 1) {
     return 1;
@@ -1831,180 +1894,208 @@ function compareKey(a, b) {
   } else if (b === LABEL_REG_EXP_STR) {
     return -1;
   }
-  return a.length === b.length ? a < b ? -1 : 1 : b.length - a.length;
+  return a.length === b.length ? (a < b ? -1 : 1) : b.length - a.length;
 }
-__name(compareKey, "compareKey");
-var Node = /* @__PURE__ */ __name(class {
-  #index;
-  #varIndex;
-  #children = /* @__PURE__ */ Object.create(null);
-  insert(tokens, index, paramMap, context2, pathErrorCheckOnly) {
-    if (tokens.length === 0) {
-      if (this.#index !== void 0) {
-        throw PATH_ERROR;
-      }
-      if (pathErrorCheckOnly) {
+__name(compareKey, 'compareKey');
+var Node = /* @__PURE__ */ __name(
+  class {
+    #index;
+    #varIndex;
+    #children = /* @__PURE__ */ Object.create(null);
+    insert(tokens, index, paramMap, context2, pathErrorCheckOnly) {
+      if (tokens.length === 0) {
+        if (this.#index !== void 0) {
+          throw PATH_ERROR;
+        }
+        if (pathErrorCheckOnly) {
+          return;
+        }
+        this.#index = index;
         return;
       }
-      this.#index = index;
-      return;
-    }
-    const [token, ...restTokens] = tokens;
-    const pattern = token === "*" ? restTokens.length === 0 ? ["", "", ONLY_WILDCARD_REG_EXP_STR] : ["", "", LABEL_REG_EXP_STR] : token === "/*" ? ["", "", TAIL_WILDCARD_REG_EXP_STR] : token.match(/^\:([^\{\}]+)(?:\{(.+)\})?$/);
-    let node;
-    if (pattern) {
-      const name = pattern[1];
-      let regexpStr = pattern[2] || LABEL_REG_EXP_STR;
-      if (name && pattern[2]) {
-        if (regexpStr === ".*") {
-          throw PATH_ERROR;
+      const [token, ...restTokens] = tokens;
+      const pattern =
+        token === '*'
+          ? restTokens.length === 0
+            ? ['', '', ONLY_WILDCARD_REG_EXP_STR]
+            : ['', '', LABEL_REG_EXP_STR]
+          : token === '/*'
+            ? ['', '', TAIL_WILDCARD_REG_EXP_STR]
+            : token.match(/^\:([^\{\}]+)(?:\{(.+)\})?$/);
+      let node;
+      if (pattern) {
+        const name = pattern[1];
+        let regexpStr = pattern[2] || LABEL_REG_EXP_STR;
+        if (name && pattern[2]) {
+          if (regexpStr === '.*') {
+            throw PATH_ERROR;
+          }
+          regexpStr = regexpStr.replace(/^\((?!\?:)(?=[^)]+\)$)/, '(?:');
+          if (/\((?!\?:)/.test(regexpStr)) {
+            throw PATH_ERROR;
+          }
         }
-        regexpStr = regexpStr.replace(/^\((?!\?:)(?=[^)]+\)$)/, "(?:");
-        if (/\((?!\?:)/.test(regexpStr)) {
-          throw PATH_ERROR;
+        node = this.#children[regexpStr];
+        if (!node) {
+          if (
+            Object.keys(this.#children).some(
+              k => k !== ONLY_WILDCARD_REG_EXP_STR && k !== TAIL_WILDCARD_REG_EXP_STR
+            )
+          ) {
+            throw PATH_ERROR;
+          }
+          if (pathErrorCheckOnly) {
+            return;
+          }
+          node = this.#children[regexpStr] = new Node();
+          if (name !== '') {
+            node.#varIndex = context2.varIndex++;
+          }
+        }
+        if (!pathErrorCheckOnly && name !== '') {
+          paramMap.push([name, node.#varIndex]);
+        }
+      } else {
+        node = this.#children[token];
+        if (!node) {
+          if (
+            Object.keys(this.#children).some(
+              k =>
+                k.length > 1 && k !== ONLY_WILDCARD_REG_EXP_STR && k !== TAIL_WILDCARD_REG_EXP_STR
+            )
+          ) {
+            throw PATH_ERROR;
+          }
+          if (pathErrorCheckOnly) {
+            return;
+          }
+          node = this.#children[token] = new Node();
         }
       }
-      node = this.#children[regexpStr];
-      if (!node) {
-        if (Object.keys(this.#children).some(
-          (k) => k !== ONLY_WILDCARD_REG_EXP_STR && k !== TAIL_WILDCARD_REG_EXP_STR
-        )) {
-          throw PATH_ERROR;
-        }
-        if (pathErrorCheckOnly) {
-          return;
-        }
-        node = this.#children[regexpStr] = new Node();
-        if (name !== "") {
-          node.#varIndex = context2.varIndex++;
-        }
+      node.insert(restTokens, index, paramMap, context2, pathErrorCheckOnly);
+    }
+    buildRegExpStr() {
+      const childKeys = Object.keys(this.#children).sort(compareKey);
+      const strList = childKeys.map(k => {
+        const c = this.#children[k];
+        return (
+          (typeof c.#varIndex === 'number'
+            ? `(${k})@${c.#varIndex}`
+            : regExpMetaChars.has(k)
+              ? `\\${k}`
+              : k) + c.buildRegExpStr()
+        );
+      });
+      if (typeof this.#index === 'number') {
+        strList.unshift(`#${this.#index}`);
       }
-      if (!pathErrorCheckOnly && name !== "") {
-        paramMap.push([name, node.#varIndex]);
+      if (strList.length === 0) {
+        return '';
       }
-    } else {
-      node = this.#children[token];
-      if (!node) {
-        if (Object.keys(this.#children).some(
-          (k) => k.length > 1 && k !== ONLY_WILDCARD_REG_EXP_STR && k !== TAIL_WILDCARD_REG_EXP_STR
-        )) {
-          throw PATH_ERROR;
-        }
-        if (pathErrorCheckOnly) {
-          return;
-        }
-        node = this.#children[token] = new Node();
+      if (strList.length === 1) {
+        return strList[0];
       }
+      return '(?:' + strList.join('|') + ')';
     }
-    node.insert(restTokens, index, paramMap, context2, pathErrorCheckOnly);
-  }
-  buildRegExpStr() {
-    const childKeys = Object.keys(this.#children).sort(compareKey);
-    const strList = childKeys.map((k) => {
-      const c = this.#children[k];
-      return (typeof c.#varIndex === "number" ? `(${k})@${c.#varIndex}` : regExpMetaChars.has(k) ? `\\${k}` : k) + c.buildRegExpStr();
-    });
-    if (typeof this.#index === "number") {
-      strList.unshift(`#${this.#index}`);
-    }
-    if (strList.length === 0) {
-      return "";
-    }
-    if (strList.length === 1) {
-      return strList[0];
-    }
-    return "(?:" + strList.join("|") + ")";
-  }
-}, "Node");
+  },
+  'Node'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/router/reg-exp-router/trie.js
-var Trie = /* @__PURE__ */ __name(class {
-  #context = { varIndex: 0 };
-  #root = new Node();
-  insert(path, index, pathErrorCheckOnly) {
-    const paramAssoc = [];
-    const groups = [];
-    for (let i = 0; ; ) {
-      let replaced = false;
-      path = path.replace(/\{[^}]+\}/g, (m) => {
-        const mark = `@\\${i}`;
-        groups[i] = [mark, m];
-        i++;
-        replaced = true;
-        return mark;
-      });
-      if (!replaced) {
-        break;
-      }
-    }
-    const tokens = path.match(/(?::[^\/]+)|(?:\/\*$)|./g) || [];
-    for (let i = groups.length - 1; i >= 0; i--) {
-      const [mark] = groups[i];
-      for (let j = tokens.length - 1; j >= 0; j--) {
-        if (tokens[j].indexOf(mark) !== -1) {
-          tokens[j] = tokens[j].replace(mark, groups[i][1]);
+var Trie = /* @__PURE__ */ __name(
+  class {
+    #context = { varIndex: 0 };
+    #root = new Node();
+    insert(path, index, pathErrorCheckOnly) {
+      const paramAssoc = [];
+      const groups = [];
+      for (let i = 0; ; ) {
+        let replaced = false;
+        path = path.replace(/\{[^}]+\}/g, m => {
+          const mark = `@\\${i}`;
+          groups[i] = [mark, m];
+          i++;
+          replaced = true;
+          return mark;
+        });
+        if (!replaced) {
           break;
         }
       }
-    }
-    this.#root.insert(tokens, index, paramAssoc, this.#context, pathErrorCheckOnly);
-    return paramAssoc;
-  }
-  buildRegExp() {
-    let regexp = this.#root.buildRegExpStr();
-    if (regexp === "") {
-      return [/^$/, [], []];
-    }
-    let captureIndex = 0;
-    const indexReplacementMap = [];
-    const paramReplacementMap = [];
-    regexp = regexp.replace(/#(\d+)|@(\d+)|\.\*\$/g, (_, handlerIndex, paramIndex) => {
-      if (handlerIndex !== void 0) {
-        indexReplacementMap[++captureIndex] = Number(handlerIndex);
-        return "$()";
+      const tokens = path.match(/(?::[^\/]+)|(?:\/\*$)|./g) || [];
+      for (let i = groups.length - 1; i >= 0; i--) {
+        const [mark] = groups[i];
+        for (let j = tokens.length - 1; j >= 0; j--) {
+          if (tokens[j].indexOf(mark) !== -1) {
+            tokens[j] = tokens[j].replace(mark, groups[i][1]);
+            break;
+          }
+        }
       }
-      if (paramIndex !== void 0) {
-        paramReplacementMap[Number(paramIndex)] = ++captureIndex;
-        return "";
+      this.#root.insert(tokens, index, paramAssoc, this.#context, pathErrorCheckOnly);
+      return paramAssoc;
+    }
+    buildRegExp() {
+      let regexp = this.#root.buildRegExpStr();
+      if (regexp === '') {
+        return [/^$/, [], []];
       }
-      return "";
-    });
-    return [new RegExp(`^${regexp}`), indexReplacementMap, paramReplacementMap];
-  }
-}, "Trie");
+      let captureIndex = 0;
+      const indexReplacementMap = [];
+      const paramReplacementMap = [];
+      regexp = regexp.replace(/#(\d+)|@(\d+)|\.\*\$/g, (_, handlerIndex, paramIndex) => {
+        if (handlerIndex !== void 0) {
+          indexReplacementMap[++captureIndex] = Number(handlerIndex);
+          return '$()';
+        }
+        if (paramIndex !== void 0) {
+          paramReplacementMap[Number(paramIndex)] = ++captureIndex;
+          return '';
+        }
+        return '';
+      });
+      return [new RegExp(`^${regexp}`), indexReplacementMap, paramReplacementMap];
+    }
+  },
+  'Trie'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/router/reg-exp-router/router.js
 var nullMatcher = [/^$/, [], /* @__PURE__ */ Object.create(null)];
 var wildcardRegExpCache = /* @__PURE__ */ Object.create(null);
 function buildWildcardRegExp(path) {
-  return wildcardRegExpCache[path] ??= new RegExp(
-    path === "*" ? "" : `^${path.replace(
-      /\/\*$|([.\\+*[^\]$()])/g,
-      (_, metaChar) => metaChar ? `\\${metaChar}` : "(?:|/.*)"
-    )}$`
-  );
+  return (wildcardRegExpCache[path] ??= new RegExp(
+    path === '*'
+      ? ''
+      : `^${path.replace(/\/\*$|([.\\+*[^\]$()])/g, (_, metaChar) =>
+          metaChar ? `\\${metaChar}` : '(?:|/.*)'
+        )}$`
+  ));
 }
-__name(buildWildcardRegExp, "buildWildcardRegExp");
+__name(buildWildcardRegExp, 'buildWildcardRegExp');
 function clearWildcardRegExpCache() {
   wildcardRegExpCache = /* @__PURE__ */ Object.create(null);
 }
-__name(clearWildcardRegExpCache, "clearWildcardRegExpCache");
+__name(clearWildcardRegExpCache, 'clearWildcardRegExpCache');
 function buildMatcherFromPreprocessedRoutes(routes) {
   const trie = new Trie();
   const handlerData = [];
   if (routes.length === 0) {
     return nullMatcher;
   }
-  const routesWithStaticPathFlag = routes.map(
-    (route) => [!/\*|\/:/.test(route[0]), ...route]
-  ).sort(
-    ([isStaticA, pathA], [isStaticB, pathB]) => isStaticA ? 1 : isStaticB ? -1 : pathA.length - pathB.length
-  );
+  const routesWithStaticPathFlag = routes
+    .map(route => [!/\*|\/:/.test(route[0]), ...route])
+    .sort(([isStaticA, pathA], [isStaticB, pathB]) =>
+      isStaticA ? 1 : isStaticB ? -1 : pathA.length - pathB.length
+    );
   const staticMap = /* @__PURE__ */ Object.create(null);
   for (let i = 0, j = -1, len = routesWithStaticPathFlag.length; i < len; i++) {
     const [pathErrorCheckOnly, path, handlers] = routesWithStaticPathFlag[i];
     if (pathErrorCheckOnly) {
-      staticMap[path] = [handlers.map(([h]) => [h, /* @__PURE__ */ Object.create(null)]), emptyParam];
+      staticMap[path] = [
+        handlers.map(([h]) => [h, /* @__PURE__ */ Object.create(null)]),
+        emptyParam,
+      ];
     } else {
       j++;
     }
@@ -2046,7 +2137,7 @@ function buildMatcherFromPreprocessedRoutes(routes) {
   }
   return [regexp, handlerMap, staticMap];
 }
-__name(buildMatcherFromPreprocessedRoutes, "buildMatcherFromPreprocessedRoutes");
+__name(buildMatcherFromPreprocessedRoutes, 'buildMatcherFromPreprocessedRoutes');
 function findMiddleware(middleware, path) {
   if (!middleware) {
     return void 0;
@@ -2058,376 +2149,405 @@ function findMiddleware(middleware, path) {
   }
   return void 0;
 }
-__name(findMiddleware, "findMiddleware");
-var RegExpRouter = /* @__PURE__ */ __name(class {
-  name = "RegExpRouter";
-  #middleware;
-  #routes;
-  constructor() {
-    this.#middleware = { [METHOD_NAME_ALL]: /* @__PURE__ */ Object.create(null) };
-    this.#routes = { [METHOD_NAME_ALL]: /* @__PURE__ */ Object.create(null) };
-  }
-  add(method, path, handler) {
-    const middleware = this.#middleware;
-    const routes = this.#routes;
-    if (!middleware || !routes) {
-      throw new Error(MESSAGE_MATCHER_IS_ALREADY_BUILT);
+__name(findMiddleware, 'findMiddleware');
+var RegExpRouter = /* @__PURE__ */ __name(
+  class {
+    name = 'RegExpRouter';
+    #middleware;
+    #routes;
+    constructor() {
+      this.#middleware = { [METHOD_NAME_ALL]: /* @__PURE__ */ Object.create(null) };
+      this.#routes = { [METHOD_NAME_ALL]: /* @__PURE__ */ Object.create(null) };
     }
-    if (!middleware[method]) {
-      ;
-      [middleware, routes].forEach((handlerMap) => {
-        handlerMap[method] = /* @__PURE__ */ Object.create(null);
-        Object.keys(handlerMap[METHOD_NAME_ALL]).forEach((p) => {
-          handlerMap[method][p] = [...handlerMap[METHOD_NAME_ALL][p]];
-        });
-      });
-    }
-    if (path === "/*") {
-      path = "*";
-    }
-    const paramCount = (path.match(/\/:/g) || []).length;
-    if (/\*$/.test(path)) {
-      const re = buildWildcardRegExp(path);
-      if (method === METHOD_NAME_ALL) {
-        Object.keys(middleware).forEach((m) => {
-          middleware[m][path] ||= findMiddleware(middleware[m], path) || findMiddleware(middleware[METHOD_NAME_ALL], path) || [];
-        });
-      } else {
-        middleware[method][path] ||= findMiddleware(middleware[method], path) || findMiddleware(middleware[METHOD_NAME_ALL], path) || [];
+    add(method, path, handler) {
+      const middleware = this.#middleware;
+      const routes = this.#routes;
+      if (!middleware || !routes) {
+        throw new Error(MESSAGE_MATCHER_IS_ALREADY_BUILT);
       }
-      Object.keys(middleware).forEach((m) => {
-        if (method === METHOD_NAME_ALL || method === m) {
-          Object.keys(middleware[m]).forEach((p) => {
-            re.test(p) && middleware[m][p].push([handler, paramCount]);
+      if (!middleware[method]) {
+        [middleware, routes].forEach(handlerMap => {
+          handlerMap[method] = /* @__PURE__ */ Object.create(null);
+          Object.keys(handlerMap[METHOD_NAME_ALL]).forEach(p => {
+            handlerMap[method][p] = [...handlerMap[METHOD_NAME_ALL][p]];
           });
+        });
+      }
+      if (path === '/*') {
+        path = '*';
+      }
+      const paramCount = (path.match(/\/:/g) || []).length;
+      if (/\*$/.test(path)) {
+        const re = buildWildcardRegExp(path);
+        if (method === METHOD_NAME_ALL) {
+          Object.keys(middleware).forEach(m => {
+            middleware[m][path] ||=
+              findMiddleware(middleware[m], path) ||
+              findMiddleware(middleware[METHOD_NAME_ALL], path) ||
+              [];
+          });
+        } else {
+          middleware[method][path] ||=
+            findMiddleware(middleware[method], path) ||
+            findMiddleware(middleware[METHOD_NAME_ALL], path) ||
+            [];
         }
-      });
-      Object.keys(routes).forEach((m) => {
-        if (method === METHOD_NAME_ALL || method === m) {
-          Object.keys(routes[m]).forEach(
-            (p) => re.test(p) && routes[m][p].push([handler, paramCount])
+        Object.keys(middleware).forEach(m => {
+          if (method === METHOD_NAME_ALL || method === m) {
+            Object.keys(middleware[m]).forEach(p => {
+              re.test(p) && middleware[m][p].push([handler, paramCount]);
+            });
+          }
+        });
+        Object.keys(routes).forEach(m => {
+          if (method === METHOD_NAME_ALL || method === m) {
+            Object.keys(routes[m]).forEach(
+              p => re.test(p) && routes[m][p].push([handler, paramCount])
+            );
+          }
+        });
+        return;
+      }
+      const paths = checkOptionalParameter(path) || [path];
+      for (let i = 0, len = paths.length; i < len; i++) {
+        const path2 = paths[i];
+        Object.keys(routes).forEach(m => {
+          if (method === METHOD_NAME_ALL || method === m) {
+            routes[m][path2] ||= [
+              ...(findMiddleware(middleware[m], path2) ||
+                findMiddleware(middleware[METHOD_NAME_ALL], path2) ||
+                []),
+            ];
+            routes[m][path2].push([handler, paramCount - len + i + 1]);
+          }
+        });
+      }
+    }
+    match = match;
+    buildAllMatchers() {
+      const matchers = /* @__PURE__ */ Object.create(null);
+      Object.keys(this.#routes)
+        .concat(Object.keys(this.#middleware))
+        .forEach(method => {
+          matchers[method] ||= this.#buildMatcher(method);
+        });
+      this.#middleware = this.#routes = void 0;
+      clearWildcardRegExpCache();
+      return matchers;
+    }
+    #buildMatcher(method) {
+      const routes = [];
+      let hasOwnRoute = method === METHOD_NAME_ALL;
+      [this.#middleware, this.#routes].forEach(r => {
+        const ownRoute = r[method]
+          ? Object.keys(r[method]).map(path => [path, r[method][path]])
+          : [];
+        if (ownRoute.length !== 0) {
+          hasOwnRoute ||= true;
+          routes.push(...ownRoute);
+        } else if (method !== METHOD_NAME_ALL) {
+          routes.push(
+            ...Object.keys(r[METHOD_NAME_ALL]).map(path => [path, r[METHOD_NAME_ALL][path]])
           );
         }
       });
-      return;
-    }
-    const paths = checkOptionalParameter(path) || [path];
-    for (let i = 0, len = paths.length; i < len; i++) {
-      const path2 = paths[i];
-      Object.keys(routes).forEach((m) => {
-        if (method === METHOD_NAME_ALL || method === m) {
-          routes[m][path2] ||= [
-            ...findMiddleware(middleware[m], path2) || findMiddleware(middleware[METHOD_NAME_ALL], path2) || []
-          ];
-          routes[m][path2].push([handler, paramCount - len + i + 1]);
-        }
-      });
-    }
-  }
-  match = match;
-  buildAllMatchers() {
-    const matchers = /* @__PURE__ */ Object.create(null);
-    Object.keys(this.#routes).concat(Object.keys(this.#middleware)).forEach((method) => {
-      matchers[method] ||= this.#buildMatcher(method);
-    });
-    this.#middleware = this.#routes = void 0;
-    clearWildcardRegExpCache();
-    return matchers;
-  }
-  #buildMatcher(method) {
-    const routes = [];
-    let hasOwnRoute = method === METHOD_NAME_ALL;
-    [this.#middleware, this.#routes].forEach((r) => {
-      const ownRoute = r[method] ? Object.keys(r[method]).map((path) => [path, r[method][path]]) : [];
-      if (ownRoute.length !== 0) {
-        hasOwnRoute ||= true;
-        routes.push(...ownRoute);
-      } else if (method !== METHOD_NAME_ALL) {
-        routes.push(
-          ...Object.keys(r[METHOD_NAME_ALL]).map((path) => [path, r[METHOD_NAME_ALL][path]])
-        );
+      if (!hasOwnRoute) {
+        return null;
+      } else {
+        return buildMatcherFromPreprocessedRoutes(routes);
       }
-    });
-    if (!hasOwnRoute) {
-      return null;
-    } else {
-      return buildMatcherFromPreprocessedRoutes(routes);
     }
-  }
-}, "RegExpRouter");
+  },
+  'RegExpRouter'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/router/smart-router/router.js
-var SmartRouter = /* @__PURE__ */ __name(class {
-  name = "SmartRouter";
-  #routers = [];
-  #routes = [];
-  constructor(init) {
-    this.#routers = init.routers;
-  }
-  add(method, path, handler) {
-    if (!this.#routes) {
-      throw new Error(MESSAGE_MATCHER_IS_ALREADY_BUILT);
+var SmartRouter = /* @__PURE__ */ __name(
+  class {
+    name = 'SmartRouter';
+    #routers = [];
+    #routes = [];
+    constructor(init) {
+      this.#routers = init.routers;
     }
-    this.#routes.push([method, path, handler]);
-  }
-  match(method, path) {
-    if (!this.#routes) {
-      throw new Error("Fatal error");
-    }
-    const routers = this.#routers;
-    const routes = this.#routes;
-    const len = routers.length;
-    let i = 0;
-    let res;
-    for (; i < len; i++) {
-      const router = routers[i];
-      try {
-        for (let i2 = 0, len2 = routes.length; i2 < len2; i2++) {
-          router.add(...routes[i2]);
-        }
-        res = router.match(method, path);
-      } catch (e) {
-        if (e instanceof UnsupportedPathError) {
-          continue;
-        }
-        throw e;
+    add(method, path, handler) {
+      if (!this.#routes) {
+        throw new Error(MESSAGE_MATCHER_IS_ALREADY_BUILT);
       }
-      this.match = router.match.bind(router);
-      this.#routers = [router];
-      this.#routes = void 0;
-      break;
+      this.#routes.push([method, path, handler]);
     }
-    if (i === len) {
-      throw new Error("Fatal error");
+    match(method, path) {
+      if (!this.#routes) {
+        throw new Error('Fatal error');
+      }
+      const routers = this.#routers;
+      const routes = this.#routes;
+      const len = routers.length;
+      let i = 0;
+      let res;
+      for (; i < len; i++) {
+        const router = routers[i];
+        try {
+          for (let i2 = 0, len2 = routes.length; i2 < len2; i2++) {
+            router.add(...routes[i2]);
+          }
+          res = router.match(method, path);
+        } catch (e) {
+          if (e instanceof UnsupportedPathError) {
+            continue;
+          }
+          throw e;
+        }
+        this.match = router.match.bind(router);
+        this.#routers = [router];
+        this.#routes = void 0;
+        break;
+      }
+      if (i === len) {
+        throw new Error('Fatal error');
+      }
+      this.name = `SmartRouter + ${this.activeRouter.name}`;
+      return res;
     }
-    this.name = `SmartRouter + ${this.activeRouter.name}`;
-    return res;
-  }
-  get activeRouter() {
-    if (this.#routes || this.#routers.length !== 1) {
-      throw new Error("No active router has been determined yet.");
+    get activeRouter() {
+      if (this.#routes || this.#routers.length !== 1) {
+        throw new Error('No active router has been determined yet.');
+      }
+      return this.#routers[0];
     }
-    return this.#routers[0];
-  }
-}, "SmartRouter");
+  },
+  'SmartRouter'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/router/trie-router/node.js
 var emptyParams = /* @__PURE__ */ Object.create(null);
-var Node2 = /* @__PURE__ */ __name(class {
-  #methods;
-  #children;
-  #patterns;
-  #order = 0;
-  #params = emptyParams;
-  constructor(method, handler, children) {
-    this.#children = children || /* @__PURE__ */ Object.create(null);
-    this.#methods = [];
-    if (method && handler) {
-      const m = /* @__PURE__ */ Object.create(null);
-      m[method] = { handler, possibleKeys: [], score: 0 };
-      this.#methods = [m];
+var Node2 = /* @__PURE__ */ __name(
+  class {
+    #methods;
+    #children;
+    #patterns;
+    #order = 0;
+    #params = emptyParams;
+    constructor(method, handler, children) {
+      this.#children = children || /* @__PURE__ */ Object.create(null);
+      this.#methods = [];
+      if (method && handler) {
+        const m = /* @__PURE__ */ Object.create(null);
+        m[method] = { handler, possibleKeys: [], score: 0 };
+        this.#methods = [m];
+      }
+      this.#patterns = [];
     }
-    this.#patterns = [];
-  }
-  insert(method, path, handler) {
-    this.#order = ++this.#order;
-    let curNode = this;
-    const parts = splitRoutingPath(path);
-    const possibleKeys = [];
-    for (let i = 0, len = parts.length; i < len; i++) {
-      const p = parts[i];
-      const nextP = parts[i + 1];
-      const pattern = getPattern(p, nextP);
-      const key = Array.isArray(pattern) ? pattern[0] : p;
-      if (key in curNode.#children) {
-        curNode = curNode.#children[key];
+    insert(method, path, handler) {
+      this.#order = ++this.#order;
+      let curNode = this;
+      const parts = splitRoutingPath(path);
+      const possibleKeys = [];
+      for (let i = 0, len = parts.length; i < len; i++) {
+        const p = parts[i];
+        const nextP = parts[i + 1];
+        const pattern = getPattern(p, nextP);
+        const key = Array.isArray(pattern) ? pattern[0] : p;
+        if (key in curNode.#children) {
+          curNode = curNode.#children[key];
+          if (pattern) {
+            possibleKeys.push(pattern[1]);
+          }
+          continue;
+        }
+        curNode.#children[key] = new Node2();
         if (pattern) {
+          curNode.#patterns.push(pattern);
           possibleKeys.push(pattern[1]);
         }
-        continue;
+        curNode = curNode.#children[key];
       }
-      curNode.#children[key] = new Node2();
-      if (pattern) {
-        curNode.#patterns.push(pattern);
-        possibleKeys.push(pattern[1]);
-      }
-      curNode = curNode.#children[key];
+      curNode.#methods.push({
+        [method]: {
+          handler,
+          possibleKeys: possibleKeys.filter((v, i, a) => a.indexOf(v) === i),
+          score: this.#order,
+        },
+      });
+      return curNode;
     }
-    curNode.#methods.push({
-      [method]: {
-        handler,
-        possibleKeys: possibleKeys.filter((v, i, a) => a.indexOf(v) === i),
-        score: this.#order
-      }
-    });
-    return curNode;
-  }
-  #getHandlerSets(node, method, nodeParams, params) {
-    const handlerSets = [];
-    for (let i = 0, len = node.#methods.length; i < len; i++) {
-      const m = node.#methods[i];
-      const handlerSet = m[method] || m[METHOD_NAME_ALL];
-      const processedSet = {};
-      if (handlerSet !== void 0) {
-        handlerSet.params = /* @__PURE__ */ Object.create(null);
-        handlerSets.push(handlerSet);
-        if (nodeParams !== emptyParams || params && params !== emptyParams) {
-          for (let i2 = 0, len2 = handlerSet.possibleKeys.length; i2 < len2; i2++) {
-            const key = handlerSet.possibleKeys[i2];
-            const processed = processedSet[handlerSet.score];
-            handlerSet.params[key] = params?.[key] && !processed ? params[key] : nodeParams[key] ?? params?.[key];
-            processedSet[handlerSet.score] = true;
+    #getHandlerSets(node, method, nodeParams, params) {
+      const handlerSets = [];
+      for (let i = 0, len = node.#methods.length; i < len; i++) {
+        const m = node.#methods[i];
+        const handlerSet = m[method] || m[METHOD_NAME_ALL];
+        const processedSet = {};
+        if (handlerSet !== void 0) {
+          handlerSet.params = /* @__PURE__ */ Object.create(null);
+          handlerSets.push(handlerSet);
+          if (nodeParams !== emptyParams || (params && params !== emptyParams)) {
+            for (let i2 = 0, len2 = handlerSet.possibleKeys.length; i2 < len2; i2++) {
+              const key = handlerSet.possibleKeys[i2];
+              const processed = processedSet[handlerSet.score];
+              handlerSet.params[key] =
+                params?.[key] && !processed ? params[key] : (nodeParams[key] ?? params?.[key]);
+              processedSet[handlerSet.score] = true;
+            }
           }
         }
       }
+      return handlerSets;
     }
-    return handlerSets;
-  }
-  search(method, path) {
-    const handlerSets = [];
-    this.#params = emptyParams;
-    const curNode = this;
-    let curNodes = [curNode];
-    const parts = splitPath(path);
-    const curNodesQueue = [];
-    for (let i = 0, len = parts.length; i < len; i++) {
-      const part = parts[i];
-      const isLast = i === len - 1;
-      const tempNodes = [];
-      for (let j = 0, len2 = curNodes.length; j < len2; j++) {
-        const node = curNodes[j];
-        const nextNode = node.#children[part];
-        if (nextNode) {
-          nextNode.#params = node.#params;
-          if (isLast) {
-            if (nextNode.#children["*"]) {
-              handlerSets.push(
-                ...this.#getHandlerSets(nextNode.#children["*"], method, node.#params)
-              );
+    search(method, path) {
+      const handlerSets = [];
+      this.#params = emptyParams;
+      const curNode = this;
+      let curNodes = [curNode];
+      const parts = splitPath(path);
+      const curNodesQueue = [];
+      for (let i = 0, len = parts.length; i < len; i++) {
+        const part = parts[i];
+        const isLast = i === len - 1;
+        const tempNodes = [];
+        for (let j = 0, len2 = curNodes.length; j < len2; j++) {
+          const node = curNodes[j];
+          const nextNode = node.#children[part];
+          if (nextNode) {
+            nextNode.#params = node.#params;
+            if (isLast) {
+              if (nextNode.#children['*']) {
+                handlerSets.push(
+                  ...this.#getHandlerSets(nextNode.#children['*'], method, node.#params)
+                );
+              }
+              handlerSets.push(...this.#getHandlerSets(nextNode, method, node.#params));
+            } else {
+              tempNodes.push(nextNode);
             }
-            handlerSets.push(...this.#getHandlerSets(nextNode, method, node.#params));
-          } else {
-            tempNodes.push(nextNode);
           }
-        }
-        for (let k = 0, len3 = node.#patterns.length; k < len3; k++) {
-          const pattern = node.#patterns[k];
-          const params = node.#params === emptyParams ? {} : { ...node.#params };
-          if (pattern === "*") {
-            const astNode = node.#children["*"];
-            if (astNode) {
-              handlerSets.push(...this.#getHandlerSets(astNode, method, node.#params));
-              astNode.#params = params;
-              tempNodes.push(astNode);
-            }
-            continue;
-          }
-          const [key, name, matcher] = pattern;
-          if (!part && !(matcher instanceof RegExp)) {
-            continue;
-          }
-          const child = node.#children[key];
-          const restPathString = parts.slice(i).join("/");
-          if (matcher instanceof RegExp) {
-            const m = matcher.exec(restPathString);
-            if (m) {
-              params[name] = m[0];
-              handlerSets.push(...this.#getHandlerSets(child, method, node.#params, params));
-              if (Object.keys(child.#children).length) {
-                child.#params = params;
-                const componentCount = m[0].match(/\//)?.length ?? 0;
-                const targetCurNodes = curNodesQueue[componentCount] ||= [];
-                targetCurNodes.push(child);
+          for (let k = 0, len3 = node.#patterns.length; k < len3; k++) {
+            const pattern = node.#patterns[k];
+            const params = node.#params === emptyParams ? {} : { ...node.#params };
+            if (pattern === '*') {
+              const astNode = node.#children['*'];
+              if (astNode) {
+                handlerSets.push(...this.#getHandlerSets(astNode, method, node.#params));
+                astNode.#params = params;
+                tempNodes.push(astNode);
               }
               continue;
             }
-          }
-          if (matcher === true || matcher.test(part)) {
-            params[name] = part;
-            if (isLast) {
-              handlerSets.push(...this.#getHandlerSets(child, method, params, node.#params));
-              if (child.#children["*"]) {
-                handlerSets.push(
-                  ...this.#getHandlerSets(child.#children["*"], method, params, node.#params)
-                );
+            const [key, name, matcher] = pattern;
+            if (!part && !(matcher instanceof RegExp)) {
+              continue;
+            }
+            const child = node.#children[key];
+            const restPathString = parts.slice(i).join('/');
+            if (matcher instanceof RegExp) {
+              const m = matcher.exec(restPathString);
+              if (m) {
+                params[name] = m[0];
+                handlerSets.push(...this.#getHandlerSets(child, method, node.#params, params));
+                if (Object.keys(child.#children).length) {
+                  child.#params = params;
+                  const componentCount = m[0].match(/\//)?.length ?? 0;
+                  const targetCurNodes = (curNodesQueue[componentCount] ||= []);
+                  targetCurNodes.push(child);
+                }
+                continue;
               }
-            } else {
-              child.#params = params;
-              tempNodes.push(child);
+            }
+            if (matcher === true || matcher.test(part)) {
+              params[name] = part;
+              if (isLast) {
+                handlerSets.push(...this.#getHandlerSets(child, method, params, node.#params));
+                if (child.#children['*']) {
+                  handlerSets.push(
+                    ...this.#getHandlerSets(child.#children['*'], method, params, node.#params)
+                  );
+                }
+              } else {
+                child.#params = params;
+                tempNodes.push(child);
+              }
             }
           }
         }
+        curNodes = tempNodes.concat(curNodesQueue.shift() ?? []);
       }
-      curNodes = tempNodes.concat(curNodesQueue.shift() ?? []);
+      if (handlerSets.length > 1) {
+        handlerSets.sort((a, b) => {
+          return a.score - b.score;
+        });
+      }
+      return [handlerSets.map(({ handler, params }) => [handler, params])];
     }
-    if (handlerSets.length > 1) {
-      handlerSets.sort((a, b) => {
-        return a.score - b.score;
-      });
-    }
-    return [handlerSets.map(({ handler, params }) => [handler, params])];
-  }
-}, "Node");
+  },
+  'Node'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/router/trie-router/router.js
-var TrieRouter = /* @__PURE__ */ __name(class {
-  name = "TrieRouter";
-  #node;
-  constructor() {
-    this.#node = new Node2();
-  }
-  add(method, path, handler) {
-    const results = checkOptionalParameter(path);
-    if (results) {
-      for (let i = 0, len = results.length; i < len; i++) {
-        this.#node.insert(method, results[i], handler);
-      }
-      return;
+var TrieRouter = /* @__PURE__ */ __name(
+  class {
+    name = 'TrieRouter';
+    #node;
+    constructor() {
+      this.#node = new Node2();
     }
-    this.#node.insert(method, path, handler);
-  }
-  match(method, path) {
-    return this.#node.search(method, path);
-  }
-}, "TrieRouter");
+    add(method, path, handler) {
+      const results = checkOptionalParameter(path);
+      if (results) {
+        for (let i = 0, len = results.length; i < len; i++) {
+          this.#node.insert(method, results[i], handler);
+        }
+        return;
+      }
+      this.#node.insert(method, path, handler);
+    }
+    match(method, path) {
+      return this.#node.search(method, path);
+    }
+  },
+  'TrieRouter'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/hono.js
-var Hono2 = /* @__PURE__ */ __name(class extends Hono {
-  constructor(options = {}) {
-    super(options);
-    this.router = options.router ?? new SmartRouter({
-      routers: [new RegExpRouter(), new TrieRouter()]
-    });
-  }
-}, "Hono");
+var Hono2 = /* @__PURE__ */ __name(
+  class extends Hono {
+    constructor(options = {}) {
+      super(options);
+      this.router =
+        options.router ??
+        new SmartRouter({
+          routers: [new RegExpRouter(), new TrieRouter()],
+        });
+    }
+  },
+  'Hono'
+);
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/middleware/cors/index.js
-var cors = /* @__PURE__ */ __name((options) => {
+var cors = /* @__PURE__ */ __name(options => {
   const defaults = {
-    origin: "*",
-    allowMethods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH"],
+    origin: '*',
+    allowMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE', 'PATCH'],
     allowHeaders: [],
-    exposeHeaders: []
+    exposeHeaders: [],
   };
   const opts = {
     ...defaults,
-    ...options
+    ...options,
   };
-  const findAllowOrigin = ((optsOrigin) => {
-    if (typeof optsOrigin === "string") {
-      if (optsOrigin === "*") {
+  const findAllowOrigin = (optsOrigin => {
+    if (typeof optsOrigin === 'string') {
+      if (optsOrigin === '*') {
         return () => optsOrigin;
       } else {
-        return (origin) => optsOrigin === origin ? origin : null;
+        return origin => (optsOrigin === origin ? origin : null);
       }
-    } else if (typeof optsOrigin === "function") {
+    } else if (typeof optsOrigin === 'function') {
       return optsOrigin;
     } else {
-      return (origin) => optsOrigin.includes(origin) ? origin : null;
+      return origin => (optsOrigin.includes(origin) ? origin : null);
     }
   })(opts.origin);
-  const findAllowMethods = ((optsAllowMethods) => {
-    if (typeof optsAllowMethods === "function") {
+  const findAllowMethods = (optsAllowMethods => {
+    if (typeof optsAllowMethods === 'function') {
       return optsAllowMethods;
     } else if (Array.isArray(optsAllowMethods)) {
       return () => optsAllowMethods;
@@ -2439,89 +2559,97 @@ var cors = /* @__PURE__ */ __name((options) => {
     function set(key, value) {
       c.res.headers.set(key, value);
     }
-    __name(set, "set");
-    const allowOrigin = await findAllowOrigin(c.req.header("origin") || "", c);
+    __name(set, 'set');
+    const allowOrigin = await findAllowOrigin(c.req.header('origin') || '', c);
     if (allowOrigin) {
-      set("Access-Control-Allow-Origin", allowOrigin);
+      set('Access-Control-Allow-Origin', allowOrigin);
     }
     if (opts.credentials) {
-      set("Access-Control-Allow-Credentials", "true");
+      set('Access-Control-Allow-Credentials', 'true');
     }
     if (opts.exposeHeaders?.length) {
-      set("Access-Control-Expose-Headers", opts.exposeHeaders.join(","));
+      set('Access-Control-Expose-Headers', opts.exposeHeaders.join(','));
     }
-    if (c.req.method === "OPTIONS") {
-      if (opts.origin !== "*") {
-        set("Vary", "Origin");
+    if (c.req.method === 'OPTIONS') {
+      if (opts.origin !== '*') {
+        set('Vary', 'Origin');
       }
       if (opts.maxAge != null) {
-        set("Access-Control-Max-Age", opts.maxAge.toString());
+        set('Access-Control-Max-Age', opts.maxAge.toString());
       }
-      const allowMethods = await findAllowMethods(c.req.header("origin") || "", c);
+      const allowMethods = await findAllowMethods(c.req.header('origin') || '', c);
       if (allowMethods.length) {
-        set("Access-Control-Allow-Methods", allowMethods.join(","));
+        set('Access-Control-Allow-Methods', allowMethods.join(','));
       }
       let headers = opts.allowHeaders;
       if (!headers?.length) {
-        const requestHeaders = c.req.header("Access-Control-Request-Headers");
+        const requestHeaders = c.req.header('Access-Control-Request-Headers');
         if (requestHeaders) {
           headers = requestHeaders.split(/\s*,\s*/);
         }
       }
       if (headers?.length) {
-        set("Access-Control-Allow-Headers", headers.join(","));
-        c.res.headers.append("Vary", "Access-Control-Request-Headers");
+        set('Access-Control-Allow-Headers', headers.join(','));
+        c.res.headers.append('Vary', 'Access-Control-Request-Headers');
       }
-      c.res.headers.delete("Content-Length");
-      c.res.headers.delete("Content-Type");
+      c.res.headers.delete('Content-Length');
+      c.res.headers.delete('Content-Type');
       return new Response(null, {
         headers: c.res.headers,
         status: 204,
-        statusText: "No Content"
+        statusText: 'No Content',
       });
     }
     await next();
-    if (opts.origin !== "*") {
-      c.header("Vary", "Origin", { append: true });
+    if (opts.origin !== '*') {
+      c.header('Vary', 'Origin', { append: true });
     }
-  }, "cors2");
-}, "cors");
+  }, 'cors2');
+}, 'cors');
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/utils/color.js
 function getColorEnabled() {
   const { process, Deno } = globalThis;
-  const isNoColor = typeof Deno?.noColor === "boolean" ? Deno.noColor : process !== void 0 ? "NO_COLOR" in process?.env : false;
+  const isNoColor =
+    typeof Deno?.noColor === 'boolean'
+      ? Deno.noColor
+      : process !== void 0
+        ? 'NO_COLOR' in process?.env
+        : false;
   return !isNoColor;
 }
-__name(getColorEnabled, "getColorEnabled");
+__name(getColorEnabled, 'getColorEnabled');
 async function getColorEnabledAsync() {
   const { navigator } = globalThis;
-  const cfWorkers = "cloudflare:workers";
-  const isNoColor = navigator !== void 0 && navigator.userAgent === "Cloudflare-Workers" ? await (async () => {
-    try {
-      return "NO_COLOR" in ((await import(cfWorkers)).env ?? {});
-    } catch {
-      return false;
-    }
-  })() : !getColorEnabled();
+  const cfWorkers = 'cloudflare:workers';
+  const isNoColor =
+    navigator !== void 0 && navigator.userAgent === 'Cloudflare-Workers'
+      ? await (async () => {
+          try {
+            return 'NO_COLOR' in ((await import(cfWorkers)).env ?? {});
+          } catch {
+            return false;
+          }
+        })()
+      : !getColorEnabled();
   return !isNoColor;
 }
-__name(getColorEnabledAsync, "getColorEnabledAsync");
+__name(getColorEnabledAsync, 'getColorEnabledAsync');
 
 // ../../node_modules/.pnpm/hono@4.10.7/node_modules/hono/dist/middleware/logger/index.js
-var humanize = /* @__PURE__ */ __name((times) => {
-  const [delimiter, separator] = [",", "."];
-  const orderTimes = times.map((v) => v.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1" + delimiter));
+var humanize = /* @__PURE__ */ __name(times => {
+  const [delimiter, separator] = [',', '.'];
+  const orderTimes = times.map(v => v.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + delimiter));
   return orderTimes.join(separator);
-}, "humanize");
-var time3 = /* @__PURE__ */ __name((start) => {
+}, 'humanize');
+var time3 = /* @__PURE__ */ __name(start => {
   const delta = Date.now() - start;
-  return humanize([delta < 1e3 ? delta + "ms" : Math.round(delta / 1e3) + "s"]);
-}, "time");
-var colorStatus = /* @__PURE__ */ __name(async (status) => {
+  return humanize([delta < 1e3 ? delta + 'ms' : Math.round(delta / 1e3) + 's']);
+}, 'time');
+var colorStatus = /* @__PURE__ */ __name(async status => {
   const colorEnabled = await getColorEnabledAsync();
   if (colorEnabled) {
-    switch (status / 100 | 0) {
+    switch ((status / 100) | 0) {
       case 5:
         return `\x1B[31m${status}\x1B[0m`;
       case 4:
@@ -2533,22 +2661,25 @@ var colorStatus = /* @__PURE__ */ __name(async (status) => {
     }
   }
   return `${status}`;
-}, "colorStatus");
+}, 'colorStatus');
 async function log3(fn, prefix, method, path, status = 0, elapsed) {
-  const out = prefix === "<--" ? `${prefix} ${method} ${path}` : `${prefix} ${method} ${path} ${await colorStatus(status)} ${elapsed}`;
+  const out =
+    prefix === '<--'
+      ? `${prefix} ${method} ${path}`
+      : `${prefix} ${method} ${path} ${await colorStatus(status)} ${elapsed}`;
   fn(out);
 }
-__name(log3, "log");
+__name(log3, 'log');
 var logger = /* @__PURE__ */ __name((fn = console.log) => {
   return /* @__PURE__ */ __name(async function logger2(c, next) {
     const { method, url } = c.req;
-    const path = url.slice(url.indexOf("/", 8));
-    await log3(fn, "<--", method, path);
+    const path = url.slice(url.indexOf('/', 8));
+    await log3(fn, '<--', method, path);
     const start = Date.now();
     await next();
-    await log3(fn, "-->", method, path, c.res.status, time3(start));
-  }, "logger2");
-}, "logger");
+    await log3(fn, '-->', method, path, c.res.status, time3(start));
+  }, 'logger2');
+}, 'logger');
 
 // ../../node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/external.js
 var external_exports = {};
@@ -2659,169 +2790,177 @@ __export(external_exports, {
   union: () => unionType,
   unknown: () => unknownType,
   util: () => util,
-  void: () => voidType
+  void: () => voidType,
 });
 
 // ../../node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/helpers/util.js
 var util;
-(function(util2) {
-  util2.assertEqual = (_) => {
-  };
-  function assertIs(_arg) {
-  }
-  __name(assertIs, "assertIs");
+(function (util2) {
+  util2.assertEqual = _ => {};
+  function assertIs(_arg) {}
+  __name(assertIs, 'assertIs');
   util2.assertIs = assertIs;
   function assertNever(_x) {
     throw new Error();
   }
-  __name(assertNever, "assertNever");
+  __name(assertNever, 'assertNever');
   util2.assertNever = assertNever;
-  util2.arrayToEnum = (items) => {
+  util2.arrayToEnum = items => {
     const obj = {};
     for (const item of items) {
       obj[item] = item;
     }
     return obj;
   };
-  util2.getValidEnumValues = (obj) => {
-    const validKeys = util2.objectKeys(obj).filter((k) => typeof obj[obj[k]] !== "number");
+  util2.getValidEnumValues = obj => {
+    const validKeys = util2.objectKeys(obj).filter(k => typeof obj[obj[k]] !== 'number');
     const filtered = {};
     for (const k of validKeys) {
       filtered[k] = obj[k];
     }
     return util2.objectValues(filtered);
   };
-  util2.objectValues = (obj) => {
-    return util2.objectKeys(obj).map(function(e) {
+  util2.objectValues = obj => {
+    return util2.objectKeys(obj).map(function (e) {
       return obj[e];
     });
   };
-  util2.objectKeys = typeof Object.keys === "function" ? (obj) => Object.keys(obj) : (object) => {
-    const keys = [];
-    for (const key in object) {
-      if (Object.prototype.hasOwnProperty.call(object, key)) {
-        keys.push(key);
-      }
-    }
-    return keys;
-  };
+  util2.objectKeys =
+    typeof Object.keys === 'function'
+      ? obj => Object.keys(obj)
+      : object => {
+          const keys = [];
+          for (const key in object) {
+            if (Object.prototype.hasOwnProperty.call(object, key)) {
+              keys.push(key);
+            }
+          }
+          return keys;
+        };
   util2.find = (arr, checker) => {
     for (const item of arr) {
-      if (checker(item))
-        return item;
+      if (checker(item)) return item;
     }
     return void 0;
   };
-  util2.isInteger = typeof Number.isInteger === "function" ? (val) => Number.isInteger(val) : (val) => typeof val === "number" && Number.isFinite(val) && Math.floor(val) === val;
-  function joinValues(array, separator = " | ") {
-    return array.map((val) => typeof val === "string" ? `'${val}'` : val).join(separator);
+  util2.isInteger =
+    typeof Number.isInteger === 'function'
+      ? val => Number.isInteger(val)
+      : val => typeof val === 'number' && Number.isFinite(val) && Math.floor(val) === val;
+  function joinValues(array, separator = ' | ') {
+    return array.map(val => (typeof val === 'string' ? `'${val}'` : val)).join(separator);
   }
-  __name(joinValues, "joinValues");
+  __name(joinValues, 'joinValues');
   util2.joinValues = joinValues;
   util2.jsonStringifyReplacer = (_, value) => {
-    if (typeof value === "bigint") {
+    if (typeof value === 'bigint') {
       return value.toString();
     }
     return value;
   };
 })(util || (util = {}));
 var objectUtil;
-(function(objectUtil2) {
+(function (objectUtil2) {
   objectUtil2.mergeShapes = (first, second) => {
     return {
       ...first,
-      ...second
+      ...second,
       // second overwrites first
     };
   };
 })(objectUtil || (objectUtil = {}));
 var ZodParsedType = util.arrayToEnum([
-  "string",
-  "nan",
-  "number",
-  "integer",
-  "float",
-  "boolean",
-  "date",
-  "bigint",
-  "symbol",
-  "function",
-  "undefined",
-  "null",
-  "array",
-  "object",
-  "unknown",
-  "promise",
-  "void",
-  "never",
-  "map",
-  "set"
+  'string',
+  'nan',
+  'number',
+  'integer',
+  'float',
+  'boolean',
+  'date',
+  'bigint',
+  'symbol',
+  'function',
+  'undefined',
+  'null',
+  'array',
+  'object',
+  'unknown',
+  'promise',
+  'void',
+  'never',
+  'map',
+  'set',
 ]);
-var getParsedType = /* @__PURE__ */ __name((data) => {
+var getParsedType = /* @__PURE__ */ __name(data => {
   const t = typeof data;
   switch (t) {
-    case "undefined":
+    case 'undefined':
       return ZodParsedType.undefined;
-    case "string":
+    case 'string':
       return ZodParsedType.string;
-    case "number":
+    case 'number':
       return Number.isNaN(data) ? ZodParsedType.nan : ZodParsedType.number;
-    case "boolean":
+    case 'boolean':
       return ZodParsedType.boolean;
-    case "function":
+    case 'function':
       return ZodParsedType.function;
-    case "bigint":
+    case 'bigint':
       return ZodParsedType.bigint;
-    case "symbol":
+    case 'symbol':
       return ZodParsedType.symbol;
-    case "object":
+    case 'object':
       if (Array.isArray(data)) {
         return ZodParsedType.array;
       }
       if (data === null) {
         return ZodParsedType.null;
       }
-      if (data.then && typeof data.then === "function" && data.catch && typeof data.catch === "function") {
+      if (
+        data.then &&
+        typeof data.then === 'function' &&
+        data.catch &&
+        typeof data.catch === 'function'
+      ) {
         return ZodParsedType.promise;
       }
-      if (typeof Map !== "undefined" && data instanceof Map) {
+      if (typeof Map !== 'undefined' && data instanceof Map) {
         return ZodParsedType.map;
       }
-      if (typeof Set !== "undefined" && data instanceof Set) {
+      if (typeof Set !== 'undefined' && data instanceof Set) {
         return ZodParsedType.set;
       }
-      if (typeof Date !== "undefined" && data instanceof Date) {
+      if (typeof Date !== 'undefined' && data instanceof Date) {
         return ZodParsedType.date;
       }
       return ZodParsedType.object;
     default:
       return ZodParsedType.unknown;
   }
-}, "getParsedType");
+}, 'getParsedType');
 
 // ../../node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/ZodError.js
 var ZodIssueCode = util.arrayToEnum([
-  "invalid_type",
-  "invalid_literal",
-  "custom",
-  "invalid_union",
-  "invalid_union_discriminator",
-  "invalid_enum_value",
-  "unrecognized_keys",
-  "invalid_arguments",
-  "invalid_return_type",
-  "invalid_date",
-  "invalid_string",
-  "too_small",
-  "too_big",
-  "invalid_intersection_types",
-  "not_multiple_of",
-  "not_finite"
+  'invalid_type',
+  'invalid_literal',
+  'custom',
+  'invalid_union',
+  'invalid_union_discriminator',
+  'invalid_enum_value',
+  'unrecognized_keys',
+  'invalid_arguments',
+  'invalid_return_type',
+  'invalid_date',
+  'invalid_string',
+  'too_small',
+  'too_big',
+  'invalid_intersection_types',
+  'not_multiple_of',
+  'not_finite',
 ]);
-var quotelessJson = /* @__PURE__ */ __name((obj) => {
+var quotelessJson = /* @__PURE__ */ __name(obj => {
   const json = JSON.stringify(obj, null, 2);
-  return json.replace(/"([^"]+)":/g, "$1:");
-}, "quotelessJson");
+  return json.replace(/"([^"]+)":/g, '$1:');
+}, 'quotelessJson');
 var ZodError = class extends Error {
   get errors() {
     return this.issues;
@@ -2829,7 +2968,7 @@ var ZodError = class extends Error {
   constructor(issues) {
     super();
     this.issues = [];
-    this.addIssue = (sub) => {
+    this.addIssue = sub => {
       this.issues = [...this.issues, sub];
     };
     this.addIssues = (subs = []) => {
@@ -2841,21 +2980,23 @@ var ZodError = class extends Error {
     } else {
       this.__proto__ = actualProto;
     }
-    this.name = "ZodError";
+    this.name = 'ZodError';
     this.issues = issues;
   }
   format(_mapper) {
-    const mapper = _mapper || function(issue) {
-      return issue.message;
-    };
+    const mapper =
+      _mapper ||
+      function (issue) {
+        return issue.message;
+      };
     const fieldErrors = { _errors: [] };
-    const processError = /* @__PURE__ */ __name((error3) => {
+    const processError = /* @__PURE__ */ __name(error3 => {
       for (const issue of error3.issues) {
-        if (issue.code === "invalid_union") {
+        if (issue.code === 'invalid_union') {
           issue.unionErrors.map(processError);
-        } else if (issue.code === "invalid_return_type") {
+        } else if (issue.code === 'invalid_return_type') {
           processError(issue.returnTypeError);
-        } else if (issue.code === "invalid_arguments") {
+        } else if (issue.code === 'invalid_arguments') {
           processError(issue.argumentsError);
         } else if (issue.path.length === 0) {
           fieldErrors._errors.push(mapper(issue));
@@ -2876,7 +3017,7 @@ var ZodError = class extends Error {
           }
         }
       }
-    }, "processError");
+    }, 'processError');
     processError(this);
     return fieldErrors;
   }
@@ -2894,7 +3035,7 @@ var ZodError = class extends Error {
   get isEmpty() {
     return this.issues.length === 0;
   }
-  flatten(mapper = (issue) => issue.message) {
+  flatten(mapper = issue => issue.message) {
     const fieldErrors = {};
     const formErrors = [];
     for (const sub of this.issues) {
@@ -2912,8 +3053,8 @@ var ZodError = class extends Error {
     return this.flatten();
   }
 };
-__name(ZodError, "ZodError");
-ZodError.create = (issues) => {
+__name(ZodError, 'ZodError');
+ZodError.create = issues => {
   const error3 = new ZodError(issues);
   return error3;
 };
@@ -2924,7 +3065,7 @@ var errorMap = /* @__PURE__ */ __name((issue, _ctx) => {
   switch (issue.code) {
     case ZodIssueCode.invalid_type:
       if (issue.received === ZodParsedType.undefined) {
-        message = "Required";
+        message = 'Required';
       } else {
         message = `Expected ${issue.expected}, received ${issue.received}`;
       }
@@ -2933,7 +3074,7 @@ var errorMap = /* @__PURE__ */ __name((issue, _ctx) => {
       message = `Invalid literal value, expected ${JSON.stringify(issue.expected, util.jsonStringifyReplacer)}`;
       break;
     case ZodIssueCode.unrecognized_keys:
-      message = `Unrecognized key(s) in object: ${util.joinValues(issue.keys, ", ")}`;
+      message = `Unrecognized key(s) in object: ${util.joinValues(issue.keys, ', ')}`;
       break;
     case ZodIssueCode.invalid_union:
       message = `Invalid input`;
@@ -2954,52 +3095,50 @@ var errorMap = /* @__PURE__ */ __name((issue, _ctx) => {
       message = `Invalid date`;
       break;
     case ZodIssueCode.invalid_string:
-      if (typeof issue.validation === "object") {
-        if ("includes" in issue.validation) {
+      if (typeof issue.validation === 'object') {
+        if ('includes' in issue.validation) {
           message = `Invalid input: must include "${issue.validation.includes}"`;
-          if (typeof issue.validation.position === "number") {
+          if (typeof issue.validation.position === 'number') {
             message = `${message} at one or more positions greater than or equal to ${issue.validation.position}`;
           }
-        } else if ("startsWith" in issue.validation) {
+        } else if ('startsWith' in issue.validation) {
           message = `Invalid input: must start with "${issue.validation.startsWith}"`;
-        } else if ("endsWith" in issue.validation) {
+        } else if ('endsWith' in issue.validation) {
           message = `Invalid input: must end with "${issue.validation.endsWith}"`;
         } else {
           util.assertNever(issue.validation);
         }
-      } else if (issue.validation !== "regex") {
+      } else if (issue.validation !== 'regex') {
         message = `Invalid ${issue.validation}`;
       } else {
-        message = "Invalid";
+        message = 'Invalid';
       }
       break;
     case ZodIssueCode.too_small:
-      if (issue.type === "array")
-        message = `Array must contain ${issue.exact ? "exactly" : issue.inclusive ? `at least` : `more than`} ${issue.minimum} element(s)`;
-      else if (issue.type === "string")
-        message = `String must contain ${issue.exact ? "exactly" : issue.inclusive ? `at least` : `over`} ${issue.minimum} character(s)`;
-      else if (issue.type === "number")
+      if (issue.type === 'array')
+        message = `Array must contain ${issue.exact ? 'exactly' : issue.inclusive ? `at least` : `more than`} ${issue.minimum} element(s)`;
+      else if (issue.type === 'string')
+        message = `String must contain ${issue.exact ? 'exactly' : issue.inclusive ? `at least` : `over`} ${issue.minimum} character(s)`;
+      else if (issue.type === 'number')
         message = `Number must be ${issue.exact ? `exactly equal to ` : issue.inclusive ? `greater than or equal to ` : `greater than `}${issue.minimum}`;
-      else if (issue.type === "bigint")
+      else if (issue.type === 'bigint')
         message = `Number must be ${issue.exact ? `exactly equal to ` : issue.inclusive ? `greater than or equal to ` : `greater than `}${issue.minimum}`;
-      else if (issue.type === "date")
+      else if (issue.type === 'date')
         message = `Date must be ${issue.exact ? `exactly equal to ` : issue.inclusive ? `greater than or equal to ` : `greater than `}${new Date(Number(issue.minimum))}`;
-      else
-        message = "Invalid input";
+      else message = 'Invalid input';
       break;
     case ZodIssueCode.too_big:
-      if (issue.type === "array")
+      if (issue.type === 'array')
         message = `Array must contain ${issue.exact ? `exactly` : issue.inclusive ? `at most` : `less than`} ${issue.maximum} element(s)`;
-      else if (issue.type === "string")
+      else if (issue.type === 'string')
         message = `String must contain ${issue.exact ? `exactly` : issue.inclusive ? `at most` : `under`} ${issue.maximum} character(s)`;
-      else if (issue.type === "number")
+      else if (issue.type === 'number')
         message = `Number must be ${issue.exact ? `exactly` : issue.inclusive ? `less than or equal to` : `less than`} ${issue.maximum}`;
-      else if (issue.type === "bigint")
+      else if (issue.type === 'bigint')
         message = `BigInt must be ${issue.exact ? `exactly` : issue.inclusive ? `less than or equal to` : `less than`} ${issue.maximum}`;
-      else if (issue.type === "date")
+      else if (issue.type === 'date')
         message = `Date must be ${issue.exact ? `exactly` : issue.inclusive ? `smaller than or equal to` : `smaller than`} ${new Date(Number(issue.maximum))}`;
-      else
-        message = "Invalid input";
+      else message = 'Invalid input';
       break;
     case ZodIssueCode.custom:
       message = `Invalid input`;
@@ -3011,14 +3150,14 @@ var errorMap = /* @__PURE__ */ __name((issue, _ctx) => {
       message = `Number must be a multiple of ${issue.multipleOf}`;
       break;
     case ZodIssueCode.not_finite:
-      message = "Number must be finite";
+      message = 'Number must be finite';
       break;
     default:
       message = _ctx.defaultError;
       util.assertNever(issue);
   }
   return { message };
-}, "errorMap");
+}, 'errorMap');
 var en_default = errorMap;
 
 // ../../node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/errors.js
@@ -3026,38 +3165,41 @@ var overrideErrorMap = en_default;
 function setErrorMap(map) {
   overrideErrorMap = map;
 }
-__name(setErrorMap, "setErrorMap");
+__name(setErrorMap, 'setErrorMap');
 function getErrorMap() {
   return overrideErrorMap;
 }
-__name(getErrorMap, "getErrorMap");
+__name(getErrorMap, 'getErrorMap');
 
 // ../../node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/helpers/parseUtil.js
-var makeIssue = /* @__PURE__ */ __name((params) => {
+var makeIssue = /* @__PURE__ */ __name(params => {
   const { data, path, errorMaps, issueData } = params;
-  const fullPath = [...path, ...issueData.path || []];
+  const fullPath = [...path, ...(issueData.path || [])];
   const fullIssue = {
     ...issueData,
-    path: fullPath
+    path: fullPath,
   };
   if (issueData.message !== void 0) {
     return {
       ...issueData,
       path: fullPath,
-      message: issueData.message
+      message: issueData.message,
     };
   }
-  let errorMessage = "";
-  const maps = errorMaps.filter((m) => !!m).slice().reverse();
+  let errorMessage = '';
+  const maps = errorMaps
+    .filter(m => !!m)
+    .slice()
+    .reverse();
   for (const map of maps) {
     errorMessage = map(fullIssue, { data, defaultError: errorMessage }).message;
   }
   return {
     ...issueData,
     path: fullPath,
-    message: errorMessage
+    message: errorMessage,
   };
-}, "makeIssue");
+}, 'makeIssue');
 var EMPTY_PATH = [];
 function addIssueToContext(ctx, issueData) {
   const overrideMap = getErrorMap();
@@ -3072,32 +3214,28 @@ function addIssueToContext(ctx, issueData) {
       // then schema-bound map if available
       overrideMap,
       // then global override map
-      overrideMap === en_default ? void 0 : en_default
+      overrideMap === en_default ? void 0 : en_default,
       // then global default map
-    ].filter((x) => !!x)
+    ].filter(x => !!x),
   });
   ctx.common.issues.push(issue);
 }
-__name(addIssueToContext, "addIssueToContext");
+__name(addIssueToContext, 'addIssueToContext');
 var ParseStatus = class {
   constructor() {
-    this.value = "valid";
+    this.value = 'valid';
   }
   dirty() {
-    if (this.value === "valid")
-      this.value = "dirty";
+    if (this.value === 'valid') this.value = 'dirty';
   }
   abort() {
-    if (this.value !== "aborted")
-      this.value = "aborted";
+    if (this.value !== 'aborted') this.value = 'aborted';
   }
   static mergeArray(status, results) {
     const arrayValue = [];
     for (const s of results) {
-      if (s.status === "aborted")
-        return INVALID;
-      if (s.status === "dirty")
-        status.dirty();
+      if (s.status === 'aborted') return INVALID;
+      if (s.status === 'dirty') status.dirty();
       arrayValue.push(s.value);
     }
     return { status: status.value, value: arrayValue };
@@ -3109,7 +3247,7 @@ var ParseStatus = class {
       const value = await pair.value;
       syncPairs.push({
         key,
-        value
+        value,
       });
     }
     return ParseStatus.mergeObjectSync(status, syncPairs);
@@ -3118,37 +3256,36 @@ var ParseStatus = class {
     const finalObject = {};
     for (const pair of pairs) {
       const { key, value } = pair;
-      if (key.status === "aborted")
-        return INVALID;
-      if (value.status === "aborted")
-        return INVALID;
-      if (key.status === "dirty")
-        status.dirty();
-      if (value.status === "dirty")
-        status.dirty();
-      if (key.value !== "__proto__" && (typeof value.value !== "undefined" || pair.alwaysSet)) {
+      if (key.status === 'aborted') return INVALID;
+      if (value.status === 'aborted') return INVALID;
+      if (key.status === 'dirty') status.dirty();
+      if (value.status === 'dirty') status.dirty();
+      if (key.value !== '__proto__' && (typeof value.value !== 'undefined' || pair.alwaysSet)) {
         finalObject[key.value] = value.value;
       }
     }
     return { status: status.value, value: finalObject };
   }
 };
-__name(ParseStatus, "ParseStatus");
+__name(ParseStatus, 'ParseStatus');
 var INVALID = Object.freeze({
-  status: "aborted"
+  status: 'aborted',
 });
-var DIRTY = /* @__PURE__ */ __name((value) => ({ status: "dirty", value }), "DIRTY");
-var OK = /* @__PURE__ */ __name((value) => ({ status: "valid", value }), "OK");
-var isAborted = /* @__PURE__ */ __name((x) => x.status === "aborted", "isAborted");
-var isDirty = /* @__PURE__ */ __name((x) => x.status === "dirty", "isDirty");
-var isValid = /* @__PURE__ */ __name((x) => x.status === "valid", "isValid");
-var isAsync = /* @__PURE__ */ __name((x) => typeof Promise !== "undefined" && x instanceof Promise, "isAsync");
+var DIRTY = /* @__PURE__ */ __name(value => ({ status: 'dirty', value }), 'DIRTY');
+var OK = /* @__PURE__ */ __name(value => ({ status: 'valid', value }), 'OK');
+var isAborted = /* @__PURE__ */ __name(x => x.status === 'aborted', 'isAborted');
+var isDirty = /* @__PURE__ */ __name(x => x.status === 'dirty', 'isDirty');
+var isValid = /* @__PURE__ */ __name(x => x.status === 'valid', 'isValid');
+var isAsync = /* @__PURE__ */ __name(
+  x => typeof Promise !== 'undefined' && x instanceof Promise,
+  'isAsync'
+);
 
 // ../../node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/helpers/errorUtil.js
 var errorUtil;
-(function(errorUtil2) {
-  errorUtil2.errToObj = (message) => typeof message === "string" ? { message } : message || {};
-  errorUtil2.toString = (message) => typeof message === "string" ? message : message?.message;
+(function (errorUtil2) {
+  errorUtil2.errToObj = message => (typeof message === 'string' ? { message } : message || {});
+  errorUtil2.toString = message => (typeof message === 'string' ? message : message?.message);
 })(errorUtil || (errorUtil = {}));
 
 // ../../node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/types.js
@@ -3171,50 +3308,48 @@ var ParseInputLazyPath = class {
     return this._cachedPath;
   }
 };
-__name(ParseInputLazyPath, "ParseInputLazyPath");
+__name(ParseInputLazyPath, 'ParseInputLazyPath');
 var handleResult = /* @__PURE__ */ __name((ctx, result) => {
   if (isValid(result)) {
     return { success: true, data: result.value };
   } else {
     if (!ctx.common.issues.length) {
-      throw new Error("Validation failed but no issues detected.");
+      throw new Error('Validation failed but no issues detected.');
     }
     return {
       success: false,
       get error() {
-        if (this._error)
-          return this._error;
+        if (this._error) return this._error;
         const error3 = new ZodError(ctx.common.issues);
         this._error = error3;
         return this._error;
-      }
+      },
     };
   }
-}, "handleResult");
+}, 'handleResult');
 function processCreateParams(params) {
-  if (!params)
-    return {};
+  if (!params) return {};
   const { errorMap: errorMap2, invalid_type_error, required_error, description } = params;
   if (errorMap2 && (invalid_type_error || required_error)) {
-    throw new Error(`Can't use "invalid_type_error" or "required_error" in conjunction with custom error map.`);
+    throw new Error(
+      `Can't use "invalid_type_error" or "required_error" in conjunction with custom error map.`
+    );
   }
-  if (errorMap2)
-    return { errorMap: errorMap2, description };
+  if (errorMap2) return { errorMap: errorMap2, description };
   const customMap = /* @__PURE__ */ __name((iss, ctx) => {
     const { message } = params;
-    if (iss.code === "invalid_enum_value") {
+    if (iss.code === 'invalid_enum_value') {
       return { message: message ?? ctx.defaultError };
     }
-    if (typeof ctx.data === "undefined") {
+    if (typeof ctx.data === 'undefined') {
       return { message: message ?? required_error ?? ctx.defaultError };
     }
-    if (iss.code !== "invalid_type")
-      return { message: ctx.defaultError };
+    if (iss.code !== 'invalid_type') return { message: ctx.defaultError };
     return { message: message ?? invalid_type_error ?? ctx.defaultError };
-  }, "customMap");
+  }, 'customMap');
   return { errorMap: customMap, description };
 }
-__name(processCreateParams, "processCreateParams");
+__name(processCreateParams, 'processCreateParams');
 var ZodType = class {
   get description() {
     return this._def.description;
@@ -3223,14 +3358,16 @@ var ZodType = class {
     return getParsedType(input.data);
   }
   _getOrReturnCtx(input, ctx) {
-    return ctx || {
-      common: input.parent.common,
-      data: input.data,
-      parsedType: getParsedType(input.data),
-      schemaErrorMap: this._def.errorMap,
-      path: input.path,
-      parent: input.parent
-    };
+    return (
+      ctx || {
+        common: input.parent.common,
+        data: input.data,
+        parsedType: getParsedType(input.data),
+        schemaErrorMap: this._def.errorMap,
+        path: input.path,
+        parent: input.parent,
+      }
+    );
   }
   _processInputParams(input) {
     return {
@@ -3241,14 +3378,14 @@ var ZodType = class {
         parsedType: getParsedType(input.data),
         schemaErrorMap: this._def.errorMap,
         path: input.path,
-        parent: input.parent
-      }
+        parent: input.parent,
+      },
     };
   }
   _parseSync(input) {
     const result = this._parse(input);
     if (isAsync(result)) {
-      throw new Error("Synchronous parse encountered promise.");
+      throw new Error('Synchronous parse encountered promise.');
     }
     return result;
   }
@@ -3258,8 +3395,7 @@ var ZodType = class {
   }
   parse(data, params) {
     const result = this.safeParse(data, params);
-    if (result.success)
-      return result.data;
+    if (result.success) return result.data;
     throw result.error;
   }
   safeParse(data, params) {
@@ -3267,57 +3403,62 @@ var ZodType = class {
       common: {
         issues: [],
         async: params?.async ?? false,
-        contextualErrorMap: params?.errorMap
+        contextualErrorMap: params?.errorMap,
       },
       path: params?.path || [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
       data,
-      parsedType: getParsedType(data)
+      parsedType: getParsedType(data),
     };
     const result = this._parseSync({ data, path: ctx.path, parent: ctx });
     return handleResult(ctx, result);
   }
-  "~validate"(data) {
+  '~validate'(data) {
     const ctx = {
       common: {
         issues: [],
-        async: !!this["~standard"].async
+        async: !!this['~standard'].async,
       },
       path: [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
       data,
-      parsedType: getParsedType(data)
+      parsedType: getParsedType(data),
     };
-    if (!this["~standard"].async) {
+    if (!this['~standard'].async) {
       try {
         const result = this._parseSync({ data, path: [], parent: ctx });
-        return isValid(result) ? {
-          value: result.value
-        } : {
-          issues: ctx.common.issues
-        };
+        return isValid(result)
+          ? {
+              value: result.value,
+            }
+          : {
+              issues: ctx.common.issues,
+            };
       } catch (err) {
-        if (err?.message?.toLowerCase()?.includes("encountered")) {
-          this["~standard"].async = true;
+        if (err?.message?.toLowerCase()?.includes('encountered')) {
+          this['~standard'].async = true;
         }
         ctx.common = {
           issues: [],
-          async: true
+          async: true,
         };
       }
     }
-    return this._parseAsync({ data, path: [], parent: ctx }).then((result) => isValid(result) ? {
-      value: result.value
-    } : {
-      issues: ctx.common.issues
-    });
+    return this._parseAsync({ data, path: [], parent: ctx }).then(result =>
+      isValid(result)
+        ? {
+            value: result.value,
+          }
+        : {
+            issues: ctx.common.issues,
+          }
+    );
   }
   async parseAsync(data, params) {
     const result = await this.safeParseAsync(data, params);
-    if (result.success)
-      return result.data;
+    if (result.success) return result.data;
     throw result.error;
   }
   async safeParseAsync(data, params) {
@@ -3325,36 +3466,42 @@ var ZodType = class {
       common: {
         issues: [],
         contextualErrorMap: params?.errorMap,
-        async: true
+        async: true,
       },
       path: params?.path || [],
       schemaErrorMap: this._def.errorMap,
       parent: null,
       data,
-      parsedType: getParsedType(data)
+      parsedType: getParsedType(data),
     };
     const maybeAsyncResult = this._parse({ data, path: ctx.path, parent: ctx });
-    const result = await (isAsync(maybeAsyncResult) ? maybeAsyncResult : Promise.resolve(maybeAsyncResult));
+    const result = await (isAsync(maybeAsyncResult)
+      ? maybeAsyncResult
+      : Promise.resolve(maybeAsyncResult));
     return handleResult(ctx, result);
   }
   refine(check, message) {
-    const getIssueProperties = /* @__PURE__ */ __name((val) => {
-      if (typeof message === "string" || typeof message === "undefined") {
+    const getIssueProperties = /* @__PURE__ */ __name(val => {
+      if (typeof message === 'string' || typeof message === 'undefined') {
         return { message };
-      } else if (typeof message === "function") {
+      } else if (typeof message === 'function') {
         return message(val);
       } else {
         return message;
       }
-    }, "getIssueProperties");
+    }, 'getIssueProperties');
     return this._refinement((val, ctx) => {
       const result = check(val);
-      const setError = /* @__PURE__ */ __name(() => ctx.addIssue({
-        code: ZodIssueCode.custom,
-        ...getIssueProperties(val)
-      }), "setError");
-      if (typeof Promise !== "undefined" && result instanceof Promise) {
-        return result.then((data) => {
+      const setError = /* @__PURE__ */ __name(
+        () =>
+          ctx.addIssue({
+            code: ZodIssueCode.custom,
+            ...getIssueProperties(val),
+          }),
+        'setError'
+      );
+      if (typeof Promise !== 'undefined' && result instanceof Promise) {
+        return result.then(data => {
           if (!data) {
             setError();
             return false;
@@ -3374,7 +3521,9 @@ var ZodType = class {
   refinement(check, refinementData) {
     return this._refinement((val, ctx) => {
       if (!check(val)) {
-        ctx.addIssue(typeof refinementData === "function" ? refinementData(val, ctx) : refinementData);
+        ctx.addIssue(
+          typeof refinementData === 'function' ? refinementData(val, ctx) : refinementData
+        );
         return false;
       } else {
         return true;
@@ -3385,7 +3534,7 @@ var ZodType = class {
     return new ZodEffects({
       schema: this,
       typeName: ZodFirstPartyTypeKind.ZodEffects,
-      effect: { type: "refinement", refinement }
+      effect: { type: 'refinement', refinement },
     });
   }
   superRefine(refinement) {
@@ -3418,10 +3567,10 @@ var ZodType = class {
     this.readonly = this.readonly.bind(this);
     this.isNullable = this.isNullable.bind(this);
     this.isOptional = this.isOptional.bind(this);
-    this["~standard"] = {
+    this['~standard'] = {
       version: 1,
-      vendor: "zod",
-      validate: (data) => this["~validate"](data)
+      vendor: 'zod',
+      validate: data => this['~validate'](data),
     };
   }
   optional() {
@@ -3450,39 +3599,39 @@ var ZodType = class {
       ...processCreateParams(this._def),
       schema: this,
       typeName: ZodFirstPartyTypeKind.ZodEffects,
-      effect: { type: "transform", transform }
+      effect: { type: 'transform', transform },
     });
   }
   default(def) {
-    const defaultValueFunc = typeof def === "function" ? def : () => def;
+    const defaultValueFunc = typeof def === 'function' ? def : () => def;
     return new ZodDefault({
       ...processCreateParams(this._def),
       innerType: this,
       defaultValue: defaultValueFunc,
-      typeName: ZodFirstPartyTypeKind.ZodDefault
+      typeName: ZodFirstPartyTypeKind.ZodDefault,
     });
   }
   brand() {
     return new ZodBranded({
       typeName: ZodFirstPartyTypeKind.ZodBranded,
       type: this,
-      ...processCreateParams(this._def)
+      ...processCreateParams(this._def),
     });
   }
   catch(def) {
-    const catchValueFunc = typeof def === "function" ? def : () => def;
+    const catchValueFunc = typeof def === 'function' ? def : () => def;
     return new ZodCatch({
       ...processCreateParams(this._def),
       innerType: this,
       catchValue: catchValueFunc,
-      typeName: ZodFirstPartyTypeKind.ZodCatch
+      typeName: ZodFirstPartyTypeKind.ZodCatch,
     });
   }
   describe(description) {
     const This = this.constructor;
     return new This({
       ...this._def,
-      description
+      description,
     });
   }
   pipe(target) {
@@ -3498,21 +3647,28 @@ var ZodType = class {
     return this.safeParse(null).success;
   }
 };
-__name(ZodType, "ZodType");
+__name(ZodType, 'ZodType');
 var cuidRegex = /^c[^\s-]{8,}$/i;
 var cuid2Regex = /^[0-9a-z]+$/;
 var ulidRegex = /^[0-9A-HJKMNP-TV-Z]{26}$/i;
-var uuidRegex = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/i;
+var uuidRegex =
+  /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/i;
 var nanoidRegex = /^[a-z0-9_-]{21}$/i;
 var jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]*$/;
-var durationRegex = /^[-+]?P(?!$)(?:(?:[-+]?\d+Y)|(?:[-+]?\d+[.,]\d+Y$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:(?:[-+]?\d+W)|(?:[-+]?\d+[.,]\d+W$))?(?:(?:[-+]?\d+D)|(?:[-+]?\d+[.,]\d+D$))?(?:T(?=[\d+-])(?:(?:[-+]?\d+H)|(?:[-+]?\d+[.,]\d+H$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:[-+]?\d+(?:[.,]\d+)?S)?)??$/;
-var emailRegex = /^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-\.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9\-]*\.)+[A-Z]{2,}$/i;
+var durationRegex =
+  /^[-+]?P(?!$)(?:(?:[-+]?\d+Y)|(?:[-+]?\d+[.,]\d+Y$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:(?:[-+]?\d+W)|(?:[-+]?\d+[.,]\d+W$))?(?:(?:[-+]?\d+D)|(?:[-+]?\d+[.,]\d+D$))?(?:T(?=[\d+-])(?:(?:[-+]?\d+H)|(?:[-+]?\d+[.,]\d+H$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:[-+]?\d+(?:[.,]\d+)?S)?)??$/;
+var emailRegex =
+  /^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-\.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9\-]*\.)+[A-Z]{2,}$/i;
 var _emojiRegex = `^(\\p{Extended_Pictographic}|\\p{Emoji_Component})+$`;
 var emojiRegex;
-var ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/;
-var ipv4CidrRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/(3[0-2]|[12]?[0-9])$/;
-var ipv6Regex = /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/;
-var ipv6CidrRegex = /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))\/(12[0-8]|1[01][0-9]|[1-9]?[0-9])$/;
+var ipv4Regex =
+  /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/;
+var ipv4CidrRegex =
+  /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/(3[0-2]|[12]?[0-9])$/;
+var ipv6Regex =
+  /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/;
+var ipv6CidrRegex =
+  /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))\/(12[0-8]|1[01][0-9]|[1-9]?[0-9])$/;
 var base64Regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
 var base64urlRegex = /^([0-9a-zA-Z-_]{4})*(([0-9a-zA-Z-_]{2}(==)?)|([0-9a-zA-Z-_]{3}(=)?))?$/;
 var dateRegexSource = `((\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-((0[13578]|1[02])-(0[1-9]|[12]\\d|3[01])|(0[469]|11)-(0[1-9]|[12]\\d|30)|(02)-(0[1-9]|1\\d|2[0-8])))`;
@@ -3524,67 +3680,63 @@ function timeRegexSource(args) {
   } else if (args.precision == null) {
     secondsRegexSource = `${secondsRegexSource}(\\.\\d+)?`;
   }
-  const secondsQuantifier = args.precision ? "+" : "?";
+  const secondsQuantifier = args.precision ? '+' : '?';
   return `([01]\\d|2[0-3]):[0-5]\\d(:${secondsRegexSource})${secondsQuantifier}`;
 }
-__name(timeRegexSource, "timeRegexSource");
+__name(timeRegexSource, 'timeRegexSource');
 function timeRegex(args) {
   return new RegExp(`^${timeRegexSource(args)}$`);
 }
-__name(timeRegex, "timeRegex");
+__name(timeRegex, 'timeRegex');
 function datetimeRegex(args) {
   let regex = `${dateRegexSource}T${timeRegexSource(args)}`;
   const opts = [];
   opts.push(args.local ? `Z?` : `Z`);
-  if (args.offset)
-    opts.push(`([+-]\\d{2}:?\\d{2})`);
-  regex = `${regex}(${opts.join("|")})`;
+  if (args.offset) opts.push(`([+-]\\d{2}:?\\d{2})`);
+  regex = `${regex}(${opts.join('|')})`;
   return new RegExp(`^${regex}$`);
 }
-__name(datetimeRegex, "datetimeRegex");
+__name(datetimeRegex, 'datetimeRegex');
 function isValidIP(ip, version2) {
-  if ((version2 === "v4" || !version2) && ipv4Regex.test(ip)) {
+  if ((version2 === 'v4' || !version2) && ipv4Regex.test(ip)) {
     return true;
   }
-  if ((version2 === "v6" || !version2) && ipv6Regex.test(ip)) {
+  if ((version2 === 'v6' || !version2) && ipv6Regex.test(ip)) {
     return true;
   }
   return false;
 }
-__name(isValidIP, "isValidIP");
+__name(isValidIP, 'isValidIP');
 function isValidJWT(jwt, alg) {
-  if (!jwtRegex.test(jwt))
-    return false;
+  if (!jwtRegex.test(jwt)) return false;
   try {
-    const [header] = jwt.split(".");
-    if (!header)
-      return false;
-    const base64 = header.replace(/-/g, "+").replace(/_/g, "/").padEnd(header.length + (4 - header.length % 4) % 4, "=");
+    const [header] = jwt.split('.');
+    if (!header) return false;
+    const base64 = header
+      .replace(/-/g, '+')
+      .replace(/_/g, '/')
+      .padEnd(header.length + ((4 - (header.length % 4)) % 4), '=');
     const decoded = JSON.parse(atob(base64));
-    if (typeof decoded !== "object" || decoded === null)
-      return false;
-    if ("typ" in decoded && decoded?.typ !== "JWT")
-      return false;
-    if (!decoded.alg)
-      return false;
-    if (alg && decoded.alg !== alg)
-      return false;
+    if (typeof decoded !== 'object' || decoded === null) return false;
+    if ('typ' in decoded && decoded?.typ !== 'JWT') return false;
+    if (!decoded.alg) return false;
+    if (alg && decoded.alg !== alg) return false;
     return true;
   } catch {
     return false;
   }
 }
-__name(isValidJWT, "isValidJWT");
+__name(isValidJWT, 'isValidJWT');
 function isValidCidr(ip, version2) {
-  if ((version2 === "v4" || !version2) && ipv4CidrRegex.test(ip)) {
+  if ((version2 === 'v4' || !version2) && ipv4CidrRegex.test(ip)) {
     return true;
   }
-  if ((version2 === "v6" || !version2) && ipv6CidrRegex.test(ip)) {
+  if ((version2 === 'v6' || !version2) && ipv6CidrRegex.test(ip)) {
     return true;
   }
   return false;
 }
-__name(isValidCidr, "isValidCidr");
+__name(isValidCidr, 'isValidCidr');
 var ZodString = class extends ZodType {
   _parse(input) {
     if (this._def.coerce) {
@@ -3596,40 +3748,40 @@ var ZodString = class extends ZodType {
       addIssueToContext(ctx2, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.string,
-        received: ctx2.parsedType
+        received: ctx2.parsedType,
       });
       return INVALID;
     }
     const status = new ParseStatus();
     let ctx = void 0;
     for (const check of this._def.checks) {
-      if (check.kind === "min") {
+      if (check.kind === 'min') {
         if (input.data.length < check.value) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.too_small,
             minimum: check.value,
-            type: "string",
+            type: 'string',
             inclusive: true,
             exact: false,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "max") {
+      } else if (check.kind === 'max') {
         if (input.data.length > check.value) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.too_big,
             maximum: check.value,
-            type: "string",
+            type: 'string',
             inclusive: true,
             exact: false,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "length") {
+      } else if (check.kind === 'length') {
         const tooBig = input.data.length > check.value;
         const tooSmall = input.data.length < check.value;
         if (tooBig || tooSmall) {
@@ -3638,246 +3790,246 @@ var ZodString = class extends ZodType {
             addIssueToContext(ctx, {
               code: ZodIssueCode.too_big,
               maximum: check.value,
-              type: "string",
+              type: 'string',
               inclusive: true,
               exact: true,
-              message: check.message
+              message: check.message,
             });
           } else if (tooSmall) {
             addIssueToContext(ctx, {
               code: ZodIssueCode.too_small,
               minimum: check.value,
-              type: "string",
+              type: 'string',
               inclusive: true,
               exact: true,
-              message: check.message
+              message: check.message,
             });
           }
           status.dirty();
         }
-      } else if (check.kind === "email") {
+      } else if (check.kind === 'email') {
         if (!emailRegex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "email",
+            validation: 'email',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "emoji") {
+      } else if (check.kind === 'emoji') {
         if (!emojiRegex) {
-          emojiRegex = new RegExp(_emojiRegex, "u");
+          emojiRegex = new RegExp(_emojiRegex, 'u');
         }
         if (!emojiRegex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "emoji",
+            validation: 'emoji',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "uuid") {
+      } else if (check.kind === 'uuid') {
         if (!uuidRegex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "uuid",
+            validation: 'uuid',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "nanoid") {
+      } else if (check.kind === 'nanoid') {
         if (!nanoidRegex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "nanoid",
+            validation: 'nanoid',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "cuid") {
+      } else if (check.kind === 'cuid') {
         if (!cuidRegex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "cuid",
+            validation: 'cuid',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "cuid2") {
+      } else if (check.kind === 'cuid2') {
         if (!cuid2Regex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "cuid2",
+            validation: 'cuid2',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "ulid") {
+      } else if (check.kind === 'ulid') {
         if (!ulidRegex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "ulid",
+            validation: 'ulid',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "url") {
+      } else if (check.kind === 'url') {
         try {
           new URL(input.data);
         } catch {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "url",
+            validation: 'url',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "regex") {
+      } else if (check.kind === 'regex') {
         check.regex.lastIndex = 0;
         const testResult = check.regex.test(input.data);
         if (!testResult) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "regex",
+            validation: 'regex',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "trim") {
+      } else if (check.kind === 'trim') {
         input.data = input.data.trim();
-      } else if (check.kind === "includes") {
+      } else if (check.kind === 'includes') {
         if (!input.data.includes(check.value, check.position)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.invalid_string,
             validation: { includes: check.value, position: check.position },
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "toLowerCase") {
+      } else if (check.kind === 'toLowerCase') {
         input.data = input.data.toLowerCase();
-      } else if (check.kind === "toUpperCase") {
+      } else if (check.kind === 'toUpperCase') {
         input.data = input.data.toUpperCase();
-      } else if (check.kind === "startsWith") {
+      } else if (check.kind === 'startsWith') {
         if (!input.data.startsWith(check.value)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.invalid_string,
             validation: { startsWith: check.value },
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "endsWith") {
+      } else if (check.kind === 'endsWith') {
         if (!input.data.endsWith(check.value)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.invalid_string,
             validation: { endsWith: check.value },
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "datetime") {
+      } else if (check.kind === 'datetime') {
         const regex = datetimeRegex(check);
         if (!regex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.invalid_string,
-            validation: "datetime",
-            message: check.message
+            validation: 'datetime',
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "date") {
+      } else if (check.kind === 'date') {
         const regex = dateRegex;
         if (!regex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.invalid_string,
-            validation: "date",
-            message: check.message
+            validation: 'date',
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "time") {
+      } else if (check.kind === 'time') {
         const regex = timeRegex(check);
         if (!regex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.invalid_string,
-            validation: "time",
-            message: check.message
+            validation: 'time',
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "duration") {
+      } else if (check.kind === 'duration') {
         if (!durationRegex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "duration",
+            validation: 'duration',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "ip") {
+      } else if (check.kind === 'ip') {
         if (!isValidIP(input.data, check.version)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "ip",
+            validation: 'ip',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "jwt") {
+      } else if (check.kind === 'jwt') {
         if (!isValidJWT(input.data, check.alg)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "jwt",
+            validation: 'jwt',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "cidr") {
+      } else if (check.kind === 'cidr') {
         if (!isValidCidr(input.data, check.version)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "cidr",
+            validation: 'cidr',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "base64") {
+      } else if (check.kind === 'base64') {
         if (!base64Regex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "base64",
+            validation: 'base64',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "base64url") {
+      } else if (check.kind === 'base64url') {
         if (!base64urlRegex.test(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
-            validation: "base64url",
+            validation: 'base64url',
             code: ZodIssueCode.invalid_string,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
@@ -3888,146 +4040,146 @@ var ZodString = class extends ZodType {
     return { status: status.value, value: input.data };
   }
   _regex(regex, validation, message) {
-    return this.refinement((data) => regex.test(data), {
+    return this.refinement(data => regex.test(data), {
       validation,
       code: ZodIssueCode.invalid_string,
-      ...errorUtil.errToObj(message)
+      ...errorUtil.errToObj(message),
     });
   }
   _addCheck(check) {
     return new ZodString({
       ...this._def,
-      checks: [...this._def.checks, check]
+      checks: [...this._def.checks, check],
     });
   }
   email(message) {
-    return this._addCheck({ kind: "email", ...errorUtil.errToObj(message) });
+    return this._addCheck({ kind: 'email', ...errorUtil.errToObj(message) });
   }
   url(message) {
-    return this._addCheck({ kind: "url", ...errorUtil.errToObj(message) });
+    return this._addCheck({ kind: 'url', ...errorUtil.errToObj(message) });
   }
   emoji(message) {
-    return this._addCheck({ kind: "emoji", ...errorUtil.errToObj(message) });
+    return this._addCheck({ kind: 'emoji', ...errorUtil.errToObj(message) });
   }
   uuid(message) {
-    return this._addCheck({ kind: "uuid", ...errorUtil.errToObj(message) });
+    return this._addCheck({ kind: 'uuid', ...errorUtil.errToObj(message) });
   }
   nanoid(message) {
-    return this._addCheck({ kind: "nanoid", ...errorUtil.errToObj(message) });
+    return this._addCheck({ kind: 'nanoid', ...errorUtil.errToObj(message) });
   }
   cuid(message) {
-    return this._addCheck({ kind: "cuid", ...errorUtil.errToObj(message) });
+    return this._addCheck({ kind: 'cuid', ...errorUtil.errToObj(message) });
   }
   cuid2(message) {
-    return this._addCheck({ kind: "cuid2", ...errorUtil.errToObj(message) });
+    return this._addCheck({ kind: 'cuid2', ...errorUtil.errToObj(message) });
   }
   ulid(message) {
-    return this._addCheck({ kind: "ulid", ...errorUtil.errToObj(message) });
+    return this._addCheck({ kind: 'ulid', ...errorUtil.errToObj(message) });
   }
   base64(message) {
-    return this._addCheck({ kind: "base64", ...errorUtil.errToObj(message) });
+    return this._addCheck({ kind: 'base64', ...errorUtil.errToObj(message) });
   }
   base64url(message) {
     return this._addCheck({
-      kind: "base64url",
-      ...errorUtil.errToObj(message)
+      kind: 'base64url',
+      ...errorUtil.errToObj(message),
     });
   }
   jwt(options) {
-    return this._addCheck({ kind: "jwt", ...errorUtil.errToObj(options) });
+    return this._addCheck({ kind: 'jwt', ...errorUtil.errToObj(options) });
   }
   ip(options) {
-    return this._addCheck({ kind: "ip", ...errorUtil.errToObj(options) });
+    return this._addCheck({ kind: 'ip', ...errorUtil.errToObj(options) });
   }
   cidr(options) {
-    return this._addCheck({ kind: "cidr", ...errorUtil.errToObj(options) });
+    return this._addCheck({ kind: 'cidr', ...errorUtil.errToObj(options) });
   }
   datetime(options) {
-    if (typeof options === "string") {
+    if (typeof options === 'string') {
       return this._addCheck({
-        kind: "datetime",
+        kind: 'datetime',
         precision: null,
         offset: false,
         local: false,
-        message: options
+        message: options,
       });
     }
     return this._addCheck({
-      kind: "datetime",
-      precision: typeof options?.precision === "undefined" ? null : options?.precision,
+      kind: 'datetime',
+      precision: typeof options?.precision === 'undefined' ? null : options?.precision,
       offset: options?.offset ?? false,
       local: options?.local ?? false,
-      ...errorUtil.errToObj(options?.message)
+      ...errorUtil.errToObj(options?.message),
     });
   }
   date(message) {
-    return this._addCheck({ kind: "date", message });
+    return this._addCheck({ kind: 'date', message });
   }
   time(options) {
-    if (typeof options === "string") {
+    if (typeof options === 'string') {
       return this._addCheck({
-        kind: "time",
+        kind: 'time',
         precision: null,
-        message: options
+        message: options,
       });
     }
     return this._addCheck({
-      kind: "time",
-      precision: typeof options?.precision === "undefined" ? null : options?.precision,
-      ...errorUtil.errToObj(options?.message)
+      kind: 'time',
+      precision: typeof options?.precision === 'undefined' ? null : options?.precision,
+      ...errorUtil.errToObj(options?.message),
     });
   }
   duration(message) {
-    return this._addCheck({ kind: "duration", ...errorUtil.errToObj(message) });
+    return this._addCheck({ kind: 'duration', ...errorUtil.errToObj(message) });
   }
   regex(regex, message) {
     return this._addCheck({
-      kind: "regex",
+      kind: 'regex',
       regex,
-      ...errorUtil.errToObj(message)
+      ...errorUtil.errToObj(message),
     });
   }
   includes(value, options) {
     return this._addCheck({
-      kind: "includes",
+      kind: 'includes',
       value,
       position: options?.position,
-      ...errorUtil.errToObj(options?.message)
+      ...errorUtil.errToObj(options?.message),
     });
   }
   startsWith(value, message) {
     return this._addCheck({
-      kind: "startsWith",
+      kind: 'startsWith',
       value,
-      ...errorUtil.errToObj(message)
+      ...errorUtil.errToObj(message),
     });
   }
   endsWith(value, message) {
     return this._addCheck({
-      kind: "endsWith",
+      kind: 'endsWith',
       value,
-      ...errorUtil.errToObj(message)
+      ...errorUtil.errToObj(message),
     });
   }
   min(minLength, message) {
     return this._addCheck({
-      kind: "min",
+      kind: 'min',
       value: minLength,
-      ...errorUtil.errToObj(message)
+      ...errorUtil.errToObj(message),
     });
   }
   max(maxLength, message) {
     return this._addCheck({
-      kind: "max",
+      kind: 'max',
       value: maxLength,
-      ...errorUtil.errToObj(message)
+      ...errorUtil.errToObj(message),
     });
   }
   length(len, message) {
     return this._addCheck({
-      kind: "length",
+      kind: 'length',
       value: len,
-      ...errorUtil.errToObj(message)
+      ...errorUtil.errToObj(message),
     });
   }
   /**
@@ -4039,75 +4191,74 @@ var ZodString = class extends ZodType {
   trim() {
     return new ZodString({
       ...this._def,
-      checks: [...this._def.checks, { kind: "trim" }]
+      checks: [...this._def.checks, { kind: 'trim' }],
     });
   }
   toLowerCase() {
     return new ZodString({
       ...this._def,
-      checks: [...this._def.checks, { kind: "toLowerCase" }]
+      checks: [...this._def.checks, { kind: 'toLowerCase' }],
     });
   }
   toUpperCase() {
     return new ZodString({
       ...this._def,
-      checks: [...this._def.checks, { kind: "toUpperCase" }]
+      checks: [...this._def.checks, { kind: 'toUpperCase' }],
     });
   }
   get isDatetime() {
-    return !!this._def.checks.find((ch) => ch.kind === "datetime");
+    return !!this._def.checks.find(ch => ch.kind === 'datetime');
   }
   get isDate() {
-    return !!this._def.checks.find((ch) => ch.kind === "date");
+    return !!this._def.checks.find(ch => ch.kind === 'date');
   }
   get isTime() {
-    return !!this._def.checks.find((ch) => ch.kind === "time");
+    return !!this._def.checks.find(ch => ch.kind === 'time');
   }
   get isDuration() {
-    return !!this._def.checks.find((ch) => ch.kind === "duration");
+    return !!this._def.checks.find(ch => ch.kind === 'duration');
   }
   get isEmail() {
-    return !!this._def.checks.find((ch) => ch.kind === "email");
+    return !!this._def.checks.find(ch => ch.kind === 'email');
   }
   get isURL() {
-    return !!this._def.checks.find((ch) => ch.kind === "url");
+    return !!this._def.checks.find(ch => ch.kind === 'url');
   }
   get isEmoji() {
-    return !!this._def.checks.find((ch) => ch.kind === "emoji");
+    return !!this._def.checks.find(ch => ch.kind === 'emoji');
   }
   get isUUID() {
-    return !!this._def.checks.find((ch) => ch.kind === "uuid");
+    return !!this._def.checks.find(ch => ch.kind === 'uuid');
   }
   get isNANOID() {
-    return !!this._def.checks.find((ch) => ch.kind === "nanoid");
+    return !!this._def.checks.find(ch => ch.kind === 'nanoid');
   }
   get isCUID() {
-    return !!this._def.checks.find((ch) => ch.kind === "cuid");
+    return !!this._def.checks.find(ch => ch.kind === 'cuid');
   }
   get isCUID2() {
-    return !!this._def.checks.find((ch) => ch.kind === "cuid2");
+    return !!this._def.checks.find(ch => ch.kind === 'cuid2');
   }
   get isULID() {
-    return !!this._def.checks.find((ch) => ch.kind === "ulid");
+    return !!this._def.checks.find(ch => ch.kind === 'ulid');
   }
   get isIP() {
-    return !!this._def.checks.find((ch) => ch.kind === "ip");
+    return !!this._def.checks.find(ch => ch.kind === 'ip');
   }
   get isCIDR() {
-    return !!this._def.checks.find((ch) => ch.kind === "cidr");
+    return !!this._def.checks.find(ch => ch.kind === 'cidr');
   }
   get isBase64() {
-    return !!this._def.checks.find((ch) => ch.kind === "base64");
+    return !!this._def.checks.find(ch => ch.kind === 'base64');
   }
   get isBase64url() {
-    return !!this._def.checks.find((ch) => ch.kind === "base64url");
+    return !!this._def.checks.find(ch => ch.kind === 'base64url');
   }
   get minLength() {
     let min = null;
     for (const ch of this._def.checks) {
-      if (ch.kind === "min") {
-        if (min === null || ch.value > min)
-          min = ch.value;
+      if (ch.kind === 'min') {
+        if (min === null || ch.value > min) min = ch.value;
       }
     }
     return min;
@@ -4115,32 +4266,31 @@ var ZodString = class extends ZodType {
   get maxLength() {
     let max = null;
     for (const ch of this._def.checks) {
-      if (ch.kind === "max") {
-        if (max === null || ch.value < max)
-          max = ch.value;
+      if (ch.kind === 'max') {
+        if (max === null || ch.value < max) max = ch.value;
       }
     }
     return max;
   }
 };
-__name(ZodString, "ZodString");
-ZodString.create = (params) => {
+__name(ZodString, 'ZodString');
+ZodString.create = params => {
   return new ZodString({
     checks: [],
     typeName: ZodFirstPartyTypeKind.ZodString,
     coerce: params?.coerce ?? false,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 function floatSafeRemainder(val, step) {
-  const valDecCount = (val.toString().split(".")[1] || "").length;
-  const stepDecCount = (step.toString().split(".")[1] || "").length;
+  const valDecCount = (val.toString().split('.')[1] || '').length;
+  const stepDecCount = (step.toString().split('.')[1] || '').length;
   const decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount;
-  const valInt = Number.parseInt(val.toFixed(decCount).replace(".", ""));
-  const stepInt = Number.parseInt(step.toFixed(decCount).replace(".", ""));
-  return valInt % stepInt / 10 ** decCount;
+  const valInt = Number.parseInt(val.toFixed(decCount).replace('.', ''));
+  const stepInt = Number.parseInt(step.toFixed(decCount).replace('.', ''));
+  return (valInt % stepInt) / 10 ** decCount;
 }
-__name(floatSafeRemainder, "floatSafeRemainder");
+__name(floatSafeRemainder, 'floatSafeRemainder');
 var ZodNumber = class extends ZodType {
   constructor() {
     super(...arguments);
@@ -4158,68 +4308,68 @@ var ZodNumber = class extends ZodType {
       addIssueToContext(ctx2, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.number,
-        received: ctx2.parsedType
+        received: ctx2.parsedType,
       });
       return INVALID;
     }
     let ctx = void 0;
     const status = new ParseStatus();
     for (const check of this._def.checks) {
-      if (check.kind === "int") {
+      if (check.kind === 'int') {
         if (!util.isInteger(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.invalid_type,
-            expected: "integer",
-            received: "float",
-            message: check.message
+            expected: 'integer',
+            received: 'float',
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "min") {
+      } else if (check.kind === 'min') {
         const tooSmall = check.inclusive ? input.data < check.value : input.data <= check.value;
         if (tooSmall) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.too_small,
             minimum: check.value,
-            type: "number",
+            type: 'number',
             inclusive: check.inclusive,
             exact: false,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "max") {
+      } else if (check.kind === 'max') {
         const tooBig = check.inclusive ? input.data > check.value : input.data >= check.value;
         if (tooBig) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.too_big,
             maximum: check.value,
-            type: "number",
+            type: 'number',
             inclusive: check.inclusive,
             exact: false,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "multipleOf") {
+      } else if (check.kind === 'multipleOf') {
         if (floatSafeRemainder(input.data, check.value) !== 0) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.not_multiple_of,
             multipleOf: check.value,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "finite") {
+      } else if (check.kind === 'finite') {
         if (!Number.isFinite(input.data)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.not_finite,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
@@ -4230,16 +4380,16 @@ var ZodNumber = class extends ZodType {
     return { status: status.value, value: input.data };
   }
   gte(value, message) {
-    return this.setLimit("min", value, true, errorUtil.toString(message));
+    return this.setLimit('min', value, true, errorUtil.toString(message));
   }
   gt(value, message) {
-    return this.setLimit("min", value, false, errorUtil.toString(message));
+    return this.setLimit('min', value, false, errorUtil.toString(message));
   }
   lte(value, message) {
-    return this.setLimit("max", value, true, errorUtil.toString(message));
+    return this.setLimit('max', value, true, errorUtil.toString(message));
   }
   lt(value, message) {
-    return this.setLimit("max", value, false, errorUtil.toString(message));
+    return this.setLimit('max', value, false, errorUtil.toString(message));
   }
   setLimit(kind, value, inclusive, message) {
     return new ZodNumber({
@@ -4250,87 +4400,86 @@ var ZodNumber = class extends ZodType {
           kind,
           value,
           inclusive,
-          message: errorUtil.toString(message)
-        }
-      ]
+          message: errorUtil.toString(message),
+        },
+      ],
     });
   }
   _addCheck(check) {
     return new ZodNumber({
       ...this._def,
-      checks: [...this._def.checks, check]
+      checks: [...this._def.checks, check],
     });
   }
   int(message) {
     return this._addCheck({
-      kind: "int",
-      message: errorUtil.toString(message)
+      kind: 'int',
+      message: errorUtil.toString(message),
     });
   }
   positive(message) {
     return this._addCheck({
-      kind: "min",
+      kind: 'min',
       value: 0,
       inclusive: false,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   negative(message) {
     return this._addCheck({
-      kind: "max",
+      kind: 'max',
       value: 0,
       inclusive: false,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   nonpositive(message) {
     return this._addCheck({
-      kind: "max",
+      kind: 'max',
       value: 0,
       inclusive: true,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   nonnegative(message) {
     return this._addCheck({
-      kind: "min",
+      kind: 'min',
       value: 0,
       inclusive: true,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   multipleOf(value, message) {
     return this._addCheck({
-      kind: "multipleOf",
+      kind: 'multipleOf',
       value,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   finite(message) {
     return this._addCheck({
-      kind: "finite",
-      message: errorUtil.toString(message)
+      kind: 'finite',
+      message: errorUtil.toString(message),
     });
   }
   safe(message) {
     return this._addCheck({
-      kind: "min",
+      kind: 'min',
       inclusive: true,
       value: Number.MIN_SAFE_INTEGER,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     })._addCheck({
-      kind: "max",
+      kind: 'max',
       inclusive: true,
       value: Number.MAX_SAFE_INTEGER,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   get minValue() {
     let min = null;
     for (const ch of this._def.checks) {
-      if (ch.kind === "min") {
-        if (min === null || ch.value > min)
-          min = ch.value;
+      if (ch.kind === 'min') {
+        if (min === null || ch.value > min) min = ch.value;
       }
     }
     return min;
@@ -4338,40 +4487,39 @@ var ZodNumber = class extends ZodType {
   get maxValue() {
     let max = null;
     for (const ch of this._def.checks) {
-      if (ch.kind === "max") {
-        if (max === null || ch.value < max)
-          max = ch.value;
+      if (ch.kind === 'max') {
+        if (max === null || ch.value < max) max = ch.value;
       }
     }
     return max;
   }
   get isInt() {
-    return !!this._def.checks.find((ch) => ch.kind === "int" || ch.kind === "multipleOf" && util.isInteger(ch.value));
+    return !!this._def.checks.find(
+      ch => ch.kind === 'int' || (ch.kind === 'multipleOf' && util.isInteger(ch.value))
+    );
   }
   get isFinite() {
     let max = null;
     let min = null;
     for (const ch of this._def.checks) {
-      if (ch.kind === "finite" || ch.kind === "int" || ch.kind === "multipleOf") {
+      if (ch.kind === 'finite' || ch.kind === 'int' || ch.kind === 'multipleOf') {
         return true;
-      } else if (ch.kind === "min") {
-        if (min === null || ch.value > min)
-          min = ch.value;
-      } else if (ch.kind === "max") {
-        if (max === null || ch.value < max)
-          max = ch.value;
+      } else if (ch.kind === 'min') {
+        if (min === null || ch.value > min) min = ch.value;
+      } else if (ch.kind === 'max') {
+        if (max === null || ch.value < max) max = ch.value;
       }
     }
     return Number.isFinite(min) && Number.isFinite(max);
   }
 };
-__name(ZodNumber, "ZodNumber");
-ZodNumber.create = (params) => {
+__name(ZodNumber, 'ZodNumber');
+ZodNumber.create = params => {
   return new ZodNumber({
     checks: [],
     typeName: ZodFirstPartyTypeKind.ZodNumber,
     coerce: params?.coerce || false,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodBigInt = class extends ZodType {
@@ -4395,39 +4543,39 @@ var ZodBigInt = class extends ZodType {
     let ctx = void 0;
     const status = new ParseStatus();
     for (const check of this._def.checks) {
-      if (check.kind === "min") {
+      if (check.kind === 'min') {
         const tooSmall = check.inclusive ? input.data < check.value : input.data <= check.value;
         if (tooSmall) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.too_small,
-            type: "bigint",
+            type: 'bigint',
             minimum: check.value,
             inclusive: check.inclusive,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "max") {
+      } else if (check.kind === 'max') {
         const tooBig = check.inclusive ? input.data > check.value : input.data >= check.value;
         if (tooBig) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.too_big,
-            type: "bigint",
+            type: 'bigint',
             maximum: check.value,
             inclusive: check.inclusive,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
-      } else if (check.kind === "multipleOf") {
+      } else if (check.kind === 'multipleOf') {
         if (input.data % check.value !== BigInt(0)) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
             code: ZodIssueCode.not_multiple_of,
             multipleOf: check.value,
-            message: check.message
+            message: check.message,
           });
           status.dirty();
         }
@@ -4442,21 +4590,21 @@ var ZodBigInt = class extends ZodType {
     addIssueToContext(ctx, {
       code: ZodIssueCode.invalid_type,
       expected: ZodParsedType.bigint,
-      received: ctx.parsedType
+      received: ctx.parsedType,
     });
     return INVALID;
   }
   gte(value, message) {
-    return this.setLimit("min", value, true, errorUtil.toString(message));
+    return this.setLimit('min', value, true, errorUtil.toString(message));
   }
   gt(value, message) {
-    return this.setLimit("min", value, false, errorUtil.toString(message));
+    return this.setLimit('min', value, false, errorUtil.toString(message));
   }
   lte(value, message) {
-    return this.setLimit("max", value, true, errorUtil.toString(message));
+    return this.setLimit('max', value, true, errorUtil.toString(message));
   }
   lt(value, message) {
-    return this.setLimit("max", value, false, errorUtil.toString(message));
+    return this.setLimit('max', value, false, errorUtil.toString(message));
   }
   setLimit(kind, value, inclusive, message) {
     return new ZodBigInt({
@@ -4467,62 +4615,61 @@ var ZodBigInt = class extends ZodType {
           kind,
           value,
           inclusive,
-          message: errorUtil.toString(message)
-        }
-      ]
+          message: errorUtil.toString(message),
+        },
+      ],
     });
   }
   _addCheck(check) {
     return new ZodBigInt({
       ...this._def,
-      checks: [...this._def.checks, check]
+      checks: [...this._def.checks, check],
     });
   }
   positive(message) {
     return this._addCheck({
-      kind: "min",
+      kind: 'min',
       value: BigInt(0),
       inclusive: false,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   negative(message) {
     return this._addCheck({
-      kind: "max",
+      kind: 'max',
       value: BigInt(0),
       inclusive: false,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   nonpositive(message) {
     return this._addCheck({
-      kind: "max",
+      kind: 'max',
       value: BigInt(0),
       inclusive: true,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   nonnegative(message) {
     return this._addCheck({
-      kind: "min",
+      kind: 'min',
       value: BigInt(0),
       inclusive: true,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   multipleOf(value, message) {
     return this._addCheck({
-      kind: "multipleOf",
+      kind: 'multipleOf',
       value,
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   get minValue() {
     let min = null;
     for (const ch of this._def.checks) {
-      if (ch.kind === "min") {
-        if (min === null || ch.value > min)
-          min = ch.value;
+      if (ch.kind === 'min') {
+        if (min === null || ch.value > min) min = ch.value;
       }
     }
     return min;
@@ -4530,21 +4677,20 @@ var ZodBigInt = class extends ZodType {
   get maxValue() {
     let max = null;
     for (const ch of this._def.checks) {
-      if (ch.kind === "max") {
-        if (max === null || ch.value < max)
-          max = ch.value;
+      if (ch.kind === 'max') {
+        if (max === null || ch.value < max) max = ch.value;
       }
     }
     return max;
   }
 };
-__name(ZodBigInt, "ZodBigInt");
-ZodBigInt.create = (params) => {
+__name(ZodBigInt, 'ZodBigInt');
+ZodBigInt.create = params => {
   return new ZodBigInt({
     checks: [],
     typeName: ZodFirstPartyTypeKind.ZodBigInt,
     coerce: params?.coerce ?? false,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodBoolean = class extends ZodType {
@@ -4558,19 +4704,19 @@ var ZodBoolean = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.boolean,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
     return OK(input.data);
   }
 };
-__name(ZodBoolean, "ZodBoolean");
-ZodBoolean.create = (params) => {
+__name(ZodBoolean, 'ZodBoolean');
+ZodBoolean.create = params => {
   return new ZodBoolean({
     typeName: ZodFirstPartyTypeKind.ZodBoolean,
     coerce: params?.coerce || false,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodDate = class extends ZodType {
@@ -4584,21 +4730,21 @@ var ZodDate = class extends ZodType {
       addIssueToContext(ctx2, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.date,
-        received: ctx2.parsedType
+        received: ctx2.parsedType,
       });
       return INVALID;
     }
     if (Number.isNaN(input.data.getTime())) {
       const ctx2 = this._getOrReturnCtx(input);
       addIssueToContext(ctx2, {
-        code: ZodIssueCode.invalid_date
+        code: ZodIssueCode.invalid_date,
       });
       return INVALID;
     }
     const status = new ParseStatus();
     let ctx = void 0;
     for (const check of this._def.checks) {
-      if (check.kind === "min") {
+      if (check.kind === 'min') {
         if (input.data.getTime() < check.value) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
@@ -4607,11 +4753,11 @@ var ZodDate = class extends ZodType {
             inclusive: true,
             exact: false,
             minimum: check.value,
-            type: "date"
+            type: 'date',
           });
           status.dirty();
         }
-      } else if (check.kind === "max") {
+      } else if (check.kind === 'max') {
         if (input.data.getTime() > check.value) {
           ctx = this._getOrReturnCtx(input, ctx);
           addIssueToContext(ctx, {
@@ -4620,7 +4766,7 @@ var ZodDate = class extends ZodType {
             inclusive: true,
             exact: false,
             maximum: check.value,
-            type: "date"
+            type: 'date',
           });
           status.dirty();
         }
@@ -4630,35 +4776,34 @@ var ZodDate = class extends ZodType {
     }
     return {
       status: status.value,
-      value: new Date(input.data.getTime())
+      value: new Date(input.data.getTime()),
     };
   }
   _addCheck(check) {
     return new ZodDate({
       ...this._def,
-      checks: [...this._def.checks, check]
+      checks: [...this._def.checks, check],
     });
   }
   min(minDate, message) {
     return this._addCheck({
-      kind: "min",
+      kind: 'min',
       value: minDate.getTime(),
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   max(maxDate, message) {
     return this._addCheck({
-      kind: "max",
+      kind: 'max',
       value: maxDate.getTime(),
-      message: errorUtil.toString(message)
+      message: errorUtil.toString(message),
     });
   }
   get minDate() {
     let min = null;
     for (const ch of this._def.checks) {
-      if (ch.kind === "min") {
-        if (min === null || ch.value > min)
-          min = ch.value;
+      if (ch.kind === 'min') {
+        if (min === null || ch.value > min) min = ch.value;
       }
     }
     return min != null ? new Date(min) : null;
@@ -4666,21 +4811,20 @@ var ZodDate = class extends ZodType {
   get maxDate() {
     let max = null;
     for (const ch of this._def.checks) {
-      if (ch.kind === "max") {
-        if (max === null || ch.value < max)
-          max = ch.value;
+      if (ch.kind === 'max') {
+        if (max === null || ch.value < max) max = ch.value;
       }
     }
     return max != null ? new Date(max) : null;
   }
 };
-__name(ZodDate, "ZodDate");
-ZodDate.create = (params) => {
+__name(ZodDate, 'ZodDate');
+ZodDate.create = params => {
   return new ZodDate({
     checks: [],
     coerce: params?.coerce || false,
     typeName: ZodFirstPartyTypeKind.ZodDate,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodSymbol = class extends ZodType {
@@ -4691,18 +4835,18 @@ var ZodSymbol = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.symbol,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
     return OK(input.data);
   }
 };
-__name(ZodSymbol, "ZodSymbol");
-ZodSymbol.create = (params) => {
+__name(ZodSymbol, 'ZodSymbol');
+ZodSymbol.create = params => {
   return new ZodSymbol({
     typeName: ZodFirstPartyTypeKind.ZodSymbol,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodUndefined = class extends ZodType {
@@ -4713,18 +4857,18 @@ var ZodUndefined = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.undefined,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
     return OK(input.data);
   }
 };
-__name(ZodUndefined, "ZodUndefined");
-ZodUndefined.create = (params) => {
+__name(ZodUndefined, 'ZodUndefined');
+ZodUndefined.create = params => {
   return new ZodUndefined({
     typeName: ZodFirstPartyTypeKind.ZodUndefined,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodNull = class extends ZodType {
@@ -4735,18 +4879,18 @@ var ZodNull = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.null,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
     return OK(input.data);
   }
 };
-__name(ZodNull, "ZodNull");
-ZodNull.create = (params) => {
+__name(ZodNull, 'ZodNull');
+ZodNull.create = params => {
   return new ZodNull({
     typeName: ZodFirstPartyTypeKind.ZodNull,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodAny = class extends ZodType {
@@ -4758,11 +4902,11 @@ var ZodAny = class extends ZodType {
     return OK(input.data);
   }
 };
-__name(ZodAny, "ZodAny");
-ZodAny.create = (params) => {
+__name(ZodAny, 'ZodAny');
+ZodAny.create = params => {
   return new ZodAny({
     typeName: ZodFirstPartyTypeKind.ZodAny,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodUnknown = class extends ZodType {
@@ -4774,11 +4918,11 @@ var ZodUnknown = class extends ZodType {
     return OK(input.data);
   }
 };
-__name(ZodUnknown, "ZodUnknown");
-ZodUnknown.create = (params) => {
+__name(ZodUnknown, 'ZodUnknown');
+ZodUnknown.create = params => {
   return new ZodUnknown({
     typeName: ZodFirstPartyTypeKind.ZodUnknown,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodNever = class extends ZodType {
@@ -4787,16 +4931,16 @@ var ZodNever = class extends ZodType {
     addIssueToContext(ctx, {
       code: ZodIssueCode.invalid_type,
       expected: ZodParsedType.never,
-      received: ctx.parsedType
+      received: ctx.parsedType,
     });
     return INVALID;
   }
 };
-__name(ZodNever, "ZodNever");
-ZodNever.create = (params) => {
+__name(ZodNever, 'ZodNever');
+ZodNever.create = params => {
   return new ZodNever({
     typeName: ZodFirstPartyTypeKind.ZodNever,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodVoid = class extends ZodType {
@@ -4807,18 +4951,18 @@ var ZodVoid = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.void,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
     return OK(input.data);
   }
 };
-__name(ZodVoid, "ZodVoid");
-ZodVoid.create = (params) => {
+__name(ZodVoid, 'ZodVoid');
+ZodVoid.create = params => {
   return new ZodVoid({
     typeName: ZodFirstPartyTypeKind.ZodVoid,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodArray = class extends ZodType {
@@ -4829,7 +4973,7 @@ var ZodArray = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.array,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
@@ -4841,10 +4985,10 @@ var ZodArray = class extends ZodType {
           code: tooBig ? ZodIssueCode.too_big : ZodIssueCode.too_small,
           minimum: tooSmall ? def.exactLength.value : void 0,
           maximum: tooBig ? def.exactLength.value : void 0,
-          type: "array",
+          type: 'array',
           inclusive: true,
           exact: true,
-          message: def.exactLength.message
+          message: def.exactLength.message,
         });
         status.dirty();
       }
@@ -4854,10 +4998,10 @@ var ZodArray = class extends ZodType {
         addIssueToContext(ctx, {
           code: ZodIssueCode.too_small,
           minimum: def.minLength.value,
-          type: "array",
+          type: 'array',
           inclusive: true,
           exact: false,
-          message: def.minLength.message
+          message: def.minLength.message,
         });
         status.dirty();
       }
@@ -4867,18 +5011,20 @@ var ZodArray = class extends ZodType {
         addIssueToContext(ctx, {
           code: ZodIssueCode.too_big,
           maximum: def.maxLength.value,
-          type: "array",
+          type: 'array',
           inclusive: true,
           exact: false,
-          message: def.maxLength.message
+          message: def.maxLength.message,
         });
         status.dirty();
       }
     }
     if (ctx.common.async) {
-      return Promise.all([...ctx.data].map((item, i) => {
-        return def.type._parseAsync(new ParseInputLazyPath(ctx, item, ctx.path, i));
-      })).then((result2) => {
+      return Promise.all(
+        [...ctx.data].map((item, i) => {
+          return def.type._parseAsync(new ParseInputLazyPath(ctx, item, ctx.path, i));
+        })
+      ).then(result2 => {
         return ParseStatus.mergeArray(status, result2);
       });
     }
@@ -4893,26 +5039,26 @@ var ZodArray = class extends ZodType {
   min(minLength, message) {
     return new ZodArray({
       ...this._def,
-      minLength: { value: minLength, message: errorUtil.toString(message) }
+      minLength: { value: minLength, message: errorUtil.toString(message) },
     });
   }
   max(maxLength, message) {
     return new ZodArray({
       ...this._def,
-      maxLength: { value: maxLength, message: errorUtil.toString(message) }
+      maxLength: { value: maxLength, message: errorUtil.toString(message) },
     });
   }
   length(len, message) {
     return new ZodArray({
       ...this._def,
-      exactLength: { value: len, message: errorUtil.toString(message) }
+      exactLength: { value: len, message: errorUtil.toString(message) },
     });
   }
   nonempty(message) {
     return this.min(1, message);
   }
 };
-__name(ZodArray, "ZodArray");
+__name(ZodArray, 'ZodArray');
 ZodArray.create = (schema, params) => {
   return new ZodArray({
     type: schema,
@@ -4920,7 +5066,7 @@ ZodArray.create = (schema, params) => {
     maxLength: null,
     exactLength: null,
     typeName: ZodFirstPartyTypeKind.ZodArray,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 function deepPartialify(schema) {
@@ -4932,24 +5078,24 @@ function deepPartialify(schema) {
     }
     return new ZodObject({
       ...schema._def,
-      shape: () => newShape
+      shape: () => newShape,
     });
   } else if (schema instanceof ZodArray) {
     return new ZodArray({
       ...schema._def,
-      type: deepPartialify(schema.element)
+      type: deepPartialify(schema.element),
     });
   } else if (schema instanceof ZodOptional) {
     return ZodOptional.create(deepPartialify(schema.unwrap()));
   } else if (schema instanceof ZodNullable) {
     return ZodNullable.create(deepPartialify(schema.unwrap()));
   } else if (schema instanceof ZodTuple) {
-    return ZodTuple.create(schema.items.map((item) => deepPartialify(item)));
+    return ZodTuple.create(schema.items.map(item => deepPartialify(item)));
   } else {
     return schema;
   }
 }
-__name(deepPartialify, "deepPartialify");
+__name(deepPartialify, 'deepPartialify');
 var ZodObject = class extends ZodType {
   constructor() {
     super(...arguments);
@@ -4958,8 +5104,7 @@ var ZodObject = class extends ZodType {
     this.augment = this.extend;
   }
   _getCached() {
-    if (this._cached !== null)
-      return this._cached;
+    if (this._cached !== null) return this._cached;
     const shape = this._def.shape();
     const keys = util.objectKeys(shape);
     this._cached = { shape, keys };
@@ -4972,14 +5117,14 @@ var ZodObject = class extends ZodType {
       addIssueToContext(ctx2, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.object,
-        received: ctx2.parsedType
+        received: ctx2.parsedType,
       });
       return INVALID;
     }
     const { status, ctx } = this._processInputParams(input);
     const { shape, keys: shapeKeys } = this._getCached();
     const extraKeys = [];
-    if (!(this._def.catchall instanceof ZodNever && this._def.unknownKeys === "strip")) {
+    if (!(this._def.catchall instanceof ZodNever && this._def.unknownKeys === 'strip')) {
       for (const key in ctx.data) {
         if (!shapeKeys.includes(key)) {
           extraKeys.push(key);
@@ -4991,29 +5136,29 @@ var ZodObject = class extends ZodType {
       const keyValidator = shape[key];
       const value = ctx.data[key];
       pairs.push({
-        key: { status: "valid", value: key },
+        key: { status: 'valid', value: key },
         value: keyValidator._parse(new ParseInputLazyPath(ctx, value, ctx.path, key)),
-        alwaysSet: key in ctx.data
+        alwaysSet: key in ctx.data,
       });
     }
     if (this._def.catchall instanceof ZodNever) {
       const unknownKeys = this._def.unknownKeys;
-      if (unknownKeys === "passthrough") {
+      if (unknownKeys === 'passthrough') {
         for (const key of extraKeys) {
           pairs.push({
-            key: { status: "valid", value: key },
-            value: { status: "valid", value: ctx.data[key] }
+            key: { status: 'valid', value: key },
+            value: { status: 'valid', value: ctx.data[key] },
           });
         }
-      } else if (unknownKeys === "strict") {
+      } else if (unknownKeys === 'strict') {
         if (extraKeys.length > 0) {
           addIssueToContext(ctx, {
             code: ZodIssueCode.unrecognized_keys,
-            keys: extraKeys
+            keys: extraKeys,
           });
           status.dirty();
         }
-      } else if (unknownKeys === "strip") {
+      } else if (unknownKeys === 'strip') {
       } else {
         throw new Error(`Internal ZodObject error: invalid unknownKeys value.`);
       }
@@ -5022,31 +5167,33 @@ var ZodObject = class extends ZodType {
       for (const key of extraKeys) {
         const value = ctx.data[key];
         pairs.push({
-          key: { status: "valid", value: key },
+          key: { status: 'valid', value: key },
           value: catchall._parse(
             new ParseInputLazyPath(ctx, value, ctx.path, key)
             //, ctx.child(key), value, getParsedType(value)
           ),
-          alwaysSet: key in ctx.data
+          alwaysSet: key in ctx.data,
         });
       }
     }
     if (ctx.common.async) {
-      return Promise.resolve().then(async () => {
-        const syncPairs = [];
-        for (const pair of pairs) {
-          const key = await pair.key;
-          const value = await pair.value;
-          syncPairs.push({
-            key,
-            value,
-            alwaysSet: pair.alwaysSet
-          });
-        }
-        return syncPairs;
-      }).then((syncPairs) => {
-        return ParseStatus.mergeObjectSync(status, syncPairs);
-      });
+      return Promise.resolve()
+        .then(async () => {
+          const syncPairs = [];
+          for (const pair of pairs) {
+            const key = await pair.key;
+            const value = await pair.value;
+            syncPairs.push({
+              key,
+              value,
+              alwaysSet: pair.alwaysSet,
+            });
+          }
+          return syncPairs;
+        })
+        .then(syncPairs => {
+          return ParseStatus.mergeObjectSync(status, syncPairs);
+        });
     } else {
       return ParseStatus.mergeObjectSync(status, pairs);
     }
@@ -5058,31 +5205,33 @@ var ZodObject = class extends ZodType {
     errorUtil.errToObj;
     return new ZodObject({
       ...this._def,
-      unknownKeys: "strict",
-      ...message !== void 0 ? {
-        errorMap: (issue, ctx) => {
-          const defaultError = this._def.errorMap?.(issue, ctx).message ?? ctx.defaultError;
-          if (issue.code === "unrecognized_keys")
-            return {
-              message: errorUtil.errToObj(message).message ?? defaultError
-            };
-          return {
-            message: defaultError
-          };
-        }
-      } : {}
+      unknownKeys: 'strict',
+      ...(message !== void 0
+        ? {
+            errorMap: (issue, ctx) => {
+              const defaultError = this._def.errorMap?.(issue, ctx).message ?? ctx.defaultError;
+              if (issue.code === 'unrecognized_keys')
+                return {
+                  message: errorUtil.errToObj(message).message ?? defaultError,
+                };
+              return {
+                message: defaultError,
+              };
+            },
+          }
+        : {}),
     });
   }
   strip() {
     return new ZodObject({
       ...this._def,
-      unknownKeys: "strip"
+      unknownKeys: 'strip',
     });
   }
   passthrough() {
     return new ZodObject({
       ...this._def,
-      unknownKeys: "passthrough"
+      unknownKeys: 'passthrough',
     });
   }
   // const AugmentFactory =
@@ -5107,8 +5256,8 @@ var ZodObject = class extends ZodType {
       ...this._def,
       shape: () => ({
         ...this._def.shape(),
-        ...augmentation
-      })
+        ...augmentation,
+      }),
     });
   }
   /**
@@ -5122,9 +5271,9 @@ var ZodObject = class extends ZodType {
       catchall: merging._def.catchall,
       shape: () => ({
         ...this._def.shape(),
-        ...merging._def.shape()
+        ...merging._def.shape(),
       }),
-      typeName: ZodFirstPartyTypeKind.ZodObject
+      typeName: ZodFirstPartyTypeKind.ZodObject,
     });
     return merged;
   }
@@ -5190,7 +5339,7 @@ var ZodObject = class extends ZodType {
   catchall(index) {
     return new ZodObject({
       ...this._def,
-      catchall: index
+      catchall: index,
     });
   }
   pick(mask) {
@@ -5202,7 +5351,7 @@ var ZodObject = class extends ZodType {
     }
     return new ZodObject({
       ...this._def,
-      shape: () => shape
+      shape: () => shape,
     });
   }
   omit(mask) {
@@ -5214,7 +5363,7 @@ var ZodObject = class extends ZodType {
     }
     return new ZodObject({
       ...this._def,
-      shape: () => shape
+      shape: () => shape,
     });
   }
   /**
@@ -5235,7 +5384,7 @@ var ZodObject = class extends ZodType {
     }
     return new ZodObject({
       ...this._def,
-      shape: () => newShape
+      shape: () => newShape,
     });
   }
   required(mask) {
@@ -5254,39 +5403,39 @@ var ZodObject = class extends ZodType {
     }
     return new ZodObject({
       ...this._def,
-      shape: () => newShape
+      shape: () => newShape,
     });
   }
   keyof() {
     return createZodEnum(util.objectKeys(this.shape));
   }
 };
-__name(ZodObject, "ZodObject");
+__name(ZodObject, 'ZodObject');
 ZodObject.create = (shape, params) => {
   return new ZodObject({
     shape: () => shape,
-    unknownKeys: "strip",
+    unknownKeys: 'strip',
     catchall: ZodNever.create(),
     typeName: ZodFirstPartyTypeKind.ZodObject,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 ZodObject.strictCreate = (shape, params) => {
   return new ZodObject({
     shape: () => shape,
-    unknownKeys: "strict",
+    unknownKeys: 'strict',
     catchall: ZodNever.create(),
     typeName: ZodFirstPartyTypeKind.ZodObject,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 ZodObject.lazycreate = (shape, params) => {
   return new ZodObject({
     shape,
-    unknownKeys: "strip",
+    unknownKeys: 'strip',
     catchall: ZodNever.create(),
     typeName: ZodFirstPartyTypeKind.ZodObject,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodUnion = class extends ZodType {
@@ -5295,43 +5444,45 @@ var ZodUnion = class extends ZodType {
     const options = this._def.options;
     function handleResults(results) {
       for (const result of results) {
-        if (result.result.status === "valid") {
+        if (result.result.status === 'valid') {
           return result.result;
         }
       }
       for (const result of results) {
-        if (result.result.status === "dirty") {
+        if (result.result.status === 'dirty') {
           ctx.common.issues.push(...result.ctx.common.issues);
           return result.result;
         }
       }
-      const unionErrors = results.map((result) => new ZodError(result.ctx.common.issues));
+      const unionErrors = results.map(result => new ZodError(result.ctx.common.issues));
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_union,
-        unionErrors
+        unionErrors,
       });
       return INVALID;
     }
-    __name(handleResults, "handleResults");
+    __name(handleResults, 'handleResults');
     if (ctx.common.async) {
-      return Promise.all(options.map(async (option) => {
-        const childCtx = {
-          ...ctx,
-          common: {
-            ...ctx.common,
-            issues: []
-          },
-          parent: null
-        };
-        return {
-          result: await option._parseAsync({
-            data: ctx.data,
-            path: ctx.path,
-            parent: childCtx
-          }),
-          ctx: childCtx
-        };
-      })).then(handleResults);
+      return Promise.all(
+        options.map(async option => {
+          const childCtx = {
+            ...ctx,
+            common: {
+              ...ctx.common,
+              issues: [],
+            },
+            parent: null,
+          };
+          return {
+            result: await option._parseAsync({
+              data: ctx.data,
+              path: ctx.path,
+              parent: childCtx,
+            }),
+            ctx: childCtx,
+          };
+        })
+      ).then(handleResults);
     } else {
       let dirty = void 0;
       const issues = [];
@@ -5340,18 +5491,18 @@ var ZodUnion = class extends ZodType {
           ...ctx,
           common: {
             ...ctx.common,
-            issues: []
+            issues: [],
           },
-          parent: null
+          parent: null,
         };
         const result = option._parseSync({
           data: ctx.data,
           path: ctx.path,
-          parent: childCtx
+          parent: childCtx,
         });
-        if (result.status === "valid") {
+        if (result.status === 'valid') {
           return result;
-        } else if (result.status === "dirty" && !dirty) {
+        } else if (result.status === 'dirty' && !dirty) {
           dirty = { result, ctx: childCtx };
         }
         if (childCtx.common.issues.length) {
@@ -5362,10 +5513,10 @@ var ZodUnion = class extends ZodType {
         ctx.common.issues.push(...dirty.ctx.common.issues);
         return dirty.result;
       }
-      const unionErrors = issues.map((issues2) => new ZodError(issues2));
+      const unionErrors = issues.map(issues2 => new ZodError(issues2));
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_union,
-        unionErrors
+        unionErrors,
       });
       return INVALID;
     }
@@ -5374,15 +5525,15 @@ var ZodUnion = class extends ZodType {
     return this._def.options;
   }
 };
-__name(ZodUnion, "ZodUnion");
+__name(ZodUnion, 'ZodUnion');
 ZodUnion.create = (types, params) => {
   return new ZodUnion({
     options: types,
     typeName: ZodFirstPartyTypeKind.ZodUnion,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
-var getDiscriminator = /* @__PURE__ */ __name((type) => {
+var getDiscriminator = /* @__PURE__ */ __name(type => {
   if (type instanceof ZodLazy) {
     return getDiscriminator(type.schema);
   } else if (type instanceof ZodEffects) {
@@ -5412,7 +5563,7 @@ var getDiscriminator = /* @__PURE__ */ __name((type) => {
   } else {
     return [];
   }
-}, "getDiscriminator");
+}, 'getDiscriminator');
 var ZodDiscriminatedUnion = class extends ZodType {
   _parse(input) {
     const { ctx } = this._processInputParams(input);
@@ -5420,7 +5571,7 @@ var ZodDiscriminatedUnion = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.object,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
@@ -5431,7 +5582,7 @@ var ZodDiscriminatedUnion = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_union_discriminator,
         options: Array.from(this.optionsMap.keys()),
-        path: [discriminator]
+        path: [discriminator],
       });
       return INVALID;
     }
@@ -5439,13 +5590,13 @@ var ZodDiscriminatedUnion = class extends ZodType {
       return option._parseAsync({
         data: ctx.data,
         path: ctx.path,
-        parent: ctx
+        parent: ctx,
       });
     } else {
       return option._parseSync({
         data: ctx.data,
         path: ctx.path,
-        parent: ctx
+        parent: ctx,
       });
     }
   }
@@ -5471,11 +5622,15 @@ var ZodDiscriminatedUnion = class extends ZodType {
     for (const type of options) {
       const discriminatorValues = getDiscriminator(type.shape[discriminator]);
       if (!discriminatorValues.length) {
-        throw new Error(`A discriminator value for key \`${discriminator}\` could not be extracted from all schema options`);
+        throw new Error(
+          `A discriminator value for key \`${discriminator}\` could not be extracted from all schema options`
+        );
       }
       for (const value of discriminatorValues) {
         if (optionsMap.has(value)) {
-          throw new Error(`Discriminator property ${String(discriminator)} has duplicate value ${String(value)}`);
+          throw new Error(
+            `Discriminator property ${String(discriminator)} has duplicate value ${String(value)}`
+          );
         }
         optionsMap.set(value, type);
       }
@@ -5485,11 +5640,11 @@ var ZodDiscriminatedUnion = class extends ZodType {
       discriminator,
       options,
       optionsMap,
-      ...processCreateParams(params)
+      ...processCreateParams(params),
     });
   }
 };
-__name(ZodDiscriminatedUnion, "ZodDiscriminatedUnion");
+__name(ZodDiscriminatedUnion, 'ZodDiscriminatedUnion');
 function mergeValues(a, b) {
   const aType = getParsedType(a);
   const bType = getParsedType(b);
@@ -5497,7 +5652,7 @@ function mergeValues(a, b) {
     return { valid: true, data: a };
   } else if (aType === ZodParsedType.object && bType === ZodParsedType.object) {
     const bKeys = util.objectKeys(b);
-    const sharedKeys = util.objectKeys(a).filter((key) => bKeys.indexOf(key) !== -1);
+    const sharedKeys = util.objectKeys(a).filter(key => bKeys.indexOf(key) !== -1);
     const newObj = { ...a, ...b };
     for (const key of sharedKeys) {
       const sharedValue = mergeValues(a[key], b[key]);
@@ -5528,7 +5683,7 @@ function mergeValues(a, b) {
     return { valid: false };
   }
 }
-__name(mergeValues, "mergeValues");
+__name(mergeValues, 'mergeValues');
 var ZodIntersection = class extends ZodType {
   _parse(input) {
     const { status, ctx } = this._processInputParams(input);
@@ -5539,7 +5694,7 @@ var ZodIntersection = class extends ZodType {
       const merged = mergeValues(parsedLeft.value, parsedRight.value);
       if (!merged.valid) {
         addIssueToContext(ctx, {
-          code: ZodIssueCode.invalid_intersection_types
+          code: ZodIssueCode.invalid_intersection_types,
         });
         return INVALID;
       }
@@ -5547,40 +5702,43 @@ var ZodIntersection = class extends ZodType {
         status.dirty();
       }
       return { status: status.value, value: merged.data };
-    }, "handleParsed");
+    }, 'handleParsed');
     if (ctx.common.async) {
       return Promise.all([
         this._def.left._parseAsync({
           data: ctx.data,
           path: ctx.path,
-          parent: ctx
+          parent: ctx,
         }),
         this._def.right._parseAsync({
           data: ctx.data,
           path: ctx.path,
-          parent: ctx
-        })
+          parent: ctx,
+        }),
       ]).then(([left, right]) => handleParsed(left, right));
     } else {
-      return handleParsed(this._def.left._parseSync({
-        data: ctx.data,
-        path: ctx.path,
-        parent: ctx
-      }), this._def.right._parseSync({
-        data: ctx.data,
-        path: ctx.path,
-        parent: ctx
-      }));
+      return handleParsed(
+        this._def.left._parseSync({
+          data: ctx.data,
+          path: ctx.path,
+          parent: ctx,
+        }),
+        this._def.right._parseSync({
+          data: ctx.data,
+          path: ctx.path,
+          parent: ctx,
+        })
+      );
     }
   }
 };
-__name(ZodIntersection, "ZodIntersection");
+__name(ZodIntersection, 'ZodIntersection');
 ZodIntersection.create = (left, right, params) => {
   return new ZodIntersection({
     left,
     right,
     typeName: ZodFirstPartyTypeKind.ZodIntersection,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodTuple = class extends ZodType {
@@ -5590,7 +5748,7 @@ var ZodTuple = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.array,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
@@ -5600,7 +5758,7 @@ var ZodTuple = class extends ZodType {
         minimum: this._def.items.length,
         inclusive: true,
         exact: false,
-        type: "array"
+        type: 'array',
       });
       return INVALID;
     }
@@ -5611,18 +5769,19 @@ var ZodTuple = class extends ZodType {
         maximum: this._def.items.length,
         inclusive: true,
         exact: false,
-        type: "array"
+        type: 'array',
       });
       status.dirty();
     }
-    const items = [...ctx.data].map((item, itemIndex) => {
-      const schema = this._def.items[itemIndex] || this._def.rest;
-      if (!schema)
-        return null;
-      return schema._parse(new ParseInputLazyPath(ctx, item, ctx.path, itemIndex));
-    }).filter((x) => !!x);
+    const items = [...ctx.data]
+      .map((item, itemIndex) => {
+        const schema = this._def.items[itemIndex] || this._def.rest;
+        if (!schema) return null;
+        return schema._parse(new ParseInputLazyPath(ctx, item, ctx.path, itemIndex));
+      })
+      .filter(x => !!x);
     if (ctx.common.async) {
-      return Promise.all(items).then((results) => {
+      return Promise.all(items).then(results => {
         return ParseStatus.mergeArray(status, results);
       });
     } else {
@@ -5635,20 +5794,20 @@ var ZodTuple = class extends ZodType {
   rest(rest) {
     return new ZodTuple({
       ...this._def,
-      rest
+      rest,
     });
   }
 };
-__name(ZodTuple, "ZodTuple");
+__name(ZodTuple, 'ZodTuple');
 ZodTuple.create = (schemas, params) => {
   if (!Array.isArray(schemas)) {
-    throw new Error("You must pass an array of schemas to z.tuple([ ... ])");
+    throw new Error('You must pass an array of schemas to z.tuple([ ... ])');
   }
   return new ZodTuple({
     items: schemas,
     typeName: ZodFirstPartyTypeKind.ZodTuple,
     rest: null,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodRecord = class extends ZodType {
@@ -5664,7 +5823,7 @@ var ZodRecord = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.object,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
@@ -5675,7 +5834,7 @@ var ZodRecord = class extends ZodType {
       pairs.push({
         key: keyType._parse(new ParseInputLazyPath(ctx, key, ctx.path, key)),
         value: valueType._parse(new ParseInputLazyPath(ctx, ctx.data[key], ctx.path, key)),
-        alwaysSet: key in ctx.data
+        alwaysSet: key in ctx.data,
       });
     }
     if (ctx.common.async) {
@@ -5693,18 +5852,18 @@ var ZodRecord = class extends ZodType {
         keyType: first,
         valueType: second,
         typeName: ZodFirstPartyTypeKind.ZodRecord,
-        ...processCreateParams(third)
+        ...processCreateParams(third),
       });
     }
     return new ZodRecord({
       keyType: ZodString.create(),
       valueType: first,
       typeName: ZodFirstPartyTypeKind.ZodRecord,
-      ...processCreateParams(second)
+      ...processCreateParams(second),
     });
   }
 };
-__name(ZodRecord, "ZodRecord");
+__name(ZodRecord, 'ZodRecord');
 var ZodMap = class extends ZodType {
   get keySchema() {
     return this._def.keyType;
@@ -5718,7 +5877,7 @@ var ZodMap = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.map,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
@@ -5726,8 +5885,8 @@ var ZodMap = class extends ZodType {
     const valueType = this._def.valueType;
     const pairs = [...ctx.data.entries()].map(([key, value], index) => {
       return {
-        key: keyType._parse(new ParseInputLazyPath(ctx, key, ctx.path, [index, "key"])),
-        value: valueType._parse(new ParseInputLazyPath(ctx, value, ctx.path, [index, "value"]))
+        key: keyType._parse(new ParseInputLazyPath(ctx, key, ctx.path, [index, 'key'])),
+        value: valueType._parse(new ParseInputLazyPath(ctx, value, ctx.path, [index, 'value'])),
       };
     });
     if (ctx.common.async) {
@@ -5736,10 +5895,10 @@ var ZodMap = class extends ZodType {
         for (const pair of pairs) {
           const key = await pair.key;
           const value = await pair.value;
-          if (key.status === "aborted" || value.status === "aborted") {
+          if (key.status === 'aborted' || value.status === 'aborted') {
             return INVALID;
           }
-          if (key.status === "dirty" || value.status === "dirty") {
+          if (key.status === 'dirty' || value.status === 'dirty') {
             status.dirty();
           }
           finalMap.set(key.value, value.value);
@@ -5751,10 +5910,10 @@ var ZodMap = class extends ZodType {
       for (const pair of pairs) {
         const key = pair.key;
         const value = pair.value;
-        if (key.status === "aborted" || value.status === "aborted") {
+        if (key.status === 'aborted' || value.status === 'aborted') {
           return INVALID;
         }
-        if (key.status === "dirty" || value.status === "dirty") {
+        if (key.status === 'dirty' || value.status === 'dirty') {
           status.dirty();
         }
         finalMap.set(key.value, value.value);
@@ -5763,13 +5922,13 @@ var ZodMap = class extends ZodType {
     }
   }
 };
-__name(ZodMap, "ZodMap");
+__name(ZodMap, 'ZodMap');
 ZodMap.create = (keyType, valueType, params) => {
   return new ZodMap({
     valueType,
     keyType,
     typeName: ZodFirstPartyTypeKind.ZodMap,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodSet = class extends ZodType {
@@ -5779,7 +5938,7 @@ var ZodSet = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.set,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
@@ -5789,10 +5948,10 @@ var ZodSet = class extends ZodType {
         addIssueToContext(ctx, {
           code: ZodIssueCode.too_small,
           minimum: def.minSize.value,
-          type: "set",
+          type: 'set',
           inclusive: true,
           exact: false,
-          message: def.minSize.message
+          message: def.minSize.message,
         });
         status.dirty();
       }
@@ -5802,10 +5961,10 @@ var ZodSet = class extends ZodType {
         addIssueToContext(ctx, {
           code: ZodIssueCode.too_big,
           maximum: def.maxSize.value,
-          type: "set",
+          type: 'set',
           inclusive: true,
           exact: false,
-          message: def.maxSize.message
+          message: def.maxSize.message,
         });
         status.dirty();
       }
@@ -5814,18 +5973,18 @@ var ZodSet = class extends ZodType {
     function finalizeSet(elements2) {
       const parsedSet = /* @__PURE__ */ new Set();
       for (const element of elements2) {
-        if (element.status === "aborted")
-          return INVALID;
-        if (element.status === "dirty")
-          status.dirty();
+        if (element.status === 'aborted') return INVALID;
+        if (element.status === 'dirty') status.dirty();
         parsedSet.add(element.value);
       }
       return { status: status.value, value: parsedSet };
     }
-    __name(finalizeSet, "finalizeSet");
-    const elements = [...ctx.data.values()].map((item, i) => valueType._parse(new ParseInputLazyPath(ctx, item, ctx.path, i)));
+    __name(finalizeSet, 'finalizeSet');
+    const elements = [...ctx.data.values()].map((item, i) =>
+      valueType._parse(new ParseInputLazyPath(ctx, item, ctx.path, i))
+    );
     if (ctx.common.async) {
-      return Promise.all(elements).then((elements2) => finalizeSet(elements2));
+      return Promise.all(elements).then(elements2 => finalizeSet(elements2));
     } else {
       return finalizeSet(elements);
     }
@@ -5833,13 +5992,13 @@ var ZodSet = class extends ZodType {
   min(minSize, message) {
     return new ZodSet({
       ...this._def,
-      minSize: { value: minSize, message: errorUtil.toString(message) }
+      minSize: { value: minSize, message: errorUtil.toString(message) },
     });
   }
   max(maxSize, message) {
     return new ZodSet({
       ...this._def,
-      maxSize: { value: maxSize, message: errorUtil.toString(message) }
+      maxSize: { value: maxSize, message: errorUtil.toString(message) },
     });
   }
   size(size, message) {
@@ -5849,14 +6008,14 @@ var ZodSet = class extends ZodType {
     return this.min(1, message);
   }
 };
-__name(ZodSet, "ZodSet");
+__name(ZodSet, 'ZodSet');
 ZodSet.create = (valueType, params) => {
   return new ZodSet({
     valueType,
     minSize: null,
     maxSize: null,
     typeName: ZodFirstPartyTypeKind.ZodSet,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodFunction = class extends ZodType {
@@ -5870,7 +6029,7 @@ var ZodFunction = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.function,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
@@ -5878,46 +6037,58 @@ var ZodFunction = class extends ZodType {
       return makeIssue({
         data: args,
         path: ctx.path,
-        errorMaps: [ctx.common.contextualErrorMap, ctx.schemaErrorMap, getErrorMap(), en_default].filter((x) => !!x),
+        errorMaps: [
+          ctx.common.contextualErrorMap,
+          ctx.schemaErrorMap,
+          getErrorMap(),
+          en_default,
+        ].filter(x => !!x),
         issueData: {
           code: ZodIssueCode.invalid_arguments,
-          argumentsError: error3
-        }
+          argumentsError: error3,
+        },
       });
     }
-    __name(makeArgsIssue, "makeArgsIssue");
+    __name(makeArgsIssue, 'makeArgsIssue');
     function makeReturnsIssue(returns, error3) {
       return makeIssue({
         data: returns,
         path: ctx.path,
-        errorMaps: [ctx.common.contextualErrorMap, ctx.schemaErrorMap, getErrorMap(), en_default].filter((x) => !!x),
+        errorMaps: [
+          ctx.common.contextualErrorMap,
+          ctx.schemaErrorMap,
+          getErrorMap(),
+          en_default,
+        ].filter(x => !!x),
         issueData: {
           code: ZodIssueCode.invalid_return_type,
-          returnTypeError: error3
-        }
+          returnTypeError: error3,
+        },
       });
     }
-    __name(makeReturnsIssue, "makeReturnsIssue");
+    __name(makeReturnsIssue, 'makeReturnsIssue');
     const params = { errorMap: ctx.common.contextualErrorMap };
     const fn = ctx.data;
     if (this._def.returns instanceof ZodPromise) {
       const me = this;
-      return OK(async function(...args) {
+      return OK(async function (...args) {
         const error3 = new ZodError([]);
-        const parsedArgs = await me._def.args.parseAsync(args, params).catch((e) => {
+        const parsedArgs = await me._def.args.parseAsync(args, params).catch(e => {
           error3.addIssue(makeArgsIssue(args, e));
           throw error3;
         });
         const result = await Reflect.apply(fn, this, parsedArgs);
-        const parsedReturns = await me._def.returns._def.type.parseAsync(result, params).catch((e) => {
-          error3.addIssue(makeReturnsIssue(result, e));
-          throw error3;
-        });
+        const parsedReturns = await me._def.returns._def.type
+          .parseAsync(result, params)
+          .catch(e => {
+            error3.addIssue(makeReturnsIssue(result, e));
+            throw error3;
+          });
         return parsedReturns;
       });
     } else {
       const me = this;
-      return OK(function(...args) {
+      return OK(function (...args) {
         const parsedArgs = me._def.args.safeParse(args, params);
         if (!parsedArgs.success) {
           throw new ZodError([makeArgsIssue(args, parsedArgs.error)]);
@@ -5940,13 +6111,13 @@ var ZodFunction = class extends ZodType {
   args(...items) {
     return new ZodFunction({
       ...this._def,
-      args: ZodTuple.create(items).rest(ZodUnknown.create())
+      args: ZodTuple.create(items).rest(ZodUnknown.create()),
     });
   }
   returns(returnType) {
     return new ZodFunction({
       ...this._def,
-      returns: returnType
+      returns: returnType,
     });
   }
   implement(func) {
@@ -5962,11 +6133,11 @@ var ZodFunction = class extends ZodType {
       args: args ? args : ZodTuple.create([]).rest(ZodUnknown.create()),
       returns: returns || ZodUnknown.create(),
       typeName: ZodFirstPartyTypeKind.ZodFunction,
-      ...processCreateParams(params)
+      ...processCreateParams(params),
     });
   }
 };
-__name(ZodFunction, "ZodFunction");
+__name(ZodFunction, 'ZodFunction');
 var ZodLazy = class extends ZodType {
   get schema() {
     return this._def.getter();
@@ -5977,12 +6148,12 @@ var ZodLazy = class extends ZodType {
     return lazySchema._parse({ data: ctx.data, path: ctx.path, parent: ctx });
   }
 };
-__name(ZodLazy, "ZodLazy");
+__name(ZodLazy, 'ZodLazy');
 ZodLazy.create = (getter, params) => {
   return new ZodLazy({
     getter,
     typeName: ZodFirstPartyTypeKind.ZodLazy,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodLiteral = class extends ZodType {
@@ -5992,41 +6163,41 @@ var ZodLiteral = class extends ZodType {
       addIssueToContext(ctx, {
         received: ctx.data,
         code: ZodIssueCode.invalid_literal,
-        expected: this._def.value
+        expected: this._def.value,
       });
       return INVALID;
     }
-    return { status: "valid", value: input.data };
+    return { status: 'valid', value: input.data };
   }
   get value() {
     return this._def.value;
   }
 };
-__name(ZodLiteral, "ZodLiteral");
+__name(ZodLiteral, 'ZodLiteral');
 ZodLiteral.create = (value, params) => {
   return new ZodLiteral({
     value,
     typeName: ZodFirstPartyTypeKind.ZodLiteral,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 function createZodEnum(values, params) {
   return new ZodEnum({
     values,
     typeName: ZodFirstPartyTypeKind.ZodEnum,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 }
-__name(createZodEnum, "createZodEnum");
+__name(createZodEnum, 'createZodEnum');
 var ZodEnum = class extends ZodType {
   _parse(input) {
-    if (typeof input.data !== "string") {
+    if (typeof input.data !== 'string') {
       const ctx = this._getOrReturnCtx(input);
       const expectedValues = this._def.values;
       addIssueToContext(ctx, {
         expected: util.joinValues(expectedValues),
         received: ctx.parsedType,
-        code: ZodIssueCode.invalid_type
+        code: ZodIssueCode.invalid_type,
       });
       return INVALID;
     }
@@ -6039,7 +6210,7 @@ var ZodEnum = class extends ZodType {
       addIssueToContext(ctx, {
         received: ctx.data,
         code: ZodIssueCode.invalid_enum_value,
-        options: expectedValues
+        options: expectedValues,
       });
       return INVALID;
     }
@@ -6072,17 +6243,20 @@ var ZodEnum = class extends ZodType {
   extract(values, newDef = this._def) {
     return ZodEnum.create(values, {
       ...this._def,
-      ...newDef
+      ...newDef,
     });
   }
   exclude(values, newDef = this._def) {
-    return ZodEnum.create(this.options.filter((opt) => !values.includes(opt)), {
-      ...this._def,
-      ...newDef
-    });
+    return ZodEnum.create(
+      this.options.filter(opt => !values.includes(opt)),
+      {
+        ...this._def,
+        ...newDef,
+      }
+    );
   }
 };
-__name(ZodEnum, "ZodEnum");
+__name(ZodEnum, 'ZodEnum');
 ZodEnum.create = createZodEnum;
 var ZodNativeEnum = class extends ZodType {
   _parse(input) {
@@ -6093,7 +6267,7 @@ var ZodNativeEnum = class extends ZodType {
       addIssueToContext(ctx, {
         expected: util.joinValues(expectedValues),
         received: ctx.parsedType,
-        code: ZodIssueCode.invalid_type
+        code: ZodIssueCode.invalid_type,
       });
       return INVALID;
     }
@@ -6105,7 +6279,7 @@ var ZodNativeEnum = class extends ZodType {
       addIssueToContext(ctx, {
         received: ctx.data,
         code: ZodIssueCode.invalid_enum_value,
-        options: expectedValues
+        options: expectedValues,
       });
       return INVALID;
     }
@@ -6115,12 +6289,12 @@ var ZodNativeEnum = class extends ZodType {
     return this._def.values;
   }
 };
-__name(ZodNativeEnum, "ZodNativeEnum");
+__name(ZodNativeEnum, 'ZodNativeEnum');
 ZodNativeEnum.create = (values, params) => {
   return new ZodNativeEnum({
     values,
     typeName: ZodFirstPartyTypeKind.ZodNativeEnum,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodPromise = class extends ZodType {
@@ -6133,25 +6307,28 @@ var ZodPromise = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.promise,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
-    const promisified = ctx.parsedType === ZodParsedType.promise ? ctx.data : Promise.resolve(ctx.data);
-    return OK(promisified.then((data) => {
-      return this._def.type.parseAsync(data, {
-        path: ctx.path,
-        errorMap: ctx.common.contextualErrorMap
-      });
-    }));
+    const promisified =
+      ctx.parsedType === ZodParsedType.promise ? ctx.data : Promise.resolve(ctx.data);
+    return OK(
+      promisified.then(data => {
+        return this._def.type.parseAsync(data, {
+          path: ctx.path,
+          errorMap: ctx.common.contextualErrorMap,
+        });
+      })
+    );
   }
 };
-__name(ZodPromise, "ZodPromise");
+__name(ZodPromise, 'ZodPromise');
 ZodPromise.create = (schema, params) => {
   return new ZodPromise({
     type: schema,
     typeName: ZodFirstPartyTypeKind.ZodPromise,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodEffects = class extends ZodType {
@@ -6159,13 +6336,15 @@ var ZodEffects = class extends ZodType {
     return this._def.schema;
   }
   sourceType() {
-    return this._def.schema._def.typeName === ZodFirstPartyTypeKind.ZodEffects ? this._def.schema.sourceType() : this._def.schema;
+    return this._def.schema._def.typeName === ZodFirstPartyTypeKind.ZodEffects
+      ? this._def.schema.sourceType()
+      : this._def.schema;
   }
   _parse(input) {
     const { status, ctx } = this._processInputParams(input);
     const effect = this._def.effect || null;
     const checkCtx = {
-      addIssue: (arg) => {
+      addIssue: arg => {
         addIssueToContext(ctx, arg);
         if (arg.fatal) {
           status.abort();
@@ -6175,123 +6354,117 @@ var ZodEffects = class extends ZodType {
       },
       get path() {
         return ctx.path;
-      }
+      },
     };
     checkCtx.addIssue = checkCtx.addIssue.bind(checkCtx);
-    if (effect.type === "preprocess") {
+    if (effect.type === 'preprocess') {
       const processed = effect.transform(ctx.data, checkCtx);
       if (ctx.common.async) {
-        return Promise.resolve(processed).then(async (processed2) => {
-          if (status.value === "aborted")
-            return INVALID;
+        return Promise.resolve(processed).then(async processed2 => {
+          if (status.value === 'aborted') return INVALID;
           const result = await this._def.schema._parseAsync({
             data: processed2,
             path: ctx.path,
-            parent: ctx
+            parent: ctx,
           });
-          if (result.status === "aborted")
-            return INVALID;
-          if (result.status === "dirty")
-            return DIRTY(result.value);
-          if (status.value === "dirty")
-            return DIRTY(result.value);
+          if (result.status === 'aborted') return INVALID;
+          if (result.status === 'dirty') return DIRTY(result.value);
+          if (status.value === 'dirty') return DIRTY(result.value);
           return result;
         });
       } else {
-        if (status.value === "aborted")
-          return INVALID;
+        if (status.value === 'aborted') return INVALID;
         const result = this._def.schema._parseSync({
           data: processed,
           path: ctx.path,
-          parent: ctx
+          parent: ctx,
         });
-        if (result.status === "aborted")
-          return INVALID;
-        if (result.status === "dirty")
-          return DIRTY(result.value);
-        if (status.value === "dirty")
-          return DIRTY(result.value);
+        if (result.status === 'aborted') return INVALID;
+        if (result.status === 'dirty') return DIRTY(result.value);
+        if (status.value === 'dirty') return DIRTY(result.value);
         return result;
       }
     }
-    if (effect.type === "refinement") {
-      const executeRefinement = /* @__PURE__ */ __name((acc) => {
+    if (effect.type === 'refinement') {
+      const executeRefinement = /* @__PURE__ */ __name(acc => {
         const result = effect.refinement(acc, checkCtx);
         if (ctx.common.async) {
           return Promise.resolve(result);
         }
         if (result instanceof Promise) {
-          throw new Error("Async refinement encountered during synchronous parse operation. Use .parseAsync instead.");
+          throw new Error(
+            'Async refinement encountered during synchronous parse operation. Use .parseAsync instead.'
+          );
         }
         return acc;
-      }, "executeRefinement");
+      }, 'executeRefinement');
       if (ctx.common.async === false) {
         const inner = this._def.schema._parseSync({
           data: ctx.data,
           path: ctx.path,
-          parent: ctx
+          parent: ctx,
         });
-        if (inner.status === "aborted")
-          return INVALID;
-        if (inner.status === "dirty")
-          status.dirty();
+        if (inner.status === 'aborted') return INVALID;
+        if (inner.status === 'dirty') status.dirty();
         executeRefinement(inner.value);
         return { status: status.value, value: inner.value };
       } else {
-        return this._def.schema._parseAsync({ data: ctx.data, path: ctx.path, parent: ctx }).then((inner) => {
-          if (inner.status === "aborted")
-            return INVALID;
-          if (inner.status === "dirty")
-            status.dirty();
-          return executeRefinement(inner.value).then(() => {
-            return { status: status.value, value: inner.value };
+        return this._def.schema
+          ._parseAsync({ data: ctx.data, path: ctx.path, parent: ctx })
+          .then(inner => {
+            if (inner.status === 'aborted') return INVALID;
+            if (inner.status === 'dirty') status.dirty();
+            return executeRefinement(inner.value).then(() => {
+              return { status: status.value, value: inner.value };
+            });
           });
-        });
       }
     }
-    if (effect.type === "transform") {
+    if (effect.type === 'transform') {
       if (ctx.common.async === false) {
         const base = this._def.schema._parseSync({
           data: ctx.data,
           path: ctx.path,
-          parent: ctx
+          parent: ctx,
         });
-        if (!isValid(base))
-          return INVALID;
+        if (!isValid(base)) return INVALID;
         const result = effect.transform(base.value, checkCtx);
         if (result instanceof Promise) {
-          throw new Error(`Asynchronous transform encountered during synchronous parse operation. Use .parseAsync instead.`);
+          throw new Error(
+            `Asynchronous transform encountered during synchronous parse operation. Use .parseAsync instead.`
+          );
         }
         return { status: status.value, value: result };
       } else {
-        return this._def.schema._parseAsync({ data: ctx.data, path: ctx.path, parent: ctx }).then((base) => {
-          if (!isValid(base))
-            return INVALID;
-          return Promise.resolve(effect.transform(base.value, checkCtx)).then((result) => ({
-            status: status.value,
-            value: result
-          }));
-        });
+        return this._def.schema
+          ._parseAsync({ data: ctx.data, path: ctx.path, parent: ctx })
+          .then(base => {
+            if (!isValid(base)) return INVALID;
+            return Promise.resolve(effect.transform(base.value, checkCtx)).then(result => ({
+              status: status.value,
+              value: result,
+            }));
+          });
       }
     }
     util.assertNever(effect);
   }
 };
-__name(ZodEffects, "ZodEffects");
+__name(ZodEffects, 'ZodEffects');
 ZodEffects.create = (schema, effect, params) => {
   return new ZodEffects({
     schema,
     typeName: ZodFirstPartyTypeKind.ZodEffects,
     effect,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 ZodEffects.createWithPreprocess = (preprocess, schema, params) => {
   return new ZodEffects({
     schema,
-    effect: { type: "preprocess", transform: preprocess },
+    effect: { type: 'preprocess', transform: preprocess },
     typeName: ZodFirstPartyTypeKind.ZodEffects,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodOptional = class extends ZodType {
@@ -6306,12 +6479,12 @@ var ZodOptional = class extends ZodType {
     return this._def.innerType;
   }
 };
-__name(ZodOptional, "ZodOptional");
+__name(ZodOptional, 'ZodOptional');
 ZodOptional.create = (type, params) => {
   return new ZodOptional({
     innerType: type,
     typeName: ZodFirstPartyTypeKind.ZodOptional,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodNullable = class extends ZodType {
@@ -6326,12 +6499,12 @@ var ZodNullable = class extends ZodType {
     return this._def.innerType;
   }
 };
-__name(ZodNullable, "ZodNullable");
+__name(ZodNullable, 'ZodNullable');
 ZodNullable.create = (type, params) => {
   return new ZodNullable({
     innerType: type,
     typeName: ZodFirstPartyTypeKind.ZodNullable,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 var ZodDefault = class extends ZodType {
@@ -6344,20 +6517,20 @@ var ZodDefault = class extends ZodType {
     return this._def.innerType._parse({
       data,
       path: ctx.path,
-      parent: ctx
+      parent: ctx,
     });
   }
   removeDefault() {
     return this._def.innerType;
   }
 };
-__name(ZodDefault, "ZodDefault");
+__name(ZodDefault, 'ZodDefault');
 ZodDefault.create = (type, params) => {
   return new ZodDefault({
     innerType: type,
     typeName: ZodFirstPartyTypeKind.ZodDefault,
-    defaultValue: typeof params.default === "function" ? params.default : () => params.default,
-    ...processCreateParams(params)
+    defaultValue: typeof params.default === 'function' ? params.default : () => params.default,
+    ...processCreateParams(params),
   });
 };
 var ZodCatch = class extends ZodType {
@@ -6367,37 +6540,43 @@ var ZodCatch = class extends ZodType {
       ...ctx,
       common: {
         ...ctx.common,
-        issues: []
-      }
+        issues: [],
+      },
     };
     const result = this._def.innerType._parse({
       data: newCtx.data,
       path: newCtx.path,
       parent: {
-        ...newCtx
-      }
+        ...newCtx,
+      },
     });
     if (isAsync(result)) {
-      return result.then((result2) => {
+      return result.then(result2 => {
         return {
-          status: "valid",
-          value: result2.status === "valid" ? result2.value : this._def.catchValue({
-            get error() {
-              return new ZodError(newCtx.common.issues);
-            },
-            input: newCtx.data
-          })
+          status: 'valid',
+          value:
+            result2.status === 'valid'
+              ? result2.value
+              : this._def.catchValue({
+                  get error() {
+                    return new ZodError(newCtx.common.issues);
+                  },
+                  input: newCtx.data,
+                }),
         };
       });
     } else {
       return {
-        status: "valid",
-        value: result.status === "valid" ? result.value : this._def.catchValue({
-          get error() {
-            return new ZodError(newCtx.common.issues);
-          },
-          input: newCtx.data
-        })
+        status: 'valid',
+        value:
+          result.status === 'valid'
+            ? result.value
+            : this._def.catchValue({
+                get error() {
+                  return new ZodError(newCtx.common.issues);
+                },
+                input: newCtx.data,
+              }),
       };
     }
   }
@@ -6405,13 +6584,13 @@ var ZodCatch = class extends ZodType {
     return this._def.innerType;
   }
 };
-__name(ZodCatch, "ZodCatch");
+__name(ZodCatch, 'ZodCatch');
 ZodCatch.create = (type, params) => {
   return new ZodCatch({
     innerType: type,
     typeName: ZodFirstPartyTypeKind.ZodCatch,
-    catchValue: typeof params.catch === "function" ? params.catch : () => params.catch,
-    ...processCreateParams(params)
+    catchValue: typeof params.catch === 'function' ? params.catch : () => params.catch,
+    ...processCreateParams(params),
   });
 };
 var ZodNaN = class extends ZodType {
@@ -6422,21 +6601,21 @@ var ZodNaN = class extends ZodType {
       addIssueToContext(ctx, {
         code: ZodIssueCode.invalid_type,
         expected: ZodParsedType.nan,
-        received: ctx.parsedType
+        received: ctx.parsedType,
       });
       return INVALID;
     }
-    return { status: "valid", value: input.data };
+    return { status: 'valid', value: input.data };
   }
 };
-__name(ZodNaN, "ZodNaN");
-ZodNaN.create = (params) => {
+__name(ZodNaN, 'ZodNaN');
+ZodNaN.create = params => {
   return new ZodNaN({
     typeName: ZodFirstPartyTypeKind.ZodNaN,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
-var BRAND = Symbol("zod_brand");
+var BRAND = Symbol('zod_brand');
 var ZodBranded = class extends ZodType {
   _parse(input) {
     const { ctx } = this._processInputParams(input);
@@ -6444,14 +6623,14 @@ var ZodBranded = class extends ZodType {
     return this._def.type._parse({
       data,
       path: ctx.path,
-      parent: ctx
+      parent: ctx,
     });
   }
   unwrap() {
     return this._def.type;
   }
 };
-__name(ZodBranded, "ZodBranded");
+__name(ZodBranded, 'ZodBranded');
 var ZodPipeline = class extends ZodType {
   _parse(input) {
     const { status, ctx } = this._processInputParams(input);
@@ -6460,41 +6639,39 @@ var ZodPipeline = class extends ZodType {
         const inResult = await this._def.in._parseAsync({
           data: ctx.data,
           path: ctx.path,
-          parent: ctx
+          parent: ctx,
         });
-        if (inResult.status === "aborted")
-          return INVALID;
-        if (inResult.status === "dirty") {
+        if (inResult.status === 'aborted') return INVALID;
+        if (inResult.status === 'dirty') {
           status.dirty();
           return DIRTY(inResult.value);
         } else {
           return this._def.out._parseAsync({
             data: inResult.value,
             path: ctx.path,
-            parent: ctx
+            parent: ctx,
           });
         }
-      }, "handleAsync");
+      }, 'handleAsync');
       return handleAsync();
     } else {
       const inResult = this._def.in._parseSync({
         data: ctx.data,
         path: ctx.path,
-        parent: ctx
+        parent: ctx,
       });
-      if (inResult.status === "aborted")
-        return INVALID;
-      if (inResult.status === "dirty") {
+      if (inResult.status === 'aborted') return INVALID;
+      if (inResult.status === 'dirty') {
         status.dirty();
         return {
-          status: "dirty",
-          value: inResult.value
+          status: 'dirty',
+          value: inResult.value,
         };
       } else {
         return this._def.out._parseSync({
           data: inResult.value,
           path: ctx.path,
-          parent: ctx
+          parent: ctx,
         });
       }
     }
@@ -6503,108 +6680,119 @@ var ZodPipeline = class extends ZodType {
     return new ZodPipeline({
       in: a,
       out: b,
-      typeName: ZodFirstPartyTypeKind.ZodPipeline
+      typeName: ZodFirstPartyTypeKind.ZodPipeline,
     });
   }
 };
-__name(ZodPipeline, "ZodPipeline");
+__name(ZodPipeline, 'ZodPipeline');
 var ZodReadonly = class extends ZodType {
   _parse(input) {
     const result = this._def.innerType._parse(input);
-    const freeze = /* @__PURE__ */ __name((data) => {
+    const freeze = /* @__PURE__ */ __name(data => {
       if (isValid(data)) {
         data.value = Object.freeze(data.value);
       }
       return data;
-    }, "freeze");
-    return isAsync(result) ? result.then((data) => freeze(data)) : freeze(result);
+    }, 'freeze');
+    return isAsync(result) ? result.then(data => freeze(data)) : freeze(result);
   }
   unwrap() {
     return this._def.innerType;
   }
 };
-__name(ZodReadonly, "ZodReadonly");
+__name(ZodReadonly, 'ZodReadonly');
 ZodReadonly.create = (type, params) => {
   return new ZodReadonly({
     innerType: type,
     typeName: ZodFirstPartyTypeKind.ZodReadonly,
-    ...processCreateParams(params)
+    ...processCreateParams(params),
   });
 };
 function cleanParams(params, data) {
-  const p = typeof params === "function" ? params(data) : typeof params === "string" ? { message: params } : params;
-  const p2 = typeof p === "string" ? { message: p } : p;
+  const p =
+    typeof params === 'function'
+      ? params(data)
+      : typeof params === 'string'
+        ? { message: params }
+        : params;
+  const p2 = typeof p === 'string' ? { message: p } : p;
   return p2;
 }
-__name(cleanParams, "cleanParams");
+__name(cleanParams, 'cleanParams');
 function custom(check, _params = {}, fatal) {
   if (check)
     return ZodAny.create().superRefine((data, ctx) => {
       const r = check(data);
       if (r instanceof Promise) {
-        return r.then((r2) => {
+        return r.then(r2 => {
           if (!r2) {
             const params = cleanParams(_params, data);
             const _fatal = params.fatal ?? fatal ?? true;
-            ctx.addIssue({ code: "custom", ...params, fatal: _fatal });
+            ctx.addIssue({ code: 'custom', ...params, fatal: _fatal });
           }
         });
       }
       if (!r) {
         const params = cleanParams(_params, data);
         const _fatal = params.fatal ?? fatal ?? true;
-        ctx.addIssue({ code: "custom", ...params, fatal: _fatal });
+        ctx.addIssue({ code: 'custom', ...params, fatal: _fatal });
       }
       return;
     });
   return ZodAny.create();
 }
-__name(custom, "custom");
+__name(custom, 'custom');
 var late = {
-  object: ZodObject.lazycreate
+  object: ZodObject.lazycreate,
 };
 var ZodFirstPartyTypeKind;
-(function(ZodFirstPartyTypeKind2) {
-  ZodFirstPartyTypeKind2["ZodString"] = "ZodString";
-  ZodFirstPartyTypeKind2["ZodNumber"] = "ZodNumber";
-  ZodFirstPartyTypeKind2["ZodNaN"] = "ZodNaN";
-  ZodFirstPartyTypeKind2["ZodBigInt"] = "ZodBigInt";
-  ZodFirstPartyTypeKind2["ZodBoolean"] = "ZodBoolean";
-  ZodFirstPartyTypeKind2["ZodDate"] = "ZodDate";
-  ZodFirstPartyTypeKind2["ZodSymbol"] = "ZodSymbol";
-  ZodFirstPartyTypeKind2["ZodUndefined"] = "ZodUndefined";
-  ZodFirstPartyTypeKind2["ZodNull"] = "ZodNull";
-  ZodFirstPartyTypeKind2["ZodAny"] = "ZodAny";
-  ZodFirstPartyTypeKind2["ZodUnknown"] = "ZodUnknown";
-  ZodFirstPartyTypeKind2["ZodNever"] = "ZodNever";
-  ZodFirstPartyTypeKind2["ZodVoid"] = "ZodVoid";
-  ZodFirstPartyTypeKind2["ZodArray"] = "ZodArray";
-  ZodFirstPartyTypeKind2["ZodObject"] = "ZodObject";
-  ZodFirstPartyTypeKind2["ZodUnion"] = "ZodUnion";
-  ZodFirstPartyTypeKind2["ZodDiscriminatedUnion"] = "ZodDiscriminatedUnion";
-  ZodFirstPartyTypeKind2["ZodIntersection"] = "ZodIntersection";
-  ZodFirstPartyTypeKind2["ZodTuple"] = "ZodTuple";
-  ZodFirstPartyTypeKind2["ZodRecord"] = "ZodRecord";
-  ZodFirstPartyTypeKind2["ZodMap"] = "ZodMap";
-  ZodFirstPartyTypeKind2["ZodSet"] = "ZodSet";
-  ZodFirstPartyTypeKind2["ZodFunction"] = "ZodFunction";
-  ZodFirstPartyTypeKind2["ZodLazy"] = "ZodLazy";
-  ZodFirstPartyTypeKind2["ZodLiteral"] = "ZodLiteral";
-  ZodFirstPartyTypeKind2["ZodEnum"] = "ZodEnum";
-  ZodFirstPartyTypeKind2["ZodEffects"] = "ZodEffects";
-  ZodFirstPartyTypeKind2["ZodNativeEnum"] = "ZodNativeEnum";
-  ZodFirstPartyTypeKind2["ZodOptional"] = "ZodOptional";
-  ZodFirstPartyTypeKind2["ZodNullable"] = "ZodNullable";
-  ZodFirstPartyTypeKind2["ZodDefault"] = "ZodDefault";
-  ZodFirstPartyTypeKind2["ZodCatch"] = "ZodCatch";
-  ZodFirstPartyTypeKind2["ZodPromise"] = "ZodPromise";
-  ZodFirstPartyTypeKind2["ZodBranded"] = "ZodBranded";
-  ZodFirstPartyTypeKind2["ZodPipeline"] = "ZodPipeline";
-  ZodFirstPartyTypeKind2["ZodReadonly"] = "ZodReadonly";
+(function (ZodFirstPartyTypeKind2) {
+  ZodFirstPartyTypeKind2['ZodString'] = 'ZodString';
+  ZodFirstPartyTypeKind2['ZodNumber'] = 'ZodNumber';
+  ZodFirstPartyTypeKind2['ZodNaN'] = 'ZodNaN';
+  ZodFirstPartyTypeKind2['ZodBigInt'] = 'ZodBigInt';
+  ZodFirstPartyTypeKind2['ZodBoolean'] = 'ZodBoolean';
+  ZodFirstPartyTypeKind2['ZodDate'] = 'ZodDate';
+  ZodFirstPartyTypeKind2['ZodSymbol'] = 'ZodSymbol';
+  ZodFirstPartyTypeKind2['ZodUndefined'] = 'ZodUndefined';
+  ZodFirstPartyTypeKind2['ZodNull'] = 'ZodNull';
+  ZodFirstPartyTypeKind2['ZodAny'] = 'ZodAny';
+  ZodFirstPartyTypeKind2['ZodUnknown'] = 'ZodUnknown';
+  ZodFirstPartyTypeKind2['ZodNever'] = 'ZodNever';
+  ZodFirstPartyTypeKind2['ZodVoid'] = 'ZodVoid';
+  ZodFirstPartyTypeKind2['ZodArray'] = 'ZodArray';
+  ZodFirstPartyTypeKind2['ZodObject'] = 'ZodObject';
+  ZodFirstPartyTypeKind2['ZodUnion'] = 'ZodUnion';
+  ZodFirstPartyTypeKind2['ZodDiscriminatedUnion'] = 'ZodDiscriminatedUnion';
+  ZodFirstPartyTypeKind2['ZodIntersection'] = 'ZodIntersection';
+  ZodFirstPartyTypeKind2['ZodTuple'] = 'ZodTuple';
+  ZodFirstPartyTypeKind2['ZodRecord'] = 'ZodRecord';
+  ZodFirstPartyTypeKind2['ZodMap'] = 'ZodMap';
+  ZodFirstPartyTypeKind2['ZodSet'] = 'ZodSet';
+  ZodFirstPartyTypeKind2['ZodFunction'] = 'ZodFunction';
+  ZodFirstPartyTypeKind2['ZodLazy'] = 'ZodLazy';
+  ZodFirstPartyTypeKind2['ZodLiteral'] = 'ZodLiteral';
+  ZodFirstPartyTypeKind2['ZodEnum'] = 'ZodEnum';
+  ZodFirstPartyTypeKind2['ZodEffects'] = 'ZodEffects';
+  ZodFirstPartyTypeKind2['ZodNativeEnum'] = 'ZodNativeEnum';
+  ZodFirstPartyTypeKind2['ZodOptional'] = 'ZodOptional';
+  ZodFirstPartyTypeKind2['ZodNullable'] = 'ZodNullable';
+  ZodFirstPartyTypeKind2['ZodDefault'] = 'ZodDefault';
+  ZodFirstPartyTypeKind2['ZodCatch'] = 'ZodCatch';
+  ZodFirstPartyTypeKind2['ZodPromise'] = 'ZodPromise';
+  ZodFirstPartyTypeKind2['ZodBranded'] = 'ZodBranded';
+  ZodFirstPartyTypeKind2['ZodPipeline'] = 'ZodPipeline';
+  ZodFirstPartyTypeKind2['ZodReadonly'] = 'ZodReadonly';
 })(ZodFirstPartyTypeKind || (ZodFirstPartyTypeKind = {}));
-var instanceOfType = /* @__PURE__ */ __name((cls, params = {
-  message: `Input not instance of ${cls.name}`
-}) => custom((data) => data instanceof cls, params), "instanceOfType");
+var instanceOfType = /* @__PURE__ */ __name(
+  (
+    cls,
+    params = {
+      message: `Input not instance of ${cls.name}`,
+    }
+  ) => custom(data => data instanceof cls, params),
+  'instanceOfType'
+);
 var stringType = ZodString.create;
 var numberType = ZodNumber.create;
 var nanType = ZodNaN.create;
@@ -6639,1034 +6827,1071 @@ var optionalType = ZodOptional.create;
 var nullableType = ZodNullable.create;
 var preprocessType = ZodEffects.createWithPreprocess;
 var pipelineType = ZodPipeline.create;
-var ostring = /* @__PURE__ */ __name(() => stringType().optional(), "ostring");
-var onumber = /* @__PURE__ */ __name(() => numberType().optional(), "onumber");
-var oboolean = /* @__PURE__ */ __name(() => booleanType().optional(), "oboolean");
+var ostring = /* @__PURE__ */ __name(() => stringType().optional(), 'ostring');
+var onumber = /* @__PURE__ */ __name(() => numberType().optional(), 'onumber');
+var oboolean = /* @__PURE__ */ __name(() => booleanType().optional(), 'oboolean');
 var coerce = {
-  string: (arg) => ZodString.create({ ...arg, coerce: true }),
-  number: (arg) => ZodNumber.create({ ...arg, coerce: true }),
-  boolean: (arg) => ZodBoolean.create({
-    ...arg,
-    coerce: true
-  }),
-  bigint: (arg) => ZodBigInt.create({ ...arg, coerce: true }),
-  date: (arg) => ZodDate.create({ ...arg, coerce: true })
+  string: arg => ZodString.create({ ...arg, coerce: true }),
+  number: arg => ZodNumber.create({ ...arg, coerce: true }),
+  boolean: arg =>
+    ZodBoolean.create({
+      ...arg,
+      coerce: true,
+    }),
+  bigint: arg => ZodBigInt.create({ ...arg, coerce: true }),
+  date: arg => ZodDate.create({ ...arg, coerce: true }),
 };
 var NEVER = INVALID;
 
 // ../../packages/core/src/data.ts
 var TRANSFORMATIONS = {
   P: {
-    code: "P",
-    name: "Perspective",
-    description: "Frame and name what is. Anchor or shift point of view.",
+    code: 'P',
+    name: 'Perspective',
+    description: 'Frame and name what is. Anchor or shift point of view.',
     models: [
       {
-        code: "P1",
-        name: "First Principles Framing",
-        transformation: "P",
-        definition: "Reduce complex problems to foundational truths that cannot be further simplified",
+        code: 'P1',
+        name: 'First Principles Framing',
+        transformation: 'P',
+        definition:
+          'Reduce complex problems to foundational truths that cannot be further simplified',
         priority: 1,
-        whenToUse: "When solving new problems where analogy might mislead",
-        example: "Elon Musk reasoning about battery costs by raw material prices rather than market history"
+        whenToUse: 'When solving new problems where analogy might mislead',
+        example:
+          'Elon Musk reasoning about battery costs by raw material prices rather than market history',
       },
       {
-        code: "P2",
-        name: "Stakeholder Mapping",
-        transformation: "P",
-        definition: "Identify all parties with interest, influence, or impact in a system or decision",
+        code: 'P2',
+        name: 'Stakeholder Mapping',
+        transformation: 'P',
+        definition:
+          'Identify all parties with interest, influence, or impact in a system or decision',
         priority: 1,
-        whenToUse: "When launching a product or changing a policy",
-        example: "Mapping users, buyers, regulators, and internal teams for a software launch"
+        whenToUse: 'When launching a product or changing a policy',
+        example: 'Mapping users, buyers, regulators, and internal teams for a software launch',
       },
       {
-        code: "P3",
-        name: "Identity Stack",
-        transformation: "P",
-        definition: "Recognize that individuals operate from multiple nested identities simultaneously",
+        code: 'P3',
+        name: 'Identity Stack',
+        transformation: 'P',
+        definition:
+          'Recognize that individuals operate from multiple nested identities simultaneously',
         priority: 2,
-        whenToUse: "When understanding user motivations or organizational behavior"
+        whenToUse: 'When understanding user motivations or organizational behavior',
       },
       {
-        code: "P4",
-        name: "Lens Shifting",
-        transformation: "P",
-        definition: "Deliberately adopt different interpretive frameworks to reveal hidden aspects",
+        code: 'P4',
+        name: 'Lens Shifting',
+        transformation: 'P',
+        definition: 'Deliberately adopt different interpretive frameworks to reveal hidden aspects',
         priority: 1,
-        whenToUse: "When stuck in one way of viewing a problem"
+        whenToUse: 'When stuck in one way of viewing a problem',
       },
       {
-        code: "P5",
-        name: "Empathy Mapping",
-        transformation: "P",
-        definition: "Systematically capture what stakeholders see, think, feel, and do in their context",
+        code: 'P5',
+        name: 'Empathy Mapping',
+        transformation: 'P',
+        definition:
+          'Systematically capture what stakeholders see, think, feel, and do in their context',
         priority: 2,
-        whenToUse: "During user research or product design"
+        whenToUse: 'During user research or product design',
       },
       {
-        code: "P6",
-        name: "Point-of-View Anchoring",
-        transformation: "P",
-        definition: "Establish and maintain a consistent reference frame before analysis begins",
+        code: 'P6',
+        name: 'Point-of-View Anchoring',
+        transformation: 'P',
+        definition: 'Establish and maintain a consistent reference frame before analysis begins',
         priority: 3,
-        whenToUse: "Before complex analysis or decision-making"
+        whenToUse: 'Before complex analysis or decision-making',
       },
       {
-        code: "P7",
-        name: "Perspective Switching",
-        transformation: "P",
-        definition: "Rotate through multiple viewpoints to identify invariants and blind spots",
+        code: 'P7',
+        name: 'Perspective Switching',
+        transformation: 'P',
+        definition: 'Rotate through multiple viewpoints to identify invariants and blind spots',
         priority: 2,
-        whenToUse: "When seeking comprehensive understanding"
+        whenToUse: 'When seeking comprehensive understanding',
       },
       {
-        code: "P8",
-        name: "Narrative Framing",
-        transformation: "P",
-        definition: "Structure information as causal stories with conflict, choice, and consequence",
+        code: 'P8',
+        name: 'Narrative Framing',
+        transformation: 'P',
+        definition:
+          'Structure information as causal stories with conflict, choice, and consequence',
         priority: 3,
-        whenToUse: "When communicating complex ideas or strategies"
+        whenToUse: 'When communicating complex ideas or strategies',
       },
       {
-        code: "P9",
-        name: "Cultural Lens Shifting",
-        transformation: "P",
-        definition: "Adjust communication and interpretation for different cultural contexts and norms",
+        code: 'P9',
+        name: 'Cultural Lens Shifting',
+        transformation: 'P',
+        definition:
+          'Adjust communication and interpretation for different cultural contexts and norms',
         priority: 4,
-        whenToUse: "In cross-cultural or international contexts"
+        whenToUse: 'In cross-cultural or international contexts',
       },
       {
-        code: "P10",
-        name: "Context Windowing",
-        transformation: "P",
-        definition: "Define explicit boundaries in time, space, and scope for analysis or action",
+        code: 'P10',
+        name: 'Context Windowing',
+        transformation: 'P',
+        definition: 'Define explicit boundaries in time, space, and scope for analysis or action',
         priority: 2,
-        whenToUse: "When scoping a project or analysis"
+        whenToUse: 'When scoping a project or analysis',
       },
       {
-        code: "P11",
-        name: "Role Perspective-Taking",
-        transformation: "P",
-        definition: "Temporarily inhabit specific roles to understand constraints and priorities",
+        code: 'P11',
+        name: 'Role Perspective-Taking',
+        transformation: 'P',
+        definition: 'Temporarily inhabit specific roles to understand constraints and priorities',
         priority: 3,
-        whenToUse: "When designing systems or processes for others"
+        whenToUse: 'When designing systems or processes for others',
       },
       {
-        code: "P12",
-        name: "Temporal Framing",
-        transformation: "P",
-        definition: "Organize understanding across past causes, present states, and future implications",
+        code: 'P12',
+        name: 'Temporal Framing',
+        transformation: 'P',
+        definition:
+          'Organize understanding across past causes, present states, and future implications',
         priority: 3,
-        whenToUse: "For strategic planning or historical analysis"
+        whenToUse: 'For strategic planning or historical analysis',
       },
       {
-        code: "P13",
-        name: "Spatial Framing",
-        transformation: "P",
-        definition: "Scale perspective from local details to global patterns and back",
+        code: 'P13',
+        name: 'Spatial Framing',
+        transformation: 'P',
+        definition: 'Scale perspective from local details to global patterns and back',
         priority: 4,
-        whenToUse: "When dealing with multi-scale systems"
+        whenToUse: 'When dealing with multi-scale systems',
       },
       {
-        code: "P14",
-        name: "Reference Class Framing",
-        transformation: "P",
-        definition: "Select comparable situations to inform judgment and avoid uniqueness bias",
+        code: 'P14',
+        name: 'Reference Class Framing',
+        transformation: 'P',
+        definition: 'Select comparable situations to inform judgment and avoid uniqueness bias',
         priority: 3,
-        whenToUse: "When forecasting or estimating"
+        whenToUse: 'When forecasting or estimating',
       },
       {
-        code: "P15",
-        name: "Assumption Surfacing",
-        transformation: "P",
-        definition: "Explicitly identify and document beliefs underlying plans or models",
+        code: 'P15',
+        name: 'Assumption Surfacing',
+        transformation: 'P',
+        definition: 'Explicitly identify and document beliefs underlying plans or models',
         priority: 2,
-        whenToUse: "Before major decisions or commitments"
+        whenToUse: 'Before major decisions or commitments',
       },
       {
-        code: "P16",
-        name: "Identity-Context Reciprocity",
-        transformation: "P",
-        definition: "Recognize how identities shape interpretations and contexts reinforce identities",
+        code: 'P16',
+        name: 'Identity-Context Reciprocity',
+        transformation: 'P',
+        definition:
+          'Recognize how identities shape interpretations and contexts reinforce identities',
         priority: 5,
-        whenToUse: "In organizational change or culture work"
+        whenToUse: 'In organizational change or culture work',
       },
       {
-        code: "P17",
-        name: "Frame Control & Reframing",
-        transformation: "P",
-        definition: "Consciously select or reshape interpretive frames to enable new solutions",
+        code: 'P17',
+        name: 'Frame Control & Reframing',
+        transformation: 'P',
+        definition: 'Consciously select or reshape interpretive frames to enable new solutions',
         priority: 2,
-        whenToUse: "When traditional approaches fail"
+        whenToUse: 'When traditional approaches fail',
       },
       {
-        code: "P18",
-        name: "Boundary Object Selection",
-        transformation: "P",
-        definition: "Choose representations that bridge multiple perspectives while remaining meaningful",
+        code: 'P18',
+        name: 'Boundary Object Selection',
+        transformation: 'P',
+        definition:
+          'Choose representations that bridge multiple perspectives while remaining meaningful',
         priority: 4,
-        whenToUse: "In cross-functional collaboration"
+        whenToUse: 'In cross-functional collaboration',
       },
       {
-        code: "P19",
-        name: "Sensemaking Canvases",
-        transformation: "P",
-        definition: "Deploy structured templates to systematically capture and organize observations",
+        code: 'P19',
+        name: 'Sensemaking Canvases',
+        transformation: 'P',
+        definition:
+          'Deploy structured templates to systematically capture and organize observations',
         priority: 3,
-        whenToUse: "During discovery or research phases"
+        whenToUse: 'During discovery or research phases',
       },
       {
-        code: "P20",
-        name: "Worldview Articulation",
-        transformation: "P",
-        definition: "Make explicit the fundamental beliefs and values that drive interpretation and action",
+        code: 'P20',
+        name: 'Worldview Articulation',
+        transformation: 'P',
+        definition:
+          'Make explicit the fundamental beliefs and values that drive interpretation and action',
         priority: 4,
-        whenToUse: "For deep organizational or personal alignment"
-      }
-    ]
+        whenToUse: 'For deep organizational or personal alignment',
+      },
+    ],
   },
   IN: {
-    code: "IN",
-    name: "Inversion",
-    description: "Reverse assumptions. Examine opposites, edges, negations.",
+    code: 'IN',
+    name: 'Inversion',
+    description: 'Reverse assumptions. Examine opposites, edges, negations.',
     models: [
       {
-        code: "IN1",
-        name: "Subtractive Thinking",
-        transformation: "IN",
-        definition: "Improve systems by removing elements rather than adding complexity",
+        code: 'IN1',
+        name: 'Subtractive Thinking',
+        transformation: 'IN',
+        definition: 'Improve systems by removing elements rather than adding complexity',
         priority: 1,
-        whenToUse: "When a system is sluggish or over-complicated",
-        example: "Removing meetings to improve productivity instead of adding coordination tools"
+        whenToUse: 'When a system is sluggish or over-complicated',
+        example: 'Removing meetings to improve productivity instead of adding coordination tools',
       },
       {
-        code: "IN2",
-        name: "Premortem Analysis",
-        transformation: "IN",
-        definition: "Assume failure has occurred and work backward to identify causes",
+        code: 'IN2',
+        name: 'Premortem Analysis',
+        transformation: 'IN',
+        definition: 'Assume failure has occurred and work backward to identify causes',
         priority: 1,
-        whenToUse: "Before launching major initiatives"
+        whenToUse: 'Before launching major initiatives',
       },
       {
-        code: "IN3",
-        name: "Problem Reversal",
-        transformation: "IN",
-        definition: "Solve the inverse of the stated problem to reveal insights",
+        code: 'IN3',
+        name: 'Problem Reversal',
+        transformation: 'IN',
+        definition: 'Solve the inverse of the stated problem to reveal insights',
         priority: 2,
-        whenToUse: "When direct approaches seem blocked"
+        whenToUse: 'When direct approaches seem blocked',
       },
       {
-        code: "IN4",
-        name: "Contra-Logic",
-        transformation: "IN",
-        definition: "Argue the opposite position to stress-test assumptions and expose weak reasoning",
+        code: 'IN4',
+        name: 'Contra-Logic',
+        transformation: 'IN',
+        definition:
+          'Argue the opposite position to stress-test assumptions and expose weak reasoning',
         priority: 2,
-        whenToUse: "During strategic planning or critical decisions"
+        whenToUse: 'During strategic planning or critical decisions',
       },
       {
-        code: "IN5",
-        name: "Negative Space Framing",
-        transformation: "IN",
-        definition: "Study what is absent rather than what is present",
+        code: 'IN5',
+        name: 'Negative Space Framing',
+        transformation: 'IN',
+        definition: 'Study what is absent rather than what is present',
         priority: 3,
-        whenToUse: "When analyzing opportunities or gaps"
+        whenToUse: 'When analyzing opportunities or gaps',
       },
       {
-        code: "IN6",
-        name: "Inverse/Proof by Contradiction",
-        transformation: "IN",
-        definition: "Assume a claim is false, derive logical impossibility, thus proving the claim true",
+        code: 'IN6',
+        name: 'Inverse/Proof by Contradiction',
+        transformation: 'IN',
+        definition:
+          'Assume a claim is false, derive logical impossibility, thus proving the claim true',
         priority: 3,
-        whenToUse: "For rigorous logical validation"
+        whenToUse: 'For rigorous logical validation',
       },
       {
-        code: "IN7",
-        name: "Boundary Testing",
-        transformation: "IN",
-        definition: "Explore extreme conditions to find system limits and breaking points",
+        code: 'IN7',
+        name: 'Boundary Testing',
+        transformation: 'IN',
+        definition: 'Explore extreme conditions to find system limits and breaking points',
         priority: 2,
-        whenToUse: "During system design or testing"
+        whenToUse: 'During system design or testing',
       },
       {
-        code: "IN8",
-        name: "Contrapositive Reasoning",
-        transformation: "IN",
-        definition: "Use logical equivalence that if A then B equals if not B then not A",
+        code: 'IN8',
+        name: 'Contrapositive Reasoning',
+        transformation: 'IN',
+        definition: 'Use logical equivalence that if A then B equals if not B then not A',
         priority: 4,
-        whenToUse: "In formal logic or argumentation"
+        whenToUse: 'In formal logic or argumentation',
       },
       {
-        code: "IN9",
-        name: "Backward Induction",
-        transformation: "IN",
-        definition: "Begin with desired end state and work backward to determine necessary steps",
+        code: 'IN9',
+        name: 'Backward Induction',
+        transformation: 'IN',
+        definition: 'Begin with desired end state and work backward to determine necessary steps',
         priority: 2,
-        whenToUse: "For project planning or goal achievement"
+        whenToUse: 'For project planning or goal achievement',
       },
       {
-        code: "IN10",
-        name: "Red Teaming",
-        transformation: "IN",
-        definition: "Organize adversarial review to find vulnerabilities through simulated attack",
+        code: 'IN10',
+        name: 'Red Teaming',
+        transformation: 'IN',
+        definition: 'Organize adversarial review to find vulnerabilities through simulated attack',
         priority: 2,
-        whenToUse: "For security or resilience testing"
+        whenToUse: 'For security or resilience testing',
       },
       {
-        code: "IN11",
+        code: 'IN11',
         name: "Devil's Advocate Protocol",
-        transformation: "IN",
-        definition: "Assign explicit role to argue against group consensus or preferred option",
+        transformation: 'IN',
+        definition: 'Assign explicit role to argue against group consensus or preferred option',
         priority: 3,
-        whenToUse: "To avoid groupthink"
+        whenToUse: 'To avoid groupthink',
       },
       {
-        code: "IN12",
-        name: "Failure First Design",
-        transformation: "IN",
-        definition: "Begin planning by identifying all possible failure modes and designing to prevent them",
+        code: 'IN12',
+        name: 'Failure First Design',
+        transformation: 'IN',
+        definition:
+          'Begin planning by identifying all possible failure modes and designing to prevent them',
         priority: 3,
-        whenToUse: "For safety-critical systems"
+        whenToUse: 'For safety-critical systems',
       },
       {
-        code: "IN13",
-        name: "Opportunity Cost Focus",
-        transformation: "IN",
-        definition: "Evaluate options by what must be forgone rather than what is gained",
+        code: 'IN13',
+        name: 'Opportunity Cost Focus',
+        transformation: 'IN',
+        definition: 'Evaluate options by what must be forgone rather than what is gained',
         priority: 2,
-        whenToUse: "When making resource allocation decisions"
+        whenToUse: 'When making resource allocation decisions',
       },
       {
-        code: "IN14",
-        name: "Second-Order Effects (Inverted)",
-        transformation: "IN",
-        definition: "Trace negative downstream consequences rather than immediate benefits",
+        code: 'IN14',
+        name: 'Second-Order Effects (Inverted)',
+        transformation: 'IN',
+        definition: 'Trace negative downstream consequences rather than immediate benefits',
         priority: 3,
-        whenToUse: "For risk analysis"
+        whenToUse: 'For risk analysis',
       },
       {
-        code: "IN15",
-        name: "Constraint Reversal",
-        transformation: "IN",
-        definition: "Temporarily remove assumed constraints to explore alternative solution space",
+        code: 'IN15',
+        name: 'Constraint Reversal',
+        transformation: 'IN',
+        definition: 'Temporarily remove assumed constraints to explore alternative solution space',
         priority: 2,
-        whenToUse: "When conventional solutions fail"
+        whenToUse: 'When conventional solutions fail',
       },
       {
-        code: "IN16",
-        name: "Inverse Optimization",
-        transformation: "IN",
-        definition: "Maximize worst outcomes to understand system vulnerabilities",
+        code: 'IN16',
+        name: 'Inverse Optimization',
+        transformation: 'IN',
+        definition: 'Maximize worst outcomes to understand system vulnerabilities',
         priority: 4,
-        whenToUse: "For stress testing or robustness analysis"
+        whenToUse: 'For stress testing or robustness analysis',
       },
       {
-        code: "IN17",
-        name: "Counterfactual Negation",
-        transformation: "IN",
-        definition: "Imagine outcomes if key decision had been reversed",
+        code: 'IN17',
+        name: 'Counterfactual Negation',
+        transformation: 'IN',
+        definition: 'Imagine outcomes if key decision had been reversed',
         priority: 4,
-        whenToUse: "For learning from decisions"
+        whenToUse: 'For learning from decisions',
       },
       {
-        code: "IN18",
-        name: "Kill-Criteria & Stop Rules",
-        transformation: "IN",
-        definition: "Define conditions that trigger project termination before launch",
+        code: 'IN18',
+        name: 'Kill-Criteria & Stop Rules',
+        transformation: 'IN',
+        definition: 'Define conditions that trigger project termination before launch',
         priority: 3,
-        whenToUse: "At project inception"
+        whenToUse: 'At project inception',
       },
       {
-        code: "IN19",
-        name: "Harm Minimization (Via Negativa)",
-        transformation: "IN",
-        definition: "Improve by removing harmful elements rather than adding beneficial ones",
+        code: 'IN19',
+        name: 'Harm Minimization (Via Negativa)',
+        transformation: 'IN',
+        definition: 'Improve by removing harmful elements rather than adding beneficial ones',
         priority: 3,
-        whenToUse: "For health, safety, or simplification"
+        whenToUse: 'For health, safety, or simplification',
       },
       {
-        code: "IN20",
-        name: "Antigoals & Anti-Patterns Catalog",
-        transformation: "IN",
-        definition: "Document failure modes to avoid rather than success patterns to emulate",
+        code: 'IN20',
+        name: 'Antigoals & Anti-Patterns Catalog',
+        transformation: 'IN',
+        definition: 'Document failure modes to avoid rather than success patterns to emulate',
         priority: 4,
-        whenToUse: "For organizational learning"
-      }
-    ]
+        whenToUse: 'For organizational learning',
+      },
+    ],
   },
   CO: {
-    code: "CO",
-    name: "Composition",
-    description: "Combine parts into coherent wholes.",
+    code: 'CO',
+    name: 'Composition',
+    description: 'Combine parts into coherent wholes.',
     models: [
       {
-        code: "CO1",
-        name: "Synergy Principle",
-        transformation: "CO",
-        definition: "Design combinations where integrated value exceeds sum of parts",
+        code: 'CO1',
+        name: 'Synergy Principle',
+        transformation: 'CO',
+        definition: 'Design combinations where integrated value exceeds sum of parts',
         priority: 1,
-        whenToUse: "When assembling teams or systems"
+        whenToUse: 'When assembling teams or systems',
       },
       {
-        code: "CO2",
-        name: "Chunking",
-        transformation: "CO",
-        definition: "Group related elements into meaningful units to reduce cognitive load",
+        code: 'CO2',
+        name: 'Chunking',
+        transformation: 'CO',
+        definition: 'Group related elements into meaningful units to reduce cognitive load',
         priority: 1,
-        whenToUse: "When organizing information or tasks"
+        whenToUse: 'When organizing information or tasks',
       },
       {
-        code: "CO3",
-        name: "Functional Composition",
-        transformation: "CO",
-        definition: "Chain pure operations where output of one becomes input of next",
+        code: 'CO3',
+        name: 'Functional Composition',
+        transformation: 'CO',
+        definition: 'Chain pure operations where output of one becomes input of next',
         priority: 2,
-        whenToUse: "In programming or process design"
+        whenToUse: 'In programming or process design',
       },
       {
-        code: "CO4",
-        name: "Interdisciplinary Synthesis",
-        transformation: "CO",
-        definition: "Merge insights from distinct fields to generate novel solutions",
+        code: 'CO4',
+        name: 'Interdisciplinary Synthesis',
+        transformation: 'CO',
+        definition: 'Merge insights from distinct fields to generate novel solutions',
         priority: 2,
-        whenToUse: "For innovation or complex problem-solving"
+        whenToUse: 'For innovation or complex problem-solving',
       },
       {
-        code: "CO5",
-        name: "Emergence",
-        transformation: "CO",
-        definition: "Recognize higher-order behavior arising from component interactions",
+        code: 'CO5',
+        name: 'Emergence',
+        transformation: 'CO',
+        definition: 'Recognize higher-order behavior arising from component interactions',
         priority: 2,
-        whenToUse: "When studying complex systems"
+        whenToUse: 'When studying complex systems',
       },
       {
-        code: "CO6",
-        name: "Gestalt Integration",
-        transformation: "CO",
-        definition: "Perceive and leverage whole patterns rather than isolated components",
+        code: 'CO6',
+        name: 'Gestalt Integration',
+        transformation: 'CO',
+        definition: 'Perceive and leverage whole patterns rather than isolated components',
         priority: 3,
-        whenToUse: "In design or pattern recognition"
+        whenToUse: 'In design or pattern recognition',
       },
       {
-        code: "CO7",
-        name: "Network Effects",
-        transformation: "CO",
-        definition: "Exploit increasing value as user base or connections grow",
+        code: 'CO7',
+        name: 'Network Effects',
+        transformation: 'CO',
+        definition: 'Exploit increasing value as user base or connections grow',
         priority: 2,
-        whenToUse: "For platform or network businesses"
+        whenToUse: 'For platform or network businesses',
       },
       {
-        code: "CO8",
-        name: "Layered Abstraction",
-        transformation: "CO",
-        definition: "Separate concerns into hierarchical levels with clear interfaces between them",
+        code: 'CO8',
+        name: 'Layered Abstraction',
+        transformation: 'CO',
+        definition: 'Separate concerns into hierarchical levels with clear interfaces between them',
         priority: 2,
-        whenToUse: "In software architecture or system design"
+        whenToUse: 'In software architecture or system design',
       },
       {
-        code: "CO9",
-        name: "Interface Contracts",
-        transformation: "CO",
-        definition: "Define explicit agreements about data structures and behavior between components",
+        code: 'CO9',
+        name: 'Interface Contracts',
+        transformation: 'CO',
+        definition:
+          'Define explicit agreements about data structures and behavior between components',
         priority: 3,
-        whenToUse: "For API design or team coordination"
+        whenToUse: 'For API design or team coordination',
       },
       {
-        code: "CO10",
-        name: "Pipeline Orchestration",
-        transformation: "CO",
-        definition: "Coordinate sequential stages with explicit handoffs and error handling",
+        code: 'CO10',
+        name: 'Pipeline Orchestration',
+        transformation: 'CO',
+        definition: 'Coordinate sequential stages with explicit handoffs and error handling',
         priority: 3,
-        whenToUse: "For workflow or data pipeline design"
+        whenToUse: 'For workflow or data pipeline design',
       },
       {
-        code: "CO11",
-        name: "Pattern Composition (Tiling)",
-        transformation: "CO",
-        definition: "Combine repeating elements to construct complex structures efficiently",
+        code: 'CO11',
+        name: 'Pattern Composition (Tiling)',
+        transformation: 'CO',
+        definition: 'Combine repeating elements to construct complex structures efficiently',
         priority: 4,
-        whenToUse: "In architecture or generative design"
+        whenToUse: 'In architecture or generative design',
       },
       {
-        code: "CO12",
-        name: "Modular Interoperability",
-        transformation: "CO",
-        definition: "Ensure independent components work together through standardized connections",
+        code: 'CO12',
+        name: 'Modular Interoperability',
+        transformation: 'CO',
+        definition: 'Ensure independent components work together through standardized connections',
         priority: 3,
-        whenToUse: "For plugin systems or microservices"
+        whenToUse: 'For plugin systems or microservices',
       },
       {
-        code: "CO13",
-        name: "Cross-Domain Analogy",
-        transformation: "CO",
-        definition: "Transfer solution patterns from one domain to solve problems in another",
+        code: 'CO13',
+        name: 'Cross-Domain Analogy',
+        transformation: 'CO',
+        definition: 'Transfer solution patterns from one domain to solve problems in another',
         priority: 2,
-        whenToUse: "For creative problem-solving"
+        whenToUse: 'For creative problem-solving',
       },
       {
-        code: "CO14",
-        name: "Platformization",
-        transformation: "CO",
-        definition: "Extract common capabilities into reusable infrastructure serving multiple use cases",
+        code: 'CO14',
+        name: 'Platformization',
+        transformation: 'CO',
+        definition:
+          'Extract common capabilities into reusable infrastructure serving multiple use cases',
         priority: 3,
-        whenToUse: "When building scalable systems"
+        whenToUse: 'When building scalable systems',
       },
       {
-        code: "CO15",
-        name: "Combinatorial Design",
-        transformation: "CO",
-        definition: "Systematically explore option combinations to find optimal configurations",
+        code: 'CO15',
+        name: 'Combinatorial Design',
+        transformation: 'CO',
+        definition: 'Systematically explore option combinations to find optimal configurations',
         priority: 4,
-        whenToUse: "For optimization or experimentation"
+        whenToUse: 'For optimization or experimentation',
       },
       {
-        code: "CO16",
-        name: "System Integration Testing",
-        transformation: "CO",
-        definition: "Verify assembled components work correctly together, not just in isolation",
+        code: 'CO16',
+        name: 'System Integration Testing',
+        transformation: 'CO',
+        definition: 'Verify assembled components work correctly together, not just in isolation',
         priority: 3,
-        whenToUse: "During quality assurance"
+        whenToUse: 'During quality assurance',
       },
       {
-        code: "CO17",
-        name: "Orchestration vs Choreography",
-        transformation: "CO",
-        definition: "Choose between centralized coordination or distributed peer-to-peer interaction",
+        code: 'CO17',
+        name: 'Orchestration vs Choreography',
+        transformation: 'CO',
+        definition:
+          'Choose between centralized coordination or distributed peer-to-peer interaction',
         priority: 4,
-        whenToUse: "For distributed system design"
+        whenToUse: 'For distributed system design',
       },
       {
-        code: "CO18",
-        name: "Knowledge Graphing",
-        transformation: "CO",
-        definition: "Represent information as interconnected entities and relationships",
+        code: 'CO18',
+        name: 'Knowledge Graphing',
+        transformation: 'CO',
+        definition: 'Represent information as interconnected entities and relationships',
         priority: 3,
-        whenToUse: "For knowledge management"
+        whenToUse: 'For knowledge management',
       },
       {
-        code: "CO19",
-        name: "Multi-Modal Integration",
-        transformation: "CO",
-        definition: "Synthesize information from different sensory or data modalities",
+        code: 'CO19',
+        name: 'Multi-Modal Integration',
+        transformation: 'CO',
+        definition: 'Synthesize information from different sensory or data modalities',
         priority: 4,
-        whenToUse: "For rich user experiences or AI systems"
+        whenToUse: 'For rich user experiences or AI systems',
       },
       {
-        code: "CO20",
-        name: "Holistic Integration",
-        transformation: "CO",
-        definition: "Unify disparate elements into coherent, seamless whole where boundaries dissolve",
+        code: 'CO20',
+        name: 'Holistic Integration',
+        transformation: 'CO',
+        definition:
+          'Unify disparate elements into coherent, seamless whole where boundaries dissolve',
         priority: 4,
-        whenToUse: "For mature system design"
-      }
-    ]
+        whenToUse: 'For mature system design',
+      },
+    ],
   },
   DE: {
-    code: "DE",
-    name: "Decomposition",
-    description: "Break complex systems into constituent parts.",
+    code: 'DE',
+    name: 'Decomposition',
+    description: 'Break complex systems into constituent parts.',
     models: [
       {
-        code: "DE1",
-        name: "Root Cause Analysis (5 Whys)",
-        transformation: "DE",
-        definition: "Iteratively ask why problems occur until fundamental cause emerges",
+        code: 'DE1',
+        name: 'Root Cause Analysis (5 Whys)',
+        transformation: 'DE',
+        definition: 'Iteratively ask why problems occur until fundamental cause emerges',
         priority: 1,
-        whenToUse: "When debugging or problem-solving"
+        whenToUse: 'When debugging or problem-solving',
       },
       {
-        code: "DE2",
-        name: "Factorization",
-        transformation: "DE",
-        definition: "Separate multiplicative components to understand relative contribution of each factor",
+        code: 'DE2',
+        name: 'Factorization',
+        transformation: 'DE',
+        definition:
+          'Separate multiplicative components to understand relative contribution of each factor',
         priority: 2,
-        whenToUse: "For performance analysis or attribution"
+        whenToUse: 'For performance analysis or attribution',
       },
       {
-        code: "DE3",
-        name: "Modularization",
-        transformation: "DE",
-        definition: "Partition system into self-contained units with minimal interdependencies",
+        code: 'DE3',
+        name: 'Modularization',
+        transformation: 'DE',
+        definition: 'Partition system into self-contained units with minimal interdependencies',
         priority: 1,
-        whenToUse: "In software design or organizational structure"
+        whenToUse: 'In software design or organizational structure',
       },
       {
-        code: "DE4",
-        name: "Layered Breakdown",
-        transformation: "DE",
-        definition: "Decompose from system to subsystem to component progressively",
+        code: 'DE4',
+        name: 'Layered Breakdown',
+        transformation: 'DE',
+        definition: 'Decompose from system to subsystem to component progressively',
         priority: 2,
-        whenToUse: "For hierarchical analysis"
+        whenToUse: 'For hierarchical analysis',
       },
       {
-        code: "DE5",
-        name: "Dimensional Reduction",
-        transformation: "DE",
-        definition: "Focus on most informative variables while discarding noise or redundancy",
+        code: 'DE5',
+        name: 'Dimensional Reduction',
+        transformation: 'DE',
+        definition: 'Focus on most informative variables while discarding noise or redundancy',
         priority: 3,
-        whenToUse: "For data analysis or simplification"
+        whenToUse: 'For data analysis or simplification',
       },
       {
-        code: "DE6",
-        name: "Taxonomy/Classification",
-        transformation: "DE",
-        definition: "Organize entities into hierarchical categories based on shared properties",
+        code: 'DE6',
+        name: 'Taxonomy/Classification',
+        transformation: 'DE',
+        definition: 'Organize entities into hierarchical categories based on shared properties',
         priority: 2,
-        whenToUse: "For organizing knowledge or products"
+        whenToUse: 'For organizing knowledge or products',
       },
       {
-        code: "DE7",
-        name: "Pareto Decomposition (80/20)",
-        transformation: "DE",
-        definition: "Identify vital few drivers producing most impact versus trivial many",
+        code: 'DE7',
+        name: 'Pareto Decomposition (80/20)',
+        transformation: 'DE',
+        definition: 'Identify vital few drivers producing most impact versus trivial many',
         priority: 1,
-        whenToUse: "For prioritization or focus"
+        whenToUse: 'For prioritization or focus',
       },
       {
-        code: "DE8",
-        name: "Work Breakdown Structure",
-        transformation: "DE",
-        definition: "Hierarchically divide project into deliverable-oriented components with clear ownership",
+        code: 'DE8',
+        name: 'Work Breakdown Structure',
+        transformation: 'DE',
+        definition:
+          'Hierarchically divide project into deliverable-oriented components with clear ownership',
         priority: 2,
-        whenToUse: "For project planning"
+        whenToUse: 'For project planning',
       },
       {
-        code: "DE9",
-        name: "Signal Separation",
-        transformation: "DE",
-        definition: "Distinguish meaningful patterns from random variation or confounding factors",
+        code: 'DE9',
+        name: 'Signal Separation',
+        transformation: 'DE',
+        definition: 'Distinguish meaningful patterns from random variation or confounding factors',
         priority: 3,
-        whenToUse: "For data analysis or decision-making"
+        whenToUse: 'For data analysis or decision-making',
       },
       {
-        code: "DE10",
-        name: "Abstraction Laddering",
-        transformation: "DE",
-        definition: "Move up and down conceptual hierarchy to find appropriate solution level",
+        code: 'DE10',
+        name: 'Abstraction Laddering',
+        transformation: 'DE',
+        definition: 'Move up and down conceptual hierarchy to find appropriate solution level',
         priority: 3,
-        whenToUse: "For problem reframing"
+        whenToUse: 'For problem reframing',
       },
       {
-        code: "DE11",
-        name: "Scope Delimitation",
-        transformation: "DE",
-        definition: "Define precise boundaries of what is included versus excluded from consideration",
+        code: 'DE11',
+        name: 'Scope Delimitation',
+        transformation: 'DE',
+        definition:
+          'Define precise boundaries of what is included versus excluded from consideration',
         priority: 2,
-        whenToUse: "At project initiation"
+        whenToUse: 'At project initiation',
       },
       {
-        code: "DE12",
-        name: "Constraint Isolation",
-        transformation: "DE",
-        definition: "Identify specific limiting factor preventing performance improvement",
+        code: 'DE12',
+        name: 'Constraint Isolation',
+        transformation: 'DE',
+        definition: 'Identify specific limiting factor preventing performance improvement',
         priority: 2,
-        whenToUse: "For bottleneck analysis"
+        whenToUse: 'For bottleneck analysis',
       },
       {
-        code: "DE13",
-        name: "Failure Mode Analysis (FMEA)",
-        transformation: "DE",
-        definition: "Enumerate potential failure points with severity, likelihood, and detectability ratings",
+        code: 'DE13',
+        name: 'Failure Mode Analysis (FMEA)',
+        transformation: 'DE',
+        definition:
+          'Enumerate potential failure points with severity, likelihood, and detectability ratings',
         priority: 3,
-        whenToUse: "For risk management"
+        whenToUse: 'For risk management',
       },
       {
-        code: "DE14",
-        name: "Variable Control & Isolation",
-        transformation: "DE",
+        code: 'DE14',
+        name: 'Variable Control & Isolation',
+        transformation: 'DE',
         definition: "Hold factors constant to measure single variable's causal impact",
         priority: 3,
-        whenToUse: "For experimentation or testing"
+        whenToUse: 'For experimentation or testing',
       },
       {
-        code: "DE15",
-        name: "Decision Tree Expansion",
-        transformation: "DE",
-        definition: "Map choices and their consequences as branching paths",
+        code: 'DE15',
+        name: 'Decision Tree Expansion',
+        transformation: 'DE',
+        definition: 'Map choices and their consequences as branching paths',
         priority: 2,
-        whenToUse: "For decision analysis"
+        whenToUse: 'For decision analysis',
       },
       {
-        code: "DE16",
-        name: "Hypothesis Disaggregation",
-        transformation: "DE",
-        definition: "Break compound claim into testable sub-hypotheses",
+        code: 'DE16',
+        name: 'Hypothesis Disaggregation',
+        transformation: 'DE',
+        definition: 'Break compound claim into testable sub-hypotheses',
         priority: 3,
-        whenToUse: "For scientific inquiry"
+        whenToUse: 'For scientific inquiry',
       },
       {
-        code: "DE17",
-        name: "Orthogonalization",
-        transformation: "DE",
-        definition: "Ensure factors vary independently without correlation or interdependence",
+        code: 'DE17',
+        name: 'Orthogonalization',
+        transformation: 'DE',
+        definition: 'Ensure factors vary independently without correlation or interdependence',
         priority: 4,
-        whenToUse: "For experimental design"
+        whenToUse: 'For experimental design',
       },
       {
-        code: "DE18",
-        name: "Scenario Decomposition",
-        transformation: "DE",
-        definition: "Partition future possibilities into discrete, mutually exclusive scenarios",
+        code: 'DE18',
+        name: 'Scenario Decomposition',
+        transformation: 'DE',
+        definition: 'Partition future possibilities into discrete, mutually exclusive scenarios',
         priority: 3,
-        whenToUse: "For scenario planning"
+        whenToUse: 'For scenario planning',
       },
       {
-        code: "DE19",
-        name: "Critical Path Unwinding",
-        transformation: "DE",
-        definition: "Trace longest sequence of dependent tasks determining minimum project duration",
+        code: 'DE19',
+        name: 'Critical Path Unwinding',
+        transformation: 'DE',
+        definition:
+          'Trace longest sequence of dependent tasks determining minimum project duration',
         priority: 3,
-        whenToUse: "For project scheduling"
+        whenToUse: 'For project scheduling',
       },
       {
-        code: "DE20",
-        name: "Partition-and-Conquer",
-        transformation: "DE",
-        definition: "Divide problem into independent subproblems solvable separately then combined",
+        code: 'DE20',
+        name: 'Partition-and-Conquer',
+        transformation: 'DE',
+        definition: 'Divide problem into independent subproblems solvable separately then combined',
         priority: 2,
-        whenToUse: "For algorithmic problem-solving"
-      }
-    ]
+        whenToUse: 'For algorithmic problem-solving',
+      },
+    ],
   },
   RE: {
-    code: "RE",
-    name: "Recursion",
-    description: "Apply operations iteratively, with outputs becoming inputs.",
+    code: 'RE',
+    name: 'Recursion',
+    description: 'Apply operations iteratively, with outputs becoming inputs.',
     models: [
       {
-        code: "RE1",
-        name: "Recursive Improvement (Kaizen)",
-        transformation: "RE",
-        definition: "Continuously refine process through small, frequent enhancements",
+        code: 'RE1',
+        name: 'Recursive Improvement (Kaizen)',
+        transformation: 'RE',
+        definition: 'Continuously refine process through small, frequent enhancements',
         priority: 1,
-        whenToUse: "For continuous improvement"
+        whenToUse: 'For continuous improvement',
       },
       {
-        code: "RE2",
-        name: "Feedback Loops",
-        transformation: "RE",
-        definition: "Create mechanisms where system outputs influence future inputs",
+        code: 'RE2',
+        name: 'Feedback Loops',
+        transformation: 'RE',
+        definition: 'Create mechanisms where system outputs influence future inputs',
         priority: 1,
-        whenToUse: "For adaptive systems"
+        whenToUse: 'For adaptive systems',
       },
       {
-        code: "RE3",
-        name: "Meta-Learning (Learn-to-Learn)",
-        transformation: "RE",
-        definition: "Improve the process of learning itself, not just domain knowledge",
+        code: 'RE3',
+        name: 'Meta-Learning (Learn-to-Learn)',
+        transformation: 'RE',
+        definition: 'Improve the process of learning itself, not just domain knowledge',
         priority: 2,
-        whenToUse: "For skill development or education"
+        whenToUse: 'For skill development or education',
       },
       {
-        code: "RE4",
-        name: "Nested Narratives",
-        transformation: "RE",
-        definition: "Structure information as stories within stories for depth and memorability",
+        code: 'RE4',
+        name: 'Nested Narratives',
+        transformation: 'RE',
+        definition: 'Structure information as stories within stories for depth and memorability',
         priority: 4,
-        whenToUse: "For storytelling or communication"
+        whenToUse: 'For storytelling or communication',
       },
       {
-        code: "RE5",
-        name: "Fractal Reasoning",
-        transformation: "RE",
-        definition: "Recognize self-similar patterns repeating across different scales",
+        code: 'RE5',
+        name: 'Fractal Reasoning',
+        transformation: 'RE',
+        definition: 'Recognize self-similar patterns repeating across different scales',
         priority: 3,
-        whenToUse: "For pattern recognition in nature or markets"
+        whenToUse: 'For pattern recognition in nature or markets',
       },
       {
-        code: "RE6",
-        name: "Recursive Framing",
-        transformation: "RE",
-        definition: "Apply mental models to the process of selecting mental models",
+        code: 'RE6',
+        name: 'Recursive Framing',
+        transformation: 'RE',
+        definition: 'Apply mental models to the process of selecting mental models',
         priority: 3,
-        whenToUse: "For meta-cognition"
+        whenToUse: 'For meta-cognition',
       },
       {
-        code: "RE7",
-        name: "Self-Referential Logic",
-        transformation: "RE",
-        definition: "Create systems that monitor, measure, or modify themselves",
+        code: 'RE7',
+        name: 'Self-Referential Logic',
+        transformation: 'RE',
+        definition: 'Create systems that monitor, measure, or modify themselves',
         priority: 3,
-        whenToUse: "For autonomous systems"
+        whenToUse: 'For autonomous systems',
       },
       {
-        code: "RE8",
-        name: "Bootstrapping",
-        transformation: "RE",
-        definition: "Build capability using currently available resources, then use that to build more",
+        code: 'RE8',
+        name: 'Bootstrapping',
+        transformation: 'RE',
+        definition:
+          'Build capability using currently available resources, then use that to build more',
         priority: 2,
-        whenToUse: "When starting with minimal resources"
+        whenToUse: 'When starting with minimal resources',
       },
       {
-        code: "RE9",
-        name: "Iterative Prototyping",
-        transformation: "RE",
-        definition: "Cycle rapidly through build-test-learn loops with increasing fidelity",
+        code: 'RE9',
+        name: 'Iterative Prototyping',
+        transformation: 'RE',
+        definition: 'Cycle rapidly through build-test-learn loops with increasing fidelity',
         priority: 1,
-        whenToUse: "For product development"
+        whenToUse: 'For product development',
       },
       {
-        code: "RE10",
-        name: "Compounding Cycles",
-        transformation: "RE",
-        definition: "Design systems where gains reinforce future gains exponentially",
+        code: 'RE10',
+        name: 'Compounding Cycles',
+        transformation: 'RE',
+        definition: 'Design systems where gains reinforce future gains exponentially',
         priority: 2,
-        whenToUse: "For growth strategies"
+        whenToUse: 'For growth strategies',
       },
       {
-        code: "RE11",
-        name: "Calibration Loops",
-        transformation: "RE",
-        definition: "Repeatedly check predictions against outcomes to improve forecasting accuracy",
+        code: 'RE11',
+        name: 'Calibration Loops',
+        transformation: 'RE',
+        definition: 'Repeatedly check predictions against outcomes to improve forecasting accuracy',
         priority: 3,
-        whenToUse: "For improving judgment"
+        whenToUse: 'For improving judgment',
       },
       {
-        code: "RE12",
-        name: "Bayesian Updating in Practice",
-        transformation: "RE",
-        definition: "Continuously revise beliefs as new evidence arrives, weighting by reliability",
+        code: 'RE12',
+        name: 'Bayesian Updating in Practice',
+        transformation: 'RE',
+        definition: 'Continuously revise beliefs as new evidence arrives, weighting by reliability',
         priority: 3,
-        whenToUse: "For decision-making under uncertainty"
+        whenToUse: 'For decision-making under uncertainty',
       },
       {
-        code: "RE13",
-        name: "Gradient Descent Heuristic",
-        transformation: "RE",
-        definition: "Iteratively adjust toward improvement, even without perfect knowledge of optimal direction",
+        code: 'RE13',
+        name: 'Gradient Descent Heuristic',
+        transformation: 'RE',
+        definition:
+          'Iteratively adjust toward improvement, even without perfect knowledge of optimal direction',
         priority: 3,
-        whenToUse: "For optimization"
+        whenToUse: 'For optimization',
       },
       {
-        code: "RE14",
-        name: "Spiral Learning",
-        transformation: "RE",
-        definition: "Revisit concepts at increasing depth, building on previous understanding",
+        code: 'RE14',
+        name: 'Spiral Learning',
+        transformation: 'RE',
+        definition: 'Revisit concepts at increasing depth, building on previous understanding',
         priority: 4,
-        whenToUse: "For curriculum design or skill mastery"
+        whenToUse: 'For curriculum design or skill mastery',
       },
       {
-        code: "RE15",
-        name: "Convergence-Divergence Cycling",
-        transformation: "RE",
-        definition: "Alternate between expanding possibilities and narrowing to decisions",
+        code: 'RE15',
+        name: 'Convergence-Divergence Cycling',
+        transformation: 'RE',
+        definition: 'Alternate between expanding possibilities and narrowing to decisions',
         priority: 2,
-        whenToUse: "For creative problem-solving"
+        whenToUse: 'For creative problem-solving',
       },
       {
-        code: "RE16",
-        name: "Retrospective\u2192Prospective Loop",
-        transformation: "RE",
-        definition: "Use systematic reflection on past to inform future planning",
+        code: 'RE16',
+        name: 'Retrospective\u2192Prospective Loop',
+        transformation: 'RE',
+        definition: 'Use systematic reflection on past to inform future planning',
         priority: 2,
-        whenToUse: "For learning from experience"
+        whenToUse: 'For learning from experience',
       },
       {
-        code: "RE17",
-        name: "Versioning & Diff",
-        transformation: "RE",
-        definition: "Track changes over time and compare versions to understand evolution",
+        code: 'RE17',
+        name: 'Versioning & Diff',
+        transformation: 'RE',
+        definition: 'Track changes over time and compare versions to understand evolution',
         priority: 3,
-        whenToUse: "For change management"
+        whenToUse: 'For change management',
       },
       {
-        code: "RE18",
-        name: "Anti-Catastrophic Forgetting",
-        transformation: "RE",
-        definition: "Preserve critical knowledge while adapting to new information",
+        code: 'RE18',
+        name: 'Anti-Catastrophic Forgetting',
+        transformation: 'RE',
+        definition: 'Preserve critical knowledge while adapting to new information',
         priority: 4,
-        whenToUse: "For organizational memory"
+        whenToUse: 'For organizational memory',
       },
       {
-        code: "RE19",
-        name: "Auto-Refactor",
-        transformation: "RE",
-        definition: "Systematically improve system structure without changing external behavior",
+        code: 'RE19',
+        name: 'Auto-Refactor',
+        transformation: 'RE',
+        definition: 'Systematically improve system structure without changing external behavior',
         priority: 4,
-        whenToUse: "For technical debt management"
+        whenToUse: 'For technical debt management',
       },
       {
-        code: "RE20",
-        name: "Recursive Governance (Guardrails that Learn)",
-        transformation: "RE",
-        definition: "Establish rules that adapt based on their own effectiveness",
+        code: 'RE20',
+        name: 'Recursive Governance (Guardrails that Learn)',
+        transformation: 'RE',
+        definition: 'Establish rules that adapt based on their own effectiveness',
         priority: 5,
-        whenToUse: "For adaptive governance"
-      }
-    ]
+        whenToUse: 'For adaptive governance',
+      },
+    ],
   },
   SY: {
-    code: "SY",
-    name: "Meta-Systems",
-    description: "Understand systems of systems, coordination, and emergent dynamics.",
+    code: 'SY',
+    name: 'Meta-Systems',
+    description: 'Understand systems of systems, coordination, and emergent dynamics.',
     models: [
       {
-        code: "SY1",
-        name: "Leverage Points",
-        transformation: "SY",
-        definition: "Identify intervention points where small changes produce disproportionate effects",
+        code: 'SY1',
+        name: 'Leverage Points',
+        transformation: 'SY',
+        definition:
+          'Identify intervention points where small changes produce disproportionate effects',
         priority: 1,
-        whenToUse: "For strategic intervention"
+        whenToUse: 'For strategic intervention',
       },
       {
-        code: "SY2",
-        name: "System Boundaries",
-        transformation: "SY",
-        definition: "Define what is inside versus outside system scope for analysis or design",
+        code: 'SY2',
+        name: 'System Boundaries',
+        transformation: 'SY',
+        definition: 'Define what is inside versus outside system scope for analysis or design',
         priority: 1,
-        whenToUse: "At start of systems analysis"
+        whenToUse: 'At start of systems analysis',
       },
       {
-        code: "SY3",
-        name: "Stocks & Flows",
-        transformation: "SY",
-        definition: "Distinguish accumulations from rates of change affecting them",
+        code: 'SY3',
+        name: 'Stocks & Flows',
+        transformation: 'SY',
+        definition: 'Distinguish accumulations from rates of change affecting them',
         priority: 2,
-        whenToUse: "For systems modeling"
+        whenToUse: 'For systems modeling',
       },
       {
-        code: "SY4",
-        name: "Requisite Variety",
-        transformation: "SY",
+        code: 'SY4',
+        name: 'Requisite Variety',
+        transformation: 'SY',
         definition: "Match control system's complexity to system being controlled",
         priority: 3,
-        whenToUse: "For governance design"
+        whenToUse: 'For governance design',
       },
       {
-        code: "SY5",
-        name: "Systems Archetypes",
-        transformation: "SY",
-        definition: "Recognize recurring dynamic patterns across different domains",
+        code: 'SY5',
+        name: 'Systems Archetypes',
+        transformation: 'SY',
+        definition: 'Recognize recurring dynamic patterns across different domains',
         priority: 2,
-        whenToUse: "For pattern matching in systems"
+        whenToUse: 'For pattern matching in systems',
       },
       {
-        code: "SY6",
-        name: "Feedback Structure Mapping",
-        transformation: "SY",
-        definition: "Diagram causal loops showing how variables influence each other",
+        code: 'SY6',
+        name: 'Feedback Structure Mapping',
+        transformation: 'SY',
+        definition: 'Diagram causal loops showing how variables influence each other',
         priority: 2,
-        whenToUse: "For understanding system dynamics"
+        whenToUse: 'For understanding system dynamics',
       },
       {
-        code: "SY7",
-        name: "Path Dependence",
-        transformation: "SY",
-        definition: "Acknowledge how early decisions constrain future options through accumulated consequences",
+        code: 'SY7',
+        name: 'Path Dependence',
+        transformation: 'SY',
+        definition:
+          'Acknowledge how early decisions constrain future options through accumulated consequences',
         priority: 2,
-        whenToUse: "For strategic planning"
+        whenToUse: 'For strategic planning',
       },
       {
-        code: "SY8",
-        name: "Homeostasis/Dynamic Equilibrium",
-        transformation: "SY",
-        definition: "Understand self-regulating mechanisms maintaining stable states despite disturbances",
+        code: 'SY8',
+        name: 'Homeostasis/Dynamic Equilibrium',
+        transformation: 'SY',
+        definition:
+          'Understand self-regulating mechanisms maintaining stable states despite disturbances',
         priority: 3,
-        whenToUse: "For stability analysis"
+        whenToUse: 'For stability analysis',
       },
       {
-        code: "SY9",
-        name: "Phase Transitions & Tipping Points",
-        transformation: "SY",
-        definition: "Identify thresholds where gradual changes produce sudden qualitative shifts",
+        code: 'SY9',
+        name: 'Phase Transitions & Tipping Points',
+        transformation: 'SY',
+        definition: 'Identify thresholds where gradual changes produce sudden qualitative shifts',
         priority: 2,
-        whenToUse: "For monitoring critical changes"
+        whenToUse: 'For monitoring critical changes',
       },
       {
-        code: "SY10",
-        name: "Causal Loop Diagrams",
-        transformation: "SY",
-        definition: "Visualize circular cause-effect relationships with reinforcing and balancing dynamics",
+        code: 'SY10',
+        name: 'Causal Loop Diagrams',
+        transformation: 'SY',
+        definition:
+          'Visualize circular cause-effect relationships with reinforcing and balancing dynamics',
         priority: 3,
-        whenToUse: "For systems thinking"
+        whenToUse: 'For systems thinking',
       },
       {
-        code: "SY11",
-        name: "Governance Patterns",
-        transformation: "SY",
-        definition: "Design decision rights, accountability structures, and coordination mechanisms",
+        code: 'SY11',
+        name: 'Governance Patterns',
+        transformation: 'SY',
+        definition:
+          'Design decision rights, accountability structures, and coordination mechanisms',
         priority: 2,
-        whenToUse: "For organizational design"
+        whenToUse: 'For organizational design',
       },
       {
-        code: "SY12",
-        name: "Protocol/Interface Standards",
-        transformation: "SY",
-        definition: "Specify rules for interaction enabling coordination without central control",
+        code: 'SY12',
+        name: 'Protocol/Interface Standards',
+        transformation: 'SY',
+        definition: 'Specify rules for interaction enabling coordination without central control',
         priority: 3,
-        whenToUse: "For decentralized systems"
+        whenToUse: 'For decentralized systems',
       },
       {
-        code: "SY13",
-        name: "Incentive Architecture",
-        transformation: "SY",
-        definition: "Design reward and penalty structures aligning individual actions with system goals",
+        code: 'SY13',
+        name: 'Incentive Architecture',
+        transformation: 'SY',
+        definition:
+          'Design reward and penalty structures aligning individual actions with system goals',
         priority: 2,
-        whenToUse: "For behavior design"
+        whenToUse: 'For behavior design',
       },
       {
-        code: "SY14",
-        name: "Risk & Resilience Engineering",
-        transformation: "SY",
-        definition: "Build systems that fail gracefully and recover automatically",
+        code: 'SY14',
+        name: 'Risk & Resilience Engineering',
+        transformation: 'SY',
+        definition: 'Build systems that fail gracefully and recover automatically',
         priority: 2,
-        whenToUse: "For reliability engineering"
+        whenToUse: 'For reliability engineering',
       },
       {
-        code: "SY15",
-        name: "Multi-Scale Alignment",
-        transformation: "SY",
-        definition: "Ensure strategy, operations, and execution cohere across organizational levels",
+        code: 'SY15',
+        name: 'Multi-Scale Alignment',
+        transformation: 'SY',
+        definition:
+          'Ensure strategy, operations, and execution cohere across organizational levels',
         priority: 3,
-        whenToUse: "For organizational coherence"
+        whenToUse: 'For organizational coherence',
       },
       {
-        code: "SY16",
-        name: "Ecosystem Strategy",
-        transformation: "SY",
-        definition: "Position organization within network of partners, competitors, and stakeholders",
+        code: 'SY16',
+        name: 'Ecosystem Strategy',
+        transformation: 'SY',
+        definition:
+          'Position organization within network of partners, competitors, and stakeholders',
         priority: 3,
-        whenToUse: "For competitive strategy"
+        whenToUse: 'For competitive strategy',
       },
       {
-        code: "SY17",
-        name: "Policy Feedbacks",
-        transformation: "SY",
-        definition: "Anticipate how rules shape behavior, which creates conditions affecting future rules",
+        code: 'SY17',
+        name: 'Policy Feedbacks',
+        transformation: 'SY',
+        definition:
+          'Anticipate how rules shape behavior, which creates conditions affecting future rules',
         priority: 4,
-        whenToUse: "For policy design"
+        whenToUse: 'For policy design',
       },
       {
-        code: "SY18",
-        name: "Measurement & Telemetry",
-        transformation: "SY",
-        definition: "Instrument systems to capture state, changes, and anomalies for informed response",
+        code: 'SY18',
+        name: 'Measurement & Telemetry',
+        transformation: 'SY',
+        definition:
+          'Instrument systems to capture state, changes, and anomalies for informed response',
         priority: 2,
-        whenToUse: "For system monitoring"
+        whenToUse: 'For system monitoring',
       },
       {
-        code: "SY19",
-        name: "Meta-Model Selection",
-        transformation: "SY",
-        definition: "Choose appropriate framework or tool for specific problem characteristics",
+        code: 'SY19',
+        name: 'Meta-Model Selection',
+        transformation: 'SY',
+        definition: 'Choose appropriate framework or tool for specific problem characteristics',
         priority: 1,
-        whenToUse: "When selecting mental models"
+        whenToUse: 'When selecting mental models',
       },
       {
-        code: "SY20",
-        name: "Systems-of-Systems Coordination",
-        transformation: "SY",
-        definition: "Manage interactions between independent systems with emergent behaviors",
+        code: 'SY20',
+        name: 'Systems-of-Systems Coordination',
+        transformation: 'SY',
+        definition: 'Manage interactions between independent systems with emergent behaviors',
         priority: 3,
-        whenToUse: "For complex system orchestration"
-      }
-    ]
-  }
+        whenToUse: 'For complex system orchestration',
+      },
+    ],
+  },
 };
 
 // ../../packages/core/src/result.ts
 var Result = {
-  ok: (value) => ({ ok: true, value }),
-  err: (error3) => ({ ok: false, error: error3 }),
+  ok: value => ({ ok: true, value }),
+  err: error3 => ({ ok: false, error: error3 }),
   fromPromise: async (promise, errorMapper) => {
     try {
       const data = await promise;
@@ -7676,42 +7901,52 @@ var Result = {
       return Result.err(mappedError);
     }
   },
-  from: (fn) => {
+  from: fn => {
     try {
       return Result.ok(fn());
     } catch (error3) {
       return Result.err(error3);
     }
-  }
+  },
 };
 
 // ../../packages/core/src/schemas.ts
-var TRANSFORMATION_VALUES = ["P", "IN", "CO", "DE", "RE", "SY"];
+var TRANSFORMATION_VALUES = ['P', 'IN', 'CO', 'DE', 'RE', 'SY'];
 var ModelFilterSchema = external_exports.object({
   transformation: external_exports.enum(TRANSFORMATION_VALUES).optional(),
   base_level: external_exports.coerce.number().int().min(1).max(5).optional(),
-  search: external_exports.string().trim().min(2, "Search requires at least 2 characters").optional()
+  search: external_exports
+    .string()
+    .trim()
+    .min(2, 'Search requires at least 2 characters')
+    .optional(),
 });
 var ModelCodeSchema = external_exports.object({
-  code: external_exports.string().trim().regex(/^[A-Z]{1,2}\d{1,2}$/, "Code must be like P1 or SY12")
+  code: external_exports
+    .string()
+    .trim()
+    .regex(/^[A-Z]{1,2}\d{1,2}$/, 'Code must be like P1 or SY12'),
 });
 var TransformationParamSchema = external_exports.object({
-  transformation: external_exports.enum(TRANSFORMATION_VALUES)
+  transformation: external_exports.enum(TRANSFORMATION_VALUES),
 });
 
 // src/lib/api.ts
-var createApiError = /* @__PURE__ */ __name((code, message, status, details) => ({
-  code,
-  message,
-  status,
-  ...details ? { details } : {}
-}), "createApiError");
+var createApiError = /* @__PURE__ */ __name(
+  (code, message, status, details) => ({
+    code,
+    message,
+    status,
+    ...(details ? { details } : {}),
+  }),
+  'createApiError'
+);
 var respondWithResult = /* @__PURE__ */ __name((c, result, successStatus = 200) => {
   if (result.ok) {
     return c.json(
       {
         ok: true,
-        value: result.value
+        value: result.value,
       },
       successStatus
     );
@@ -7722,26 +7957,26 @@ var respondWithResult = /* @__PURE__ */ __name((c, result, successStatus = 200) 
       error: {
         code: result.error.code,
         message: result.error.message,
-        details: result.error.details ?? null
-      }
+        details: result.error.details ?? null,
+      },
     },
     result.error.status
   );
-}, "respondWithResult");
+}, 'respondWithResult');
 var logCacheError = /* @__PURE__ */ __name((message, error3) => {
   console.warn(`[CACHE] ${message}`, error3);
-}, "logCacheError");
+}, 'logCacheError');
 
 // src/lib/cache.ts
 var memoryCache = /* @__PURE__ */ new Map();
-var WORKERS_CACHE_NAME = "hummbl-workers";
-var buildCacheRequest = /* @__PURE__ */ __name((key) => {
+var WORKERS_CACHE_NAME = 'hummbl-workers';
+var buildCacheRequest = /* @__PURE__ */ __name(key => {
   return new Request(`https://cache.hummbl.internal/${key}`);
-}, "buildCacheRequest");
+}, 'buildCacheRequest');
 var getWorkersCache = /* @__PURE__ */ __name(async () => {
   return caches.open(WORKERS_CACHE_NAME);
-}, "getWorkersCache");
-var readMemoryCache = /* @__PURE__ */ __name((key) => {
+}, 'getWorkersCache');
+var readMemoryCache = /* @__PURE__ */ __name(key => {
   const entry = memoryCache.get(key);
   if (!entry) {
     return null;
@@ -7751,13 +7986,13 @@ var readMemoryCache = /* @__PURE__ */ __name((key) => {
     return null;
   }
   return JSON.parse(entry.value);
-}, "readMemoryCache");
+}, 'readMemoryCache');
 var writeMemoryCache = /* @__PURE__ */ __name((key, payload, ttlSeconds) => {
   memoryCache.set(key, {
     value: payload,
-    expiresAt: Date.now() + ttlSeconds * 1e3
+    expiresAt: Date.now() + ttlSeconds * 1e3,
   });
-}, "writeMemoryCache");
+}, 'writeMemoryCache');
 var getCachedResult = /* @__PURE__ */ __name(async (env2, cacheKey, fetcher, config2 = {}) => {
   const memoryTtl = config2.memoryTtlSeconds ?? 60;
   const kvTtl = config2.kvTtlSeconds ?? 3600;
@@ -7812,53 +8047,57 @@ var getCachedResult = /* @__PURE__ */ __name(async (env2, cacheKey, fetcher, con
       cacheRequest,
       new Response(serialized, {
         headers: {
-          "Cache-Control": `public, max-age=${cfTtl}`,
-          "Content-Type": "application/json"
-        }
+          'Cache-Control': `public, max-age=${cfTtl}`,
+          'Content-Type': 'application/json',
+        },
       })
     );
   } catch (error3) {
     logCacheError(`Workers cache write failed for key ${cacheKey}`, error3);
   }
   return Result.ok(freshResult.value);
-}, "getCachedResult");
+}, 'getCachedResult');
 
 // src/routes/models.ts
-var mapToApiModel = /* @__PURE__ */ __name((model) => ({
-  ...model
-}), "mapToApiModel");
-var MODEL_SELECT = "SELECT code, name, transformation, definition, whenToUse, example, priority, system_prompt FROM mental_models";
-var buildModelsQuery = /* @__PURE__ */ __name((filters) => {
+var mapToApiModel = /* @__PURE__ */ __name(
+  model => ({
+    ...model,
+  }),
+  'mapToApiModel'
+);
+var MODEL_SELECT =
+  'SELECT code, name, transformation, definition, whenToUse, example, priority, system_prompt FROM mental_models';
+var buildModelsQuery = /* @__PURE__ */ __name(filters => {
   const clauses = [];
   const params = [];
   if (filters.transformation) {
-    clauses.push("transformation = ?");
+    clauses.push('transformation = ?');
     params.push(filters.transformation);
   }
   if (filters.search) {
     const searchTerm = `%${filters.search.toLowerCase()}%`;
     clauses.push(
-      "(LOWER(definition) LIKE ? OR LOWER(whenToUse) LIKE ? OR LOWER(name) LIKE ? OR code LIKE ?)"
+      '(LOWER(definition) LIKE ? OR LOWER(whenToUse) LIKE ? OR LOWER(name) LIKE ? OR code LIKE ?)'
     );
     params.push(searchTerm, searchTerm, searchTerm, `%${filters.search.toUpperCase()}%`);
   }
-  const whereClause = clauses.length ? ` WHERE ${clauses.join(" AND ")}` : "";
-  const orderClause = " ORDER BY transformation, code";
+  const whereClause = clauses.length ? ` WHERE ${clauses.join(' AND ')}` : '';
+  const orderClause = ' ORDER BY transformation, code';
   return {
     query: `${MODEL_SELECT}${whereClause}${orderClause}`,
-    params
+    params,
   };
-}, "buildModelsQuery");
+}, 'buildModelsQuery');
 var modelsRouter = new Hono2();
-modelsRouter.get("/", async (c) => {
+modelsRouter.get('/', async c => {
   const parsedFilters = ModelFilterSchema.safeParse(c.req.query());
   if (!parsedFilters.success) {
     return respondWithResult(
       c,
       Result.err(
         createApiError(
-          "invalid_query",
-          "Query parameters failed validation",
+          'invalid_query',
+          'Query parameters failed validation',
           400,
           parsedFilters.error.flatten()
         )
@@ -7866,24 +8105,26 @@ modelsRouter.get("/", async (c) => {
     );
   }
   const { transformation, search } = parsedFilters.data;
-  const cacheKey = ["models", transformation ?? "all", search?.toLowerCase() ?? ""].join(":");
+  const cacheKey = ['models', transformation ?? 'all', search?.toLowerCase() ?? ''].join(':');
   const result = await getCachedResult(
     c.env,
     cacheKey,
     async () => {
       const { query, params } = buildModelsQuery({ transformation, search });
       try {
-        const { results } = await c.env.DB.prepare(query).bind(...params).all();
+        const { results } = await c.env.DB.prepare(query)
+          .bind(...params)
+          .all();
         return Result.ok({
           models: results.map(mapToApiModel),
           count: results.length,
           transformation: transformation ?? null,
-          search: search ?? null
+          search: search ?? null,
         });
       } catch (error3) {
         return Result.err(
-          createApiError("db_error", "Failed to fetch models", 500, {
-            cause: error3 instanceof Error ? error3.message : String(error3)
+          createApiError('db_error', 'Failed to fetch models', 500, {
+            cause: error3 instanceof Error ? error3.message : String(error3),
           })
         );
       }
@@ -7891,54 +8132,52 @@ modelsRouter.get("/", async (c) => {
     {
       memoryTtlSeconds: 60,
       cfTtlSeconds: 300,
-      kvTtlSeconds: 3600
+      kvTtlSeconds: 3600,
     }
   );
   return respondWithResult(c, result);
 });
-modelsRouter.get("/:code", async (c) => {
-  const code = c.req.param("code").toUpperCase();
+modelsRouter.get('/:code', async c => {
+  const code = c.req.param('code').toUpperCase();
   const parsed = ModelCodeSchema.safeParse({ code });
   if (!parsed.success) {
     return respondWithResult(
       c,
       Result.err(
-        createApiError("invalid_code", "Model code is invalid", 400, parsed.error.flatten())
+        createApiError('invalid_code', 'Model code is invalid', 400, parsed.error.flatten())
       )
     );
   }
   const cacheKey = `model:${code}`;
-  const result = await getCachedResult(
-    c.env,
-    cacheKey,
-    async () => {
-      try {
-        const model = await c.env.DB.prepare(
-          "SELECT code, name, transformation, definition, whenToUse, example, priority, system_prompt FROM mental_models WHERE code = ?"
-        ).bind(code).first();
-        if (!model) {
-          return Result.err(createApiError("not_found", `Model ${code} not found`, 404, { code }));
-        }
-        return Result.ok({ model: mapToApiModel(model) });
-      } catch (error3) {
-        return Result.err(
-          createApiError("db_error", "Failed to fetch model", 500, {
-            cause: error3 instanceof Error ? error3.message : String(error3)
-          })
-        );
+  const result = await getCachedResult(c.env, cacheKey, async () => {
+    try {
+      const model = await c.env.DB.prepare(
+        'SELECT code, name, transformation, definition, whenToUse, example, priority, system_prompt FROM mental_models WHERE code = ?'
+      )
+        .bind(code)
+        .first();
+      if (!model) {
+        return Result.err(createApiError('not_found', `Model ${code} not found`, 404, { code }));
       }
+      return Result.ok({ model: mapToApiModel(model) });
+    } catch (error3) {
+      return Result.err(
+        createApiError('db_error', 'Failed to fetch model', 500, {
+          cause: error3 instanceof Error ? error3.message : String(error3),
+        })
+      );
     }
-  );
+  });
   return respondWithResult(c, result);
 });
-modelsRouter.get("/:code/relationships", async (c) => {
-  const code = c.req.param("code").toUpperCase();
+modelsRouter.get('/:code/relationships', async c => {
+  const code = c.req.param('code').toUpperCase();
   const parsed = ModelCodeSchema.safeParse({ code });
   if (!parsed.success) {
     return respondWithResult(
       c,
       Result.err(
-        createApiError("invalid_code", "Model code is invalid", 400, parsed.error.flatten())
+        createApiError('invalid_code', 'Model code is invalid', 400, parsed.error.flatten())
       )
     );
   }
@@ -7948,9 +8187,11 @@ modelsRouter.get("/:code/relationships", async (c) => {
     cacheKey,
     async () => {
       try {
-        const modelExists = await c.env.DB.prepare("SELECT code FROM mental_models WHERE code = ?").bind(code).first();
+        const modelExists = await c.env.DB.prepare('SELECT code FROM mental_models WHERE code = ?')
+          .bind(code)
+          .first();
         if (!modelExists) {
-          return Result.err(createApiError("not_found", `Model ${code} not found`, 404, { code }));
+          return Result.err(createApiError('not_found', `Model ${code} not found`, 404, { code }));
         }
         const { results } = await c.env.DB.prepare(
           `
@@ -7959,16 +8200,18 @@ modelsRouter.get("/:code/relationships", async (c) => {
             WHERE source_code = ? OR target_code = ?
             ORDER BY confidence DESC, created_at DESC
           `
-        ).bind(code, code).all();
+        )
+          .bind(code, code)
+          .all();
         return Result.ok({
           model: code,
           relationships: results,
-          count: results.length
+          count: results.length,
         });
       } catch (error3) {
         return Result.err(
-          createApiError("db_error", "Failed to fetch relationships", 500, {
-            cause: error3 instanceof Error ? error3.message : String(error3)
+          createApiError('db_error', 'Failed to fetch relationships', 500, {
+            cause: error3 instanceof Error ? error3.message : String(error3),
           })
         );
       }
@@ -7976,15 +8219,15 @@ modelsRouter.get("/:code/relationships", async (c) => {
     {
       memoryTtlSeconds: 120,
       cfTtlSeconds: 600,
-      kvTtlSeconds: 7200
+      kvTtlSeconds: 7200,
     }
   );
   return respondWithResult(c, result);
 });
 var recommendSchema = external_exports.object({
-  problem: external_exports.string().min(10, "Problem description must be at least 10 characters")
+  problem: external_exports.string().min(10, 'Problem description must be at least 10 characters'),
 });
-modelsRouter.post("/recommend", async (c) => {
+modelsRouter.post('/recommend', async c => {
   try {
     const body = await c.req.json();
     const { problem } = recommendSchema.parse(body);
@@ -7998,27 +8241,29 @@ modelsRouter.post("/recommend", async (c) => {
         ORDER BY priority DESC
         LIMIT 10
       `
-    ).bind(searchTerm, searchTerm, searchTerm).all();
+    )
+      .bind(searchTerm, searchTerm, searchTerm)
+      .all();
     return respondWithResult(
       c,
       Result.ok({
         problem,
         recommendations: results,
-        count: results.length
+        count: results.length,
       })
     );
   } catch (error3) {
     if (error3 instanceof external_exports.ZodError) {
       return respondWithResult(
         c,
-        Result.err(createApiError("invalid_request", "Invalid request", 400, error3.flatten()))
+        Result.err(createApiError('invalid_request', 'Invalid request', 400, error3.flatten()))
       );
     }
     return respondWithResult(
       c,
       Result.err(
-        createApiError("db_error", "Failed to generate recommendations", 500, {
-          cause: error3 instanceof Error ? error3.message : String(error3)
+        createApiError('db_error', 'Failed to generate recommendations', 500, {
+          cause: error3 instanceof Error ? error3.message : String(error3),
         })
       )
     );
@@ -8027,8 +8272,8 @@ modelsRouter.post("/recommend", async (c) => {
 
 // src/routes/transformations.ts
 var transformationsRouter = new Hono2();
-transformationsRouter.get("/", async (c) => {
-  const cacheKey = "transformations:list";
+transformationsRouter.get('/', async c => {
+  const cacheKey = 'transformations:list';
   const result = await getCachedResult(
     c.env,
     cacheKey,
@@ -8037,12 +8282,12 @@ transformationsRouter.get("/", async (c) => {
         const transformations = TRANSFORMATIONS;
         return Result.ok({
           transformations,
-          count: Object.keys(transformations).length
+          count: Object.keys(transformations).length,
         });
       } catch (error3) {
         return Result.err(
-          createApiError("internal_error", "Failed to load transformations", 500, {
-            cause: error3 instanceof Error ? error3.message : String(error3)
+          createApiError('internal_error', 'Failed to load transformations', 500, {
+            cause: error3 instanceof Error ? error3.message : String(error3),
           })
         );
       }
@@ -8050,21 +8295,21 @@ transformationsRouter.get("/", async (c) => {
     {
       memoryTtlSeconds: 300,
       cfTtlSeconds: 600,
-      kvTtlSeconds: 14400
+      kvTtlSeconds: 14400,
     }
   );
   return respondWithResult(c, result);
 });
-transformationsRouter.get("/:type", async (c) => {
-  const typeParam = c.req.param("type").toUpperCase();
+transformationsRouter.get('/:type', async c => {
+  const typeParam = c.req.param('type').toUpperCase();
   const parsed = TransformationParamSchema.safeParse({ transformation: typeParam });
   if (!parsed.success) {
     return respondWithResult(
       c,
       Result.err(
         createApiError(
-          "invalid_transformation",
-          "Transformation type is invalid",
+          'invalid_transformation',
+          'Transformation type is invalid',
           400,
           parsed.error.flatten()
         )
@@ -8077,8 +8322,8 @@ transformationsRouter.get("/:type", async (c) => {
     return respondWithResult(
       c,
       Result.err(
-        createApiError("not_found", `Transformation ${type} not found`, 404, {
-          validTypes: Object.keys(TRANSFORMATIONS)
+        createApiError('not_found', `Transformation ${type} not found`, 404, {
+          validTypes: Object.keys(TRANSFORMATIONS),
         })
       )
     );
@@ -8096,16 +8341,18 @@ transformationsRouter.get("/:type", async (c) => {
             WHERE transformation = ?
             ORDER BY code
           `
-        ).bind(type).all();
+        )
+          .bind(type)
+          .all();
         return Result.ok({
           ...transformation,
           models: results,
-          modelCount: results.length
+          modelCount: results.length,
         });
       } catch (error3) {
         return Result.err(
-          createApiError("db_error", "Failed to fetch transformation models", 500, {
-            cause: error3 instanceof Error ? error3.message : String(error3)
+          createApiError('db_error', 'Failed to fetch transformation models', 500, {
+            cause: error3 instanceof Error ? error3.message : String(error3),
           })
         );
       }
@@ -8113,7 +8360,7 @@ transformationsRouter.get("/:type", async (c) => {
     {
       memoryTtlSeconds: 120,
       cfTtlSeconds: 600,
-      kvTtlSeconds: 7200
+      kvTtlSeconds: 7200,
     }
   );
   return respondWithResult(c, result);
@@ -8121,38 +8368,38 @@ transformationsRouter.get("/:type", async (c) => {
 
 // src/index.ts
 var app = new Hono2();
-app.use("*", logger());
+app.use('*', logger());
 app.use(
-  "*",
+  '*',
   cors({
-    origin: "*",
-    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowHeaders: ["Content-Type", "Authorization"],
-    maxAge: 86400
+    origin: '*',
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    maxAge: 86400,
   })
 );
-app.get("/", (c) => {
+app.get('/', c => {
   return c.json({
-    name: "HUMMBL Workers API",
-    version: c.env.API_VERSION || "v1",
-    environment: c.env.ENVIRONMENT || "production",
-    status: "healthy"
+    name: 'HUMMBL Workers API',
+    version: c.env.API_VERSION || 'v1',
+    environment: c.env.ENVIRONMENT || 'production',
+    status: 'healthy',
   });
 });
-app.get("/health", (c) => {
-  return c.json({ status: "ok", timestamp: (/* @__PURE__ */ new Date()).toISOString() });
+app.get('/health', c => {
+  return c.json({ status: 'ok', timestamp: /* @__PURE__ */ new Date().toISOString() });
 });
-app.route("/v1/models", modelsRouter);
-app.route("/v1/transformations", transformationsRouter);
-app.notFound((c) => {
-  return c.json({ error: "Not Found", path: c.req.path }, 404);
+app.route('/v1/models', modelsRouter);
+app.route('/v1/transformations', transformationsRouter);
+app.notFound(c => {
+  return c.json({ error: 'Not Found', path: c.req.path }, 404);
 });
 app.onError((err, c) => {
-  console.error("Unhandled error:", err);
+  console.error('Unhandled error:', err);
   return c.json(
     {
-      error: "Internal Server Error",
-      message: err.message
+      error: 'Internal Server Error',
+      message: err.message,
     },
     500
   );
@@ -8167,14 +8414,13 @@ var drainBody = /* @__PURE__ */ __name(async (request, env2, _ctx, middlewareCtx
     try {
       if (request.body !== null && !request.bodyUsed) {
         const reader = request.body.getReader();
-        while (!(await reader.read()).done) {
-        }
+        while (!(await reader.read()).done) {}
       }
     } catch (e) {
-      console.error("Failed to drain the unused request body.", e);
+      console.error('Failed to drain the unused request body.', e);
     }
   }
-}, "drainBody");
+}, 'drainBody');
 var middleware_ensure_req_body_drained_default = drainBody;
 
 // ../../node_modules/.pnpm/wrangler@3.114.15_@cloudflare+workers-types@4.20251202.0/node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
@@ -8183,10 +8429,10 @@ function reduceError(e) {
     name: e?.name,
     message: e?.message ?? String(e),
     stack: e?.stack,
-    cause: e?.cause === void 0 ? void 0 : reduceError(e.cause)
+    cause: e?.cause === void 0 ? void 0 : reduceError(e.cause),
   };
 }
-__name(reduceError, "reduceError");
+__name(reduceError, 'reduceError');
 var jsonError = /* @__PURE__ */ __name(async (request, env2, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env2);
@@ -8194,16 +8440,16 @@ var jsonError = /* @__PURE__ */ __name(async (request, env2, _ctx, middlewareCtx
     const error3 = reduceError(e);
     return Response.json(error3, {
       status: 500,
-      headers: { "MF-Experimental-Error-Stack": "true" }
+      headers: { 'MF-Experimental-Error-Stack': 'true' },
     });
   }
-}, "jsonError");
+}, 'jsonError');
 var middleware_miniflare3_json_error_default = jsonError;
 
 // .wrangler/tmp/bundle-O6A26N/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
-  middleware_miniflare3_json_error_default
+  middleware_miniflare3_json_error_default,
 ];
 var middleware_insertion_facade_default = src_default;
 
@@ -8212,25 +8458,25 @@ var __facade_middleware__ = [];
 function __facade_register__(...args) {
   __facade_middleware__.push(...args.flat());
 }
-__name(__facade_register__, "__facade_register__");
+__name(__facade_register__, '__facade_register__');
 function __facade_invokeChain__(request, env2, ctx, dispatch, middlewareChain) {
   const [head, ...tail] = middlewareChain;
   const middlewareCtx = {
     dispatch,
     next(newRequest, newEnv) {
       return __facade_invokeChain__(newRequest, newEnv, ctx, dispatch, tail);
-    }
+    },
   };
   return head(request, env2, ctx, middlewareCtx);
 }
-__name(__facade_invokeChain__, "__facade_invokeChain__");
+__name(__facade_invokeChain__, '__facade_invokeChain__');
 function __facade_invoke__(request, env2, ctx, dispatch, finalMiddleware) {
   return __facade_invokeChain__(request, env2, ctx, dispatch, [
     ...__facade_middleware__,
-    finalMiddleware
+    finalMiddleware,
   ]);
 }
-__name(__facade_invoke__, "__facade_invoke__");
+__name(__facade_invoke__, '__facade_invoke__');
 
 // .wrangler/tmp/bundle-O6A26N/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class {
@@ -8242,46 +8488,51 @@ var __Facade_ScheduledController__ = class {
   #noRetry;
   noRetry() {
     if (!(this instanceof __Facade_ScheduledController__)) {
-      throw new TypeError("Illegal invocation");
+      throw new TypeError('Illegal invocation');
     }
     this.#noRetry();
   }
 };
-__name(__Facade_ScheduledController__, "__Facade_ScheduledController__");
+__name(__Facade_ScheduledController__, '__Facade_ScheduledController__');
 function wrapExportedHandler(worker) {
-  if (__INTERNAL_WRANGLER_MIDDLEWARE__ === void 0 || __INTERNAL_WRANGLER_MIDDLEWARE__.length === 0) {
+  if (
+    __INTERNAL_WRANGLER_MIDDLEWARE__ === void 0 ||
+    __INTERNAL_WRANGLER_MIDDLEWARE__.length === 0
+  ) {
     return worker;
   }
   for (const middleware of __INTERNAL_WRANGLER_MIDDLEWARE__) {
     __facade_register__(middleware);
   }
-  const fetchDispatcher = /* @__PURE__ */ __name(function(request, env2, ctx) {
+  const fetchDispatcher = /* @__PURE__ */ __name(function (request, env2, ctx) {
     if (worker.fetch === void 0) {
-      throw new Error("Handler does not export a fetch() function.");
+      throw new Error('Handler does not export a fetch() function.');
     }
     return worker.fetch(request, env2, ctx);
-  }, "fetchDispatcher");
+  }, 'fetchDispatcher');
   return {
     ...worker,
     fetch(request, env2, ctx) {
-      const dispatcher = /* @__PURE__ */ __name(function(type, init) {
-        if (type === "scheduled" && worker.scheduled !== void 0) {
+      const dispatcher = /* @__PURE__ */ __name(function (type, init) {
+        if (type === 'scheduled' && worker.scheduled !== void 0) {
           const controller = new __Facade_ScheduledController__(
             Date.now(),
-            init.cron ?? "",
-            () => {
-            }
+            init.cron ?? '',
+            () => {}
           );
           return worker.scheduled(controller, env2, ctx);
         }
-      }, "dispatcher");
+      }, 'dispatcher');
       return __facade_invoke__(request, env2, ctx, dispatcher, fetchDispatcher);
-    }
+    },
   };
 }
-__name(wrapExportedHandler, "wrapExportedHandler");
+__name(wrapExportedHandler, 'wrapExportedHandler');
 function wrapWorkerEntrypoint(klass) {
-  if (__INTERNAL_WRANGLER_MIDDLEWARE__ === void 0 || __INTERNAL_WRANGLER_MIDDLEWARE__.length === 0) {
+  if (
+    __INTERNAL_WRANGLER_MIDDLEWARE__ === void 0 ||
+    __INTERNAL_WRANGLER_MIDDLEWARE__.length === 0
+  ) {
     return klass;
   }
   for (const middleware of __INTERNAL_WRANGLER_MIDDLEWARE__) {
@@ -8292,17 +8543,16 @@ function wrapWorkerEntrypoint(klass) {
       this.env = env2;
       this.ctx = ctx;
       if (super.fetch === void 0) {
-        throw new Error("Entrypoint class does not define a fetch() function.");
+        throw new Error('Entrypoint class does not define a fetch() function.');
       }
       return super.fetch(request);
     };
     #dispatcher = (type, init) => {
-      if (type === "scheduled" && super.scheduled !== void 0) {
+      if (type === 'scheduled' && super.scheduled !== void 0) {
         const controller = new __Facade_ScheduledController__(
           Date.now(),
-          init.cron ?? "",
-          () => {
-          }
+          init.cron ?? '',
+          () => {}
         );
         return super.scheduled(controller);
       }
@@ -8318,16 +8568,13 @@ function wrapWorkerEntrypoint(klass) {
     }
   };
 }
-__name(wrapWorkerEntrypoint, "wrapWorkerEntrypoint");
+__name(wrapWorkerEntrypoint, 'wrapWorkerEntrypoint');
 var WRAPPED_ENTRY;
-if (typeof middleware_insertion_facade_default === "object") {
+if (typeof middleware_insertion_facade_default === 'object') {
   WRAPPED_ENTRY = wrapExportedHandler(middleware_insertion_facade_default);
-} else if (typeof middleware_insertion_facade_default === "function") {
+} else if (typeof middleware_insertion_facade_default === 'function') {
   WRAPPED_ENTRY = wrapWorkerEntrypoint(middleware_insertion_facade_default);
 }
 var middleware_loader_entry_default = WRAPPED_ENTRY;
-export {
-  __INTERNAL_WRANGLER_MIDDLEWARE__,
-  middleware_loader_entry_default as default
-};
+export { __INTERNAL_WRANGLER_MIDDLEWARE__, middleware_loader_entry_default as default };
 //# sourceMappingURL=index.js.map

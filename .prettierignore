@@ -7,4 +7,12 @@ coverage
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+docs/bugs/
+docs/examples/
+docs/monitoring/
+docs/proposals/
+docs/protocols/
+docs/reference/
+tests/
+CHANGELOG.md
 
