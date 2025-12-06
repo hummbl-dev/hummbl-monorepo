@@ -127,7 +127,11 @@ describe('MCP Tools Integration', () => {
   });
 
   describe('recommend_models tool', () => {
-    it('should return recommendations for problem', async () => {
+    // Skip recommend_models tests in CI when API key is not set (hybrid mode requires it)
+    const skipInCIWithoutApiKey =
+      !process.env.HUMMBL_API_KEY && process.env.CI ? it.skip : it;
+
+    skipInCIWithoutApiKey('should return recommendations for problem', async () => {
       const tool = mockServer.getTool('recommend_models');
       const result = await tool.handler({
         problem: 'Our startup is growing rapidly but systems are breaking',
@@ -137,7 +141,7 @@ describe('MCP Tools Integration', () => {
       expect(result.structuredContent.recommendations.length).toBeGreaterThan(0);
     });
 
-    it('should include problem in response', async () => {
+    skipInCIWithoutApiKey('should include problem in response', async () => {
       const problem = 'Need to make strategic decision';
       const tool = mockServer.getTool('recommend_models');
       const result = await tool.handler({ problem });
@@ -145,7 +149,7 @@ describe('MCP Tools Integration', () => {
       expect(result.structuredContent.problem).toBe(problem);
     });
 
-    it('should return transformations and models', async () => {
+    skipInCIWithoutApiKey('should return transformations and models', async () => {
       const tool = mockServer.getTool('recommend_models');
       const result = await tool.handler({ problem: 'innovation challenge' });
 
