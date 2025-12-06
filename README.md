@@ -10,14 +10,37 @@
 ```
 hummbl-monorepo/
 ├── apps/
-│   ├── mcp-server/      # Model Context Protocol server
+│   ├── mcp-server/      # Model Context Protocol server with Base120 mental models
 │   ├── web/             # Next.js web application
-│   └── workers/         # Cloudflare Workers
+│   └── workers/         # Cloudflare Workers (D1, KV, R2, Queues)
 ├── packages/
 │   └── core/            # Shared core types and utilities
+├── docs/
+│   ├── bugs/            # Bug reports and incident documentation
+│   ├── examples/        # Training examples and best practices
+│   ├── protocols/       # Validation protocols and standards
+│   ├── proposals/       # Improvement proposals and RFCs
+│   └── reference/       # Reference documentation and quick guides
+├── tests/               # Test suites and reproduction scenarios
 └── .github/
     └── workflows/       # CI/CD workflows
 ```
+
+## HUMMBL Base120 Framework
+
+**6 Transformations, 120 Mental Models** for systematic problem-solving:
+
+| Code   | Transformation | Description                                               | Models |
+| ------ | -------------- | --------------------------------------------------------- | ------ |
+| **P**  | Perspective    | Frame and name what is. Anchor or shift point of view.    | 20     |
+| **IN** | Inversion      | Reverse assumptions. Examine opposites, edges, negations. | 20     |
+| **CO** | Composition    | Combine parts into coherent wholes.                       | 20     |
+| **DE** | Decomposition  | Break systems into components.                            | 20     |
+| **RE** | Recursion      | Apply operations iteratively, outputs→inputs.             | 20     |
+| **SY** | Meta-Systems   | Systems of systems, coordination, emergence.              | 20     |
+
+> **⚠️ Important**: Always validate transformation references using the MCP server's `get_transformation` tool.  
+> See [Transformation Validation Protocol](docs/protocols/transformation-validation.md) for details.
 
 ## Getting Started
 
@@ -35,6 +58,44 @@ npm install -g pnpm@9.14.4
 # Install dependencies
 pnpm install
 ```
+
+## MCP Server Tools
+
+The HUMMBL MCP server provides mental model access via Model Context Protocol:
+
+### Available Tools
+
+1. **`search_models`** - Search Base120 framework for mental models
+
+   ```typescript
+   search_models({ query: 'feedback', transformation: 'RE' });
+   ```
+
+2. **`get_model_details`** - Get full definition + system prompt for a model
+
+   ```typescript
+   get_model_details({ id: 'RE8' }); // Returns Bootstrapping model
+   ```
+
+3. **`get_transformation`** - Validate transformation definitions (⚠️ Use this first!)
+   ```typescript
+   get_transformation({ code: 'RE' }); // Returns: Recursion definition
+   ```
+
+### Transformation Validation
+
+**CRITICAL**: Always validate transformation references before use.
+
+```typescript
+// ❌ INCORRECT - Fabricating meaning
+'RE stands for Reconstruct...'; // WITHOUT validation
+
+// ✅ CORRECT - Validated first
+const transform = await get_transformation({ code: 'RE' });
+// Returns: "RE = Recursion: Apply operations iteratively, outputs→inputs"
+```
+
+See [Transformation Validation Protocol](docs/protocols/transformation-validation.md) for complete guidelines.
 
 ## Development
 
@@ -97,6 +158,14 @@ pnpm --filter @hummbl/core build
 # Run a script in all packages
 pnpm -r build
 ```
+
+## Documentation
+
+- **[Transformation Reference](docs/reference/transformations-reference.md)** - Quick reference for all 6 transformations
+- **[Validation Protocol](docs/protocols/transformation-validation.md)** - How to validate transformation references
+- **[Training Examples](docs/examples/transformation-validation-examples.md)** - Correct/incorrect patterns
+- **[Bug Reports](docs/bugs/)** - Incident documentation and fixes
+- **[Improvement Proposals](docs/proposals/)** - Architecture enhancements
 
 ## Adding a New Package
 

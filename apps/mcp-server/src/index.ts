@@ -7,6 +7,56 @@ import {
   type CallToolRequest,
 } from '@modelcontextprotocol/sdk/types.js';
 
+// ============================================================================
+// TRANSFORMATION MAP - HUMMBL Base120 Core Reference
+// ============================================================================
+// Added per HUMMBL-TRANSFORM-001 fix: Prevent fabrication of transformation names
+// Always validate transformation references against this authoritative source
+// ============================================================================
+
+const TRANSFORMATIONS = {
+  P: {
+    code: 'P',
+    name: 'Perspective',
+    description: 'Frame and name what is. Anchor or shift point of view.',
+    modelCount: 20,
+  },
+  IN: {
+    code: 'IN',
+    name: 'Inversion',
+    description: 'Reverse assumptions. Examine opposites, edges, negations.',
+    modelCount: 20,
+  },
+  CO: {
+    code: 'CO',
+    name: 'Composition',
+    description: 'Combine parts into coherent wholes.',
+    modelCount: 20,
+  },
+  DE: {
+    code: 'DE',
+    name: 'Decomposition',
+    description: 'Break systems into components.',
+    modelCount: 20,
+  },
+  RE: {
+    code: 'RE',
+    name: 'Recursion',
+    description: 'Apply operations iteratively, with outputs becoming inputs.',
+    modelCount: 20,
+  },
+  SY: {
+    code: 'SY',
+    name: 'Meta-Systems',
+    description: 'Understand systems of systems, coordination, and emergent dynamics.',
+    modelCount: 20,
+  },
+} as const;
+
+type TransformationCode = keyof typeof TRANSFORMATIONS;
+
+// ============================================================================
+
 type SearchArgs = {
   query: string;
   transformation?: string;
@@ -14,6 +64,10 @@ type SearchArgs = {
 
 type DetailArgs = {
   id: string;
+};
+
+type TransformationArgs = {
+  code: TransformationCode;
 };
 
 const WORKER_URL = process.env.WORKER_URL ?? 'http://localhost:8787';
@@ -54,6 +108,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           id: { type: 'string', description: 'Model ID such as P1 or DE05.' },
         },
         required: ['id'],
+      },
+    },
+    {
+      name: 'get_transformation',
+      description:
+        'Get authoritative definition for a HUMMBL transformation (P, IN, CO, DE, RE, SY). ' +
+        'ALWAYS use this to validate transformation references before asserting meaning. ' +
+        'Added per HUMMBL-TRANSFORM-001: Prevents fabrication of transformation names.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          code: {
+            type: 'string',
+            enum: ['P', 'IN', 'CO', 'DE', 'RE', 'SY'],
+            description: 'Transformation code to look up.',
+          },
+        },
+        required: ['code'],
       },
     },
   ],
@@ -106,6 +178,38 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
         isError: true,
       };
     }
+  }
+
+  if (request.params.name === 'get_transformation') {
+    const { code } = request.params.arguments as TransformationArgs;
+
+    const transformation = TRANSFORMATIONS[code];
+
+    if (!transformation) {
+      return {
+        content: [{ type: 'text', text: `Invalid transformation code: ${code}` }],
+        isError: true,
+      };
+    }
+
+    const report = `# TRANSFORMATION: ${transformation.name} (${transformation.code})
+
+## Description
+${transformation.description}
+
+## Model Count
+${transformation.modelCount} models in this transformation
+
+## Validation Note
+This definition is authoritative. Always validate transformation references against this source.
+Reference: HUMMBL-TRANSFORM-001 validation protocol.
+
+## Usage
+Use search_models with transformation filter to find specific models within this transformation.
+Example: search_models(query="feedback", transformation="${code}")
+`;
+
+    return { content: [{ type: 'text', text: report }] };
   }
 
   return { content: [{ type: 'text', text: 'Tool not found' }], isError: true };
