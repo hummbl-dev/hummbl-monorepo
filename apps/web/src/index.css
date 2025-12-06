@@ -1,0 +1,50 @@
+@import '@fontsource/inter/300.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/jetbrains-mono/400.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', sans-serif;
+  background-color: #09090b;
+  color: #f4f4f5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+  font-variant-ligatures: none;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #09090b;
+}
+
+code,
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.scroll-micro::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scroll-micro::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+.scroll-micro::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 3px;
+}
+
+.scroll-micro::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}

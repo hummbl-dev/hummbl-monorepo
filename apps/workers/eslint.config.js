@@ -17,6 +17,7 @@ export default [
         Response: 'readonly',
         Request: 'readonly',
         fetch: 'readonly',
+        caches: 'readonly',
         D1Database: 'readonly',
         KVNamespace: 'readonly',
         R2Bucket: 'readonly',

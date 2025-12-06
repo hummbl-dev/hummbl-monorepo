@@ -5,101 +5,246 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
 import type { Env } from '../env';
-import type { TransformationType } from '@hummbl/core';
+import { ModelCodeSchema, ModelFilterSchema, Result, type TransformationType } from '@hummbl/core';
+import { createApiError, respondWithResult } from '../lib/api';
+import { getCachedResult } from '../lib/cache';
+import type { ApiError } from '../lib/api';
+
+interface DbMentalModel {
+  code: string;
+  name: string;
+  transformation: TransformationType;
+  definition: string;
+  whenToUse: string;
+  example?: string;
+  priority: number;
+  system_prompt: string;
+}
+
+interface ApiMentalModel extends DbMentalModel {
+  system_prompt: string;
+}
+
+const mapToApiModel = (model: DbMentalModel): ApiMentalModel => ({
+  ...model,
+});
+
+interface DbRelationship {
+  id: number;
+  source_code: string;
+  target_code: string;
+  relationship_type: string;
+  confidence: number;
+  evidence?: string;
+  created_at: string;
+}
+
+const MODEL_SELECT =
+  'SELECT code, name, transformation, definition, whenToUse, example, priority, system_prompt FROM mental_models';
+
+const buildModelsQuery = (filters: { transformation?: TransformationType; search?: string }) => {
+  const clauses: string[] = [];
+  const params: string[] = [];
+
+  if (filters.transformation) {
+    clauses.push('transformation = ?');
+    params.push(filters.transformation);
+  }
+
+  if (filters.search) {
+    const searchTerm = `%${filters.search.toLowerCase()}%`;
+    clauses.push(
+      '(LOWER(definition) LIKE ? OR LOWER(whenToUse) LIKE ? OR LOWER(name) LIKE ? OR code LIKE ?)'
+    );
+    params.push(searchTerm, searchTerm, searchTerm, `%${filters.search.toUpperCase()}%`);
+  }
+
+  const whereClause = clauses.length ? ` WHERE ${clauses.join(' AND ')}` : '';
+  const orderClause = ' ORDER BY transformation, code';
+
+  return {
+    query: `${MODEL_SELECT}${whereClause}${orderClause}`,
+    params,
+  };
+};
 
 export const modelsRouter = new Hono<{ Bindings: Env }>();
 
-// GET /v1/models - List all models with optional transformation filter
+// GET /v1/models - List all models with optional filters
 modelsRouter.get('/', async c => {
-  const transformation = c.req.query('transformation') as TransformationType | undefined;
-
-  try {
-    let query =
-      'SELECT code, name, transformation, definition, whenToUse, example, priority FROM mental_models';
-    const params: string[] = [];
-
-    if (transformation) {
-      query += ' WHERE transformation = ?';
-      params.push(transformation);
-    }
-
-    query += ' ORDER BY transformation, code';
-
-    const { results } = await c.env.DB.prepare(query)
-      .bind(...params)
-      .all();
-
-    return c.json({
-      models: results,
-      count: results.length,
-      transformation: transformation || null,
-    });
-  } catch (error) {
-    console.error('Error fetching models:', error);
-    return c.json({ error: 'Failed to fetch models' }, 500);
+  const parsedFilters = ModelFilterSchema.safeParse(c.req.query());
+  if (!parsedFilters.success) {
+    return respondWithResult(
+      c,
+      Result.err(
+        createApiError(
+          'invalid_query',
+          'Query parameters failed validation',
+          400,
+          parsedFilters.error.flatten()
+        )
+      )
+    );
   }
+
+  const { transformation, search } = parsedFilters.data;
+  const cacheKey = ['models', transformation ?? 'all', search?.toLowerCase() ?? ''].join(':');
+
+  const result = await getCachedResult(
+    c.env,
+    cacheKey,
+    async (): Promise<
+      Result<
+        {
+          models: ApiMentalModel[];
+          count: number;
+          transformation: TransformationType | null;
+          search: string | null;
+        },
+        ApiError
+      >
+    > => {
+      const { query, params } = buildModelsQuery({ transformation, search });
+      try {
+        const { results } = await c.env.DB.prepare(query)
+          .bind(...params)
+          .all<DbMentalModel>();
+
+        return Result.ok({
+          models: results.map(mapToApiModel),
+          count: results.length,
+          transformation: transformation ?? null,
+          search: search ?? null,
+        });
+      } catch (error) {
+        return Result.err(
+          createApiError('db_error', 'Failed to fetch models', 500, {
+            cause: error instanceof Error ? error.message : String(error),
+          })
+        );
+      }
+    },
+    {
+      memoryTtlSeconds: 60,
+      cfTtlSeconds: 300,
+      kvTtlSeconds: 3600,
+    }
+  );
+
+  return respondWithResult(c, result);
 });
 
 // GET /v1/models/:code - Get a specific model by code
 modelsRouter.get('/:code', async c => {
   const code = c.req.param('code').toUpperCase();
+  const parsed = ModelCodeSchema.safeParse({ code });
 
-  try {
-    const model = await c.env.DB.prepare(
-      'SELECT code, name, transformation, definition, whenToUse, example, priority FROM mental_models WHERE code = ?'
-    )
-      .bind(code)
-      .first();
-
-    if (!model) {
-      return c.json({ error: 'Model not found', code }, 404);
-    }
-
-    return c.json({ model });
-  } catch (error) {
-    console.error('Error fetching model:', error);
-    return c.json({ error: 'Failed to fetch model' }, 500);
+  if (!parsed.success) {
+    return respondWithResult(
+      c,
+      Result.err(
+        createApiError('invalid_code', 'Model code is invalid', 400, parsed.error.flatten())
+      )
+    );
   }
+
+  const cacheKey = `model:${code}`;
+
+  const result = await getCachedResult(
+    c.env,
+    cacheKey,
+    async (): Promise<Result<{ model: ApiMentalModel }, ApiError>> => {
+      try {
+        const model = await c.env.DB.prepare(
+          'SELECT code, name, transformation, definition, whenToUse, example, priority, system_prompt FROM mental_models WHERE code = ?'
+        )
+          .bind(code)
+          .first<DbMentalModel>();
+
+        if (!model) {
+          return Result.err(createApiError('not_found', `Model ${code} not found`, 404, { code }));
+        }
+
+        return Result.ok({ model: mapToApiModel(model) });
+      } catch (error) {
+        return Result.err(
+          createApiError('db_error', 'Failed to fetch model', 500, {
+            cause: error instanceof Error ? error.message : String(error),
+          })
+        );
+      }
+    }
+  );
+
+  return respondWithResult(c, result);
 });
 
 // GET /v1/models/:code/relationships - Get relationships for a model
 modelsRouter.get('/:code/relationships', async c => {
   const code = c.req.param('code').toUpperCase();
+  const parsed = ModelCodeSchema.safeParse({ code });
 
-  try {
-    // First verify the model exists
-    const modelExists = await c.env.DB.prepare('SELECT code FROM mental_models WHERE code = ?')
-      .bind(code)
-      .first();
-
-    if (!modelExists) {
-      return c.json({ error: 'Model not found', code }, 404);
-    }
-
-    // Fetch relationships
-    const { results } = await c.env.DB.prepare(
-      `
-        SELECT id, source_code, target_code, relationship_type, confidence, evidence, created_at
-        FROM model_relationships
-        WHERE source_code = ? OR target_code = ?
-        ORDER BY confidence DESC, created_at DESC
-      `
-    )
-      .bind(code, code)
-      .all();
-
-    return c.json({
-      model: code,
-      relationships: results,
-      count: results.length,
-    });
-  } catch (error) {
-    console.error('Error fetching relationships:', error);
-    return c.json({ error: 'Failed to fetch relationships' }, 500);
+  if (!parsed.success) {
+    return respondWithResult(
+      c,
+      Result.err(
+        createApiError('invalid_code', 'Model code is invalid', 400, parsed.error.flatten())
+      )
+    );
   }
+
+  const cacheKey = `model:${code}:relationships`;
+
+  const result = await getCachedResult(
+    c.env,
+    cacheKey,
+    async (): Promise<
+      Result<{ model: string; relationships: DbRelationship[]; count: number }, ApiError>
+    > => {
+      try {
+        const modelExists = await c.env.DB.prepare('SELECT code FROM mental_models WHERE code = ?')
+          .bind(code)
+          .first();
+
+        if (!modelExists) {
+          return Result.err(createApiError('not_found', `Model ${code} not found`, 404, { code }));
+        }
+
+        const { results } = await c.env.DB.prepare(
+          `
+            SELECT id, source_code, target_code, relationship_type, confidence, evidence, created_at
+            FROM model_relationships
+            WHERE source_code = ? OR target_code = ?
+            ORDER BY confidence DESC, created_at DESC
+          `
+        )
+          .bind(code, code)
+          .all<DbRelationship>();
+
+        return Result.ok({
+          model: code,
+          relationships: results,
+          count: results.length,
+        });
+      } catch (error) {
+        return Result.err(
+          createApiError('db_error', 'Failed to fetch relationships', 500, {
+            cause: error instanceof Error ? error.message : String(error),
+          })
+        );
+      }
+    },
+    {
+      memoryTtlSeconds: 120,
+      cfTtlSeconds: 600,
+      kvTtlSeconds: 7200,
+    }
+  );
+
+  return respondWithResult(c, result);
 });
 
-// POST /v1/recommend - Get model recommendations based on problem description
+// POST /v1/models/recommend - Get model recommendations
 const recommendSchema = z.object({
   problem: z.string().min(10, 'Problem description must be at least 10 characters'),
 });
@@ -109,32 +254,44 @@ modelsRouter.post('/recommend', async c => {
     const body = await c.req.json();
     const { problem } = recommendSchema.parse(body);
 
-    // Simple keyword-based recommendation
-    // In production, this would use vector similarity or LLM-based matching
     const keywords = problem.toLowerCase().split(/\s+/);
+    const searchTerm = `%${keywords[0]}%`;
 
     const { results } = await c.env.DB.prepare(
       `
         SELECT code, name, transformation, definition, priority
         FROM mental_models
-        WHERE LOWER(definition) LIKE ? OR LOWER(whenToUse) LIKE ?
+        WHERE LOWER(definition) LIKE ? OR LOWER(whenToUse) LIKE ? OR LOWER(name) LIKE ?
         ORDER BY priority DESC
         LIMIT 10
       `
     )
-      .bind(`%${keywords[0]}%`, `%${keywords[0]}%`)
-      .all();
+      .bind(searchTerm, searchTerm, searchTerm)
+      .all<Pick<DbMentalModel, 'code' | 'name' | 'transformation' | 'definition' | 'priority'>>();
 
-    return c.json({
-      problem,
-      recommendations: results,
-      count: results.length,
-    });
+    return respondWithResult(
+      c,
+      Result.ok({
+        problem,
+        recommendations: results,
+        count: results.length,
+      })
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return c.json({ error: 'Invalid request', details: error.errors }, 400);
+      return respondWithResult(
+        c,
+        Result.err(createApiError('invalid_request', 'Invalid request', 400, error.flatten()))
+      );
     }
-    console.error('Error generating recommendations:', error);
-    return c.json({ error: 'Failed to generate recommendations' }, 500);
+
+    return respondWithResult(
+      c,
+      Result.err(
+        createApiError('db_error', 'Failed to generate recommendations', 500, {
+          cause: error instanceof Error ? error.message : String(error),
+        })
+      )
+    );
   }
 });

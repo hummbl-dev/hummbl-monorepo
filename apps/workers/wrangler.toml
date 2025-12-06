@@ -16,6 +16,7 @@ database_id = "TO_BE_CREATED"  # Run: wrangler d1 create hummbl-models
 [[kv_namespaces]]
 binding = "CACHE"
 id = "TO_BE_CREATED"  # Run: wrangler kv:namespace create CACHE
+preview_id = "a584d2551d4c465aaecbf869d9771d84"
 
 # R2 bucket for static assets/exports
 [[r2_buckets]]

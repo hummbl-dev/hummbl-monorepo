@@ -33,6 +33,9 @@ export interface MentalModel {
 
   /** Optional priority/ranking for the model */
   priority: number;
+
+  /** Optional system prompt / instruction block */
+  system_prompt?: string;
 }
 
 /**
@@ -53,33 +56,5 @@ export interface Transformation {
 }
 
 /**
- * Result type for explicit error handling
- *
- * @example
- * ```typescript
- * function divide(a: number, b: number): Result<number, string> {
- *   if (b === 0) return { ok: false, error: 'Division by zero' };
- *   return { ok: true, value: a / b };
- * }
- * ```
+ * Metadata for transformation categories lives in data.ts
  */
-export type Result<T, E = Error> = { ok: true; value: T } | { ok: false; error: E };
-
-/**
- * Type guard to check if a Result is successful
- */
-export const isOk = <T, E>(result: Result<T, E>): result is { ok: true; value: T } => {
-  return result.ok;
-};
-
-/**
- * Type guard to check if a Result is an error
- */
-export const isError = <T, E>(result: Result<T, E>): result is { ok: false; error: E } => {
-  return !result.ok;
-};
-
-/**
- * Metadata for transformation categories
- */
-// TRANSFORMATIONS constant moved to data.ts
