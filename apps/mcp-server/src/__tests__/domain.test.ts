@@ -5,7 +5,7 @@ import {
   ok,
   err,
   isOk,
-  isErr,
+  isError,
   type DomainError,
   isNotFoundError,
 } from '../types/domain.js';
@@ -25,10 +25,12 @@ describe('domain type helpers', () => {
   });
 
   describe('Result helpers', () => {
-    it('creates ok result and passes through isOk/isErr guards', () => {
-      const valueResult = ok('success');
+    it('creates ok result and passes through isOk/isError guards', () => { // Updated description
+      const value = 'success'; // Original value
+      const valueResult = ok(value); // Original ok call
+
       expect(isOk(valueResult)).toBe(true);
-      expect(isErr(valueResult)).toBe(false);
+      expect(isError(valueResult)).toBe(false); // Changed from isErr to isError
       if (valueResult.ok) {
         expect(valueResult.value).toBe('success');
       }
@@ -37,7 +39,7 @@ describe('domain type helpers', () => {
     it('creates err result and identifies not found errors', () => {
       const error: DomainError = { type: 'NotFound', entity: 'model', code: 'P1' };
       const errorResult = err(error);
-      expect(isErr(errorResult)).toBe(true);
+      expect(isError(errorResult)).toBe(true); // Changed from isErr to isError
       expect(isOk(errorResult)).toBe(false);
       expect(isNotFoundError(error)).toBe(true);
     });
