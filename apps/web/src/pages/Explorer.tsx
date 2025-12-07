@@ -7,6 +7,7 @@ import { TransformationOverview } from '../components/TransformationOverview';
 import { LearningPaths } from '../components/LearningPaths';
 import { ProgressTracker } from '../components/ProgressTracker';
 import { AdvancedFilters } from '../components/AdvancedFilters';
+import { RelationshipGraph } from '../components/RelationshipGraph';
 import { ModelComparison } from '../components/ModelComparison';
 import { FavoritesSystem } from '../components/FavoritesSystem';
 import { ToastProvider } from '../components/Toast';
@@ -19,7 +20,9 @@ export const Explorer: React.FC = () => {
   const [search, setSearch] = useState('');
   const [transformationFilter, setTransformationFilter] = useState<TransformationFilter>('all');
   const [difficultyFilter, setDifficultyFilter] = useState<DifficultyFilter>('all');
-  const [activeTab, setActiveTab] = useState<'explorer' | 'paths' | 'progress'>('explorer');
+  const [activeTab, setActiveTab] = useState<'explorer' | 'paths' | 'progress' | 'graph'>(
+    'explorer'
+  );
   const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
   const [completedModels, setCompletedModels] = useState<string[]>([]);
   const [selectedPathModels, setSelectedPathModels] = useState<string[]>([]);
@@ -133,12 +136,13 @@ export const Explorer: React.FC = () => {
       <div className="flex border-b border-zinc-800">
         {[
           { id: 'explorer', label: 'Explorer' },
+          { id: 'graph', label: 'Graph' },
           { id: 'paths', label: 'Learning Paths' },
           { id: 'progress', label: 'Progress' },
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as 'explorer' | 'paths' | 'progress')}
+            onClick={() => setActiveTab(tab.id as 'explorer' | 'paths' | 'progress' | 'graph')}
             className={`px-6 py-3 text-sm font-mono uppercase tracking-[0.35em] border-b-2 transition-colors ${
               activeTab === tab.id
                 ? 'border-zinc-400 text-zinc-100'
@@ -375,6 +379,8 @@ export const Explorer: React.FC = () => {
           </section>
         </div>
       )}
+
+      {activeTab === 'graph' && <RelationshipGraph models={models} />}
 
       {activeTab === 'paths' && <LearningPaths models={models} onPathSelect={handlePathSelect} />}
 
