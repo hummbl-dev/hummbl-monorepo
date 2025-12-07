@@ -11,7 +11,7 @@
 hummbl-monorepo/
 ├── apps/
 │   ├── mcp-server/      # Model Context Protocol server with Base120 mental models
-│   ├── web/             # Next.js web application
+│   ├── web/             # Vite + React web application
 │   └── workers/         # Cloudflare Workers (D1, KV, R2, Queues)
 ├── packages/
 │   └── core/            # Shared core types and utilities

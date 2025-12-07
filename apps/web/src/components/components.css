@@ -8,16 +8,16 @@
 }
 
 /* Transformation Overview difficulty bars */
-.emerald-bar {
-  width: var(--emerald-width);
+.emerald-bar[data-emerald-width] {
+  width: attr(data-emerald-width %);
 }
 
-.amber-bar {
-  width: var(--amber-width);
+.amber-bar[data-amber-width] {
+  width: attr(data-amber-width %);
 }
 
-.rose-bar {
-  width: var(--rose-width);
+.rose-bar[data-rose-width] {
+  width: attr(data-rose-width %);
 }
 
 /* Transformation Overview hover positioning */

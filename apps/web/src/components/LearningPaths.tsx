@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { Base120Model } from '../hooks/useModels';
+import { ProgressBar } from './ui/ProgressBar';
 import './components.css';
 
 interface LearningPathsProps {
@@ -333,9 +334,9 @@ export const LearningPaths: React.FC<LearningPathsProps> = ({ models, onPathSele
                   <span>0/{pathModels.length}</span>
                 </div>
                 <div className="w-full bg-zinc-800 rounded-full h-1">
-                  <div
-                    className="bg-blue-500 h-1 rounded-full transition-all duration-300 learning-path-progress"
-                    style={{ '--progress-width': '0%' } as React.CSSProperties}
+                  <ProgressBar
+                    width={0}
+                    className="bg-blue-500 h-1 rounded-full transition-all duration-300"
                   />
                 </div>
               </div>

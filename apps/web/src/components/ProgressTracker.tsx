@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Base120Model } from '../hooks/useModels';
 import { useAuth } from '../hooks/useAuth';
 import { useProgress } from '../hooks/useProgress';
+import { ProgressBar } from './ui/ProgressBar';
 import './components.css';
 
 interface ProgressTrackerProps {
@@ -209,9 +210,9 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
 
         {/* Progress Bar */}
         <div className="w-full bg-zinc-800 rounded-full h-2 mb-6">
-          <div
-            className="bg-gradient-to-r from-blue-500 to-emerald-500 h-2 rounded-full transition-all duration-500 progress-bar-fill"
-            style={{ '--progress-width': `${completionRate}%` } as React.CSSProperties}
+          <ProgressBar
+            width={completionRate}
+            className="bg-gradient-to-r from-blue-500 to-emerald-500 h-2 rounded-full transition-all duration-500"
           />
         </div>
 
@@ -266,9 +267,9 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
                   </span>
                 </div>
                 <div className="w-full bg-zinc-800 rounded-full h-1">
-                  <div
-                    className="bg-blue-500 h-1 rounded-full transition-all duration-300 transformation-progress"
-                    style={{ '--transformation-progress': `${percentage}%` } as React.CSSProperties}
+                  <ProgressBar
+                    width={percentage}
+                    className="bg-blue-500 h-1 rounded-full transition-all duration-300"
                   />
                 </div>
               </div>
@@ -298,9 +299,9 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
                   </span>
                 </div>
                 <div className="w-full bg-zinc-800 rounded-full h-1">
-                  <div
-                    className={`${colors[difficulty]} h-1 rounded-full transition-all duration-300 difficulty-progress`}
-                    style={{ '--difficulty-progress': `${percentage}%` } as React.CSSProperties}
+                  <ProgressBar
+                    width={percentage}
+                    className={`${colors[difficulty]} h-1 rounded-full transition-all duration-300`}
                   />
                 </div>
               </div>

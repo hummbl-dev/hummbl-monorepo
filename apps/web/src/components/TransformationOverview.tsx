@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Base120Model } from '../hooks/useModels';
+import { ProgressBar } from './ui/ProgressBar';
 import './components.css';
 
 interface TransformationOverviewProps {
@@ -128,33 +129,21 @@ export const TransformationOverview: React.FC<TransformationOverviewProps> = ({
                 {/* Visual difficulty bars */}
                 <div className="flex gap-1 h-1">
                   {stats.beginner > 0 && (
-                    <div
-                      className="bg-emerald-500 rounded-sm emerald-bar"
-                      style={
-                        {
-                          '--emerald-width': `${(stats.beginner / stats.total) * 100}%`,
-                        } as React.CSSProperties
-                      }
+                    <ProgressBar
+                      width={(stats.beginner / stats.total) * 100}
+                      className="bg-emerald-500 rounded-sm"
                     />
                   )}
                   {stats.intermediate > 0 && (
-                    <div
-                      className="bg-amber-500 rounded-sm amber-bar"
-                      style={
-                        {
-                          '--amber-width': `${(stats.intermediate / stats.total) * 100}%`,
-                        } as React.CSSProperties
-                      }
+                    <ProgressBar
+                      width={(stats.intermediate / stats.total) * 100}
+                      className="bg-amber-500 rounded-sm"
                     />
                   )}
                   {stats.advanced > 0 && (
-                    <div
-                      className="bg-rose-500 rounded-sm rose-bar"
-                      style={
-                        {
-                          '--rose-width': `${(stats.advanced / stats.total) * 100}%`,
-                        } as React.CSSProperties
-                      }
+                    <ProgressBar
+                      width={(stats.advanced / stats.total) * 100}
+                      className="bg-rose-500 rounded-sm"
                     />
                   )}
                 </div>

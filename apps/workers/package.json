@@ -11,7 +11,7 @@
     "deploy:staging": "wrangler deploy --env staging",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint src",
     "test": "vitest run"
   },
   "dependencies": {

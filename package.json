@@ -28,6 +28,11 @@
     "turbo": "^2.6.1",
     "typescript": "^5.9.3"
   },
+  "pnpm": {
+    "overrides": {
+      "vite": "^5.4.21"
+    }
+  },
   "packageManager": "pnpm@9.14.4",
   "engines": {
     "node": ">=18.0.0",

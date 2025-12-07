@@ -88,6 +88,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialVi
           <button
             onClick={onClose}
             className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            title="Close modal"
           >
             <X className="h-5 w-5" />
           </button>

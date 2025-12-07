@@ -1,4 +1,6 @@
+import React from 'react';
 import type { Base120Model } from '../hooks/useModels';
+import { PositionedElement } from './ui/PositionedElement';
 import './components.css';
 
 interface ModelPreviewProps {
@@ -20,14 +22,10 @@ export const ModelPreview: React.FC<ModelPreviewProps> = ({ model, position, vis
   if (!visible) return null;
 
   return (
-    <div
+    <PositionedElement
+      x={position.x}
+      y={position.y}
       className="fixed z-50 w-80 bg-zinc-950 border border-zinc-800 rounded-sm shadow-2xl p-4 pointer-events-none model-preview"
-      style={
-        {
-          '--preview-x': `${position.x}px`,
-          '--preview-y': `${position.y}px`,
-        } as React.CSSProperties
-      }
     >
       {/* Arrow pointing to card */}
       <div className="absolute -bottom-2 left-6 w-4 h-4 bg-zinc-950 border-r border-b border-zinc-800 transform rotate-45"></div>
@@ -103,6 +101,6 @@ export const ModelPreview: React.FC<ModelPreviewProps> = ({ model, position, vis
         </span>
         <span className="text-[9px] font-mono text-zinc-500">{model.transformation_name}</span>
       </div>
-    </div>
+    </PositionedElement>
   );
 };
