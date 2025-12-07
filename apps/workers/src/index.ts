@@ -9,7 +9,7 @@ import { logger } from 'hono/logger';
 import type { Env } from './env';
 import { modelsRouter } from './routes/models';
 import { transformationsRouter } from './routes/transformations';
-import { authRouter } from './routes/auth';
+import authRouter from './routes/auth';
 import { userRouter } from './routes/user';
 
 const app = new Hono<{ Bindings: Env }>();
