@@ -1,20 +1,19 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext, type AuthContextType, type User } from './AuthContext';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  AuthContext,
+  type AuthContextType,
+  type User,
+  type ApiError,
+  type AuthResponse,
+  type AuthTokens,
+} from './AuthContext';
 import { api } from '../lib';
+import { toast } from 'sonner';
 
-export interface ApiError extends Error {
-  response?: {
-    data?: {
-      message?: string;
-      error?: string;
-    };
-    status?: number;
-  };
-}
-
-const AUTH_TOKEN_KEY = 'auth_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
+const AUTH_TOKEN_KEY = 'hummbl_auth_token';
+const REFRESH_TOKEN_KEY = 'hummbl_refresh_token';
+const TOKEN_REFRESH_THRESHOLD = 5 * 60 * 1000; // 5 minutes before expiry
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -22,312 +21,228 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem(AUTH_TOKEN_KEY));
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isRefreshing = useRef(false);
+  const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Initialize auth state from localStorage
+  // Set auth token in axios headers when it changes
   useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        const storedToken = localStorage.getItem(AUTH_TOKEN_KEY);
-        if (storedToken) {
-          // Set the token in the API client
-          api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+    if (token) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      localStorage.setItem(AUTH_TOKEN_KEY, token);
+    } else {
+      delete api.defaults.headers.common['Authorization'];
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+    }
+  }, [token]);
 
-          // Verify token and fetch user data
-          const response = await api.get('/auth/me');
-
-          if (response.data) {
-            setUser(response.data.user);
-            setToken(storedToken);
-          } else {
-            // Invalid token, clear storage
-            clearAuth();
-          }
-        }
-      } catch (error) {
-        console.error('Auth initialization error:', error);
-        clearAuth();
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initializeAuth();
-  }, []);
-
-  // Clear auth state and storage
-  const clearAuth = () => {
-    setUser(null);
+  // Clear auth state
+  const clearAuth = useCallback(() => {
     setToken(null);
-    setError(null);
+    setUser(null);
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
-    delete api.defaults.headers.common['Authorization'];
-  };
-
-  // Handle successful authentication
-  const handleAuthSuccess = (data: { user: User; token: string; refresh_token?: string }) => {
-    setUser(data.user);
-    setToken(data.token);
-    setError(null);
-
-    // Store tokens
-    localStorage.setItem(AUTH_TOKEN_KEY, data.token);
-    if (data.refresh_token) {
-      localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh_token);
+    if (refreshTimeoutRef.current) {
+      clearTimeout(refreshTimeoutRef.current);
     }
+  }, []);
 
-    // Set default auth header
-    api.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
-
-    return { user: data.user, token: data.token };
-  };
-
-  // Handle authentication errors
-  const handleAuthError = (error: unknown, defaultMessage: string) => {
-    console.error('Auth error:', error);
-
-    // Handle Axios errors
-    const axiosError = error as {
-      response?: {
-        data?: {
-          error?: string;
-          message?: string;
-          details?: string;
-          code?: string;
-        };
-        status?: number;
-      };
-      message?: string;
-    };
-
-    // Try to get the most specific error message
-    const errorMessage =
-      axiosError.response?.data?.error ||
-      axiosError.response?.data?.message ||
-      (error as Error)?.message ||
-      defaultMessage;
-
-    // Additional details if available
-    const errorDetails = axiosError.response?.data?.details || '';
-    const errorCode = axiosError.response?.data?.code || '';
-
-    // Set the error message with details if available
-    const fullErrorMessage = [
-      errorMessage,
-      errorCode && `(Code: ${errorCode})`,
-      errorDetails && `\n\n${errorDetails}`,
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-    setError(fullErrorMessage);
-    return { user: null, token: null };
-  };
-
-  const login = useCallback(
-    async (
-      provider: 'google' | 'github' | 'email',
-      credentials?: { email: string; password: string }
-    ) => {
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        // Handle social login redirects
-        if ((provider === 'google' || provider === 'github') && !credentials) {
-          window.location.href = `${import.meta.env.VITE_API_URL}/api/v1/auth/${provider}`;
-          return { user: null, token: null };
-        }
-
-        // Handle email/password login
-        if (provider === 'email' && credentials) {
-          const response = await api.post('/auth/login', {
-            email: credentials.email,
-            password: credentials.password,
-          });
-
-          const { access_token, refresh_token, user } = response.data;
-          localStorage.setItem('auth_token', access_token);
-          if (refresh_token) {
-            localStorage.setItem('refresh_token', refresh_token);
-          }
-          setToken(access_token);
-          setUser(user);
-          return { user, token: access_token };
-        } else {
-          // Redirect to OAuth provider
-          window.location.href = `${import.meta.env.VITE_API_URL}/auth/${provider}`;
-          return { user: null, token: null };
-        }
-      } catch (error) {
-        console.error('Login error:', error);
-        throw error;
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    []
-  );
-
-  const register = useCallback(async (email: string, password: string, name: string) => {
+  // Handle login
+  const login = useCallback(async (email: string, password: string) => {
     try {
       setIsLoading(true);
       setError(null);
 
-      console.log('Attempting to register with:', { email, name });
-      const response = await api
-        .post('/auth/register', {
-          email,
-          password,
-          name,
-        })
-        .catch(
-          (error: {
-            response?: {
-              status?: number;
-              data?: {
-                error?: string;
-                message?: string;
-                details?: string;
-                code?: string;
-              };
-            };
-            message: string;
-          }) => {
-            console.error('Registration API error:', {
-              status: error.response?.status,
-              data: error.response?.data,
-              message: error.message,
-            });
-            throw error;
-          }
-        );
+      const response = await api.post<AuthResponse>('/auth/login', { email, password });
 
-      console.log('Registration successful:', response.data);
       if (response.data) {
-        return handleAuthSuccess(response.data);
+        const { user, token, refreshToken } = response.data;
+        setUser(user);
+        setToken(token);
+        localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+        toast.success('Logged in successfully');
+        return { success: true };
       }
 
-      return { user: null, token: null };
+      return { success: false, error: 'Invalid response from server' };
     } catch (error) {
-      return handleAuthError(
-        error,
-        'Failed to log in. Please check your credentials and try again.'
-      );
+      const message = (error as ApiError).response?.data?.message || 'Login failed';
+      setError(message);
+      toast.error(message);
+      return { success: false, error: message };
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  const verifyEmail = useCallback(
-    async (token: string) => {
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        const response = await api.post('/auth/verify-email', { token });
-
-        if (response.data) {
-          // If user is logged in, update their verified status
-          if (user) {
-            setUser({ ...user, email_verified: true });
-          }
-          return true;
-        }
-
-        return false;
-      } catch (error) {
-        handleAuthError(error, 'Failed to verify email. The link may have expired or is invalid.');
-        return false;
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [user]
-  );
-
-  // Handle social login callback
-  const handleSocialCallback = useCallback(async (provider: 'google' | 'github', code: string) => {
+  // Handle registration
+  const register = useCallback(async (name: string, email: string, password: string) => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const response = await api.get(`/auth/${provider}/callback?code=${code}`);
+      const response = await api.post<{ success: boolean }>('/auth/register', {
+        name,
+        email,
+        password,
+      });
 
-      if (response.data) {
-        return handleAuthSuccess(response.data);
+      if (response.data.success) {
+        toast.success('Registration successful! Please check your email to verify your account.');
+        return { success: true };
       }
 
-      return { user: null, token: null };
+      return { success: false, error: 'Registration failed' };
     } catch (error) {
-      return handleAuthError(error, `Failed to authenticate with ${provider}. Please try again.`);
+      const message = (error as ApiError).response?.data?.message || 'Registration failed';
+      setError(message);
+      toast.error(message);
+      return { success: false, error: message };
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Check for social login callback on mount
-  useEffect(() => {
-    const checkSocialLogin = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
-      const provider = window.location.pathname.includes('google')
-        ? 'google'
-        : window.location.pathname.includes('github')
-          ? 'github'
-          : null;
+  // Handle logout
+  const logout = useCallback(
+    async (options?: { silent?: boolean; returnTo?: string }) => {
+      const { silent = false, returnTo } = options || {};
 
-      if (code && provider) {
-        handleSocialCallback(provider, code).then(() => {
-          // Clean up URL after successful login
-          window.history.replaceState({}, document.title, '/dashboard');
-          navigate('/dashboard');
-        });
-      }
-    };
+      try {
+        // Try to call the logout endpoint if we have a token
+        if (token) {
+          try {
+            await api.post('/auth/logout');
+          } catch (error) {
+            // If the server is unreachable, still clear local auth
+            console.error('Error during logout:', error);
+          }
+        }
 
-    checkSocialLogin();
-  }, [handleSocialCallback, navigate]);
-
-  const logout = useCallback(async () => {
-    try {
-      // Call the logout endpoint if we have a token
-      if (token) {
-        await api.post('/auth/logout');
-      }
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Continue with logout even if API call fails
-    } finally {
-      // Clear auth state
-      clearAuth();
-      // Redirect to login
-      navigate('/login');
-    }
-  }, [token, navigate]);
-
-  const refreshUser = useCallback(async () => {
-    try {
-      const response = await api.get('/auth/me');
-      if (response.data) {
-        setUser(response.data.user);
-        return response.data.user;
-      }
-      return null;
-    } catch (error) {
-      console.error('Failed to refresh user:', error);
-      // If we get a 401, the token is invalid, so clear auth
-      if ((error as ApiError)?.response?.status === 401) {
         clearAuth();
+
+        if (!silent) {
+          toast.success('You have been logged out successfully');
+        }
+
+        // Redirect to login or specified path
+        navigate(returnTo || '/login', {
+          state: { from: location.pathname !== '/logout' ? location.pathname : undefined },
+        });
+      } catch (error) {
+        console.error('Logout error:', error);
+        if (!silent) {
+          toast.error('An error occurred during logout');
+        }
       }
-      return null;
+    },
+    [token, clearAuth, navigate, location.pathname]
+  );
+
+  // Verify email
+  const verifyEmail = useCallback(async (token: string) => {
+    try {
+      await api.post('/auth/verify-email', { token });
+      return { success: true };
+    } catch (error) {
+      const message = (error as ApiError).response?.data?.message || 'Email verification failed';
+      return { success: false, error: message };
     }
   }, []);
 
+  // Resend verification email
+  const resendVerificationEmail = useCallback(async (email: string) => {
+    try {
+      await api.post('/auth/resend-verification', { email });
+      return { success: true };
+    } catch (error) {
+      const message =
+        (error as ApiError).response?.data?.message || 'Failed to resend verification email';
+      return { success: false, error: message };
+    }
+  }, []);
+
+  // Refresh token
+  const refreshToken = useCallback(async (): Promise<string | null> => {
+    if (isRefreshing.current) {
+      return null;
+    }
+
+    try {
+      isRefreshing.current = true;
+      const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+
+      if (!refreshToken) {
+        return null;
+      }
+
+      const response = await api.post<AuthTokens>('/auth/refresh-token', { refreshToken });
+      const { token: newToken, refreshToken: newRefreshToken } = response.data;
+
+      setToken(newToken);
+      if (newRefreshToken) {
+        localStorage.setItem(REFRESH_TOKEN_KEY, newRefreshToken);
+      }
+
+      return newToken;
+    } catch (error) {
+      console.error('Failed to refresh token:', error);
+      clearAuth();
+      return null;
+    } finally {
+      isRefreshing.current = false;
+    }
+  }, [clearAuth]);
+
+  // Set up token refresh
+  useEffect(() => {
+    const checkTokenExpiry = async () => {
+      if (!token) return;
+
+      try {
+        const decoded = JSON.parse(atob(token.split('.')[1]));
+        const expiresAt = decoded.exp * 1000;
+        const now = Date.now();
+        const timeUntilExpiry = expiresAt - now;
+
+        if (timeUntilExpiry < TOKEN_REFRESH_THRESHOLD) {
+          await refreshToken();
+        }
+      } catch (error) {
+        console.error('Error checking token expiry:', error);
+      }
+    };
+
+    // Check token expiry on mount and set up interval
+    checkTokenExpiry();
+    const interval = setInterval(checkTokenExpiry, 60000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, [token, refreshToken]);
+
+  // Initial auth check
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (token) {
+        try {
+          const response = await api.get<{ user: User }>('/auth/me');
+          setUser(response.data.user);
+        } catch (error) {
+          console.error('Auth check failed:', error);
+          clearAuth();
+        }
+      }
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, [token, clearAuth]);
+
+  // Context value
   const contextValue: AuthContextType = {
     user,
     token,
@@ -336,11 +251,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     login,
     register,
     logout,
-    refreshUser,
+    refreshToken,
+    clearError: () => setError(null),
     verifyEmail,
+    resendVerificationEmail,
   };
 
-  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={contextValue}>{!isLoading && children}</AuthContext.Provider>;
 };
-
-export default AuthProvider;

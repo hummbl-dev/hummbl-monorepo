@@ -2,19 +2,38 @@ import { createContext } from 'react';
 
 export interface User {
   id: string;
-  email: string;
   name: string;
-  avatar_url?: string;
-  provider: 'google' | 'github' | 'email';
-  email_verified?: boolean;
-  created_at?: string;
-  updated_at?: string;
+  email: string;
+  emailVerified: boolean;
+  avatarUrl?: string;
+  provider?: string;
+  providerId?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface LoginResponse {
+export interface AuthTokens {
+  token: string;
+  refreshToken: string;
+}
+
+export interface AuthResponse {
   user: User;
   token: string;
-  refresh_token?: string;
+  refreshToken: string;
+}
+
+export interface ApiError extends Error {
+  response?: {
+    data?: {
+      message?: string;
+      error?: string;
+      code?: string;
+    };
+    status?: number;
+  };
+  config?: any;
+  code?: string;
 }
 
 export interface AuthContextType {
@@ -22,18 +41,52 @@ export interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   error: string | null;
-  login: (
-    provider: 'google' | 'github' | 'email',
-    credentials?: { email: string; password: string }
-  ) => Promise<LoginResponse | { user: null; token: null }>;
+  login: (email: string, password: string) => Promise<boolean>;
   register: (
+    name: string,
     email: string,
-    password: string,
-    name: string
-  ) => Promise<LoginResponse | { user: null; token: null }>;
-  logout: () => Promise<void>;
-  refreshUser: () => Promise<User | null>;
-  verifyEmail: (token: string) => Promise<boolean>;
+    password: string
+  ) => Promise<{ success: boolean; error?: string }>;
+  logout: (options?: { silent?: boolean; returnTo?: string }) => Promise<void>;
+  refreshToken: () => Promise<string | null>;
+  clearError: () => void;
+  verifyEmail: (token: string) => Promise<{ success: boolean; error?: string }>;
+  resendVerificationEmail: (email: string) => Promise<{ success: boolean; error?: string }>;
+  requestPasswordReset: (email: string) => Promise<{ success: boolean; error?: string }>;
+  resetPassword: (token: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  updateProfile: (updates: Partial<User>) => Promise<{ success: boolean; error?: string }>;
+  changePassword: (
+    currentPassword: string,
+    newPassword: string
+  ) => Promise<{ success: boolean; error?: string }>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Helper function to check if an error is an API error
+export const isApiError = (error: unknown): error is ApiError => {
+  return (
+    error !== null &&
+    typeof error === 'object' &&
+    'response' in error &&
+    error.response !== undefined
+  );
+};
+
+// Helper to extract error message from various error types
+export const getErrorMessage = (error: unknown): string => {
+  if (isApiError(error)) {
+    return (
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      'An unknown error occurred'
+    );
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return 'An unknown error occurred';
+};

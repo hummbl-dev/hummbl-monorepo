@@ -5,7 +5,7 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/Card';
 import { Label } from '../ui/Label';
-import { Icons } from '../ui/Icons';
+import { Github, Google } from '../ui/icons';
 
 export function RegisterForm() {
   const [name, setName] = useState('');
@@ -105,7 +105,7 @@ export function RegisterForm() {
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+            {isLoading && <span className="mr-2 h-4 w-4 animate-spin">↻</span>}
             Create Account
           </Button>
 
@@ -126,9 +126,9 @@ export function RegisterForm() {
               disabled={isLoading}
             >
               {isLoading ? (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                <span className="mr-2 h-4 w-4 animate-spin">↻</span>
               ) : (
-                <Icons.google className="mr-2 h-4 w-4" />
+                <Google className="mr-2 h-4 w-4" />
               )}
               Google
             </Button>
@@ -139,9 +139,9 @@ export function RegisterForm() {
               disabled={isLoading}
             >
               {isLoading ? (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                <span className="mr-2 h-4 w-4 animate-spin">↻</span>
               ) : (
-                <Icons.github className="mr-2 h-4 w-4" />
+                <Github className="mr-2 h-4 w-4" />
               )}
               GitHub
             </Button>

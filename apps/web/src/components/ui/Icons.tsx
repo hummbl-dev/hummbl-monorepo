@@ -68,8 +68,4 @@ export function Github({ className, ...props }: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-export const Icons = {
-  spinner: Spinner,
-  google: Google,
-  github: Github,
-};
+export * from './icons';
