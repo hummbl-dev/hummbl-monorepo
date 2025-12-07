@@ -239,7 +239,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (token) {
         try {
           const response = await api.get<{ user: User }>('/auth/me');
-          setUser(response.data.user);
+          setUser(response.data.user as User);
         } catch (error) {
           console.error('Auth check failed:', error);
           clearAuth();
