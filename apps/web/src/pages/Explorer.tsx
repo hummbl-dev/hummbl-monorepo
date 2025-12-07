@@ -1,16 +1,34 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { useModels } from '../hooks/useModels';
 import { ModelCard } from '../components/ModelCard';
 import { StatusStrip } from '../components/StatusStrip';
 import { TransformationOverview } from '../components/TransformationOverview';
-import { LearningPaths } from '../components/LearningPaths';
-import { ProgressTracker } from '../components/ProgressTracker';
 import { AdvancedFilters } from '../components/AdvancedFilters';
-import { RelationshipGraph } from '../components/RelationshipGraph';
 import { ModelComparison } from '../components/ModelComparison';
 import { FavoritesSystem } from '../components/FavoritesSystem';
 import { ToastProvider } from '../components/Toast';
+
+// Lazy load heavy components to reduce initial bundle
+const RelationshipGraph = lazy(() =>
+  import('../components/RelationshipGraph').then(m => ({ default: m.RelationshipGraph }))
+);
+const LearningPaths = lazy(() =>
+  import('../components/LearningPaths').then(m => ({ default: m.LearningPaths }))
+);
+const ProgressTracker = lazy(() =>
+  import('../components/ProgressTracker').then(m => ({ default: m.ProgressTracker }))
+);
+
+// Loading component for lazy-loaded tabs
+const TabLoader: React.FC = () => (
+  <div className="flex items-center justify-center py-20">
+    <div className="text-center space-y-3">
+      <div className="w-6 h-6 border-2 border-zinc-700 border-t-zinc-400 rounded-full animate-spin mx-auto" />
+      <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-zinc-500">Loading…</p>
+    </div>
+  </div>
+);
 
 type TransformationFilter = 'all' | 'P' | 'IN' | 'CO' | 'DE' | 'RE' | 'SY';
 type DifficultyFilter = 'all' | 'beginner' | 'intermediate' | 'advanced';
@@ -380,17 +398,27 @@ export const Explorer: React.FC = () => {
         </div>
       )}
 
-      {activeTab === 'graph' && <RelationshipGraph models={models} />}
+      {activeTab === 'graph' && (
+        <Suspense fallback={<TabLoader />}>
+          <RelationshipGraph models={models} />
+        </Suspense>
+      )}
 
-      {activeTab === 'paths' && <LearningPaths models={models} onPathSelect={handlePathSelect} />}
+      {activeTab === 'paths' && (
+        <Suspense fallback={<TabLoader />}>
+          <LearningPaths models={models} onPathSelect={handlePathSelect} />
+        </Suspense>
+      )}
 
       {activeTab === 'progress' && (
-        <ProgressTracker
-          models={models}
-          completedModels={completedModels}
-          onModelComplete={handleModelComplete}
-          onModelUncomplete={handleModelUncomplete}
-        />
+        <Suspense fallback={<TabLoader />}>
+          <ProgressTracker
+            models={models}
+            completedModels={completedModels}
+            onModelComplete={handleModelComplete}
+            onModelUncomplete={handleModelUncomplete}
+          />
+        </Suspense>
       )}
     </div>
   );
