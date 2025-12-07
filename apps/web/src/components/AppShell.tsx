@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import { LoginButton } from './LoginButton.tsx';
 
 interface NavItem {
   label: string;
@@ -100,6 +101,9 @@ export const AppShell: React.FC = () => {
           </div>
 
           <div className="text-[11px] text-zinc-500 space-y-1 font-mono border-t border-white/5 pt-4">
+            <div className="mb-4">
+              <LoginButton />
+            </div>
             <p>Cloudflare Workers · React 18 · Vite</p>
             <p>Obsidian Monolith v0.{new Date().getMonth() + 1}</p>
             <p>© {new Date().getFullYear()} HUMMBL Systems</p>

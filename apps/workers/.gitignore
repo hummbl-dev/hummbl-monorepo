@@ -1,0 +1,25 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Local development
+.wrangler
+node_modules/
+*.log
+.DS_Store
+
+# Build output
+dist/
+build/
+
+# Local database
+*.db
+*.sqlite
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Local development variables
+.dev.vars

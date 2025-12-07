@@ -1,0 +1,60 @@
+/* Custom component styles */
+
+/* Model Preview positioning */
+.model-preview {
+  left: var(--preview-x);
+  top: var(--preview-y);
+  transform: translate(-50%, -100%) translateY(-12px);
+}
+
+/* Transformation Overview difficulty bars */
+.emerald-bar {
+  width: var(--emerald-width);
+}
+
+.amber-bar {
+  width: var(--amber-width);
+}
+
+.rose-bar {
+  width: var(--rose-width);
+}
+
+/* Transformation Overview hover positioning */
+.transformation-card:hover .hover-preview {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-8px);
+}
+
+.hover-preview {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0);
+  transition: all 0.2s ease-in-out;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Learning Paths progress bars */
+.learning-path-progress {
+  width: var(--progress-width, 0%);
+  transition: width 0.3s ease-in-out;
+}
+
+/* Progress Tracker bars */
+.progress-bar-fill {
+  width: var(--progress-width, 0%);
+  transition: width 0.5s ease-in-out;
+}
+
+.transformation-progress {
+  width: var(--transformation-progress, 0%);
+  transition: width 0.3s ease-in-out;
+}
+
+.difficulty-progress {
+  width: var(--difficulty-progress, 0%);
+  transition: width 0.3s ease-in-out;
+}

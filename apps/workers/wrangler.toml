@@ -10,23 +10,29 @@ enabled = true
 [[d1_databases]]
 binding = "DB"
 database_name = "hummbl-models"
-database_id = "TO_BE_CREATED"  # Run: wrangler d1 create hummbl-models
+database_id = "d403a9ac-d002-47ba-8331-7b1ac5ccac6d"
 
 # KV namespace for caching
 [[kv_namespaces]]
 binding = "CACHE"
-id = "TO_BE_CREATED"  # Run: wrangler kv:namespace create CACHE
+id = "fe24311e291f45909a02fd2a89a0735c"
 preview_id = "a584d2551d4c465aaecbf869d9771d84"
 
-# R2 bucket for static assets/exports
-[[r2_buckets]]
-binding = "ASSETS"
-bucket_name = "hummbl-assets"
+# R2 bucket for static assets/exports (needs to be enabled in dashboard)
+# [[r2_buckets]]
+# binding = "ASSETS"
+# bucket_name = "hummbl-assets"
 
 # Environment variables
 [vars]
 ENVIRONMENT = "production"
 API_VERSION = "v1"
+JWT_SECRET = "your-jwt-secret-here"
+PASSWORD_SALT = "your-password-salt-here"
+GITHUB_CLIENT_ID = "your-github-client-id"
+GITHUB_CLIENT_SECRET = "your-github-client-secret"
+GOOGLE_CLIENT_ID = "your-google-client-id"
+GOOGLE_CLIENT_SECRET = "your-google-client-secret"
 
 # Staging environment
 [env.staging]

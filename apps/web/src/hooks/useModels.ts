@@ -38,6 +38,7 @@ export interface Base120Model extends MentalModel {
   system_prompt: string;
   tags: string[];
   difficulty: DifficultyLevel;
+  relatedModels: string;
   updatedAt?: string;
 }
 
@@ -72,6 +73,7 @@ const normalizeModel = (model: MentalModel): Base120Model => {
     system_prompt: model.definition,
     tags: deriveTags(model),
     difficulty: coerceDifficulty(model),
+    relatedModels: (model as { relatedModels?: string }).relatedModels ?? '',
     updatedAt: (model as { updatedAt?: string }).updatedAt,
   };
 };

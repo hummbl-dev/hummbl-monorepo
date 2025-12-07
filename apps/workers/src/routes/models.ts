@@ -14,18 +14,17 @@ interface DbMentalModel {
   code: string;
   name: string;
   transformation: TransformationType;
-  definition: string;
-  whenToUse: string;
+  description: string;
   example?: string;
-  priority: number;
-  system_prompt: string;
+  tags: string;
+  difficulty: string;
+  relatedModels: string;
+  version: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-interface ApiMentalModel extends DbMentalModel {
-  system_prompt: string;
-}
-
-const mapToApiModel = (model: DbMentalModel): ApiMentalModel => ({
+const mapToApiModel = (model: DbMentalModel): DbMentalModel => ({
   ...model,
 });
 
@@ -40,7 +39,7 @@ interface DbRelationship {
 }
 
 const MODEL_SELECT =
-  'SELECT code, name, transformation, definition, whenToUse, example, priority, system_prompt FROM mental_models';
+  'SELECT code, name, transformation, description, example, tags, difficulty, relatedModels, version, createdAt, updatedAt FROM mental_models';
 
 const buildModelsQuery = (filters: { transformation?: TransformationType; search?: string }) => {
   const clauses: string[] = [];
@@ -53,10 +52,8 @@ const buildModelsQuery = (filters: { transformation?: TransformationType; search
 
   if (filters.search) {
     const searchTerm = `%${filters.search.toLowerCase()}%`;
-    clauses.push(
-      '(LOWER(definition) LIKE ? OR LOWER(whenToUse) LIKE ? OR LOWER(name) LIKE ? OR code LIKE ?)'
-    );
-    params.push(searchTerm, searchTerm, searchTerm, `%${filters.search.toUpperCase()}%`);
+    clauses.push('(LOWER(description) LIKE ? OR LOWER(name) LIKE ? OR code LIKE ?)');
+    params.push(searchTerm, searchTerm, `%${filters.search.toUpperCase()}%`);
   }
 
   const whereClause = clauses.length ? ` WHERE ${clauses.join(' AND ')}` : '';
@@ -96,7 +93,7 @@ modelsRouter.get('/', async c => {
     async (): Promise<
       Result<
         {
-          models: ApiMentalModel[];
+          models: DbMentalModel[];
           count: number;
           transformation: TransformationType | null;
           search: string | null;
@@ -153,10 +150,10 @@ modelsRouter.get('/:code', async c => {
   const result = await getCachedResult(
     c.env,
     cacheKey,
-    async (): Promise<Result<{ model: ApiMentalModel }, ApiError>> => {
+    async (): Promise<Result<{ model: DbMentalModel }, ApiError>> => {
       try {
         const model = await c.env.DB.prepare(
-          'SELECT code, name, transformation, definition, whenToUse, example, priority, system_prompt FROM mental_models WHERE code = ?'
+          'SELECT code, name, transformation, description, example, tags, difficulty, relatedModels, version, createdAt, updatedAt FROM mental_models WHERE code = ?'
         )
           .bind(code)
           .first<DbMentalModel>();
@@ -259,15 +256,15 @@ modelsRouter.post('/recommend', async c => {
 
     const { results } = await c.env.DB.prepare(
       `
-        SELECT code, name, transformation, definition, priority
+        SELECT code, name, transformation, description
         FROM mental_models
-        WHERE LOWER(definition) LIKE ? OR LOWER(whenToUse) LIKE ? OR LOWER(name) LIKE ?
+        WHERE LOWER(description) LIKE ? OR LOWER(name) LIKE ?
         ORDER BY priority DESC
         LIMIT 10
       `
     )
-      .bind(searchTerm, searchTerm, searchTerm)
-      .all<Pick<DbMentalModel, 'code' | 'name' | 'transformation' | 'definition' | 'priority'>>();
+      .bind(searchTerm, searchTerm)
+      .all<Pick<DbMentalModel, 'code' | 'name' | 'transformation' | 'description'>>();
 
     return respondWithResult(
       c,

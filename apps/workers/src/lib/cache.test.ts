@@ -16,6 +16,12 @@ const createEnv = () => {
     ASSETS: {} as R2Bucket,
     ENVIRONMENT: 'test',
     API_VERSION: 'v1',
+    JWT_SECRET: 'test-secret',
+    PASSWORD_SALT: 'test-salt',
+    GITHUB_CLIENT_ID: 'test-github-id',
+    GITHUB_CLIENT_SECRET: 'test-github-secret',
+    GOOGLE_CLIENT_ID: 'test-google-id',
+    GOOGLE_CLIENT_SECRET: 'test-google-secret',
   } satisfies Env;
 };
 

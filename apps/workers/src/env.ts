@@ -15,4 +15,14 @@ export interface Env {
   // Environment variables
   ENVIRONMENT: string;
   API_VERSION: string;
+
+  // Authentication
+  JWT_SECRET: string;
+  PASSWORD_SALT: string;
+
+  // OAuth Providers
+  GITHUB_CLIENT_ID: string;
+  GITHUB_CLIENT_SECRET: string;
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
 }
