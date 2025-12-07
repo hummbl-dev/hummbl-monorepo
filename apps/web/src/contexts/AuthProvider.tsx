@@ -283,7 +283,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         return { success: false, error: message };
       }
     },
-    updateProfile: async (updates: Partial<User>) => {
+    updateProfile: async (updates: Partial<AuthUser>) => {
       try {
         const response = await api.patch('/auth/me', updates);
         setUser(prev => ({ ...prev!, ...response.data.user }));
