@@ -45,13 +45,16 @@ export interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (
     name: string,
     email: string,
     password: string
   ) => Promise<{ success: boolean; error?: string }>;
-  logout: (options?: { silent?: boolean; returnTo?: string }) => Promise<void>;
+  logout: (options?: {
+    silent?: boolean;
+    returnTo?: string;
+  }) => Promise<{ success: boolean; error?: string }>;
   refreshToken: () => Promise<string | null>;
   clearError: () => void;
   verifyEmail: (token: string) => Promise<{ success: boolean; error?: string }>;

@@ -11,7 +11,7 @@ export const LoginButton: React.FC = () => {
       <div className="flex items-center gap-4">
         <span className="text-sm text-gray-600">Welcome, {user.name}</span>
         <button
-          onClick={logout}
+          onClick={() => logout()}
           className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
         >
           Sign Out

@@ -13,14 +13,14 @@ const api: AxiosInstance = axios.create({
 
 // Add request interceptor to include auth token
 api.interceptors.request.use(
-  config => {
+  (config: any) => {
     const token = localStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  error => {
+  (error: any) => {
     return Promise.reject(error);
   }
 );

@@ -24,7 +24,7 @@ export const ProtectedRoute = ({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (requireEmailVerification && !user.email_verified) {
+  if (requireEmailVerification && !user.emailVerified) {
     // Redirect to email verification page if email is not verified
     return <Navigate to="/verify-email" state={{ from: location }} replace />;
   }

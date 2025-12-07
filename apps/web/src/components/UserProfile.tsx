@@ -33,12 +33,12 @@ export const UserProfile: React.FC = () => {
               <div className="flex items-center gap-2 mt-1">
                 <span
                   className={`text-xs px-2 py-1 rounded ${
-                    user.email_verified
+                    user.emailVerified
                       ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                       : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
                   }`}
                 >
-                  {user.email_verified ? 'Verified' : 'Not Verified'}
+                  {user.emailVerified ? 'Verified' : 'Not Verified'}
                 </span>
                 <span className="text-xs text-zinc-500 capitalize">{user.provider}</span>
               </div>
@@ -47,7 +47,7 @@ export const UserProfile: React.FC = () => {
         </div>
 
         {/* Email Verification */}
-        {!user.email_verified && user.provider === 'email' && (
+        {!user.emailVerified && user.provider === 'email' && (
           <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 mb-6">
             <h3 className="text-sm font-medium text-amber-400 mb-2">Email Verification Required</h3>
             <p className="text-xs text-zinc-400 mb-3">
@@ -81,7 +81,7 @@ export const UserProfile: React.FC = () => {
               Privacy Settings
             </button>
             <button
-              onClick={logout}
+              onClick={() => logout()}
               className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-zinc-800 rounded transition-colors"
             >
               Sign Out
