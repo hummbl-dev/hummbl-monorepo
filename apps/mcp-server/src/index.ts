@@ -128,6 +128,18 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         required: ['code'],
       },
     },
+    {
+      name: 'get_related_models',
+      description:
+        'Fetch all relationships for a mental model, including source/target connections.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          code: { type: 'string', description: 'Model code (e.g., P1, IN12).' },
+        },
+        required: ['code'],
+      },
+    },
   ],
 }));
 
@@ -210,6 +222,61 @@ Example: search_models(query="feedback", transformation="${code}")
 `;
 
     return { content: [{ type: 'text', text: report }] };
+  }
+
+  if (request.params.name === 'get_related_models') {
+    const { code } = request.params.arguments as { code: string };
+    const modelCode = code.toUpperCase();
+
+    try {
+      const response = await fetch(`${WORKER_URL}/v1/models/${modelCode}/relationships`);
+
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}: ${response.statusText}`);
+      }
+
+      const payload = await response.json();
+
+      if (!payload?.ok) {
+        throw new Error(`Model ${modelCode} not found or has no relationships`);
+      }
+
+      const { model, relationships, count } = payload.value;
+
+      if (count === 0) {
+        return {
+          content: [
+            { type: 'text', text: `Model ${modelCode} has no documented relationships yet.` },
+          ],
+        };
+      }
+
+      const report =
+        `# RELATIONSHIPS: ${model}\n\n` +
+        `Found ${count} relationship(s):\n\n` +
+        relationships
+          .map((rel: any) => {
+            const direction = rel.source_code === modelCode ? '→' : '←';
+            const otherModel = rel.source_code === modelCode ? rel.target_code : rel.source_code;
+            const confidence =
+              rel.confidence === 10 ? 'High' : rel.confidence >= 7 ? 'Medium' : 'Low';
+
+            return (
+              `${direction} **${otherModel}** (${rel.relationship_type}, confidence: ${confidence})\n` +
+              (rel.evidence ? `   Evidence: ${rel.evidence}\n` : '')
+            );
+          })
+          .join('\n');
+
+      return { content: [{ type: 'text', text: report }] };
+    } catch (error) {
+      return {
+        content: [
+          { type: 'text', text: `Error fetching relationships for ${modelCode}: ${String(error)}` },
+        ],
+        isError: true,
+      };
+    }
   }
 
   return { content: [{ type: 'text', text: 'Tool not found' }], isError: true };
