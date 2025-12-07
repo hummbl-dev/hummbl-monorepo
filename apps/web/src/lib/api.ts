@@ -1,4 +1,9 @@
-import axios, { type AxiosError, type AxiosInstance, type AxiosResponse } from 'axios';
+import axios, {
+  type AxiosError,
+  type AxiosInstance,
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8787';
 
@@ -13,7 +18,7 @@ const api: AxiosInstance = axios.create({
 
 // Add request interceptor to include auth token
 api.interceptors.request.use(
-  (config: { headers: Record<string, string> }) => {
+  (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('auth_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

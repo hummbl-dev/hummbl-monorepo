@@ -52,96 +52,105 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   // Handle login
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(
+    async (
+      provider: 'google' | 'github' | 'email',
+      credentials?: { email: string; password: string }
+    ) => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        if (provider === 'email' && credentials) {
+          const response = await api.post<AuthResponse>('/auth/login', {
+            email: credentials.email,
+            password: credentials.password,
+          });
+
+          if (response.data) {
+            const { user, token, refreshToken } = response.data;
+            setUser(user);
+            setToken(token);
+            localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+            toast.success('Logged in successfully');
+          }
+        } else {
+          // Handle OAuth providers (Google, GitHub)
+          const response = await api.post<AuthResponse>(`/auth/${provider}`);
+          if (response.data) {
+            const { user, token, refreshToken } = response.data;
+            setUser(user);
+            setToken(token);
+            localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+            toast.success(`Logged in with ${provider}`);
+          }
+        }
+      } catch (error) {
+        const message = (error as ApiError).response?.data?.message || 'Login failed';
+        setError(message);
+        toast.error(message);
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
+
+  // Handle registration
+  const register = useCallback(async (email: string, password: string, name: string) => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const response = await api.post<AuthResponse>('/auth/login', { email, password });
+      const response = await api.post<AuthResponse>('/auth/register', {
+        name,
+        email,
+        password,
+      });
 
       if (response.data) {
         const { user, token, refreshToken } = response.data;
         setUser(user);
         setToken(token);
         localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-        toast.success('Logged in successfully');
-        return { success: true };
+        toast.success('Registration successful!');
       }
-
-      return { success: false, error: 'Invalid response from server' };
-    } catch (error) {
-      const message = (error as ApiError).response?.data?.message || 'Login failed';
-      setError(message);
-      toast.error(message);
-      return { success: false, error: message };
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  // Handle registration
-  const register = useCallback(async (name: string, email: string, password: string) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const response = await api.post<{ success: boolean }>('/auth/register', {
-        name,
-        email,
-        password,
-      });
-
-      if (response.data.success) {
-        toast.success('Registration successful! Please check your email to verify your account.');
-        return { success: true };
-      }
-
-      return { success: false, error: 'Registration failed' };
     } catch (error) {
       const message = (error as ApiError).response?.data?.message || 'Registration failed';
       setError(message);
       toast.error(message);
-      return { success: false, error: message };
+      throw error;
     } finally {
       setIsLoading(false);
     }
   }, []);
 
   // Handle logout
-  const logout = useCallback(
-    async (options?: { silent?: boolean; returnTo?: string }) => {
-      const { silent = false, returnTo } = options || {};
-
-      try {
-        // Try to call the logout endpoint if we have a token
-        if (token) {
-          try {
-            await api.post('/auth/logout');
-          } catch (error) {
-            // If the server is unreachable, still clear local auth
-            console.error('Error during logout:', error);
-          }
-        }
-
-        clearAuth();
-
-        if (!silent) {
-          toast.success('You have been logged out successfully');
-        }
-
-        // Redirect to login or specified path
-        navigate(returnTo || '/login', {
-          state: { from: location.pathname !== '/logout' ? location.pathname : undefined },
-        });
-      } catch (error) {
-        console.error('Logout error:', error);
-        if (!silent) {
-          toast.error('An error occurred during logout');
+  const logout = useCallback(async () => {
+    try {
+      // Try to call the logout endpoint if we have a token
+      if (token) {
+        try {
+          await api.post('/auth/logout');
+        } catch (error) {
+          // If the server is unreachable, still clear local auth
+          console.error('Error during logout:', error);
         }
       }
-    },
-    [token, clearAuth, navigate, location.pathname]
-  );
+
+      clearAuth();
+      toast.success('You have been logged out successfully');
+
+      // Redirect to login
+      navigate('/login', {
+        state: { from: location.pathname !== '/logout' ? location.pathname : undefined },
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('An error occurred during logout');
+    }
+  }, [token, clearAuth, navigate, location.pathname]);
 
   // Verify email
   const verifyEmail = useCallback(async (token: string) => {
@@ -255,6 +264,44 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     clearError: () => setError(null),
     verifyEmail,
     resendVerificationEmail,
+    requestPasswordReset: async (email: string) => {
+      try {
+        await api.post('/auth/request-password-reset', { email });
+        return { success: true };
+      } catch (error) {
+        const message =
+          (error as ApiError).response?.data?.message || 'Failed to request password reset';
+        return { success: false, error: message };
+      }
+    },
+    resetPassword: async (token: string, password: string) => {
+      try {
+        await api.post('/auth/reset-password', { token, password });
+        return { success: true };
+      } catch (error) {
+        const message = (error as ApiError).response?.data?.message || 'Failed to reset password';
+        return { success: false, error: message };
+      }
+    },
+    updateProfile: async (updates: Partial<User>) => {
+      try {
+        const response = await api.patch('/auth/me', updates);
+        setUser(prev => ({ ...prev!, ...response.data.user }));
+        return { success: true };
+      } catch (error) {
+        const message = (error as ApiError).response?.data?.message || 'Failed to update profile';
+        return { success: false, error: message };
+      }
+    },
+    changePassword: async (currentPassword: string, newPassword: string) => {
+      try {
+        await api.post('/auth/change-password', { currentPassword, newPassword });
+        return { success: true };
+      } catch (error) {
+        const message = (error as ApiError).response?.data?.message || 'Failed to change password';
+        return { success: false, error: message };
+      }
+    },
   };
 
   return <AuthContext.Provider value={contextValue}>{!isLoading && children}</AuthContext.Provider>;

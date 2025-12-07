@@ -45,16 +45,12 @@ export interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  register: (
-    name: string,
-    email: string,
-    password: string
-  ) => Promise<{ success: boolean; error?: string }>;
-  logout: (options?: {
-    silent?: boolean;
-    returnTo?: string;
-  }) => Promise<{ success: boolean; error?: string }>;
+  login: (
+    provider: 'google' | 'github' | 'email',
+    credentials?: { email: string; password: string }
+  ) => Promise<void>;
+  register: (email: string, password: string, name: string) => Promise<void>;
+  logout: () => void;
   refreshToken: () => Promise<string | null>;
   clearError: () => void;
   verifyEmail: (token: string) => Promise<{ success: boolean; error?: string }>;
