@@ -47,6 +47,7 @@ const NAV_SECTIONS: NavSection[] = [
 const navClass = ({ isActive }: { isActive: boolean }) =>
   [
     'group block rounded-md border px-4 py-3 transition-all duration-300 backdrop-blur-sm',
+    'focus:outline-none focus:ring-2 focus:ring-obsidian-400 focus:ring-offset-2 focus:ring-offset-black',
     isActive
       ? 'border-obsidian-500/70 bg-obsidian-900/80 shadow-glow-soft'
       : 'border-obsidian-800/80 hover:border-obsidian-600/80',
@@ -55,16 +56,29 @@ const navClass = ({ isActive }: { isActive: boolean }) =>
 export const AppShell: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-obsidian-950 via-zinc-950 to-black text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(120,119,198,0.08),_transparent_55%)]" />
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(120,119,198,0.08),_transparent_55%)]"
+        aria-hidden="true"
+      />
       <div className="relative z-10 flex min-h-screen">
-        <aside className="w-80 border-r border-white/5 px-8 py-10 space-y-10 flex flex-col">
+        <aside
+          className="w-80 border-r border-white/5 px-8 py-10 space-y-10 flex flex-col"
+          aria-label="Primary navigation"
+        >
           <div className="space-y-8">
-            <NavLink to="/" className="flex items-center gap-4">
+            <NavLink
+              to="/"
+              className="flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-obsidian-400 rounded-lg"
+              aria-label="HUMMBL Base120 Home"
+            >
               <div className="relative">
-                <span className="w-14 h-14 border border-obsidian-700/80 rounded-full flex items-center justify-center text-lg font-bold font-mono">
+                <span
+                  className="w-14 h-14 border border-obsidian-700/80 rounded-full flex items-center justify-center text-lg font-bold font-mono"
+                  aria-hidden="true"
+                >
                   H
                 </span>
-                <span className="absolute inset-0 blur-xl bg-obsidian-500/30" aria-hidden />
+                <span className="absolute inset-0 blur-xl bg-obsidian-500/30" aria-hidden="true" />
               </div>
               <div>
                 <p className="text-[11px] tracking-[0.35em] text-zinc-400 font-mono uppercase">
@@ -74,45 +88,72 @@ export const AppShell: React.FC = () => {
               </div>
             </NavLink>
 
-            <nav className="space-y-8">
+            <nav aria-label="Main navigation" className="space-y-8">
               {NAV_SECTIONS.map(section => (
-                <div key={section.title} className="space-y-3">
-                  <p className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.4em]">
+                <div
+                  key={section.title}
+                  className="space-y-3"
+                  role="group"
+                  aria-labelledby={`nav-section-${section.title}`}
+                >
+                  <p
+                    id={`nav-section-${section.title}`}
+                    className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.4em]"
+                  >
                     {section.title}
                   </p>
-                  <div className="space-y-3">
+                  <ul className="space-y-3" role="list">
                     {section.items.map(item => (
-                      <NavLink key={item.code} to={item.to} className={navClass}>
-                        <div>
-                          <span className="flex items-center justify-between font-semibold tracking-wide">
-                            {item.label}
-                            <span className="text-[10px] text-zinc-400 font-mono">{item.code}</span>
-                          </span>
-                          <p className="text-sm text-zinc-500 group-hover:text-zinc-300">
-                            {item.description}
-                          </p>
-                        </div>
-                      </NavLink>
+                      <li key={item.code}>
+                        <NavLink
+                          to={item.to}
+                          className={navClass}
+                          aria-describedby={`nav-desc-${item.code}`}
+                        >
+                          <div>
+                            <span className="flex items-center justify-between font-semibold tracking-wide">
+                              {item.label}
+                              <span
+                                className="text-[10px] text-zinc-400 font-mono"
+                                aria-hidden="true"
+                              >
+                                {item.code}
+                              </span>
+                            </span>
+                            <p
+                              id={`nav-desc-${item.code}`}
+                              className="text-sm text-zinc-500 group-hover:text-zinc-300"
+                            >
+                              {item.description}
+                            </p>
+                          </div>
+                        </NavLink>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
               ))}
             </nav>
           </div>
 
-          <div className="text-[11px] text-zinc-500 space-y-1 font-mono border-t border-white/5 pt-4">
+          <footer className="text-[11px] text-zinc-500 space-y-1 font-mono border-t border-white/5 pt-4">
             <div className="mb-4">
               <LoginButton />
             </div>
             <p>Cloudflare Workers · React 18 · Vite</p>
             <p>Obsidian Monolith v0.{new Date().getMonth() + 1}</p>
             <p>© {new Date().getFullYear()} HUMMBL Systems</p>
-          </div>
+          </footer>
         </aside>
 
-        <section className="scroll-micro flex-1 min-h-screen overflow-y-auto px-12 py-12">
+        <main
+          id="main-content"
+          className="scroll-micro flex-1 min-h-screen overflow-y-auto px-12 py-12"
+          role="main"
+          tabIndex={-1}
+        >
           <Outlet />
-        </section>
+        </main>
       </div>
     </div>
   );

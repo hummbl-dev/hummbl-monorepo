@@ -226,22 +226,35 @@ export const ModelDetail: React.FC = () => {
         </section>
 
         {/* Tab Navigation */}
-        <div className="flex gap-1 border-b border-zinc-800">
-          {(['prompt', 'usage', 'related'] as const).map(tab => (
-            <button
-              key={tab}
-              onClick={() => setActiveSection(tab)}
-              className={`px-4 py-2.5 text-xs font-mono uppercase tracking-[0.3em] transition-colors border-b-2 -mb-px ${
-                activeSection === tab
-                  ? 'border-white text-white'
-                  : 'border-transparent text-zinc-500 hover:text-zinc-300'
-              }`}
-            >
-              {tab === 'prompt' && 'System Prompt'}
-              {tab === 'usage' && 'When to Use'}
-              {tab === 'related' && `Related Models (${relatedModels.length})`}
-            </button>
-          ))}
+        <div
+          className="flex gap-1 border-b border-zinc-800"
+          role="tablist"
+          aria-label="Model information tabs"
+        >
+          {(['prompt', 'usage', 'related'] as const).map(tab => {
+            const tabLabels = {
+              prompt: 'System Prompt',
+              usage: 'When to Use',
+              related: `Related Models (${relatedModels.length})`,
+            };
+            return (
+              <button
+                key={tab}
+                id={`tab-${tab}`}
+                role="tab"
+                aria-selected={activeSection === tab}
+                aria-controls={`tabpanel-${tab}`}
+                onClick={() => setActiveSection(tab)}
+                className={`px-4 py-2.5 text-xs font-mono uppercase tracking-[0.3em] transition-colors border-b-2 -mb-px focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
+                  activeSection === tab
+                    ? 'border-white text-white'
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300'
+                }`}
+              >
+                {tabLabels[tab]}
+              </button>
+            );
+          })}
         </div>
 
         {/* Tab Content */}
@@ -249,7 +262,12 @@ export const ModelDetail: React.FC = () => {
           <div className="space-y-6">
             {/* System Prompt Tab */}
             {activeSection === 'prompt' && (
-              <section className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-6">
+              <section
+                id="tabpanel-prompt"
+                role="tabpanel"
+                aria-labelledby="tab-prompt"
+                className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-6"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-[11px] font-mono uppercase tracking-[0.4em] text-zinc-500">
                     System Instruction
@@ -271,7 +289,12 @@ export const ModelDetail: React.FC = () => {
 
             {/* Usage Tab */}
             {activeSection === 'usage' && (
-              <section className="space-y-6">
+              <section
+                id="tabpanel-usage"
+                role="tabpanel"
+                aria-labelledby="tab-usage"
+                className="space-y-6"
+              >
                 <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-6">
                   <h3 className="mb-4 text-[11px] font-mono uppercase tracking-[0.4em] text-zinc-500">
                     When to Deploy
@@ -292,7 +315,12 @@ export const ModelDetail: React.FC = () => {
 
             {/* Related Models Tab */}
             {activeSection === 'related' && (
-              <section className="space-y-4">
+              <section
+                id="tabpanel-related"
+                role="tabpanel"
+                aria-labelledby="tab-related"
+                className="space-y-4"
+              >
                 <p className="text-sm text-zinc-400">
                   Other models in the{' '}
                   <span style={{ color: transformationColor }}>{model.transformation_name}</span>{' '}

@@ -52,40 +52,55 @@ export const ModelCard: React.FC<{ model: Base120Model }> = ({ model }) => {
 
   return (
     <>
-      <div
-        className={`group relative flex h-full flex-col overflow-hidden rounded-sm border transition-all duration-300 hover:border-zinc-500 hover:bg-zinc-900/40 ${getTransformationColor(model.transformation_code)}`}
+      <article
+        className={`group relative flex h-full flex-col overflow-hidden rounded-sm border transition-all duration-300 hover:border-zinc-500 hover:bg-zinc-900/40 focus-within:ring-2 focus-within:ring-blue-500/50 ${getTransformationColor(model.transformation_code)}`}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setShowPreview(true)}
         onMouseLeave={() => setShowPreview(false)}
+        aria-labelledby={`model-title-${model.id}`}
+        aria-describedby={`model-desc-${model.id}`}
       >
         <div className="p-5 flex-1">
           <div className="mb-4 flex items-start justify-between">
-            <span className="font-mono text-[10px] text-zinc-500 transition-colors group-hover:text-zinc-300">
+            <span
+              className="font-mono text-[10px] text-zinc-500 transition-colors group-hover:text-zinc-300"
+              aria-label={`Model ID: ${model.id}`}
+            >
               {model.id}
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2" aria-label="Model metadata">
               <span
                 className={`text-[9px] font-bold uppercase tracking-[0.35em] px-2 py-0.5 rounded border ${getDifficultyColor(model.difficulty)}`}
+                aria-label={`Difficulty: ${model.difficulty}`}
               >
                 {model.difficulty}
               </span>
               <div className="border border-zinc-800 bg-zinc-950/50 px-1.5 py-0.5">
-                <span className="text-[9px] font-bold uppercase tracking-[0.35em] text-zinc-400">
+                <span
+                  className="text-[9px] font-bold uppercase tracking-[0.35em] text-zinc-400"
+                  aria-label={`Transformation: ${model.transformation_code}`}
+                >
                   {model.transformation_code}
                 </span>
               </div>
             </div>
           </div>
 
-          <h3 className="mb-2 text-lg font-medium tracking-tight text-zinc-100 transition-colors group-hover:text-white">
+          <h3
+            id={`model-title-${model.id}`}
+            className="mb-2 text-lg font-medium tracking-tight text-zinc-100 transition-colors group-hover:text-white"
+          >
             {model.name}
           </h3>
-          <p className="text-xs leading-relaxed text-zinc-500 transition-colors group-hover:text-zinc-400 line-clamp-3">
+          <p
+            id={`model-desc-${model.id}`}
+            className="text-xs leading-relaxed text-zinc-500 transition-colors group-hover:text-zinc-400 line-clamp-3"
+          >
             {model.definition}
           </p>
 
           {/* Tags */}
-          <div className="mt-3 flex flex-wrap gap-1">
+          <div className="mt-3 flex flex-wrap gap-1" aria-label="Tags">
             {model.tags.slice(0, 3).map((tag, index) => (
               <span
                 key={index}
@@ -95,22 +110,37 @@ export const ModelCard: React.FC<{ model: Base120Model }> = ({ model }) => {
               </span>
             ))}
             {model.tags.length > 3 && (
-              <span className="text-[8px] font-mono text-zinc-500">+{model.tags.length - 3}</span>
+              <span
+                className="text-[8px] font-mono text-zinc-500"
+                aria-label={`and ${model.tags.length - 3} more tags`}
+              >
+                +{model.tags.length - 3}
+              </span>
             )}
           </div>
         </div>
 
         <div className="flex items-center justify-between border-t border-zinc-800/50 bg-zinc-950/30 p-3 opacity-60 transition-opacity duration-200 group-hover:opacity-100">
-          <span className="font-mono text-[9px] uppercase tracking-[0.35em] text-zinc-600">
+          <span
+            className="font-mono text-[9px] uppercase tracking-[0.35em] text-zinc-600"
+            aria-label={`Base level ${model.base_level}`}
+          >
             Base-{model.base_level}
           </span>
           <button
             type="button"
             onClick={handleSessionStart}
-            className="flex items-center gap-1 font-mono text-[10px] text-zinc-400 transition-colors hover:text-white"
+            className="flex items-center gap-1 font-mono text-[10px] text-zinc-400 transition-colors hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1"
+            aria-label={`Copy system prompt for ${model.name} to clipboard`}
           >
             OPEN SESSION
-            <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <svg
+              className="h-3 w-3"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -120,7 +150,7 @@ export const ModelCard: React.FC<{ model: Base120Model }> = ({ model }) => {
             </svg>
           </button>
         </div>
-      </div>
+      </article>
 
       <ModelPreview model={model} position={previewPosition} visible={showPreview} />
     </>
