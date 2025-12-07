@@ -32,7 +32,11 @@ export interface ApiError extends Error {
     };
     status?: number;
   };
-  config?: any;
+  config?: {
+    headers?: Record<string, string>;
+    method?: string;
+    url?: string;
+  };
   code?: string;
 }
 

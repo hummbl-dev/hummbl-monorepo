@@ -68,4 +68,4 @@ export function Github({ className, ...props }: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-export * from './icons';
+export { Icons } from './icons';
