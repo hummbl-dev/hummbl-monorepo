@@ -7,3 +7,6 @@ export const Icons = {
   google: Google,
   github: Github,
 };
+
+// Export individual components
+export { Spinner, Google, Github };

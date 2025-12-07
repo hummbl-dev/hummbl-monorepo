@@ -253,7 +253,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // Context value
   const contextValue: AuthContextType = {
-    user,
+    user: user as User,
     token,
     isLoading,
     error,
