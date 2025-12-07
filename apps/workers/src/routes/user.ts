@@ -7,6 +7,10 @@ import { Hono } from 'hono';
 import { verify } from 'hono/jwt';
 import type { Env } from '../env';
 
+declare const crypto: {
+  randomUUID: () => string;
+};
+
 type Variables = {
   userId: string;
 };

@@ -63,37 +63,49 @@ const authRouter = new Hono<{ Bindings: Env }>();
 
 // Rate limiting middleware
 authRouter.use('*', async (c, next) => {
-  const ip = c.req.header('CF-Connecting-IP') || 'unknown';
-  const key = `rate_limit:${ip}`;
-
-  // Get current count and last request time
-  const cacheData = await c.env.CACHE.get(key, { type: 'json' });
-  const count = (cacheData as { count?: number })?.count ?? 0;
-  const resetAt = (cacheData as { resetAt?: number })?.resetAt ?? Date.now();
-
-  // Check if window has passed, reset if needed
-  const now = Date.now();
-  const windowStart = now - RATE_LIMIT_WINDOW * 1000;
-
-  if (resetAt < windowStart) {
-    // Reset counter if window has passed
-    await c.env.CACHE.put(key, JSON.stringify({ count: 1, resetAt: now }), {
-      expirationTtl: RATE_LIMIT_WINDOW,
-    });
-  } else if (count >= RATE_LIMIT_MAX_REQUESTS) {
-    // Rate limit exceeded
-    return c.json(
-      { error: 'Too many requests, please try again later' },
-      { status: 429, headers: { 'Retry-After': RATE_LIMIT_WINDOW.toString() } }
-    );
-  } else {
-    // Increment counter
-    await c.env.CACHE.put(key, JSON.stringify({ count: count + 1, resetAt }), {
-      expirationTtl: RATE_LIMIT_WINDOW,
-    });
+  interface RateLimitData {
+    count: number;
+    resetAt: number;
   }
 
-  await next();
+  try {
+    const ip = c.req.header('CF-Connecting-IP') || 'unknown';
+    const key = `rate_limit:${ip}`;
+
+    // Get current count and reset time
+    const cacheData = await c.env.CACHE.get<RateLimitData>(key, 'json');
+    const now = Math.floor(Date.now() / 1000); // Current time in seconds
+    const resetTime = Math.ceil((now + 1) / RATE_LIMIT_WINDOW) * RATE_LIMIT_WINDOW;
+
+    let count = 0;
+    if (cacheData && cacheData.resetAt > now) {
+      count = cacheData.count;
+    }
+
+    // Check if rate limit exceeded
+    if (count >= RATE_LIMIT_MAX_REQUESTS) {
+      c.status(429);
+      c.header('Retry-After', (resetTime - now).toString());
+      return c.json({ error: 'Too many requests, please try again later' });
+    }
+
+    // Increment counter
+    await c.env.CACHE.put(
+      key,
+      JSON.stringify({
+        count: count + 1,
+        resetAt: resetTime,
+      } as RateLimitData),
+      { expirationTtl: RATE_LIMIT_WINDOW }
+    );
+
+    // Continue to next middleware
+    return await next();
+  } catch (error) {
+    console.error('Rate limiting error:', error);
+    // Allow the request to continue if there's an error with rate limiting
+    return await next();
+  }
 });
 
 // Helper function to generate tokens
@@ -308,7 +320,9 @@ authRouter.post('/register', async c => {
     const encoder = new TextEncoder();
     const data = encoder.encode(password + c.env.PASSWORD_SALT);
     const hashedPassword = await crypto.subtle.digest('SHA-256', data);
-    const hashedPasswordStr = Buffer.from(hashedPassword).toString('hex');
+    // Convert ArrayBuffer to hex string (Cloudflare Workers compatible)
+    const hashArray = Array.from(new Uint8Array(hashedPassword));
+    const hashedPasswordStr = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
     // Create user
     const userId = crypto.randomUUID();
@@ -334,12 +348,14 @@ authRouter.post('/register', async c => {
           verificationExpiry.toISOString()
         )
         .run();
-    } catch (dbError) {
-      console.error('Database error during registration:', dbError);
+    } catch (error: unknown) {
+      console.error('Database error during registration:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown database error';
       return c.json(
         {
           error: 'Failed to create user account',
-          details: dbError.message,
+          details: errorMessage,
+          code: 'REGISTRATION_FAILED',
         },
         500
       );
