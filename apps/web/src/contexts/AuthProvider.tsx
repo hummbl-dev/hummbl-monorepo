@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import {
   AuthContext,
   type AuthContextType,
-  type User,
+  type User as AuthUser,
   type ApiError,
   type AuthResponse,
   type AuthTokens,
@@ -20,7 +20,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [token, setToken] = useState<string | null>(() => localStorage.getItem(AUTH_TOKEN_KEY));
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -238,8 +238,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const response = await api.get<{ user: User }>('/auth/me');
-          setUser(response.data.user as User);
+          const response = await api.get<{ user: AuthUser }>('/auth/me');
+          setUser(response.data.user as AuthUser);
         } catch (error) {
           console.error('Auth check failed:', error);
           clearAuth();
@@ -253,7 +253,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // Context value
   const contextValue: AuthContextType = {
-    user: user as User,
+    user: user as AuthUser,
     token,
     isLoading,
     error,
