@@ -324,12 +324,11 @@ export const ModelDetail: React.FC = () => {
                 )}
               </section>
             )}
-          </div>
+        </div>
 
-          {/* Keyboard Hint */}
-          <div className="text-center text-[10px] font-mono uppercase tracking-[0.4em] text-zinc-600 pt-8">
-            Use ← → arrow keys to navigate between models
-          </div>
+        {/* Keyboard Hint */}
+        <div className="text-center text-[10px] font-mono uppercase tracking-[0.4em] text-zinc-600 pt-8">
+          Use ← → arrow keys to navigate between models
         </div>
       </div>
     </div>
