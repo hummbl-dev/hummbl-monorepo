@@ -7,50 +7,13 @@ import {
   type CallToolRequest,
 } from '@modelcontextprotocol/sdk/types.js';
 
-// ============================================================================
-// TRANSFORMATION MAP - HUMMBL Base120 Core Reference
-// ============================================================================
-// Added per HUMMBL-TRANSFORM-001 fix: Prevent fabrication of transformation names
-// Always validate transformation references against this authoritative source
-// ============================================================================
-
 const TRANSFORMATIONS = {
-  P: {
-    code: 'P',
-    name: 'Perspective',
-    description: 'Frame and name what is. Anchor or shift point of view.',
-    modelCount: 20,
-  },
-  IN: {
-    code: 'IN',
-    name: 'Inversion',
-    description: 'Reverse assumptions. Examine opposites, edges, negations.',
-    modelCount: 20,
-  },
-  CO: {
-    code: 'CO',
-    name: 'Composition',
-    description: 'Combine parts into coherent wholes.',
-    modelCount: 20,
-  },
-  DE: {
-    code: 'DE',
-    name: 'Decomposition',
-    description: 'Break systems into components.',
-    modelCount: 20,
-  },
-  RE: {
-    code: 'RE',
-    name: 'Recursion',
-    description: 'Apply operations iteratively, with outputs becoming inputs.',
-    modelCount: 20,
-  },
-  SY: {
-    code: 'SY',
-    name: 'Meta-Systems',
-    description: 'Understand systems of systems, coordination, and emergent dynamics.',
-    modelCount: 20,
-  },
+  P: { name: 'Perspective', description: 'Frame and name what is' },
+  IN: { name: 'Inversion', description: 'Reverse assumptions' },
+  CO: { name: 'Composition', description: 'Combine parts into wholes' },
+  DE: { name: 'Decomposition', description: 'Break into components' },
+  RE: { name: 'Recursion', description: 'Apply iteratively' },
+  SY: { name: 'Meta-Systems', description: 'Systems of systems' },
 } as const;
 
 type TransformationCode = keyof typeof TRANSFORMATIONS;

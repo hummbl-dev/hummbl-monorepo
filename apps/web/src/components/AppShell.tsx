@@ -1,5 +1,5 @@
+import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { LoginButton } from './LoginButton.tsx';
 
 interface NavItem {
   label: string;
@@ -44,28 +44,25 @@ const NAV_SECTIONS: NavSection[] = [
   },
 ];
 
-const navClass = ({ isActive }: { isActive: boolean }) =>
-  [
-    'group block rounded-md border px-4 py-3 transition-all duration-300 backdrop-blur-sm',
-    'focus:outline-none focus:ring-2 focus:ring-obsidian-400 focus:ring-offset-2 focus:ring-offset-black',
-    isActive
-      ? 'border-obsidian-500/70 bg-obsidian-900/80 shadow-glow-soft'
-      : 'border-obsidian-800/80 hover:border-obsidian-600/80',
-  ].join(' ');
 
 export const AppShell: React.FC = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-obsidian-950 via-zinc-950 to-black text-white">
       <div
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(120,119,198,0.08),_transparent_55%)]"
         aria-hidden="true"
       />
-      <div className="relative z-10 flex min-h-screen">
-        <aside
-          className="w-80 border-r border-white/5 px-8 py-10 space-y-10 flex flex-col"
-          aria-label="Primary navigation"
-        >
-          <div className="space-y-8">
+      
+      {/* Mobile Header */}
+      <header className="relative z-50 border-b border-white/5 backdrop-blur-sm bg-obsidian-950/80">
+        <div className="px-4 py-6">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
             <NavLink
               to="/"
               className="flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-obsidian-400 rounded-lg"
@@ -73,7 +70,7 @@ export const AppShell: React.FC = () => {
             >
               <div className="relative">
                 <span
-                  className="w-14 h-14 border border-obsidian-700/80 rounded-full flex items-center justify-center text-lg font-bold font-mono"
+                  className="w-16 h-16 border border-obsidian-700/80 rounded-full flex items-center justify-center text-2xl font-bold font-mono lg:w-12 lg:h-12 lg:text-lg"
                   aria-hidden="true"
                 >
                   H
@@ -81,24 +78,38 @@ export const AppShell: React.FC = () => {
                 <span className="absolute inset-0 blur-xl bg-obsidian-500/30" aria-hidden="true" />
               </div>
               <div>
-                <p className="text-[11px] tracking-[0.35em] text-zinc-400 font-mono uppercase">
+                <p className="text-[14px] tracking-[0.35em] text-zinc-400 font-mono uppercase lg:text-[11px]">
                   HUMMBL
                 </p>
-                <p className="text-2xl font-light">Base120</p>
+                <p className="text-2xl font-light lg:text-xl">Base120</p>
               </div>
             </NavLink>
 
-            <nav aria-label="Main navigation" className="space-y-8">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={toggleMobileMenu}
+              className="lg:hidden p-4 bg-obsidian-900/80 border border-obsidian-700/80 rounded-lg backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-obsidian-400"
+              aria-label="Toggle navigation menu"
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isMobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <nav className="lg:hidden absolute top-full left-0 right-0 bg-obsidian-950/95 border-b border-white/5 backdrop-blur-lg z-40">
+            <div className="px-4 py-6 space-y-4">
               {NAV_SECTIONS.map(section => (
-                <div
-                  key={section.title}
-                  className="space-y-3"
-                  role="group"
-                  aria-labelledby={`nav-section-${section.title}`}
-                >
+                <div key={section.title} className="space-y-4">
                   <p
-                    id={`nav-section-${section.title}`}
-                    className="text-[10px] font-mono text-zinc-500 uppercase tracking-[0.4em]"
+                    className="text-[14px] font-mono text-zinc-500 uppercase tracking-[0.4em] lg:text-[10px]"
                   >
                     {section.title}
                   </p>
@@ -107,14 +118,21 @@ export const AppShell: React.FC = () => {
                       <li key={item.code}>
                         <NavLink
                           to={item.to}
-                          className={navClass}
+                          className={({ isActive }) => [
+                            'block rounded-md border px-6 py-4 transition-all duration-300',
+                            'focus:outline-none focus:ring-2 focus:ring-obsidian-400 focus:ring-offset-2 focus:ring-offset-black',
+                            isActive
+                              ? 'border-obsidian-500/70 bg-obsidian-900/80'
+                              : 'border-obsidian-800/80 hover:border-obsidian-600/80',
+                          ].join(' ')}
                           aria-describedby={`nav-desc-${item.code}`}
+                          onClick={closeMobileMenu}
                         >
                           <div>
-                            <span className="flex items-center justify-between font-semibold tracking-wide">
+                            <span className="flex items-center justify-between font-semibold tracking-wide text-xl">
                               {item.label}
                               <span
-                                className="text-[10px] text-zinc-400 font-mono"
+                                className="text-[14px] text-zinc-400 font-mono lg:text-[10px]"
                                 aria-hidden="true"
                               >
                                 {item.code}
@@ -122,7 +140,7 @@ export const AppShell: React.FC = () => {
                             </span>
                             <p
                               id={`nav-desc-${item.code}`}
-                              className="text-sm text-zinc-500 group-hover:text-zinc-300"
+                              className="text-lg text-zinc-500 lg:text-sm"
                             >
                               {item.description}
                             </p>
@@ -133,28 +151,24 @@ export const AppShell: React.FC = () => {
                   </ul>
                 </div>
               ))}
-            </nav>
-          </div>
-
-          <footer className="text-[11px] text-zinc-500 space-y-1 font-mono border-t border-white/5 pt-4">
-            <div className="mb-4">
-              <LoginButton />
             </div>
-            <p>Cloudflare Workers · React 18 · Vite</p>
-            <p>Obsidian Monolith v0.{new Date().getMonth() + 1}</p>
-            <p>© {new Date().getFullYear()} HUMMBL Systems</p>
-          </footer>
-        </aside>
+          </nav>
+        )}
+      </header>
 
-        <main
-          id="main-content"
-          className="scroll-micro flex-1 min-h-screen overflow-y-auto px-12 py-12"
-          role="main"
-          tabIndex={-1}
-        >
-          <Outlet />
-        </main>
-      </div>
+      {/* Main Content */}
+      <main
+        id="main-content"
+        className="flex-1 min-h-screen overflow-y-auto px-6 py-8 lg:px-8 lg:py-8"
+        role="main"
+        tabIndex={-1}
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="text-2xl lg:text-lg">
+            <Outlet />
+          </div>
+        </div>
+      </main>
     </div>
   );
 };

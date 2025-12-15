@@ -1,25 +1,13 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Link, Navigate, useParams, useNavigate } from 'react-router-dom';
 import { useModels, type Base120Model } from '../hooks/useModels';
-import { useAuth } from '../hooks/useAuth';
 import { StatusStrip } from '../components/StatusStrip';
 import { toast } from '../components/Toast';
-
-// Transformation colors (matching the graph)
-const TRANSFORMATION_COLORS: Record<string, string> = {
-  P: '#2563eb',
-  IN: '#dc2626',
-  CO: '#16a34a',
-  DE: '#9333ea',
-  RE: '#ea580c',
-  SY: '#0891b2',
-};
 
 export const ModelDetail: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { models, isLoading } = useModels();
-  const { user } = useAuth();
   const [isCompleted, setIsCompleted] = useState(false);
   const [activeSection, setActiveSection] = useState<'prompt' | 'usage' | 'related'>('prompt');
 
@@ -75,13 +63,12 @@ export const ModelDetail: React.FC = () => {
   }, [model]);
 
   const handleToggleComplete = useCallback(() => {
-    if (!user) {
-      toast.emit('Sign in to track your progress.');
-      return;
-    }
     setIsCompleted(prev => !prev);
-    toast.emit(isCompleted ? 'Model unmarked' : 'Model marked as completed!');
-  }, [user, isCompleted]);
+    
+    // Show completion feedback
+    const action = !isCompleted ? 'completed' : 'uncompleted';
+    toast.emit(`Model ${action}! Progress saved locally.`);
+  }, [isCompleted]);
 
   const handleKeyNav = useCallback(
     (e: React.KeyboardEvent) => {
@@ -106,13 +93,11 @@ export const ModelDetail: React.FC = () => {
     return <Navigate to="/" replace />;
   }
 
-  const transformationColor = TRANSFORMATION_COLORS[model.transformation_code] || '#ffffff';
-
   return (
     <div className="pb-20 animate-in fade-in duration-500" tabIndex={0} onKeyDown={handleKeyNav}>
       <StatusStrip totalModels={models.length} activeFilter={model.id} />
 
-      <div className="mx-auto space-y-8 px-6 md:px-8 pt-6">
+      <div className="mx-auto space-y-8 px-4 py-6 md:px-6 md:px-8 pt-6">
         {/* Breadcrumb & Navigation */}
         <div className="flex items-center justify-between">
           <Link
@@ -146,24 +131,18 @@ export const ModelDetail: React.FC = () => {
 
         {/* Hero Section */}
         <section
-          className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-black via-zinc-900/50 to-black p-8 md:p-10"
-          style={{ borderColor: `${transformationColor}30` }}
+          className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-black via-zinc-900/50 to-black p-6 md:p-8 lg:p-10 border-blue-500/30`}
         >
           {/* Glow Effect */}
           <div
-            className="pointer-events-none absolute -right-20 -top-20 w-96 h-96 rounded-full blur-3xl opacity-20"
-            style={{ backgroundColor: transformationColor }}
+            className="pointer-events-none absolute -right-20 -top-20 w-96 h-96 rounded-full blur-3xl opacity-20 bg-blue-500"
           />
 
           <div className="relative z-10 space-y-6">
             {/* Badges */}
             <div className="flex flex-wrap items-center gap-3 text-xs font-mono uppercase tracking-[0.3em]">
               <span
-                className="rounded-full px-4 py-1.5 text-white border"
-                style={{
-                  borderColor: transformationColor,
-                  backgroundColor: `${transformationColor}20`,
-                }}
+                className={`rounded-full px-4 py-1.5 text-white border border-blue-500 bg-blue-500/20`}
               >
                 {model.transformation_name}
               </span>
@@ -184,7 +163,7 @@ export const ModelDetail: React.FC = () => {
 
             {/* Title & Definition */}
             <div className="space-y-3">
-              <h1 className="text-3xl md:text-4xl font-light tracking-tight text-white">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-white">
                 {model.name}
               </h1>
               <p className="text-lg font-light leading-relaxed text-zinc-300 max-w-3xl">
@@ -242,7 +221,7 @@ export const ModelDetail: React.FC = () => {
                 key={tab}
                 id={`tab-${tab}`}
                 role="tab"
-                aria-selected={activeSection === tab}
+                aria-selected={activeSection === tab ? 'true' : 'false'}
                 aria-controls={`tabpanel-${tab}`}
                 onClick={() => setActiveSection(tab)}
                 className={`px-4 py-2.5 text-xs font-mono uppercase tracking-[0.3em] transition-colors border-b-2 -mb-px focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
@@ -258,10 +237,9 @@ export const ModelDetail: React.FC = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="grid gap-8 lg:grid-cols-[2fr,1fr]">
-          <div className="space-y-6">
-            {/* System Prompt Tab */}
-            {activeSection === 'prompt' && (
+        <div className="space-y-6">
+          {/* System Prompt Tab */}
+          {activeSection === 'prompt' && (
               <section
                 id="tabpanel-prompt"
                 role="tabpanel"
@@ -323,7 +301,7 @@ export const ModelDetail: React.FC = () => {
               >
                 <p className="text-sm text-zinc-400">
                   Other models in the{' '}
-                  <span style={{ color: transformationColor }}>{model.transformation_name}</span>{' '}
+                  <span className="font-mono text-blue-400">{model.transformation_name}</span>{' '}
                   transformation that complement this approach:
                 </p>
 
@@ -332,7 +310,6 @@ export const ModelDetail: React.FC = () => {
                     <RelatedModelCard
                       key={related.id}
                       model={related}
-                      color={transformationColor}
                     />
                   ))}
                 </div>
@@ -349,85 +326,10 @@ export const ModelDetail: React.FC = () => {
             )}
           </div>
 
-          {/* Sidebar */}
-          <aside className="space-y-6">
-            {/* Tags */}
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-5">
-              <h4 className="mb-3 text-[11px] font-mono uppercase tracking-[0.4em] text-zinc-500">
-                Applicability Tags
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {model.tags.map(tag => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-zinc-700 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 cursor-default transition-colors"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Quick Stats */}
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-5">
-              <h4 className="mb-4 text-[11px] font-mono uppercase tracking-[0.4em] text-zinc-500">
-                Model Telemetry
-              </h4>
-              <dl className="space-y-3 text-sm text-zinc-300">
-                <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-                  <dt>Transformation</dt>
-                  <dd className="font-mono" style={{ color: transformationColor }}>
-                    {model.transformation_name}
-                  </dd>
-                </div>
-                <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-                  <dt>Priority Level</dt>
-                  <dd className="font-mono text-white">{model.base_level}</dd>
-                </div>
-                <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-                  <dt>Difficulty</dt>
-                  <dd className="font-mono text-white capitalize">{model.difficulty}</dd>
-                </div>
-                <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-                  <dt>Code</dt>
-                  <dd className="font-mono text-white">{model.id}</dd>
-                </div>
-                <div className="flex items-center justify-between">
-                  <dt>Source</dt>
-                  <dd className="font-mono text-white">Base120 Core</dd>
-                </div>
-              </dl>
-            </div>
-
-            {/* Position in Transformation */}
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-5">
-              <h4 className="mb-3 text-[11px] font-mono uppercase tracking-[0.4em] text-zinc-500">
-                Position in {model.transformation_name}
-              </h4>
-              <div className="flex flex-wrap gap-1">
-                {transformationModels.map(m => (
-                  <Link
-                    key={m.id}
-                    to={`/model/${m.id}`}
-                    className={`w-6 h-6 flex items-center justify-center text-[9px] font-mono rounded transition-all ${
-                      m.id === model.id
-                        ? 'text-white'
-                        : 'bg-zinc-800/50 text-zinc-500 hover:bg-zinc-700 hover:text-zinc-300'
-                    }`}
-                    style={m.id === model.id ? { backgroundColor: transformationColor } : {}}
-                    title={m.name}
-                  >
-                    {m.base_level}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </aside>
-        </div>
-
-        {/* Keyboard Hint */}
-        <div className="text-center text-[10px] font-mono uppercase tracking-[0.4em] text-zinc-600 pt-8">
-          Use ← → arrow keys to navigate between models
+          {/* Keyboard Hint */}
+          <div className="text-center text-[10px] font-mono uppercase tracking-[0.4em] text-zinc-600 pt-8">
+            Use ← → arrow keys to navigate between models
+          </div>
         </div>
       </div>
     </div>
@@ -437,10 +339,9 @@ export const ModelDetail: React.FC = () => {
 // Related Model Card Component
 interface RelatedModelCardProps {
   model: Base120Model;
-  color: string;
 }
 
-const RelatedModelCard: React.FC<RelatedModelCardProps> = ({ model, color }) => {
+const RelatedModelCard: React.FC<RelatedModelCardProps> = ({ model }) => {
   return (
     <Link
       to={`/model/${model.id}`}
@@ -449,7 +350,7 @@ const RelatedModelCard: React.FC<RelatedModelCardProps> = ({ model, color }) => 
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
+            <span className="w-2 h-2 rounded-full bg-blue-500" />
             <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-zinc-500">
               {model.id}
             </span>
