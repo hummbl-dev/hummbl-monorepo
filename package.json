@@ -9,7 +9,7 @@
     "test": "turbo test",
     "lint": "turbo lint",
     "clean": "rm -rf .turbo node_modules apps/*/node_modules packages/*/node_modules",
-    "check": "turbo lint test build"
+    "validate": "turbo lint test build"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
