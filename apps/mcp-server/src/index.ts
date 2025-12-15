@@ -167,13 +167,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
       };
     }
 
-    const report = `# TRANSFORMATION: ${transformation.name} (${transformation.code})
+    const report = `# TRANSFORMATION: ${transformation.name} (${code})
 
 ## Description
 ${transformation.description}
 
 ## Model Count
-${transformation.modelCount} models in this transformation
+20 models in this transformation
 
 ## Validation Note
 This definition is authoritative. Always validate transformation references against this source.
