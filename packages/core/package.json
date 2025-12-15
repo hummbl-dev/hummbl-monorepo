@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "description": "Shared Result pattern, schemas, and Base120 types for HUMMBL Systems",
   "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "license": "UNLICENSED",
   "scripts": {
+    "build": "tsc",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "test": "vitest run"
