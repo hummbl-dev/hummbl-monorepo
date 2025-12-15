@@ -88,10 +88,10 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         const savedProgress = localStorage.getItem(PROGRESS_KEY);
         if (savedProgress) {
           const data: ProgressData = JSON.parse(savedProgress);
-          
+
           // Use setTimeout to avoid synchronous setState in effect
           setTimeout(() => setProgressData(data), 0);
-          
+
           // Sync with parent state
           const currentSet = new Set(completedModels);
           const savedSet = new Set(data.completedModels);

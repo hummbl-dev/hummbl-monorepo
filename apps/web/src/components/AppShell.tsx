@@ -44,7 +44,6 @@ const NAV_SECTIONS: NavSection[] = [
   },
 ];
 
-
 export const AppShell: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -57,7 +56,7 @@ export const AppShell: React.FC = () => {
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(120,119,198,0.08),_transparent_55%)]"
         aria-hidden="true"
       />
-      
+
       {/* Mobile Header */}
       <header className="relative z-50 border-b border-white/5 backdrop-blur-sm bg-obsidian-950/80">
         <div className="px-4 py-6">
@@ -93,9 +92,19 @@ export const AppShell: React.FC = () => {
             >
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 )}
               </svg>
             </button>
@@ -108,9 +117,7 @@ export const AppShell: React.FC = () => {
             <div className="px-4 py-6 space-y-4">
               {NAV_SECTIONS.map(section => (
                 <div key={section.title} className="space-y-4">
-                  <p
-                    className="text-[14px] font-mono text-zinc-500 uppercase tracking-[0.4em] lg:text-[10px]"
-                  >
+                  <p className="text-[14px] font-mono text-zinc-500 uppercase tracking-[0.4em] lg:text-[10px]">
                     {section.title}
                   </p>
                   <ul className="space-y-3" role="list">
@@ -118,13 +125,15 @@ export const AppShell: React.FC = () => {
                       <li key={item.code}>
                         <NavLink
                           to={item.to}
-                          className={({ isActive }) => [
-                            'block rounded-md border px-6 py-4 transition-all duration-300',
-                            'focus:outline-none focus:ring-2 focus:ring-obsidian-400 focus:ring-offset-2 focus:ring-offset-black',
-                            isActive
-                              ? 'border-obsidian-500/70 bg-obsidian-900/80'
-                              : 'border-obsidian-800/80 hover:border-obsidian-600/80',
-                          ].join(' ')}
+                          className={({ isActive }) =>
+                            [
+                              'block rounded-md border px-6 py-4 transition-all duration-300',
+                              'focus:outline-none focus:ring-2 focus:ring-obsidian-400 focus:ring-offset-2 focus:ring-offset-black',
+                              isActive
+                                ? 'border-obsidian-500/70 bg-obsidian-900/80'
+                                : 'border-obsidian-800/80 hover:border-obsidian-600/80',
+                            ].join(' ')
+                          }
                           aria-describedby={`nav-desc-${item.code}`}
                           onClick={closeMobileMenu}
                         >

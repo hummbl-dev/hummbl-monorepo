@@ -12,9 +12,9 @@ export const BASE120_MODELS = {
       P1: { name: 'Stakeholder Mapping', definition: 'Identify all parties affected by decisions' },
       P2: { name: 'Frame Shifting', definition: 'Change perspective to reveal new solutions' },
       // ... other P models
-    }
+    },
   },
-  
+
   // Inversion (IN) - Reverse assumptions
   IN: {
     name: 'Inversion',
@@ -23,9 +23,9 @@ export const BASE120_MODELS = {
       IN1: { name: 'Assumption Reversal', definition: 'Challenge core assumptions systematically' },
       IN2: { name: 'Failure Analysis', definition: 'Work backward from potential failures' },
       // ... other IN models
-    }
+    },
   },
-  
+
   // Continue for CO, DE, RE, SY...
 } as const;
 

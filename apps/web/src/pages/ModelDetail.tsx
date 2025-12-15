@@ -64,7 +64,7 @@ export const ModelDetail: React.FC = () => {
 
   const handleToggleComplete = useCallback(() => {
     setIsCompleted(prev => !prev);
-    
+
     // Show completion feedback
     const action = !isCompleted ? 'completed' : 'uncompleted';
     toast.emit(`Model ${action}! Progress saved locally.`);
@@ -134,9 +134,7 @@ export const ModelDetail: React.FC = () => {
           className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-black via-zinc-900/50 to-black p-6 md:p-8 lg:p-10 border-blue-500/30`}
         >
           {/* Glow Effect */}
-          <div
-            className="pointer-events-none absolute -right-20 -top-20 w-96 h-96 rounded-full blur-3xl opacity-20 bg-blue-500"
-          />
+          <div className="pointer-events-none absolute -right-20 -top-20 w-96 h-96 rounded-full blur-3xl opacity-20 bg-blue-500" />
 
           <div className="relative z-10 space-y-6">
             {/* Badges */}
@@ -240,90 +238,87 @@ export const ModelDetail: React.FC = () => {
         <div className="space-y-6">
           {/* System Prompt Tab */}
           {activeSection === 'prompt' && (
-              <section
-                id="tabpanel-prompt"
-                role="tabpanel"
-                aria-labelledby="tab-prompt"
-                className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-6"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[11px] font-mono uppercase tracking-[0.4em] text-zinc-500">
-                    System Instruction
-                  </h3>
-                  <button
-                    onClick={handleCopy}
-                    className="text-[10px] font-mono uppercase tracking-[0.3em] text-zinc-500 hover:text-white transition-colors"
-                  >
-                    Copy ↗
-                  </button>
-                </div>
-                <div className="rounded-lg border border-zinc-800 bg-black/50 p-5">
-                  <code className="block whitespace-pre-wrap font-mono text-sm leading-relaxed text-zinc-200">
-                    {model.system_prompt}
-                  </code>
-                </div>
-              </section>
-            )}
+            <section
+              id="tabpanel-prompt"
+              role="tabpanel"
+              aria-labelledby="tab-prompt"
+              className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-6"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-[11px] font-mono uppercase tracking-[0.4em] text-zinc-500">
+                  System Instruction
+                </h3>
+                <button
+                  onClick={handleCopy}
+                  className="text-[10px] font-mono uppercase tracking-[0.3em] text-zinc-500 hover:text-white transition-colors"
+                >
+                  Copy ↗
+                </button>
+              </div>
+              <div className="rounded-lg border border-zinc-800 bg-black/50 p-5">
+                <code className="block whitespace-pre-wrap font-mono text-sm leading-relaxed text-zinc-200">
+                  {model.system_prompt}
+                </code>
+              </div>
+            </section>
+          )}
 
-            {/* Usage Tab */}
-            {activeSection === 'usage' && (
-              <section
-                id="tabpanel-usage"
-                role="tabpanel"
-                aria-labelledby="tab-usage"
-                className="space-y-6"
-              >
+          {/* Usage Tab */}
+          {activeSection === 'usage' && (
+            <section
+              id="tabpanel-usage"
+              role="tabpanel"
+              aria-labelledby="tab-usage"
+              className="space-y-6"
+            >
+              <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-6">
+                <h3 className="mb-4 text-[11px] font-mono uppercase tracking-[0.4em] text-zinc-500">
+                  When to Deploy
+                </h3>
+                <p className="leading-relaxed text-zinc-300">{model.whenToUse}</p>
+              </div>
+
+              {model.example && (
                 <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-6">
                   <h3 className="mb-4 text-[11px] font-mono uppercase tracking-[0.4em] text-zinc-500">
-                    When to Deploy
+                    Example Application
                   </h3>
-                  <p className="leading-relaxed text-zinc-300">{model.whenToUse}</p>
+                  <p className="leading-relaxed text-zinc-300">{model.example}</p>
                 </div>
+              )}
+            </section>
+          )}
 
-                {model.example && (
-                  <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-6">
-                    <h3 className="mb-4 text-[11px] font-mono uppercase tracking-[0.4em] text-zinc-500">
-                      Example Application
-                    </h3>
-                    <p className="leading-relaxed text-zinc-300">{model.example}</p>
-                  </div>
-                )}
-              </section>
-            )}
+          {/* Related Models Tab */}
+          {activeSection === 'related' && (
+            <section
+              id="tabpanel-related"
+              role="tabpanel"
+              aria-labelledby="tab-related"
+              className="space-y-4"
+            >
+              <p className="text-sm text-zinc-400">
+                Other models in the{' '}
+                <span className="font-mono text-blue-400">{model.transformation_name}</span>{' '}
+                transformation that complement this approach:
+              </p>
 
-            {/* Related Models Tab */}
-            {activeSection === 'related' && (
-              <section
-                id="tabpanel-related"
-                role="tabpanel"
-                aria-labelledby="tab-related"
-                className="space-y-4"
-              >
-                <p className="text-sm text-zinc-400">
-                  Other models in the{' '}
-                  <span className="font-mono text-blue-400">{model.transformation_name}</span>{' '}
-                  transformation that complement this approach:
-                </p>
+              <div className="grid gap-3">
+                {relatedModels.map(related => (
+                  <RelatedModelCard key={related.id} model={related} />
+                ))}
+              </div>
 
-                <div className="grid gap-3">
-                  {relatedModels.map(related => (
-                    <RelatedModelCard
-                      key={related.id}
-                      model={related}
-                    />
-                  ))}
-                </div>
-
-                {transformationModels.length > 5 && (
-                  <Link
-                    to={`/?transformation=${model.transformation_code}`}
-                    className="block text-center py-3 text-xs font-mono uppercase tracking-[0.3em] text-zinc-500 hover:text-white transition-colors"
-                  >
-                    View all {transformationModels.length} {model.transformation_name} models →
-                  </Link>
-                )}
-              </section>
-            )}
+              {transformationModels.length > 5 && (
+                <Link
+                  to={`/?transformation=${model.transformation_code}`}
+                  className="block text-center py-3 text-xs font-mono uppercase tracking-[0.3em] text-zinc-500 hover:text-white transition-colors"
+                >
+                  View all {transformationModels.length} {model.transformation_name} models →
+                </Link>
+              )}
+            </section>
+          )}
         </div>
 
         {/* Keyboard Hint */}
