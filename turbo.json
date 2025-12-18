@@ -4,6 +4,12 @@
     "test": {},
     "lint": {},
     "type-check": { "dependsOn": ["^build"] },
-    "dev": { "cache": false, "persistent": true }
-  }
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["NODE_ENV", "PORT", "WORKER_URL"]
+    }
+  },
+  "globalEnv": ["NODE_ENV"],
+  "globalPassThroughEnv": ["WORKER_URL", "PORT"]
 }
