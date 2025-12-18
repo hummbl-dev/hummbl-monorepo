@@ -1,6 +1,6 @@
+import { ProgressBar } from '@hummbl/ui';
 import React, { useState } from 'react';
 import type { Base120Model } from '../hooks/useModels';
-import { ProgressBar } from './ui/ProgressBar';
 import './components.css';
 
 interface LearningPathsProps {
@@ -285,7 +285,7 @@ export const LearningPaths: React.FC<LearningPathsProps> = ({ models, onPathSele
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {Object.entries(learningPaths).map(([key, path]) => {
           const pathModels = getPathModels(path.models);
           const isHovered = hoveredPath === key;
@@ -380,7 +380,7 @@ export const LearningPaths: React.FC<LearningPathsProps> = ({ models, onPathSele
               Clear Selection
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
             {getPathModels(learningPaths[selectedPath as keyof typeof learningPaths].models).map(
               model => (
                 <div

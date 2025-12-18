@@ -1,6 +1,6 @@
+import { ProgressBar } from '@hummbl/ui';
 import { useState } from 'react';
 import type { Base120Model } from '../hooks/useModels';
-import { ProgressBar } from './ui/ProgressBar';
 import './components.css';
 
 interface TransformationOverviewProps {
