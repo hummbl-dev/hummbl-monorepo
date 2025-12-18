@@ -1,43 +1,29 @@
 {
-  "name": "hummbl-monorepo",
-  "version": "0.0.0",
+  "name": "@hummbl/monorepo",
+  "version": "1.0.0",
   "private": true,
-  "description": "Monorepo for Hummbl projects and packages",
+  "type": "module",
   "scripts": {
-    "dev": "./scripts/dev.sh",
+    "dev": "turbo dev",
     "build": "turbo build",
     "test": "turbo test",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "clean": "rm -rf .turbo node_modules apps/*/node_modules packages/*/node_modules",
-    "validate": "turbo lint test build"
+    "validate": "turbo lint type-check test build",
+    "report": "node daily-progress.js",
+    "auto-report": "node auto-report.js"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
-    "@typescript-eslint/eslint-plugin": "^8.48.1",
-    "@typescript-eslint/parser": "^8.48.1",
-    "eslint": "^9.39.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
-    "prettier": "^3.7.4",
-    "turbo": "^2.6.3",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.16"
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
   },
-  "pnpm": {},
   "packageManager": "pnpm@9.14.4",
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hummbl-dev/hummbl-monorepo.git"
-  },
-  "author": "hummbl-dev",
-  "license": "UNLICENSED"
+    "node": ">=18"
+  }
 }
