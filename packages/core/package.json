@@ -18,6 +18,6 @@
   "devDependencies": {
     "typescript": "~5.9.3",
     "@hummbl/tsconfig": "workspace:*",
-    "vitest": "^2.1.8"
+    "vitest": "^4.0.16"
   }
 }
