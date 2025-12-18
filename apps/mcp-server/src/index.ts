@@ -7,6 +7,31 @@ import {
   type CallToolRequest,
 } from '@modelcontextprotocol/sdk/types.js';
 
+interface Model {
+  code: string;
+  name: string;
+  transformation_code: string;
+  definition: string;
+  transformation_name?: string;
+  base_level?: number;
+  system_prompt?: string;
+  tags?: string[];
+}
+
+interface Relationship {
+  source_code: string;
+  target_code: string;
+  relationship_type: string;
+  confidence: number;
+  evidence?: string;
+}
+
+interface ApiResponse<T> {
+  ok: boolean;
+  value: T;
+  error?: unknown;
+}
+
 const TRANSFORMATIONS = {
   P: { name: 'Perspective', description: 'Frame and name what is' },
   IN: { name: 'Inversion', description: 'Reverse assumptions' },
@@ -116,11 +141,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
 
     try {
       const response = await fetch(`${WORKER_URL}/v1/models?${searchParams.toString()}`);
-      const payload = await response.json();
+      const payload = (await response.json()) as ApiResponse<{ models: Model[] }>;
       const items = payload?.value?.models ?? [];
       const summary = items
         .map(
-          (model: any) =>
+          (model: Model) =>
             `[${model.code}] ${model.name} (${model.transformation_code}): ${model.definition}`
         )
         .join('\n\n');
@@ -137,7 +162,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
     const { id } = request.params.arguments as DetailArgs;
     try {
       const response = await fetch(`${WORKER_URL}/v1/models/${id}`);
-      const payload = await response.json();
+      const payload = (await response.json()) as ApiResponse<Model>;
 
       if (!payload?.ok) {
         throw new Error('Model not found');
@@ -198,7 +223,11 @@ Example: search_models(query="feedback", transformation="${code}")
         throw new Error(`API returned ${response.status}: ${response.statusText}`);
       }
 
-      const payload = await response.json();
+      const payload = (await response.json()) as ApiResponse<{
+        model: string;
+        relationships: Relationship[];
+        count: number;
+      }>;
 
       if (!payload?.ok) {
         throw new Error(`Model ${modelCode} not found or has no relationships`);
@@ -218,7 +247,7 @@ Example: search_models(query="feedback", transformation="${code}")
         `# RELATIONSHIPS: ${model}\n\n` +
         `Found ${count} relationship(s):\n\n` +
         relationships
-          .map((rel: any) => {
+          .map((rel: Relationship) => {
             const direction = rel.source_code === modelCode ? '→' : '←';
             const otherModel = rel.source_code === modelCode ? rel.target_code : rel.source_code;
             const confidence =

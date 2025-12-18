@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { cn } from '../../lib/utils';
 
 interface PositionedElementProps {
   x: number;
@@ -10,7 +11,7 @@ interface PositionedElementProps {
 export const PositionedElement: React.FC<PositionedElementProps> = ({
   x,
   y,
-  className = '',
+  className,
   children,
 }) => {
   const elementRef = useRef<HTMLDivElement>(null);
@@ -23,7 +24,7 @@ export const PositionedElement: React.FC<PositionedElementProps> = ({
   }, [x, y]);
 
   return (
-    <div ref={elementRef} className={className}>
+    <div ref={elementRef} className={cn(className)}>
       {children}
     </div>
   );
