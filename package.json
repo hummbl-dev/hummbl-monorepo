@@ -4,16 +4,15 @@
   "private": true,
   "description": "Monorepo for Hummbl projects and packages",
   "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "test": "turbo run test",
-    "lint": "turbo run lint",
-    "type-check": "turbo run type-check",
+    "dev": "./scripts/dev.sh",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "clean": "turbo run clean && rm -rf node_modules apps/*/node_modules packages/*/node_modules .turbo",
-    "validate": "npm run lint && npm run type-check && npm run test && npm run build",
-    "prepare": "husky install"
+    "clean": "rm -rf .turbo node_modules apps/*/node_modules packages/*/node_modules",
+    "validate": "turbo lint test build"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
@@ -25,7 +24,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.7.3",
-    "turbo": "^2.6.1",
+    "turbo": "^2.6.3",
     "typescript": "^5.9.3",
     "vitest": "^2.1.8"
   },

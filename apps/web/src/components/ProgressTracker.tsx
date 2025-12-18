@@ -1,8 +1,6 @@
-import { useState, useEffect } from 'react';
+import { ProgressBar } from '@hummbl/ui';
+import { useEffect, useState } from 'react';
 import type { Base120Model } from '../hooks/useModels';
-import { useAuth } from '../hooks/useAuth';
-import { useProgress } from '../hooks/useProgress';
-import { ProgressBar } from './ui/ProgressBar';
 import './components.css';
 
 interface ProgressTrackerProps {
@@ -61,47 +59,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
   onModelUncomplete,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const { user, token } = useAuth();
-  const { getProgress, addProgress, removeProgress } = useProgress();
-
-  // Load progress from API for authenticated users
-  useEffect(() => {
-    if (user && token) {
-      getProgress().then(apiProgress => {
-        // Sync API progress with local state if different
-        const currentSet = new Set(completedModels);
-        const apiSet = new Set(apiProgress);
-
-        // Add models from API that aren't in local state
-        apiProgress.forEach(modelId => {
-          if (!currentSet.has(modelId)) {
-            onModelComplete(modelId);
-          }
-        });
-
-        // Remove models from local state that aren't in API
-        completedModels.forEach(modelId => {
-          if (!apiSet.has(modelId)) {
-            onModelUncomplete(modelId);
-          }
-        });
-      });
-    }
-  }, [user, token, completedModels, getProgress, onModelComplete, onModelUncomplete]);
-
-  // Use authenticated progress if user is logged in, otherwise use localStorage
-  const getProgressData = (): ProgressData => {
-    if (user && token) {
-      // For authenticated users, progress will be managed via API calls
-      return {
-        completedModels,
-        lastUpdated: new Date().toISOString(),
-        streakDays: 0,
-        totalSessions: 0,
-      };
-    }
-
-    // Fallback to localStorage for non-authenticated users
+  const [progressData, setProgressData] = useState<ProgressData>(() => {
     try {
       const savedProgress = localStorage.getItem(PROGRESS_KEY);
       return savedProgress
@@ -121,11 +79,46 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         totalSessions: 0,
       };
     }
-  };
+  });
 
-  const [progressData, setProgressData] = useState<ProgressData>(getProgressData);
+  // Load progress from localStorage on mount and sync with parent state
+  useEffect(() => {
+    const syncProgress = () => {
+      try {
+        const savedProgress = localStorage.getItem(PROGRESS_KEY);
+        if (savedProgress) {
+          const data: ProgressData = JSON.parse(savedProgress);
 
-  const saveProgress = async (newCompleted: string[]) => {
+          // Use setTimeout to avoid synchronous setState in effect
+          setTimeout(() => setProgressData(data), 0);
+
+          // Sync with parent state
+          const currentSet = new Set(completedModels);
+          const savedSet = new Set(data.completedModels);
+
+          // Add models from localStorage that aren't in current state
+          data.completedModels.forEach(modelId => {
+            if (!currentSet.has(modelId)) {
+              onModelComplete(modelId);
+            }
+          });
+
+          // Remove models from current state that aren't in localStorage
+          completedModels.forEach(modelId => {
+            if (!savedSet.has(modelId)) {
+              onModelUncomplete(modelId);
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load progress:', error);
+      }
+    };
+
+    syncProgress();
+  }, [completedModels, onModelComplete, onModelUncomplete]);
+
+  const saveProgress = (newCompleted: string[]) => {
     const newData: ProgressData = {
       completedModels: newCompleted,
       lastUpdated: new Date().toISOString(),
@@ -133,31 +126,11 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       totalSessions: progressData.totalSessions + 1,
     };
 
-    if (user && token) {
-      // Save progress to API for authenticated users
-      const currentSet = new Set(completedModels);
-      const newSet = new Set(newCompleted);
-
-      // Add new models to API
-      for (const modelId of newCompleted) {
-        if (!currentSet.has(modelId)) {
-          await addProgress(modelId);
-        }
-      }
-
-      // Remove models from API
-      for (const modelId of completedModels) {
-        if (!newSet.has(modelId)) {
-          await removeProgress(modelId);
-        }
-      }
-    } else {
-      // Save to localStorage for non-authenticated users
-      try {
-        localStorage.setItem(PROGRESS_KEY, JSON.stringify(newData));
-      } catch (error) {
-        console.error('Failed to save progress:', error);
-      }
+    // Save to localStorage
+    try {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(newData));
+    } catch (error) {
+      console.error('Failed to save progress:', error);
     }
 
     setProgressData(newData);
@@ -217,7 +190,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
           <div>
             <div className="text-lg font-light text-zinc-100">{progressData.streakDays}</div>
             <p className="text-xs text-zinc-500">Day Streak</p>
@@ -324,7 +297,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
       {showDetails && (
         <div className="bg-zinc-900/20 border border-zinc-800 rounded-sm p-4">
           <h3 className="text-sm font-medium text-zinc-100 mb-3">Model Completion Details</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
             {models.map(model => {
               const isCompleted = completedModels.includes(model.id);
               return (

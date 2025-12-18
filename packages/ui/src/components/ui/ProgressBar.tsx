@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { cn } from '../../lib/utils';
 
 interface ProgressBarProps {
   width: number;
@@ -6,7 +7,7 @@ interface ProgressBarProps {
   children?: React.ReactNode;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ width, className = '', children }) => {
+export const ProgressBar: React.FC<ProgressBarProps> = ({ width, className, children }) => {
   const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ width, className = '',
   }, [width]);
 
   return (
-    <div ref={barRef} className={className}>
+    <div ref={barRef} className={cn(className)}>
       {children}
     </div>
   );

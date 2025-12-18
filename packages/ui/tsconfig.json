@@ -1,5 +1,5 @@
 {
-  "extends": "@hummbl/tsconfig/base.json",
+  "extends": "@hummbl/tsconfig/react-library.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src"

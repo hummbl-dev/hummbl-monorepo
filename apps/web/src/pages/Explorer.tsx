@@ -234,7 +234,7 @@ export const Explorer: React.FC = () => {
                   </button>
                 )}
               </div>
-              <div className="grid grid-cols-3 md:grid-cols-7 gap-2">
+              <div className="grid grid-cols-3 lg:grid-cols-7 gap-2">
                 {[
                   { code: 'all', name: 'All', color: 'bg-zinc-600' },
                   { code: 'P', name: 'Perspective', color: 'bg-blue-600' },
@@ -274,7 +274,7 @@ export const Explorer: React.FC = () => {
                   </button>
                 )}
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                 {[
                   { code: 'all', name: 'All', color: 'bg-zinc-600' },
                   { code: 'beginner', name: 'Beginner', color: 'bg-emerald-600' },
@@ -338,7 +338,7 @@ export const Explorer: React.FC = () => {
                 <span className="text-[10px] font-mono text-zinc-600">Recommended Entry</span>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {starterModels.map(model => (
                   <Link key={model.id} to={`/model/${model.id}`} className="block h-full">
                     <ModelCard model={model} />
@@ -369,7 +369,7 @@ export const Explorer: React.FC = () => {
               )}
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
               {filtered.map(model => (
                 <Link key={model.id} to={`/model/${model.id}`} className="block h-full">
                   <ModelCard model={model} />
