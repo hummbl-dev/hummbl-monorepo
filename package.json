@@ -16,7 +16,8 @@
     "report": "node daily-progress.js",
     "auto-report": "node auto-report.js",
     "enhanced-report": "node enhanced-report.js",
-    "benchmark": "node benchmark.js"
+    "benchmark": "node benchmark.js",
+    "validate-models": "node validate-models.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

@@ -1055,6 +1055,57 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         whenToUse: 'When building systems that AI agents will interact with',
         example: 'HUMMBL transformation validation system that returns null for fake concepts',
       },
+      {
+        code: 'SY22',
+        name: 'Adaptive Complexity Management',
+        transformation: 'SY',
+        definition:
+          'Dynamically adjust system complexity based on current capacity and environmental demands',
+        priority: 2,
+        whenToUse: 'When managing systems under varying load or complexity',
+        example: 'Auto-scaling infrastructure that adds/removes components based on demand',
+      },
+      {
+        code: 'SY23',
+        name: 'Emergent Behavior Prediction',
+        transformation: 'SY',
+        definition:
+          'Anticipate higher-order behaviors arising from component interactions before they manifest',
+        priority: 3,
+        whenToUse: 'When designing complex systems with multiple interacting parts',
+        example: 'Predicting traffic patterns from individual driver behaviors',
+      },
+      {
+        code: 'SY24',
+        name: 'System Health Scoring',
+        transformation: 'SY',
+        definition:
+          'Create composite metrics that capture overall system wellness across multiple dimensions',
+        priority: 2,
+        whenToUse: 'For monitoring and maintaining complex systems',
+        example:
+          'HUMMBL benchmark scoring combining build time, test success, and performance metrics',
+      },
+      {
+        code: 'SY25',
+        name: 'Cross-System Learning Transfer',
+        transformation: 'SY',
+        definition:
+          'Apply insights and patterns learned in one system to improve performance in related systems',
+        priority: 3,
+        whenToUse: 'When managing multiple similar systems or scaling solutions',
+        example: 'Using debugging patterns from one codebase to prevent issues in another',
+      },
+      {
+        code: 'SY26',
+        name: 'Meta-System Evolution',
+        transformation: 'SY',
+        definition:
+          'Design systems that can modify their own structure and behavior based on performance feedback',
+        priority: 4,
+        whenToUse: 'For long-term autonomous systems requiring self-improvement',
+        example: 'AI systems that modify their own architecture based on task performance',
+      },
     ],
   },
 };
