@@ -17,7 +17,11 @@
     "auto-report": "node auto-report.js",
     "enhanced-report": "node enhanced-report.js",
     "benchmark": "node benchmark.js",
-    "validate-models": "node validate-models.js"
+    "validate-models": "node validate-models.js",
+    "test:e2e": "pnpm --filter @hummbl/tests test:e2e",
+    "test:coverage": "pnpm --filter @hummbl/tests test:coverage",
+    "regression-test": "node performance-regression.js",
+    "coverage-report": "node coverage-report.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
