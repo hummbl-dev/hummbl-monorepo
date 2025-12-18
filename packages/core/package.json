@@ -13,11 +13,11 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "zod": "^3.25.1"
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "typescript": "~5.9.3",
     "@hummbl/tsconfig": "workspace:*",
-    "vitest": "^2.1.8"
+    "vitest": "^4.0.16"
   }
 }
