@@ -5,9 +5,10 @@
 **CRITICAL**: Always validate awsservices references before asserting.
 
 ### Usage Pattern
+
 ```typescript
 // ❌ INCORRECT - Fabricating meaning
-"AWSServices concept X means..."
+'AWSServices concept X means...';
 
 // ✅ CORRECT - Validated first
 const concept = await validateAWSServicesConcept('X');

@@ -5,9 +5,10 @@
 **CRITICAL**: Always validate kubernetes references before asserting.
 
 ### Usage Pattern
+
 ```typescript
 // ❌ INCORRECT - Fabricating meaning
-"Kubernetes concept X means..."
+'Kubernetes concept X means...';
 
 // ✅ CORRECT - Validated first
 const concept = await validateKubernetesConcept('X');

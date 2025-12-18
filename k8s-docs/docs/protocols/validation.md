@@ -3,12 +3,15 @@
 ## Mandatory Rules
 
 ### Rule 1: Always Validate Before Asserting
+
 Never reference kubernetes concepts without validation.
 
 ### Rule 2: Use Authoritative Source
+
 `src/definitions.ts` is the single source of truth.
 
 ### Rule 3: Document Failures
+
 When fabrication occurs, document in `docs/bugs/`.
 
 ## Validation Workflow

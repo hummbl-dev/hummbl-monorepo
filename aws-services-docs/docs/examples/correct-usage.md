@@ -21,7 +21,7 @@ results.forEach(concept => {
 
 ```typescript
 // DON'T fabricate meanings
-console.log("EXAMPLE_001 means something I think it means");
+console.log('EXAMPLE_001 means something I think it means');
 
 // DON'T skip validation
 const concept = AWSSERVICES_CONCEPTS['EXAMPLE_001']; // Direct access

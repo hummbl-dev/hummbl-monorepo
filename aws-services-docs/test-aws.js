@@ -2,16 +2,18 @@
 const AWS_SERVICES = {
   LAMBDA: {
     name: 'AWS Lambda',
-    definition: 'Serverless compute: 128MB-10,240MB memory, 15min max timeout, pay-per-invocation'
+    definition: 'Serverless compute: 128MB-10,240MB memory, 15min max timeout, pay-per-invocation',
   },
   S3: {
-    name: 'Amazon S3', 
-    definition: 'Object storage: No built-in CDN (use CloudFront), 5TB max object size, eventual consistency'
+    name: 'Amazon S3',
+    definition:
+      'Object storage: No built-in CDN (use CloudFront), 5TB max object size, eventual consistency',
   },
   RDS: {
     name: 'Amazon RDS',
-    definition: 'Managed database: Storage auto-scales, compute requires manual scaling, supports read replicas'
-  }
+    definition:
+      'Managed database: Storage auto-scales, compute requires manual scaling, supports read replicas',
+  },
 };
 
 function validateAWSService(id) {

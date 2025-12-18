@@ -1,6 +1,6 @@
 /**
  * AWSServices Authoritative Definitions
- * 
+ *
  * Single source of truth for all awsservices concepts
  */
 
@@ -23,29 +23,31 @@ export const AWSSERVICES_CONCEPTS: Record<string, AWSServicesConcept> = {
     category: 'compute',
     validation: {
       lastUpdated: new Date().toISOString(),
-      source: 'authoritative'
-    }
+      source: 'authoritative',
+    },
   },
   S3: {
     id: 'S3',
     name: 'Amazon S3',
-    definition: 'Object storage: No built-in CDN (use CloudFront), 5TB max object size, eventual consistency',
+    definition:
+      'Object storage: No built-in CDN (use CloudFront), 5TB max object size, eventual consistency',
     category: 'storage',
     validation: {
       lastUpdated: new Date().toISOString(),
-      source: 'authoritative'
-    }
+      source: 'authoritative',
+    },
   },
   RDS: {
     id: 'RDS',
     name: 'Amazon RDS',
-    definition: 'Managed database: Storage auto-scales, compute requires manual scaling, supports read replicas',
+    definition:
+      'Managed database: Storage auto-scales, compute requires manual scaling, supports read replicas',
     category: 'database',
     validation: {
       lastUpdated: new Date().toISOString(),
-      source: 'authoritative'
-    }
-  }
+      source: 'authoritative',
+    },
+  },
 };
 
 export function validateAWSServicesConcept(id: string): AWSServicesConcept | null {
@@ -53,9 +55,9 @@ export function validateAWSServicesConcept(id: string): AWSServicesConcept | nul
 }
 
 export function searchAWSServices(query: string): AWSServicesConcept[] {
-  return Object.values(AWSSERVICES_CONCEPTS)
-    .filter(concept => 
+  return Object.values(AWSSERVICES_CONCEPTS).filter(
+    concept =>
       concept.name.toLowerCase().includes(query.toLowerCase()) ||
       concept.definition.toLowerCase().includes(query.toLowerCase())
-    );
+  );
 }

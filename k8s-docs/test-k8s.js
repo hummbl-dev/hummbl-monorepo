@@ -2,16 +2,19 @@
 const K8S_RESOURCES = {
   DEPLOYMENT: {
     name: 'Deployment',
-    definition: 'Manages ReplicaSets and Pods. NO built-in load balancing (requires Service), NO persistent storage (requires PVC)'
+    definition:
+      'Manages ReplicaSets and Pods. NO built-in load balancing (requires Service), NO persistent storage (requires PVC)',
   },
   CONFIGMAP: {
     name: 'ConfigMap',
-    definition: 'Stores non-sensitive config data as key-value pairs. NO binary data support (use Secret), 1MB size limit'
+    definition:
+      'Stores non-sensitive config data as key-value pairs. NO binary data support (use Secret), 1MB size limit',
   },
   PVC: {
-    name: 'PersistentVolumeClaim', 
-    definition: 'Requests storage from PV. NO auto-expansion (depends on StorageClass allowVolumeExpansion), NO built-in backup'
-  }
+    name: 'PersistentVolumeClaim',
+    definition:
+      'Requests storage from PV. NO auto-expansion (depends on StorageClass allowVolumeExpansion), NO built-in backup',
+  },
 };
 
 function validateK8sResource(id) {
