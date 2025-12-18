@@ -21,7 +21,8 @@
     "test:e2e": "pnpm --filter @hummbl/tests test:e2e",
     "test:coverage": "pnpm --filter @hummbl/tests test:coverage",
     "regression-test": "node performance-regression.js",
-    "coverage-report": "node coverage-report.js"
+    "coverage-report": "node coverage-report.js",
+    "validate-templates": "node template-validator.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
