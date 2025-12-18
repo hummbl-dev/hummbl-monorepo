@@ -23,7 +23,9 @@
     "regression-test": "node performance-regression.js",
     "coverage-report": "node coverage-report.js",
     "validate-templates": "node template-validator.js",
-    "test-advanced-mcp": "node test-advanced-mcp.js"
+    "test-advanced-mcp": "node test-advanced-mcp.js",
+    "health-check": "node monitoring/health-check.js",
+    "check-alerts": "node monitoring/alert-system.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

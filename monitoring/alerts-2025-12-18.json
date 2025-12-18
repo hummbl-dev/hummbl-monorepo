@@ -1,0 +1,7 @@
+[
+  {
+    "timestamp": "2025-12-18T23:45:02.287Z",
+    "alerts": ["💥 High error rate: 100.0% (threshold: 10%)"],
+    "severity": "warning"
+  }
+]

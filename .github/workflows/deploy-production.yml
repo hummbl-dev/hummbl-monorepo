@@ -1,0 +1,63 @@
+name: Deploy Production
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Run Full Validation
+        run: pnpm validate
+
+      - name: Run E2E Tests
+        run: pnpm test:e2e
+
+      - name: Deploy Workers to Production
+        run: pnpm --filter @hummbl/workers deploy:production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Health Check
+        run: |
+          sleep 15
+          curl -f https://hummbl-workers.hummbl.workers.dev/health || exit 1
+
+      - name: Smoke Tests
+        run: |
+          curl -f https://hummbl-workers.hummbl.workers.dev/v1/models/P1 || exit 1
+          curl -f https://hummbl-workers.hummbl.workers.dev/v1/transformations/RE || exit 1
+
+      - name: Create Deployment Record
+        run: |
+          echo "Deployment: $(date)" >> deployment-log.txt
+          echo "Version: ${{ github.ref_name }}" >> deployment-log.txt
+
+      - name: Notify Success
+        if: success()
+        run: echo "🚀 Production deployment successful"
+
+      - name: Rollback on Failure
+        if: failure()
+        run: |
+          echo "❌ Production deployment failed - initiating rollback"
+          pnpm --filter @hummbl/workers rollback

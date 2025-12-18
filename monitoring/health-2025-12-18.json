@@ -1,0 +1,30 @@
+[
+  {
+    "timestamp": "2025-12-18T23:43:04.952Z",
+    "healthy": false,
+    "avgResponseTime": 1260.6666666666667,
+    "results": [
+      {
+        "endpoint": "https://hummbl-workers.hummbl.workers.dev/health",
+        "status": 200,
+        "ok": true,
+        "duration": 2160,
+        "timestamp": "2025-12-18T23:43:03.325Z"
+      },
+      {
+        "endpoint": "https://hummbl-workers.hummbl.workers.dev/v1/models/P1",
+        "status": 200,
+        "ok": true,
+        "duration": 1406,
+        "timestamp": "2025-12-18T23:43:04.732Z"
+      },
+      {
+        "endpoint": "https://hummbl-workers.hummbl.workers.dev/v1/transformations/RE",
+        "status": 500,
+        "ok": false,
+        "duration": 216,
+        "timestamp": "2025-12-18T23:43:04.948Z"
+      }
+    ]
+  }
+]

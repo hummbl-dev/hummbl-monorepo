@@ -1,0 +1,33 @@
+name: Production Monitoring
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # Every 5 minutes
+  workflow_dispatch:
+
+jobs:
+  health-check:
+    name: Health Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Health Check
+        run: node monitoring/health-check.js
+
+      - name: Check Alerts
+        run: node monitoring/alert-system.js
+        continue-on-error: true
+
+      - name: Upload Monitoring Data
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: monitoring-data-${{ github.run_number }}
+          path: monitoring/
+          retention-days: 7
