@@ -11,6 +11,7 @@ import { modelsRouter } from './routes/models';
 import { transformationsRouter } from './routes/transformations';
 import authRouter from './routes/auth';
 import { userRouter } from './routes/user';
+import analytics, { trackRequest } from './routes/analytics.js';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -40,11 +41,19 @@ app.get('/health', c => {
   return c.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Analytics middleware
+app.use('*', async (c, next) => {
+  await next();
+  const userAgent = c.req.header('user-agent');
+  trackRequest(c.req.path, userAgent);
+});
+
 // API Routes
 app.route('/v1/models', modelsRouter);
 app.route('/v1/transformations', transformationsRouter);
 app.route('/v1/auth', authRouter);
 app.route('/v1/user', userRouter);
+app.route('/v1/analytics', analytics);
 
 // 404 handler
 app.notFound(c => {

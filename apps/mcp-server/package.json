@@ -8,7 +8,8 @@
     "dev": "tsc --watch",
     "lint": "eslint .",
     "test": "vitest run",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "advanced": "node dist/advanced-tools.js"
   },
   "dependencies": {
     "@hummbl/core": "workspace:*",
