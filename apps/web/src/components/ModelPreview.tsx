@@ -1,6 +1,6 @@
+import { PositionedElement } from '@hummbl/ui';
 import React from 'react';
 import type { Base120Model } from '../hooks/useModels';
-import { PositionedElement } from './ui/PositionedElement';
 import './components.css';
 
 interface ModelPreviewProps {
