@@ -9,6 +9,7 @@
     "test": "turbo test",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
+    "format:check": "prettier --check .",
     "validate": "turbo lint type-check test build",
     "report": "node daily-progress.js",
     "auto-report": "node auto-report.js"
