@@ -1045,6 +1045,16 @@ export const TRANSFORMATIONS: Record<string, Transformation> = {
         priority: 3,
         whenToUse: 'For complex system orchestration',
       },
+      {
+        code: 'SY21',
+        name: 'AI-Native Documentation',
+        transformation: 'SY',
+        definition:
+          'Create executable documentation where code serves as authoritative source with built-in validation to prevent AI hallucination',
+        priority: 1,
+        whenToUse: 'When building systems that AI agents will interact with',
+        example: 'HUMMBL transformation validation system that returns null for fake concepts',
+      },
     ],
   },
 };
