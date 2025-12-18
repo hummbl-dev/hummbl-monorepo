@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-12-18T22:44:21.670Z",
+  "tests": {
+    "build": {
+      "time": 3739,
+      "status": "pass"
+    },
+    "test": {
+      "time": 3158,
+      "status": "pass"
+    },
+    "lint": {
+      "time": 3212,
+      "status": "pass"
+    },
+    "mcp": {
+      "throughput": 0,
+      "latency": 0,
+      "status": "fail"
+    }
+  },
+  "score": 75
+}
