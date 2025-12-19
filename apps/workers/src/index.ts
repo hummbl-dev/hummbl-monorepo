@@ -11,7 +11,7 @@ import { modelsRouter } from './routes/models';
 import { transformationsRouter } from './routes/transformations';
 import authRouter from './routes/auth';
 import { userRouter } from './routes/user';
-import analytics, { trackRequest } from './routes/analytics.js';
+import analytics, { trackRequest } from './routes/analytics';
 
 const app = new Hono<{ Bindings: Env }>();
 

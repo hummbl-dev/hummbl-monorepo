@@ -272,7 +272,7 @@ authRouter.post('/google', async c => {
       typeof token !== 'string' ||
       token.length < 10 ||
       token.length > 2048 ||
-      !/^[A-Za-z0-9._/+=\-]+$/.test(token)
+      !/^[A-Za-z0-9._/+=-]+$/.test(token)
     ) {
       return c.json({ error: 'Invalid Google token format' }, 400);
     }
@@ -1177,7 +1177,7 @@ authRouter.post('/refresh', async c => {
     let tokenData;
     let userId;
     try {
-      if (!/^[A-Za-z0-9._\-]+$/.test(refreshToken)) {
+      if (!/^[A-Za-z0-9._-]+$/.test(refreshToken)) {
         throw new Error('Invalid refresh token format');
       }
       const tokenString = await c.env.CACHE.get(`refresh_token:${refreshToken}`);

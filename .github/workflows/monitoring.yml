@@ -19,18 +19,12 @@ jobs:
 
       - name: Run Health Check
         run: |
-          if [ ! -f "monitoring/health-check.js" ]; then
+          if [ ! -f "monitoring/health-check.cjs" ]; then
             echo "⚠️ Health check script not found - monitoring disabled"
-            echo "📝 Create monitoring/health-check.js to enable health checks"
             exit 0
           fi
 
-          echo "🏥 Starting health check..."
-          if ! node monitoring/health-check.js; then
-            echo "❌ Health check failed"
-            exit 1
-          fi
-          echo "✅ Health check completed successfully"
+          node monitoring/health-check.cjs
 
       - name: Check Alerts
         run: |

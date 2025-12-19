@@ -115,7 +115,7 @@ analytics.get('/stats', c => {
     const now = Date.now();
     const last24h = now - 24 * 60 * 60 * 1000;
 
-    let recentRequests;
+    let recentRequests: Array<{ endpoint: string; timestamp: number; userAgent?: string }> = [];
     try {
       recentRequests = stats.requests.filter(
         r => r && typeof r.timestamp === 'number' && r.timestamp > last24h && r.timestamp <= now
@@ -133,7 +133,9 @@ analytics.get('/stats', c => {
       }
     });
 
-    let topModels, topQueries, topEndpoints;
+    let topModels: Array<[string, number]> = [];
+    let topQueries: Array<[string, number]> = [];
+    let topEndpoints: Array<[string, number]> = [];
     try {
       topModels = Array.from(stats.modelAccess.entries())
         .filter(([id, count]) => typeof id === 'string' && typeof count === 'number' && count > 0)
