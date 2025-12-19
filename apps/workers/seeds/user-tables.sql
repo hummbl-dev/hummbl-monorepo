@@ -9,6 +9,11 @@ CREATE TABLE IF NOT EXISTS users (
   avatar_url TEXT,
   provider TEXT NOT NULL, -- 'google', 'github', 'email'
   provider_id TEXT NOT NULL,
+  password_hash TEXT,
+  salt TEXT,
+  email_verified BOOLEAN DEFAULT FALSE,
+  email_verification_token TEXT,
+  email_verification_expires_at TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

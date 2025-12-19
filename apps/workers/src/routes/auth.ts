@@ -171,7 +171,7 @@ const hashPassword = async (password: string, salt: string): Promise<string> => 
     {
       name: 'PBKDF2',
       salt: saltData,
-      iterations: 210000, // OWASP recommended minimum
+      iterations: 100000, // Cloudflare Workers limit (max 100k)
       hash: 'SHA-512',
     },
     key,
