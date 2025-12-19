@@ -15,41 +15,204 @@ export const createApiError = (
   message: string,
   status: ContentfulStatusCode,
   details?: unknown
-): ApiError => ({
-  code,
-  message,
-  status,
-  ...(details ? { details } : {}),
-});
+): ApiError => {
+  try {
+    // Validate and sanitize inputs
+    const sanitizedCode =
+      typeof code === 'string' ? code.replace(/[<>"'&]/g, '').substring(0, 50) : 'unknown_error';
+    const sanitizedMessage =
+      typeof message === 'string'
+        ? message.replace(/[<>"'&]/g, '').substring(0, 200)
+        : 'An error occurred';
+    const validStatus = typeof status === 'number' && status >= 400 && status < 600 ? status : 500;
+
+    const error: ApiError = {
+      code: sanitizedCode,
+      message: sanitizedMessage,
+      status: validStatus,
+    };
+
+    // Only include details if they exist and are safe to expose
+    if (details !== undefined && details !== null) {
+      error.details = sanitizeErrorDetails(details);
+    }
+
+    return error;
+  } catch (error) {
+    console.error('Error creating API error:', error);
+    return {
+      code: 'error_creation_failed',
+      message: 'Failed to create error response',
+      status: 500,
+    };
+  }
+};
 
 export const respondWithResult = <T>(
   c: Context<{ Bindings: Env }>,
   result: Result<T, ApiError>,
   successStatus = 200 as const
 ) => {
-  if (result.ok) {
+  try {
+    if (result.ok) {
+      // Sanitize success response
+      let sanitizedValue;
+      try {
+        sanitizedValue = sanitizeResponseData(result.value);
+      } catch (error) {
+        console.error('Error sanitizing response data:', error);
+        return c.json(
+          {
+            ok: false,
+            error: {
+              code: 'sanitization_error',
+              message: 'Failed to process response data',
+              details: null,
+            },
+          },
+          500
+        );
+      }
+
+      return c.json(
+        {
+          ok: true,
+          value: sanitizedValue,
+        },
+        successStatus
+      );
+    }
+
+    // Sanitize error response
+    const sanitizedError = {
+      code:
+        typeof result.error.code === 'string'
+          ? result.error.code.substring(0, 50)
+          : 'unknown_error',
+      message:
+        typeof result.error.message === 'string'
+          ? result.error.message.substring(0, 200)
+          : 'An error occurred',
+      details: sanitizeErrorDetails(result.error.details),
+    };
+
+    const status =
+      typeof result.error.status === 'number' &&
+      result.error.status >= 400 &&
+      result.error.status < 600
+        ? result.error.status
+        : 500;
+
     return c.json(
       {
-        ok: true,
-        value: result.value,
+        ok: false,
+        error: sanitizedError,
       },
-      successStatus
+      status
+    );
+  } catch (error) {
+    console.error('Error in respondWithResult:', error);
+    return c.json(
+      {
+        ok: false,
+        error: {
+          code: 'response_error',
+          message: 'Failed to generate response',
+          details: null,
+        },
+      },
+      500
     );
   }
-
-  return c.json(
-    {
-      ok: false,
-      error: {
-        code: result.error.code,
-        message: result.error.message,
-        details: result.error.details ?? null,
-      },
-    },
-    result.error.status
-  );
 };
 
+// Helper function to sanitize response data
+function sanitizeResponseData(data: unknown): unknown {
+  if (data === null || data === undefined) {
+    return data;
+  }
+
+  if (typeof data === 'string') {
+    return data.replace(/[<>"'&]/g, '').substring(0, 10000);
+  }
+
+  if (typeof data === 'number' || typeof data === 'boolean') {
+    return data;
+  }
+
+  if (Array.isArray(data)) {
+    return data.slice(0, 1000).map(item => sanitizeResponseData(item));
+  }
+
+  if (typeof data === 'object') {
+    const sanitized: Record<string, unknown> = {};
+    let count = 0;
+    for (const [key, value] of Object.entries(data)) {
+      if (count >= 100) break; // Limit object size
+      const sanitizedKey = String(key)
+        .replace(/[<>"'&]/g, '')
+        .substring(0, 100);
+      if (sanitizedKey.length > 0) {
+        sanitized[sanitizedKey] = sanitizeResponseData(value);
+        count++;
+      }
+    }
+    return sanitized;
+  }
+
+  return String(data)
+    .replace(/[<>"'&]/g, '')
+    .substring(0, 1000);
+}
+
+// Helper function to sanitize error details
+function sanitizeErrorDetails(details: unknown): unknown {
+  if (!details) {
+    return null;
+  }
+
+  // Don't expose sensitive error details in production
+  if (typeof details === 'object' && details !== null) {
+    const sanitized: Record<string, unknown> = {};
+    const allowedKeys = ['field', 'expected', 'received', 'path', 'code'];
+
+    for (const [key, value] of Object.entries(details)) {
+      if (allowedKeys.includes(key) && typeof value === 'string') {
+        sanitized[key] = value.substring(0, 100);
+      }
+    }
+
+    return Object.keys(sanitized).length > 0 ? sanitized : null;
+  }
+
+  if (typeof details === 'string') {
+    return details.substring(0, 200);
+  }
+
+  return null;
+}
+
 export const logCacheError = (message: string, error: unknown) => {
-  console.warn(`[CACHE] ${message}`, error);
+  try {
+    const sanitizedMessage =
+      typeof message === 'string' ? message.substring(0, 200) : 'Cache error';
+
+    // Sanitize error for logging to prevent log injection
+    let sanitizedError;
+    if (error instanceof Error) {
+      sanitizedError = {
+        name: error.name.substring(0, 100),
+        message: error.message.substring(0, 500),
+        stack: error.stack ? error.stack.substring(0, 2000) : undefined,
+      };
+    } else if (typeof error === 'string') {
+      sanitizedError = error.substring(0, 500);
+    } else {
+      sanitizedError = 'Unknown error type';
+    }
+
+    console.warn(`[CACHE] ${sanitizedMessage}`, sanitizedError);
+  } catch (logError) {
+    console.warn('[CACHE] Error logging cache error:', logError);
+  }
 };

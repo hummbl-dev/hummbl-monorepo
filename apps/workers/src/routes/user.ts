@@ -19,18 +19,43 @@ const userRouter = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 // Middleware to verify JWT
 userRouter.use('*', async (c, next) => {
-  const authHeader = c.req.header('Authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return c.json({ error: 'Authentication required' }, 401);
-  }
-
   try {
+    const authHeader = c.req.header('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return c.json({ error: 'Authentication required' }, 401);
+    }
+
     const token = authHeader.substring(7);
-    const payload = await verify(token, c.env.JWT_SECRET);
-    c.set('userId', payload.userId as string);
+    if (!token || token.length === 0 || token.length > 1000) {
+      return c.json({ error: 'Invalid token format' }, 401);
+    }
+
+    let payload;
+    try {
+      payload = await verify(token, c.env.JWT_SECRET);
+    } catch (error) {
+      console.error('JWT verification error:', error);
+      return c.json({ error: 'Invalid token' }, 401);
+    }
+
+    if (
+      !payload ||
+      !payload.userId ||
+      typeof payload.userId !== 'string' ||
+      payload.userId.length === 0 ||
+      payload.userId.length > 100 ||
+      !/^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/.test(
+        payload.userId
+      )
+    ) {
+      return c.json({ error: 'Invalid token payload' }, 401);
+    }
+
+    c.set('userId', payload.userId);
     return await next();
-  } catch {
-    return c.json({ error: 'Invalid token' }, 401);
+  } catch (error) {
+    console.error('Authentication middleware error:', error);
+    return c.json({ error: 'Authentication failed' }, 401);
   }
 });
 
@@ -61,18 +86,54 @@ userRouter.get('/progress', async c => {
 userRouter.post('/progress', async c => {
   try {
     const userId = c.get('userId');
-    const { modelId } = await c.req.json();
 
-    if (!modelId) {
-      return c.json({ error: 'Model ID required' }, 400);
+    let requestData;
+    try {
+      requestData = await c.req.json();
+    } catch (error) {
+      console.error('JSON parsing error in add progress:', error);
+      return c.json({ error: 'Invalid request format' }, 400);
+    }
+
+    const { modelId } = requestData;
+
+    if (
+      !modelId ||
+      typeof modelId !== 'string' ||
+      modelId.length === 0 ||
+      modelId.length > 20 ||
+      !/^[A-Z0-9]+$/.test(modelId)
+    ) {
+      return c.json({ error: 'Invalid model ID format' }, 400);
+    }
+
+    // Verify model exists
+    let modelExists;
+    try {
+      modelExists = await c.env.DB.prepare('SELECT code FROM mental_models WHERE code = ?')
+        .bind(modelId)
+        .first();
+    } catch (error) {
+      console.error('Database error checking model existence:', error);
+      return c.json({ error: 'Failed to validate model' }, 500);
+    }
+
+    if (!modelExists) {
+      return c.json({ error: 'Model not found' }, 404);
     }
 
     // Check if already completed
-    const existing = await c.env.DB.prepare(
-      'SELECT id FROM user_progress WHERE user_id = ? AND model_id = ?'
-    )
-      .bind(userId, modelId)
-      .first();
+    let existing;
+    try {
+      existing = await c.env.DB.prepare(
+        'SELECT id FROM user_progress WHERE user_id = ? AND model_id = ?'
+      )
+        .bind(userId, modelId)
+        .first();
+    } catch (error) {
+      console.error('Database error checking existing progress:', error);
+      return c.json({ error: 'Failed to check progress' }, 500);
+    }
 
     if (existing) {
       return c.json({ error: 'Model already completed' }, 409);
@@ -80,14 +141,20 @@ userRouter.post('/progress', async c => {
 
     // Add to progress
     const progressId = crypto.randomUUID();
-    await c.env.DB.prepare(
-      `
-      INSERT INTO user_progress (id, user_id, model_id)
-      VALUES (?, ?, ?)
-    `
-    )
-      .bind(progressId, userId, modelId)
-      .run();
+    try {
+      const result = await c.env.DB.prepare(
+        'INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)'
+      )
+        .bind(progressId, userId, modelId)
+        .run();
+
+      if (!result || !result.success) {
+        throw new Error('Insert failed');
+      }
+    } catch (error) {
+      console.error('Database error adding progress:', error);
+      return c.json({ error: 'Failed to add progress' }, 500);
+    }
 
     return c.json({ success: true, progressId });
   } catch (error) {
@@ -100,15 +167,31 @@ userRouter.post('/progress', async c => {
 userRouter.delete('/progress/:modelId', async c => {
   try {
     const userId = c.get('userId');
-    const modelId = c.req.param('modelId');
+    const rawModelId = c.req.param('modelId');
 
-    const result = await c.env.DB.prepare(
-      'DELETE FROM user_progress WHERE user_id = ? AND model_id = ?'
-    )
-      .bind(userId, modelId)
-      .run();
+    if (
+      !rawModelId ||
+      typeof rawModelId !== 'string' ||
+      rawModelId.length === 0 ||
+      rawModelId.length > 20 ||
+      !/^[A-Z0-9]+$/.test(rawModelId)
+    ) {
+      return c.json({ error: 'Invalid model ID format' }, 400);
+    }
 
-    if (result.meta.changes === 0) {
+    let result;
+    try {
+      result = await c.env.DB.prepare(
+        'DELETE FROM user_progress WHERE user_id = ? AND model_id = ?'
+      )
+        .bind(userId, rawModelId)
+        .run();
+    } catch (error) {
+      console.error('Database error removing progress:', error);
+      return c.json({ error: 'Failed to remove progress' }, 500);
+    }
+
+    if (!result || result.meta.changes === 0) {
       return c.json({ error: 'Progress not found' }, 404);
     }
 
@@ -146,18 +229,54 @@ userRouter.get('/favorites', async c => {
 userRouter.post('/favorites', async c => {
   try {
     const userId = c.get('userId');
-    const { modelId } = await c.req.json();
 
-    if (!modelId) {
-      return c.json({ error: 'Model ID required' }, 400);
+    let requestData;
+    try {
+      requestData = await c.req.json();
+    } catch (error) {
+      console.error('JSON parsing error in add favorite:', error);
+      return c.json({ error: 'Invalid request format' }, 400);
+    }
+
+    const { modelId } = requestData;
+
+    if (
+      !modelId ||
+      typeof modelId !== 'string' ||
+      modelId.length === 0 ||
+      modelId.length > 20 ||
+      !/^[A-Z0-9]+$/.test(modelId)
+    ) {
+      return c.json({ error: 'Invalid model ID format' }, 400);
+    }
+
+    // Verify model exists
+    let modelExists;
+    try {
+      modelExists = await c.env.DB.prepare('SELECT code FROM mental_models WHERE code = ?')
+        .bind(modelId)
+        .first();
+    } catch (error) {
+      console.error('Database error checking model existence:', error);
+      return c.json({ error: 'Failed to validate model' }, 500);
+    }
+
+    if (!modelExists) {
+      return c.json({ error: 'Model not found' }, 404);
     }
 
     // Check if already favorited
-    const existing = await c.env.DB.prepare(
-      'SELECT id FROM user_favorites WHERE user_id = ? AND model_id = ?'
-    )
-      .bind(userId, modelId)
-      .first();
+    let existing;
+    try {
+      existing = await c.env.DB.prepare(
+        'SELECT id FROM user_favorites WHERE user_id = ? AND model_id = ?'
+      )
+        .bind(userId, modelId)
+        .first();
+    } catch (error) {
+      console.error('Database error checking existing favorite:', error);
+      return c.json({ error: 'Failed to check favorites' }, 500);
+    }
 
     if (existing) {
       return c.json({ error: 'Model already favorited' }, 409);
@@ -165,14 +284,20 @@ userRouter.post('/favorites', async c => {
 
     // Add to favorites
     const favoriteId = crypto.randomUUID();
-    await c.env.DB.prepare(
-      `
-      INSERT INTO user_favorites (id, user_id, model_id)
-      VALUES (?, ?, ?)
-    `
-    )
-      .bind(favoriteId, userId, modelId)
-      .run();
+    try {
+      const result = await c.env.DB.prepare(
+        'INSERT INTO user_favorites (id, user_id, model_id) VALUES (?, ?, ?)'
+      )
+        .bind(favoriteId, userId, modelId)
+        .run();
+
+      if (!result || !result.success) {
+        throw new Error('Insert failed');
+      }
+    } catch (error) {
+      console.error('Database error adding favorite:', error);
+      return c.json({ error: 'Failed to add favorite' }, 500);
+    }
 
     return c.json({ success: true, favoriteId });
   } catch (error) {
@@ -185,15 +310,31 @@ userRouter.post('/favorites', async c => {
 userRouter.delete('/favorites/:modelId', async c => {
   try {
     const userId = c.get('userId');
-    const modelId = c.req.param('modelId');
+    const rawModelId = c.req.param('modelId');
 
-    const result = await c.env.DB.prepare(
-      'DELETE FROM user_favorites WHERE user_id = ? AND model_id = ?'
-    )
-      .bind(userId, modelId)
-      .run();
+    if (
+      !rawModelId ||
+      typeof rawModelId !== 'string' ||
+      rawModelId.length === 0 ||
+      rawModelId.length > 20 ||
+      !/^[A-Z0-9]+$/.test(rawModelId)
+    ) {
+      return c.json({ error: 'Invalid model ID format' }, 400);
+    }
 
-    if (result.meta.changes === 0) {
+    let result;
+    try {
+      result = await c.env.DB.prepare(
+        'DELETE FROM user_favorites WHERE user_id = ? AND model_id = ?'
+      )
+        .bind(userId, rawModelId)
+        .run();
+    } catch (error) {
+      console.error('Database error removing favorite:', error);
+      return c.json({ error: 'Failed to remove favorite' }, 500);
+    }
+
+    if (!result || result.meta.changes === 0) {
       return c.json({ error: 'Favorite not found' }, 404);
     }
 

@@ -10,63 +10,232 @@ const stats = {
 };
 
 export function trackRequest(endpoint: string, userAgent?: string) {
-  stats.requests.push({ endpoint, timestamp: Date.now(), userAgent });
+  try {
+    // Validate and sanitize inputs
+    if (!endpoint || typeof endpoint !== 'string' || endpoint.length > 200) {
+      console.warn('Invalid endpoint for tracking:', endpoint);
+      return;
+    }
 
-  // Keep only last 1000 requests
-  if (stats.requests.length > 1000) {
-    stats.requests = stats.requests.slice(-1000);
+    const sanitizedEndpoint = endpoint.replace(/[<>"'&]/g, '').substring(0, 200);
+    const sanitizedUserAgent =
+      userAgent && typeof userAgent === 'string'
+        ? userAgent.replace(/[<>"'&]/g, '').substring(0, 500)
+        : undefined;
+
+    stats.requests.push({
+      endpoint: sanitizedEndpoint,
+      timestamp: Date.now(),
+      userAgent: sanitizedUserAgent,
+    });
+
+    // Keep only last 1000 requests to prevent memory leaks
+    if (stats.requests.length > 1000) {
+      stats.requests = stats.requests.slice(-1000);
+    }
+  } catch (error) {
+    console.error('Error tracking request:', error);
   }
 }
 
 export function trackModelAccess(modelId: string) {
-  stats.modelAccess.set(modelId, (stats.modelAccess.get(modelId) || 0) + 1);
+  try {
+    // Validate model ID format
+    if (
+      !modelId ||
+      typeof modelId !== 'string' ||
+      modelId.length === 0 ||
+      modelId.length > 20 ||
+      !/^[A-Z0-9]+$/.test(modelId)
+    ) {
+      console.warn('Invalid model ID for tracking:', modelId);
+      return;
+    }
+
+    const currentCount = stats.modelAccess.get(modelId) || 0;
+    if (currentCount < 1000000) {
+      // Prevent overflow
+      stats.modelAccess.set(modelId, currentCount + 1);
+    }
+
+    // Prevent memory leaks by limiting map size
+    if (stats.modelAccess.size > 10000) {
+      const entries = Array.from(stats.modelAccess.entries());
+      entries.sort(([, a], [, b]) => b - a);
+      stats.modelAccess.clear();
+      entries.slice(0, 5000).forEach(([key, value]) => {
+        stats.modelAccess.set(key, value);
+      });
+    }
+  } catch (error) {
+    console.error('Error tracking model access:', error);
+  }
 }
 
 export function trackSearch(query: string) {
-  const normalizedQuery = query.toLowerCase().trim();
-  stats.searchQueries.set(normalizedQuery, (stats.searchQueries.get(normalizedQuery) || 0) + 1);
+  try {
+    // Validate and sanitize query
+    if (!query || typeof query !== 'string' || query.length > 200) {
+      console.warn('Invalid search query for tracking:', query);
+      return;
+    }
+
+    const sanitizedQuery = query
+      .replace(/[<>"'&]/g, '')
+      .toLowerCase()
+      .trim()
+      .substring(0, 100);
+
+    if (sanitizedQuery.length === 0) {
+      return;
+    }
+
+    const currentCount = stats.searchQueries.get(sanitizedQuery) || 0;
+    if (currentCount < 1000000) {
+      // Prevent overflow
+      stats.searchQueries.set(sanitizedQuery, currentCount + 1);
+    }
+
+    // Prevent memory leaks by limiting map size
+    if (stats.searchQueries.size > 10000) {
+      const entries = Array.from(stats.searchQueries.entries());
+      entries.sort(([, a], [, b]) => b - a);
+      stats.searchQueries.clear();
+      entries.slice(0, 5000).forEach(([key, value]) => {
+        stats.searchQueries.set(key, value);
+      });
+    }
+  } catch (error) {
+    console.error('Error tracking search query:', error);
+  }
 }
 
 analytics.get('/stats', c => {
-  const now = Date.now();
-  const last24h = now - 24 * 60 * 60 * 1000;
-  const recentRequests = stats.requests.filter(r => r.timestamp > last24h);
+  try {
+    const now = Date.now();
+    const last24h = now - 24 * 60 * 60 * 1000;
 
-  const endpointCounts = new Map<string, number>();
-  recentRequests.forEach(r => {
-    endpointCounts.set(r.endpoint, (endpointCounts.get(r.endpoint) || 0) + 1);
-  });
+    let recentRequests;
+    try {
+      recentRequests = stats.requests.filter(
+        r => r && typeof r.timestamp === 'number' && r.timestamp > last24h && r.timestamp <= now
+      );
+    } catch (error) {
+      console.error('Error filtering recent requests:', error);
+      recentRequests = [];
+    }
 
-  const topModels = Array.from(stats.modelAccess.entries())
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 10);
+    const endpointCounts = new Map<string, number>();
+    recentRequests.forEach(r => {
+      if (r.endpoint && typeof r.endpoint === 'string') {
+        const sanitizedEndpoint = r.endpoint.substring(0, 200);
+        endpointCounts.set(sanitizedEndpoint, (endpointCounts.get(sanitizedEndpoint) || 0) + 1);
+      }
+    });
 
-  const topQueries = Array.from(stats.searchQueries.entries())
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 10);
+    let topModels, topQueries, topEndpoints;
+    try {
+      topModels = Array.from(stats.modelAccess.entries())
+        .filter(([id, count]) => typeof id === 'string' && typeof count === 'number' && count > 0)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10);
 
-  const topEndpoints = Array.from(endpointCounts.entries())
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 5);
+      topQueries = Array.from(stats.searchQueries.entries())
+        .filter(
+          ([query, count]) => typeof query === 'string' && typeof count === 'number' && count > 0
+        )
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 10);
 
-  return c.json({
-    timeframe: '24 hours',
-    totalRequests: recentRequests.length,
-    topModels: topModels.map(([id, count]) => ({ id, count })),
-    topQueries: topQueries.map(([query, count]) => ({ query, count })),
-    topEndpoints: topEndpoints.map(([endpoint, count]) => ({ endpoint, count })),
-    uniqueModelsAccessed: stats.modelAccess.size,
-    uniqueSearchQueries: stats.searchQueries.size,
-  });
+      topEndpoints = Array.from(endpointCounts.entries())
+        .filter(
+          ([endpoint, count]) =>
+            typeof endpoint === 'string' && typeof count === 'number' && count > 0
+        )
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 5);
+    } catch (error) {
+      console.error('Error processing analytics data:', error);
+      topModels = [];
+      topQueries = [];
+      topEndpoints = [];
+    }
+
+    // Sanitize response data
+    const sanitizedResponse = {
+      timeframe: '24 hours',
+      totalRequests: Math.max(0, recentRequests.length),
+      topModels: topModels.map(([id, count]) => ({
+        id: String(id).substring(0, 20),
+        count: Math.max(0, Math.min(1000000, Number(count))),
+      })),
+      topQueries: topQueries.map(([query, count]) => ({
+        query: String(query).substring(0, 100),
+        count: Math.max(0, Math.min(1000000, Number(count))),
+      })),
+      topEndpoints: topEndpoints.map(([endpoint, count]) => ({
+        endpoint: String(endpoint).substring(0, 200),
+        count: Math.max(0, Math.min(1000000, Number(count))),
+      })),
+      uniqueModelsAccessed: Math.max(0, stats.modelAccess.size),
+      uniqueSearchQueries: Math.max(0, stats.searchQueries.size),
+    };
+
+    return c.json(sanitizedResponse);
+  } catch (error) {
+    console.error('Analytics stats error:', error);
+    return c.json(
+      {
+        error: 'Failed to retrieve analytics',
+        timeframe: '24 hours',
+        totalRequests: 0,
+        topModels: [],
+        topQueries: [],
+        topEndpoints: [],
+        uniqueModelsAccessed: 0,
+        uniqueSearchQueries: 0,
+      },
+      500
+    );
+  }
 });
 
 analytics.get('/health', c => {
-  return c.json({
-    status: 'healthy',
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString(),
-    version: '1.0.0',
-  });
+  try {
+    let uptime;
+    try {
+      uptime = typeof process !== 'undefined' && process.uptime ? process.uptime() : 0;
+    } catch (error) {
+      console.warn('Unable to get process uptime:', error);
+      uptime = 0;
+    }
+
+    const healthData = {
+      status: 'healthy',
+      uptime: Math.max(0, Number(uptime) || 0),
+      timestamp: new Date().toISOString(),
+      version: '1.0.0',
+      analytics: {
+        requestsTracked: stats.requests.length,
+        modelsTracked: stats.modelAccess.size,
+        queriesTracked: stats.searchQueries.size,
+      },
+    };
+
+    return c.json(healthData);
+  } catch (error) {
+    console.error('Health check error:', error);
+    return c.json(
+      {
+        status: 'error',
+        uptime: 0,
+        timestamp: new Date().toISOString(),
+        version: '1.0.0',
+        error: 'Health check failed',
+      },
+      500
+    );
+  }
 });
 
 export default analytics;

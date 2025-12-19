@@ -271,7 +271,10 @@ modelsRouter.get('/:code/relationships', async c => {
 
 // POST /v1/models/recommend - Get model recommendations
 const recommendSchema = z.object({
-  problem: z.string().min(10, 'Problem description must be at least 10 characters'),
+  problem: z
+    .string()
+    .min(10, 'Problem description must be at least 10 characters')
+    .max(1000, 'Problem description too long'),
 });
 
 modelsRouter.post('/recommend', async c => {
@@ -280,30 +283,65 @@ modelsRouter.post('/recommend', async c => {
     try {
       body = await c.req.json();
     } catch (error) {
+      console.error('JSON parsing error in recommendations:', error);
       return respondWithResult(
         c,
         Result.err(createApiError('invalid_request', 'Invalid JSON format', 400))
       );
     }
-    const { problem } = recommendSchema.parse(body);
 
-    if (problem.length > 1000) {
+    if (!body || typeof body !== 'object') {
       return respondWithResult(
         c,
-        Result.err(createApiError('invalid_request', 'Problem description too long', 400))
+        Result.err(createApiError('invalid_request', 'Request body must be an object', 400))
       );
     }
-    const keywords = problem
+
+    let parsedData;
+    try {
+      parsedData = recommendSchema.parse(body);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return respondWithResult(
+          c,
+          Result.err(createApiError('invalid_request', 'Invalid request', 400, error.flatten()))
+        );
+      }
+      throw error;
+    }
+
+    const { problem } = parsedData;
+
+    // Sanitize input to prevent XSS
+    const sanitizedProblem = problem.replace(/[<>"'&]/g, '').trim();
+
+    if (sanitizedProblem.length < 10) {
+      return respondWithResult(
+        c,
+        Result.err(
+          createApiError('invalid_request', 'Problem description too short after sanitization', 400)
+        )
+      );
+    }
+
+    // Extract and validate keywords
+    const keywords = sanitizedProblem
       .toLowerCase()
       .split(/\s+/)
-      .filter(k => k.length > 0);
+      .filter(k => k.length > 2 && k.length < 50 && /^[a-z0-9]+$/.test(k))
+      .slice(0, 5); // Limit to 5 keywords
+
     if (keywords.length === 0) {
       return respondWithResult(
         c,
-        Result.err(createApiError('invalid_request', 'Problem description is empty', 400))
+        Result.err(
+          createApiError('invalid_request', 'No valid keywords found in problem description', 400)
+        )
       );
     }
-    const searchTerm = `%${keywords[0].substring(0, 50)}%`;
+
+    // Use parameterized query with escaped search terms
+    const searchTerm = `%${keywords[0].substring(0, 30)}%`;
 
     let results;
     try {
@@ -311,15 +349,28 @@ modelsRouter.post('/recommend', async c => {
         `
           SELECT code, name, transformation, description
           FROM mental_models
-          WHERE LOWER(description) LIKE ? OR LOWER(name) LIKE ?
-          ORDER BY priority DESC
+          WHERE (LOWER(description) LIKE ? OR LOWER(name) LIKE ?)
+          AND LENGTH(code) <= 10
+          ORDER BY 
+            CASE 
+              WHEN LOWER(name) LIKE ? THEN 1
+              WHEN LOWER(description) LIKE ? THEN 2
+              ELSE 3
+            END,
+            code
           LIMIT 10
         `
       )
-        .bind(searchTerm, searchTerm)
+        .bind(searchTerm, searchTerm, searchTerm, searchTerm)
         .all<Pick<DbMentalModel, 'code' | 'name' | 'transformation' | 'description'>>();
+
+      if (!dbResult || !Array.isArray(dbResult.results)) {
+        throw new Error('Invalid database response');
+      }
+
       results = dbResult.results;
     } catch (dbError) {
+      console.error('Database error in recommendations:', dbError);
       return respondWithResult(
         c,
         Result.err(
@@ -330,15 +381,25 @@ modelsRouter.post('/recommend', async c => {
       );
     }
 
+    // Sanitize response data
+    const sanitizedResults = results.map(result => ({
+      code: result.code,
+      name: typeof result.name === 'string' ? result.name.substring(0, 100) : '',
+      transformation: result.transformation,
+      description:
+        typeof result.description === 'string' ? result.description.substring(0, 500) : '',
+    }));
+
     return respondWithResult(
       c,
       Result.ok({
-        problem,
-        recommendations: results,
-        count: results.length,
+        problem: sanitizedProblem.substring(0, 1000),
+        recommendations: sanitizedResults,
+        count: sanitizedResults.length,
       })
     );
   } catch (error) {
+    console.error('Recommendations error:', error);
     if (error instanceof z.ZodError) {
       return respondWithResult(
         c,
@@ -349,7 +410,7 @@ modelsRouter.post('/recommend', async c => {
     return respondWithResult(
       c,
       Result.err(
-        createApiError('db_error', 'Failed to generate recommendations', 500, {
+        createApiError('server_error', 'Failed to generate recommendations', 500, {
           cause: error instanceof Error ? error.message : String(error),
         })
       )
