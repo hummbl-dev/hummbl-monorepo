@@ -1004,7 +1004,10 @@ authRouter.post('/login', async c => {
         .bind(sanitizedEmail, 'email')
         .first<User>();
     } catch (error) {
-      console.error('Database error during login:', error);
+      console.error('Database error during login:', {
+        error: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
+        timestamp: new Date().toISOString(),
+      });
       return c.json({ error: 'Login failed' }, 500);
     }
 
@@ -1019,7 +1022,10 @@ authRouter.post('/login', async c => {
       }
       hashedPasswordStr = await hashPassword(password, user.salt);
     } catch (error) {
-      console.error('Password hashing error during login:', error);
+      console.error('Password hashing error during login:', {
+        error: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
+        timestamp: new Date().toISOString(),
+      });
       return c.json({ error: 'Login failed' }, 500);
     }
 
@@ -1046,7 +1052,10 @@ authRouter.post('/login', async c => {
       accessToken = tokens.accessToken;
       refreshToken = tokens.refreshToken;
     } catch (error) {
-      console.error('Token generation error during login:', error);
+      console.error('Token generation error during login:', {
+        error: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
+        timestamp: new Date().toISOString(),
+      });
       return c.json({ error: 'Token generation failed' }, 500);
     }
 
@@ -1054,8 +1063,11 @@ authRouter.post('/login', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name: (user.name || '').replace(/[<>"'&]/g, ''),
-      avatar_url: user.avatar_url || null,
+      name:
+        typeof user.name === 'string'
+          ? user.name.replace(/[<>"'&\x00-\x1f\x7f-\x9f]/g, '').substring(0, 100)
+          : '',
+      avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
       email_verified: !!user.email_verified,
     };
@@ -1142,12 +1154,28 @@ authRouter.get('/verify', async c => {
 
     let user;
     try {
+      // Safe UUID validation
       if (
-        !/^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/.test(
-          payload.sub
-        )
+        payload.sub.length !== 36 ||
+        payload.sub[8] !== '-' ||
+        payload.sub[13] !== '-' ||
+        payload.sub[18] !== '-' ||
+        payload.sub[23] !== '-'
       ) {
         throw new Error('Invalid user ID format');
+      }
+      for (let i = 0; i < payload.sub.length; i++) {
+        if (i === 8 || i === 13 || i === 18 || i === 23) continue;
+        const char = payload.sub.charCodeAt(i);
+        if (
+          !(
+            (char >= 48 && char <= 57) || // 0-9
+            (char >= 65 && char <= 70) || // A-F
+            (char >= 97 && char <= 102) // a-f
+          )
+        ) {
+          throw new Error('Invalid user ID format');
+        }
       }
       user = await c.env.DB.prepare(
         'SELECT id, email, name, avatar_url, provider FROM users WHERE id = ?'
@@ -1183,7 +1211,10 @@ authRouter.get('/verify', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name: typeof user.name === 'string' ? user.name.substring(0, 100) : '',
+      name:
+        typeof user.name === 'string'
+          ? user.name.replace(/[<>"'&\x00-\x1f\x7f-\x9f]/g, '').substring(0, 100)
+          : '',
       avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
     };
@@ -1208,14 +1239,23 @@ authRouter.post('/verify-email', async c => {
 
     const { token } = requestData;
 
-    if (
-      !token ||
-      typeof token !== 'string' ||
-      token.length < 10 ||
-      token.length > 100 ||
-      !/^[A-Za-z0-9-]+$/.test(token)
-    ) {
+    if (!token || typeof token !== 'string' || token.length < 10 || token.length > 100) {
       return c.json({ error: 'Invalid verification token' }, 400);
+    }
+
+    // Safe character validation
+    for (let i = 0; i < token.length; i++) {
+      const char = token.charCodeAt(i);
+      if (
+        !(
+          (char >= 48 && char <= 57) || // 0-9
+          (char >= 65 && char <= 90) || // A-Z
+          (char >= 97 && char <= 122) || // a-z
+          char === 45 // -
+        )
+      ) {
+        return c.json({ error: 'Invalid verification token' }, 400);
+      }
     }
 
     // Find user by verification token
@@ -1307,8 +1347,21 @@ authRouter.post('/refresh', async c => {
     let tokenData;
     let userId;
     try {
-      if (!/^[A-Za-z0-9._-]+$/.test(refreshToken)) {
-        throw new Error('Invalid refresh token format');
+      // Safe character validation for refresh token
+      for (let i = 0; i < refreshToken.length; i++) {
+        const char = refreshToken.charCodeAt(i);
+        if (
+          !(
+            (char >= 48 && char <= 57) || // 0-9
+            (char >= 65 && char <= 90) || // A-Z
+            (char >= 97 && char <= 122) || // a-z
+            char === 46 ||
+            char === 95 ||
+            char === 45 // ._-
+          )
+        ) {
+          throw new Error('Invalid refresh token format');
+        }
       }
       const tokenString = await c.env.CACHE.get(`refresh_token:${refreshToken}`);
       if (!tokenString) {
@@ -1405,7 +1458,10 @@ authRouter.post('/refresh', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name: typeof user.name === 'string' ? user.name.substring(0, 100) : '',
+      name:
+        typeof user.name === 'string'
+          ? user.name.replace(/[<>"'&\x00-\x1f\x7f-\x9f]/g, '').substring(0, 100)
+          : '',
       avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
       email_verified: !!user.email_verified,
