@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "type-check": "tsc --noEmit",
-    "advanced": "node dist/advanced-tools.js"
+    "advanced": "node dist/advanced-tools.js",
+    "builder": "node dist/transformation-builder-tools.js"
   },
   "dependencies": {
     "@hummbl/core": "workspace:*",
