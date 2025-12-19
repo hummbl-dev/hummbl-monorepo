@@ -81,28 +81,67 @@ interface GitHubTokenResponse {
 
 const authRouter = new Hono<{ Bindings: Env }>();
 
-// CSRF protection middleware for POST requests
+// Enhanced CSRF protection middleware for POST requests
 authRouter.use('*', async (c, next) => {
   if (c.req.method === 'POST') {
+    // CSRF Token validation
+    const csrfToken = c.req.header('X-CSRF-Token') || c.req.header('X-Requested-With');
     const origin = c.req.header('Origin');
     const referer = c.req.header('Referer');
-    const host = c.req.header('Host');
+    const contentType = c.req.header('Content-Type');
 
-    // Basic origin validation
-    if (!origin && !referer) {
-      return c.json({ error: 'Missing origin header' }, 403);
+    // Require either CSRF token or valid origin
+    if (!csrfToken && !origin && !referer) {
+      return c.json(
+        {
+          error: 'CSRF protection: Missing required headers',
+          code: 'CSRF_TOKEN_MISSING',
+        },
+        403
+      );
     }
 
-    const allowedOrigins = [
-      'https://hummbl.dev',
-      'https://www.hummbl.dev',
-      'http://localhost:3000',
-      'http://localhost:5173',
-    ];
+    // Validate CSRF token if present
+    if (csrfToken && csrfToken !== 'XMLHttpRequest' && csrfToken.length < 8) {
+      return c.json(
+        {
+          error: 'CSRF protection: Invalid token format',
+          code: 'CSRF_TOKEN_INVALID',
+        },
+        403
+      );
+    }
 
-    const requestOrigin = origin || (referer ? new URL(referer).origin : null);
-    if (requestOrigin && !allowedOrigins.includes(requestOrigin)) {
-      return c.json({ error: 'Invalid origin' }, 403);
+    // Origin validation for requests without CSRF token
+    if (!csrfToken) {
+      const allowedOrigins = [
+        'https://hummbl.dev',
+        'https://www.hummbl.dev',
+        'http://localhost:3000',
+        'http://localhost:5173',
+      ];
+
+      const requestOrigin = origin || (referer ? new URL(referer).origin : null);
+      if (!requestOrigin || !allowedOrigins.includes(requestOrigin)) {
+        return c.json(
+          {
+            error: 'CSRF protection: Invalid or missing origin',
+            code: 'CSRF_ORIGIN_INVALID',
+          },
+          403
+        );
+      }
+    }
+
+    // Additional protection for JSON requests
+    if (contentType && contentType.includes('application/json') && !csrfToken && !origin) {
+      return c.json(
+        {
+          error: 'CSRF protection: JSON requests require origin or CSRF token',
+          code: 'CSRF_JSON_PROTECTION',
+        },
+        403
+      );
     }
   }
   return await next();
@@ -828,8 +867,16 @@ authRouter.post('/register', async c => {
       );
     }
 
-    const commonWords = ['password', '123456', 'qwerty', 'admin', 'login', 'user'];
-    if (commonWords.some(word => password.toLowerCase().includes(word))) {
+    // Check for common weak patterns
+    const lowerPassword = password.toLowerCase();
+    if (
+      lowerPassword.includes('password') ||
+      lowerPassword.includes('123456') ||
+      lowerPassword.includes('qwerty') ||
+      lowerPassword.includes('admin') ||
+      lowerPassword.includes('login') ||
+      lowerPassword.includes('user')
+    ) {
       return c.json({ error: 'Password cannot contain common words' }, 400);
     }
     if (password.toLowerCase().includes(sanitizedEmail.split('@')[0].toLowerCase())) {
@@ -873,8 +920,16 @@ authRouter.post('/register', async c => {
     if (!hasValidChar) {
       return c.json({ error: 'Name cannot be only special characters' }, 400);
     }
-    const reservedWords = ['admin', 'root', 'system', 'null', 'undefined', 'test'];
-    if (reservedWords.some(word => sanitizedName.toLowerCase().includes(word))) {
+    // Check for reserved name patterns
+    const lowerName = sanitizedName.toLowerCase();
+    if (
+      lowerName.includes('admin') ||
+      lowerName.includes('root') ||
+      lowerName.includes('system') ||
+      lowerName.includes('null') ||
+      lowerName.includes('undefined') ||
+      lowerName.includes('test')
+    ) {
       return c.json({ error: 'Name cannot contain reserved words' }, 400);
     }
 
