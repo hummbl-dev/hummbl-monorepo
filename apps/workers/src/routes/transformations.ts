@@ -105,7 +105,7 @@ transformationsRouter.get('/:type', async c => {
       try {
         const { results } = await c.env.DB.prepare(
           `
-            SELECT code, name, transformation, definition, whenToUse, example, priority, system_prompt
+            SELECT code, name, transformation, description as definition, description as whenToUse, example, 1 as priority, '' as system_prompt
             FROM mental_models
             WHERE transformation = ?
             ORDER BY code
