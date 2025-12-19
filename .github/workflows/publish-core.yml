@@ -44,12 +44,30 @@ jobs:
 
       - name: Publish to npm
         run: |
+          set -e
           cd packages/core
-          if npm publish --provenance --access public; then
+
+          # Validate package.json exists
+          if [ ! -f "package.json" ]; then
+            echo "❌ package.json not found in packages/core"
+            exit 1
+          fi
+
+          # Validate NODE_AUTH_TOKEN
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "❌ NODE_AUTH_TOKEN is not set"
+            exit 1
+          fi
+
+          # Attempt to publish with detailed error handling
+          if npm publish --provenance --access public 2>&1; then
             echo "✅ Successfully published @hummbl/core to npm"
           else
-            echo "❌ Failed to publish @hummbl/core"
-            exit 1
+            publish_exit_code=$?
+            echo "❌ Failed to publish @hummbl/core (exit code: $publish_exit_code)"
+            echo "📋 Checking npm whoami..."
+            npm whoami || echo "❌ npm authentication failed"
+            exit $publish_exit_code
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
