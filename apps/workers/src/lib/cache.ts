@@ -32,11 +32,6 @@ const getWorkersCache = async () => {
 };
 
 const readMemoryCache = <T>(key: string): T | null => {
-  // Validate cache key
-  if (!key || typeof key !== 'string' || key.length > 200) {
-    return null;
-  }
-
   const entry = memoryCache.get(key);
 
   if (!entry) {
@@ -49,62 +44,18 @@ const readMemoryCache = <T>(key: string): T | null => {
   }
 
   try {
-    // Validate entry value before parsing
-    if (!entry.value || typeof entry.value !== 'string' || entry.value.length > 1000000) {
-      memoryCache.delete(key);
-      return null;
-    }
-
-    const parsed = JSON.parse(entry.value);
-
-    // Basic validation of parsed data
-    if (parsed === null || (typeof parsed === 'object' && Object.keys(parsed).length > 1000)) {
-      memoryCache.delete(key);
-      return null;
-    }
-
-    return parsed as T;
-  } catch (error) {
-    console.error('Cache JSON parse error:', error);
+    return JSON.parse(entry.value) as T;
+  } catch {
     memoryCache.delete(key);
     return null;
   }
 };
 
 const writeMemoryCache = (key: string, payload: string, ttlSeconds: number) => {
-  // Validate inputs
-  if (
-    !key ||
-    typeof key !== 'string' ||
-    key.length > 200 ||
-    !payload ||
-    typeof payload !== 'string' ||
-    payload.length > 1000000 ||
-    typeof ttlSeconds !== 'number' ||
-    ttlSeconds <= 0 ||
-    ttlSeconds > 86400
-  ) {
-    console.warn('Invalid cache write parameters');
-    return;
-  }
-
-  try {
-    // Validate JSON structure
-    JSON.parse(payload);
-
-    memoryCache.set(key, {
-      value: payload,
-      expiresAt: Date.now() + ttlSeconds * 1000,
-    });
-
-    // Prevent memory cache from growing too large
-    if (memoryCache.size > 10000) {
-      const oldestKeys = Array.from(memoryCache.keys()).slice(0, 1000);
-      oldestKeys.forEach(k => memoryCache.delete(k));
-    }
-  } catch (error) {
-    console.error('Cache write validation error:', error);
-  }
+  memoryCache.set(key, {
+    value: payload,
+    expiresAt: Date.now() + ttlSeconds * 1000,
+  });
 };
 
 export const getCachedResult = async <T>(

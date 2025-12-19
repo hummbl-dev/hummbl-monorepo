@@ -7,11 +7,13 @@ declare global {
   };
 }
 
+/* eslint-disable */
 declare global {
   var TextEncoder: {
     new (encoding?: string): TextEncoder;
     encode(input?: string): Uint8Array;
   };
 }
+/* eslint-enable */
 
 export {};

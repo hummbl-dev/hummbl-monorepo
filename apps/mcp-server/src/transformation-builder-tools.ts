@@ -135,7 +135,7 @@ ${transformation.author ? `- **Author**: ${transformation.author}` : ''}
 
   if (request.params.name === 'get_transformation_templates') {
     const templates = TRANSFORMATION_TEMPLATES.map(
-      t => `## ${t.name}
+      (t: any) => `## ${t.name}
 **Description**: ${t.description}
 **Suggested Models**: ${t.modelCount}
 **Examples**: ${t.examples.join(', ')}`

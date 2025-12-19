@@ -46,35 +46,15 @@ const buildModelsQuery = (filters: { transformation?: TransformationType; search
   const params: string[] = [];
 
   if (filters.transformation) {
-    // Validate transformation type
-    const validTransformations = ['P', 'IN', 'CO', 'DE', 'RE', 'SY'];
-    if (!validTransformations.includes(filters.transformation)) {
-      throw new Error('Invalid transformation type');
-    }
     clauses.push('transformation = ?');
     params.push(filters.transformation);
   }
 
   if (filters.search) {
-    // Enhanced input validation and sanitization
-    if (
-      typeof filters.search !== 'string' ||
-      filters.search.length > 100 ||
-      filters.search.length < 1
-    ) {
-      throw new Error('Invalid search term');
+    if (filters.search.length > 100) {
+      throw new Error('Search term too long');
     }
-
-    // Remove potentially dangerous characters
-    const sanitizedSearch = filters.search
-      .replace(/[%_\\]/g, '\\$&')
-      .replace(/[<>"'&]/g, '')
-      .trim();
-
-    if (sanitizedSearch.length === 0) {
-      throw new Error('Search term too short after sanitization');
-    }
-
+    const sanitizedSearch = filters.search.replace(/[%_]/g, '\\$&');
     const searchTerm = `%${sanitizedSearch.toLowerCase()}%`;
     clauses.push('(LOWER(description) LIKE ? OR LOWER(name) LIKE ? OR code LIKE ?)');
     params.push(searchTerm, searchTerm, `%${sanitizedSearch.toUpperCase()}%`);

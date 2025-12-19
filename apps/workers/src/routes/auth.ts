@@ -70,11 +70,7 @@ authRouter.use('*', async (c, next) => {
   }
 
   try {
-    const ip =
-      c.req.header('CF-Connecting-IP') ||
-      c.req.header('X-Forwarded-For') ||
-      c.req.header('X-Real-IP') ||
-      'unknown';
+    const ip = c.req.header('CF-Connecting-IP') || 'unknown';
     const key = `rate_limit:${ip}`;
 
     // Get current count and reset time
@@ -115,14 +111,14 @@ authRouter.use('*', async (c, next) => {
 
 // Constant-time string comparison to prevent timing attacks
 const constantTimeEquals = (a: string, b: string): boolean => {
-  if (a.length !== b.length) {
-    return false;
-  }
+  const maxLen = Math.max(a.length, b.length);
+  const aPadded = a.padEnd(maxLen, '\0');
+  const bPadded = b.padEnd(maxLen, '\0');
   let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  for (let i = 0; i < maxLen; i++) {
+    result |= aPadded.charCodeAt(i) ^ bPadded.charCodeAt(i);
   }
-  return result === 0;
+  return result === 0 && a.length === b.length;
 };
 
 // Password hashing utility function
@@ -197,7 +193,6 @@ const generateTokens = async (c: { env: Env }, userId: string, email: string) =>
       expirationTtl: REFRESH_TOKEN_EXPIRY,
     });
   } catch (error) {
-    console.error('Cache storage error:', error);
     throw new Error('Failed to store refresh token');
   }
 
@@ -222,20 +217,14 @@ authRouter.post('/google', async c => {
       typeof token !== 'string' ||
       token.length < 10 ||
       token.length > 2048 ||
-      !/^[A-Za-z0-9._/+=\\-]+$/.test(token)
+      !/^[A-Za-z0-9._/+=\-]+$/.test(token)
     ) {
       return c.json({ error: 'Invalid Google token format' }, 400);
     }
 
-    // Verify Google token with URL validation
-    const googleApiUrl = 'https://www.googleapis.com/oauth2/v2/userinfo';
+    // Verify Google token
     const googleResponse = await fetch(
-      `${googleApiUrl}?access_token=${encodeURIComponent(token)}`,
-      {
-        method: 'GET',
-        headers: { 'User-Agent': 'HUMMBL/1.0' },
-        signal: AbortSignal.timeout(10000),
-      }
+      `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${encodeURIComponent(token)}`
     );
     if (!googleResponse.ok) {
       return c.json({ error: 'Invalid Google token' }, 400);
@@ -331,21 +320,18 @@ authRouter.post('/github', async c => {
       return c.json({ error: 'Invalid authorization code format' }, 400);
     }
 
-    // Exchange code for access token with URL validation
-    const githubTokenUrl = 'https://github.com/login/oauth/access_token';
-    const tokenResponse = await fetch(githubTokenUrl, {
+    // Exchange code for access token
+    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        'User-Agent': 'HUMMBL/1.0',
       },
       body: JSON.stringify({
         client_id: c.env.GITHUB_CLIENT_ID,
         client_secret: c.env.GITHUB_CLIENT_SECRET,
         code,
       }),
-      signal: AbortSignal.timeout(10000),
     });
 
     if (!tokenResponse.ok) {
@@ -376,8 +362,7 @@ authRouter.post('/github', async c => {
 
     let userResponse;
     try {
-      const githubUserUrl = 'https://api.github.com/user';
-      userResponse = await fetch(githubUserUrl, {
+      userResponse = await fetch('https://api.github.com/user', {
         headers: {
           Authorization: `Bearer ${tokenData.access_token}`,
           'User-Agent': 'HUMMBL/1.0',
@@ -425,7 +410,7 @@ authRouter.post('/github', async c => {
         (typeof githubUser.name !== 'string' ||
           githubUser.name.length > 100 ||
           githubUser.name.length === 0 ||
-          !/^[a-zA-Z0-9\s\\-_.@]+$/.test(githubUser.name))) ||
+          !/^[a-zA-Z0-9\s\-_.@]+$/.test(githubUser.name))) ||
       (githubUser.avatar_url &&
         (typeof githubUser.avatar_url !== 'string' ||
           githubUser.avatar_url.length > 500 ||
@@ -610,7 +595,7 @@ authRouter.post('/register', async c => {
     if (sanitizedName.length === 0 || sanitizedName.length > 100) {
       return c.json({ error: 'Name must be between 1 and 100 characters' }, 400);
     }
-    if (!/^[a-zA-Z0-9\s\\-_.]+$/.test(sanitizedName)) {
+    if (!/^[a-zA-Z0-9\s\-_.]+$/.test(sanitizedName)) {
       return c.json(
         {
           error:
@@ -619,7 +604,7 @@ authRouter.post('/register', async c => {
         400
       );
     }
-    if (/^[\s\\-_.]+$/.test(sanitizedName) || /\s{2,}/.test(sanitizedName)) {
+    if (/^[\s\-_.]+$/.test(sanitizedName) || /\s{2,}/.test(sanitizedName)) {
       return c.json(
         { error: 'Name cannot be only special characters or contain multiple consecutive spaces' },
         400
@@ -1104,7 +1089,7 @@ authRouter.post('/refresh', async c => {
     // Verify refresh token
     let userId;
     try {
-      if (!/^[A-Za-z0-9._\\-]+$/.test(refreshToken)) {
+      if (!/^[A-Za-z0-9._\-]+$/.test(refreshToken)) {
         throw new Error('Invalid refresh token format');
       }
       userId = await c.env.CACHE.get(`refresh_token:${refreshToken}`);
@@ -1209,7 +1194,7 @@ authRouter.post('/logout', async c => {
     let requestData;
     try {
       requestData = await c.req.json();
-    } catch {
+    } catch (error) {
       // Ignore JSON parsing errors for logout - always succeed
       return c.json({ message: 'Logged out successfully' });
     }

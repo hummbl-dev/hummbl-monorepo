@@ -64,18 +64,13 @@ userRouter.get('/progress', async c => {
   try {
     const userId = c.get('userId');
 
-    // Validate userId format
-    if (
-      !userId ||
-      typeof userId !== 'string' ||
-      userId.length !== 36 ||
-      !/^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/.test(userId)
-    ) {
-      return c.json({ error: 'Invalid user ID' }, 400);
-    }
-
     const progress = await c.env.DB.prepare(
-      'SELECT model_id, completed_at FROM user_progress WHERE user_id = ? ORDER BY completed_at DESC'
+      `
+      SELECT model_id, completed_at
+      FROM user_progress
+      WHERE user_id = ?
+      ORDER BY completed_at DESC
+    `
     )
       .bind(userId)
       .all();
@@ -212,18 +207,13 @@ userRouter.get('/favorites', async c => {
   try {
     const userId = c.get('userId');
 
-    // Validate userId format
-    if (
-      !userId ||
-      typeof userId !== 'string' ||
-      userId.length !== 36 ||
-      !/^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/.test(userId)
-    ) {
-      return c.json({ error: 'Invalid user ID' }, 400);
-    }
-
     const favorites = await c.env.DB.prepare(
-      'SELECT model_id, created_at FROM user_favorites WHERE user_id = ? ORDER BY created_at DESC'
+      `
+      SELECT model_id, created_at
+      FROM user_favorites
+      WHERE user_id = ?
+      ORDER BY created_at DESC
+    `
     )
       .bind(userId)
       .all();
@@ -360,16 +350,6 @@ userRouter.get('/profile', async c => {
   try {
     const userId = c.get('userId');
 
-    // Validate userId format
-    if (
-      !userId ||
-      typeof userId !== 'string' ||
-      userId.length !== 36 ||
-      !/^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/.test(userId)
-    ) {
-      return c.json({ error: 'Invalid user ID' }, 400);
-    }
-
     const user = await c.env.DB.prepare(
       'SELECT id, email, name, avatar_url, provider, created_at FROM users WHERE id = ?'
     )
@@ -380,7 +360,7 @@ userRouter.get('/profile', async c => {
       return c.json({ error: 'User not found' }, 404);
     }
 
-    // Get stats with validated queries
+    // Get stats
     const progressCount = await c.env.DB.prepare(
       'SELECT COUNT(*) as count FROM user_progress WHERE user_id = ?'
     )
@@ -393,21 +373,11 @@ userRouter.get('/profile', async c => {
       .bind(userId)
       .first();
 
-    // Sanitize response data
-    const sanitizedUser = {
-      id: user.id,
-      email: typeof user.email === 'string' ? user.email.substring(0, 254) : '',
-      name: typeof user.name === 'string' ? user.name.substring(0, 100) : '',
-      avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
-      provider: user.provider,
-      created_at: user.created_at,
-    };
-
     return c.json({
-      user: sanitizedUser,
+      user,
       stats: {
-        completedModels: Math.max(0, Number(progressCount?.count) || 0),
-        favoriteModels: Math.max(0, Number(favoritesCount?.count) || 0),
+        completedModels: progressCount?.count || 0,
+        favoriteModels: favoritesCount?.count || 0,
       },
     });
   } catch (error) {
