@@ -1089,7 +1089,7 @@ authRouter.post('/refresh', async c => {
     // Verify refresh token
     let userId;
     try {
-      if (!/^[A-Za-z0-9._-]+$/.test(refreshToken)) {
+      if (!/^[A-Za-z0-9._\-]+$/.test(refreshToken)) {
         throw new Error('Invalid refresh token format');
       }
       userId = await c.env.CACHE.get(`refresh_token:${refreshToken}`);
@@ -1128,8 +1128,8 @@ authRouter.post('/refresh', async c => {
       // Clean up invalid refresh token
       try {
         await c.env.CACHE.delete(`refresh_token:${refreshToken}`);
-      } catch (error) {
-        console.error('Cache cleanup error:', error);
+      } catch {
+        console.error('Cache cleanup error');
       }
       return c.json({ error: 'User not found' }, 404);
     }

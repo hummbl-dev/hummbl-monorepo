@@ -92,16 +92,17 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
         };
       }
 
-      return result;
-    } catch (error) {
-      return {
-        content: [{ type: 'text', text: `Build Error: ${String(error)}` }],
-        isError: true,
-      };
-    }
+      const buildResult = builder.build();
 
-    const transformation = result.value;
-    const output = `# Custom Transformation Created: ${transformation.name} (${transformation.code})
+      if (!buildResult.ok) {
+        return {
+          content: [{ type: 'text', text: `Validation Error: ${buildResult.error}` }],
+          isError: true,
+        };
+      }
+
+      const transformation = buildResult.value;
+      const output = `# Custom Transformation Created: ${transformation.name} (${transformation.code})
 
 ## Description
 ${transformation.description}
@@ -123,12 +124,18 @@ ${transformation.author ? `- **Author**: ${transformation.author}` : ''}
 
 ✅ Transformation successfully created and validated!`;
 
-    return { content: [{ type: 'text', text: output }] };
+      return { content: [{ type: 'text', text: output }] };
+    } catch (error) {
+      return {
+        content: [{ type: 'text', text: `Build Error: ${String(error)}` }],
+        isError: true,
+      };
+    }
   }
 
   if (request.params.name === 'get_transformation_templates') {
     const templates = TRANSFORMATION_TEMPLATES.map(
-      t => `## ${t.name}
+      (t: any) => `## ${t.name}
 **Description**: ${t.description}
 **Suggested Models**: ${t.modelCount}
 **Examples**: ${t.examples.join(', ')}`

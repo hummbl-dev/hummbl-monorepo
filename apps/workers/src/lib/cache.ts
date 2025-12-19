@@ -45,7 +45,7 @@ const readMemoryCache = <T>(key: string): T | null => {
 
   try {
     return JSON.parse(entry.value) as T;
-  } catch (error) {
+  } catch {
     memoryCache.delete(key);
     return null;
   }

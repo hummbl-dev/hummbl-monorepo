@@ -261,7 +261,7 @@ Example: search_models(query="feedback", transformation="${code}")
       }>;
 
       if (!payload?.ok) {
-        throw new Error(`Model ${modelCode} not found or has no relationships`);
+        throw new Error(`Model ${sanitizedCode} not found or has no relationships`);
       }
 
       const { model, relationships, count } = payload.value;
@@ -269,7 +269,7 @@ Example: search_models(query="feedback", transformation="${code}")
       if (count === 0) {
         return {
           content: [
-            { type: 'text', text: `Model ${modelCode} has no documented relationships yet.` },
+            { type: 'text', text: `Model ${sanitizedCode} has no documented relationships yet.` },
           ],
         };
       }
@@ -279,8 +279,9 @@ Example: search_models(query="feedback", transformation="${code}")
         `Found ${count} relationship(s):\n\n` +
         relationships
           .map((rel: Relationship) => {
-            const direction = rel.source_code === modelCode ? '→' : '←';
-            const otherModel = rel.source_code === modelCode ? rel.target_code : rel.source_code;
+            const direction = rel.source_code === sanitizedCode ? '→' : '←';
+            const otherModel =
+              rel.source_code === sanitizedCode ? rel.target_code : rel.source_code;
             const confidence =
               rel.confidence === 10 ? 'High' : rel.confidence >= 7 ? 'Medium' : 'Low';
 
@@ -295,7 +296,10 @@ Example: search_models(query="feedback", transformation="${code}")
     } catch (error) {
       return {
         content: [
-          { type: 'text', text: `Error fetching relationships for ${modelCode}: ${String(error)}` },
+          {
+            type: 'text',
+            text: `Error fetching relationships for ${sanitizedCode}: ${String(error)}`,
+          },
         ],
         isError: true,
       };
