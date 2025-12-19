@@ -155,11 +155,13 @@ authRouter.use('*', async (c, next) => {
   }
 
   try {
-    const ip =
-      c.req.header('CF-Connecting-IP') ||
-      c.req.header('X-Forwarded-For')?.split(',')[0]?.trim() ||
-      c.req.header('X-Real-IP') ||
-      'unknown';
+    // Only trust CF-Connecting-IP from Cloudflare to prevent IP spoofing
+    const cfIP = c.req.header('CF-Connecting-IP');
+    const ip = cfIP && /^[0-9a-f.:]+$/i.test(cfIP) ? cfIP : 'unknown';
+    
+    // If no valid CF IP, use a more restrictive rate limit
+    const isValidIP = ip !== 'unknown';
+    const maxRequests = isValidIP ? RATE_LIMIT_MAX_REQUESTS : Math.floor(RATE_LIMIT_MAX_REQUESTS / 2);
     const key = `rate_limit:${ip}`;
 
     // Get current count and reset time
@@ -173,7 +175,7 @@ authRouter.use('*', async (c, next) => {
     }
 
     // Check if rate limit exceeded
-    if (count >= RATE_LIMIT_MAX_REQUESTS) {
+    if (count >= maxRequests) {
       c.status(429);
       c.header('Retry-After', (resetTime - now).toString());
       return c.json({ error: 'Too many requests, please try again later' });
@@ -301,6 +303,47 @@ const hashPassword = async (password: string, salt: string): Promise<string> => 
 
   const hashArray = Array.from(new Uint8Array(hashedPassword));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+};
+
+// Email sending utility function
+const sendVerificationEmail = async (
+  env: Env,
+  email: string,
+  name: string,
+  token: string
+): Promise<void> => {
+  const verificationUrl = `https://hummbl.dev/verify-email?token=${token}`;
+  
+  const emailContent = {
+    to: email,
+    subject: 'Verify your HUMMBL account',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Welcome to HUMMBL, ${sanitizeUserData(name)}!</h2>
+        <p>Please verify your email address by clicking the link below:</p>
+        <a href="${verificationUrl}" style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">Verify Email</a>
+        <p>Or copy and paste this link: ${verificationUrl}</p>
+        <p>This link will expire in 24 hours.</p>
+        <p>If you didn't create this account, please ignore this email.</p>
+      </div>
+    `,
+    text: `Welcome to HUMMBL, ${sanitizeUserData(name)}! Please verify your email by visiting: ${verificationUrl}`,
+  };
+
+  // Send via Cloudflare Email Workers or external service
+  if (env.EMAIL_API_KEY) {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.EMAIL_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'HUMMBL <noreply@hummbl.dev>',
+        ...emailContent,
+      }),
+    });
+  }
 };
 
 // Helper function to generate tokens with proper JWT claims
@@ -1072,9 +1115,18 @@ authRouter.post('/register', async c => {
       return c.json({ error: 'Token generation failed' }, 500);
     }
 
+    // Send verification email
+    try {
+      await sendVerificationEmail(c.env, sanitizedEmail, sanitizedName, verificationToken);
+    } catch (error) {
+      console.error('Failed to send verification email:', error);
+      // Don't fail registration if email sending fails
+    }
+
     return c.json({
       user,
       token: jwtToken,
+      message: 'Registration successful. Please check your email to verify your account.',
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -1586,6 +1638,77 @@ authRouter.post('/refresh', async c => {
   } catch (error) {
     console.error('Token refresh error:', error);
     return c.json({ error: 'Failed to refresh token' }, 500);
+  }
+});
+
+// Resend verification email
+authRouter.post('/resend-verification', async c => {
+  try {
+    let requestData;
+    try {
+      requestData = await c.req.json();
+    } catch (error) {
+      console.error('JSON parsing error during resend verification:', error);
+      return c.json({ error: 'Invalid request format' }, 400);
+    }
+
+    const { email } = requestData;
+
+    if (!email || typeof email !== 'string' || email.length > 254) {
+      return c.json({ error: 'Invalid email format' }, 400);
+    }
+
+    const sanitizedEmail = email.trim().toLowerCase();
+    if (!isValidEmail(sanitizedEmail)) {
+      return c.json({ error: 'Invalid email format' }, 400);
+    }
+
+    // Find unverified user
+    let user;
+    try {
+      user = await c.env.DB.prepare(
+        'SELECT * FROM users WHERE email = ? AND email_verified = FALSE AND provider = ?'
+      )
+        .bind(sanitizedEmail, 'email')
+        .first();
+    } catch (error) {
+      console.error('Database error during resend verification lookup:', error);
+      return c.json({ error: 'Failed to resend verification' }, 500);
+    }
+
+    if (!user) {
+      // Don't reveal if user exists or is already verified
+      return c.json({ message: 'If the email exists and is unverified, a verification email has been sent.' });
+    }
+
+    // Generate new verification token
+    const newVerificationToken = generateUUID();
+    const verificationExpiry = new Date();
+    verificationExpiry.setHours(verificationExpiry.getHours() + 24);
+
+    try {
+      await c.env.DB.prepare(
+        'UPDATE users SET email_verification_token = ?, email_verification_expires_at = ? WHERE id = ?'
+      )
+        .bind(newVerificationToken, verificationExpiry.toISOString(), user.id)
+        .run();
+    } catch (error) {
+      console.error('Database error during verification token update:', error);
+      return c.json({ error: 'Failed to resend verification' }, 500);
+    }
+
+    // Send verification email
+    try {
+      await sendVerificationEmail(c.env, sanitizedEmail, user.name || 'User', newVerificationToken);
+    } catch (error) {
+      console.error('Failed to send verification email:', error);
+      return c.json({ error: 'Failed to send verification email' }, 500);
+    }
+
+    return c.json({ message: 'Verification email sent successfully.' });
+  } catch (error) {
+    console.error('Resend verification error:', error);
+    return c.json({ error: 'Failed to resend verification' }, 500);
   }
 });
 

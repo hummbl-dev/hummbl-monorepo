@@ -44,7 +44,12 @@ const readMemoryCache = <T>(key: string): T | null => {
   }
 
   try {
-    return JSON.parse(entry.value) as T;
+    const parsed = JSON.parse(entry.value);
+    if (parsed && typeof parsed === 'object' && ('__proto__' in parsed || 'constructor' in parsed)) {
+      memoryCache.delete(key);
+      return null;
+    }
+    return parsed as T;
   } catch {
     memoryCache.delete(key);
     return null;
@@ -77,9 +82,14 @@ export const getCachedResult = async <T>(
     const kvPayload = await env.CACHE.get(cacheKey);
     if (kvPayload) {
       try {
-        const parsed = JSON.parse(kvPayload) as T;
-        writeMemoryCache(cacheKey, kvPayload, memoryTtl);
-        return Result.ok(parsed);
+        const parsed = JSON.parse(kvPayload);
+        if (parsed && typeof parsed === 'object' && ('__proto__' in parsed || 'constructor' in parsed)) {
+          await env.CACHE.delete(cacheKey);
+          logCacheError(`KV prototype pollution attempt for key ${cacheKey}`, new Error('Prototype pollution detected'));
+        } else {
+          writeMemoryCache(cacheKey, kvPayload, memoryTtl);
+          return Result.ok(parsed as T);
+        }
       } catch (parseError) {
         await env.CACHE.delete(cacheKey);
         logCacheError(`KV parse failed for key ${cacheKey}`, parseError);
@@ -96,10 +106,15 @@ export const getCachedResult = async <T>(
     if (cacheResponse) {
       const payload = await cacheResponse.text();
       try {
-        const parsed = JSON.parse(payload) as T;
-        writeMemoryCache(cacheKey, payload, memoryTtl);
-        await env.CACHE.put(cacheKey, payload, { expirationTtl: kvTtl });
-        return Result.ok(parsed);
+        const parsed = JSON.parse(payload);
+        if (parsed && typeof parsed === 'object' && ('__proto__' in parsed || 'constructor' in parsed)) {
+          await cfCache.delete(cacheRequest);
+          logCacheError(`Workers cache prototype pollution attempt for key ${cacheKey}`, new Error('Prototype pollution detected'));
+        } else {
+          writeMemoryCache(cacheKey, payload, memoryTtl);
+          await env.CACHE.put(cacheKey, payload, { expirationTtl: kvTtl });
+          return Result.ok(parsed as T);
+        }
       } catch (parseError) {
         await cfCache.delete(cacheRequest);
         logCacheError(`Workers cache parse failed for key ${cacheKey}`, parseError);
