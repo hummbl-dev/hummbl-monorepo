@@ -2,6 +2,8 @@
  * Cloudflare Workers Environment Bindings
  */
 
+import { D1Database, KVNamespace, R2Bucket } from '@cloudflare/workers-types';
+
 export interface Env {
   // D1 Database
   DB: D1Database;

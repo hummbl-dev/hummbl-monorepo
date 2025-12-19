@@ -8,10 +8,28 @@ import { sign, verify } from 'hono/jwt';
 import type { Env } from '../env';
 import '../types.d.ts';
 
+// Cloudflare Workers crypto polyfills
 declare const crypto: {
+  getRandomValues: (array: Uint8Array) => Uint8Array;
   randomUUID: () => string;
   subtle: {
-    digest: (algorithm: string, data: Uint8Array) => Promise<ArrayBuffer>;
+    importKey: (
+      format: string,
+      keyData: Uint8Array,
+      algorithm: { name: string },
+      extractable: boolean,
+      keyUsages: string[]
+    ) => Promise<CryptoKey>;
+    deriveBits: (
+      algorithm: {
+        name: string;
+        salt: Uint8Array;
+        iterations: number;
+        hash: string;
+      },
+      baseKey: CryptoKey,
+      length: number
+    ) => Promise<ArrayBuffer>;
   };
 };
 
@@ -37,6 +55,7 @@ interface User {
   provider: 'google' | 'github' | 'email';
   provider_id: string;
   password_hash?: string;
+  salt?: string;
   email_verified?: boolean;
   created_at?: string;
   updated_at?: string;
@@ -121,7 +140,24 @@ const constantTimeEquals = (a: string, b: string): boolean => {
   return result === 0 && a.length === b.length;
 };
 
-// Password hashing utility function
+// Generate cryptographically secure random UUID
+const generateUUID = (): string => {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  bytes[6] = (bytes[6] & 0x0f) | 0x40; // version 4
+  bytes[8] = (bytes[8] & 0x3f) | 0x80; // variant 10
+  const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+};
+
+// Generate per-user salt
+const generateSalt = (): string => {
+  const saltBytes = new Uint8Array(32);
+  crypto.getRandomValues(saltBytes);
+  return Array.from(saltBytes, b => b.toString(16).padStart(2, '0')).join('');
+};
+
+// Password hashing utility function with per-user salt
 const hashPassword = async (password: string, salt: string): Promise<string> => {
   const encoder = new TextEncoder();
   const passwordData = encoder.encode(password);
@@ -135,18 +171,18 @@ const hashPassword = async (password: string, salt: string): Promise<string> => 
     {
       name: 'PBKDF2',
       salt: saltData,
-      iterations: 100000,
-      hash: 'SHA-256',
+      iterations: 210000, // OWASP recommended minimum
+      hash: 'SHA-512',
     },
     key,
-    256
+    512 // 512-bit hash
   );
 
   const hashArray = Array.from(new Uint8Array(hashedPassword));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 };
 
-// Helper function to generate tokens
+// Helper function to generate tokens with proper JWT claims
 const generateTokens = async (c: { env: Env }, userId: string, email: string) => {
   // Validate inputs
   if (
@@ -166,14 +202,22 @@ const generateTokens = async (c: { env: Env }, userId: string, email: string) =>
     throw new Error('Invalid JWT secret configuration');
   }
 
-  // Generate access token with expiration
+  const now = Math.floor(Date.now() / 1000);
+  const accessTokenExpiry = now + ACCESS_TOKEN_EXPIRY;
+
+  // Generate access token with standard JWT claims
   const accessToken = await sign(
     {
-      userId,
+      sub: userId, // subject (user ID)
       email,
-      exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXPIRY,
+      iat: now, // issued at
+      exp: accessTokenExpiry, // expiration
+      iss: 'hummbl-auth', // issuer
+      aud: 'hummbl-web', // audience
+      type: 'access',
     },
-    c.env.JWT_SECRET
+    c.env.JWT_SECRET,
+    'HS256'
   );
 
   // Validate access token
@@ -181,22 +225,33 @@ const generateTokens = async (c: { env: Env }, userId: string, email: string) =>
     throw new Error('Invalid access token generated');
   }
 
-  // Generate refresh token
-  const refreshToken = crypto.randomUUID();
+  // Generate refresh token with rotation
+  const refreshToken = generateUUID();
   if (!refreshToken || typeof refreshToken !== 'string' || refreshToken.length < 10) {
     throw new Error('Invalid refresh token generated');
   }
 
-  // Store refresh token in KV with expiration
+  // Store refresh token with metadata for rotation
   try {
-    await c.env.CACHE.put(`refresh_token:${refreshToken}`, userId, {
-      expirationTtl: REFRESH_TOKEN_EXPIRY,
-    });
+    await c.env.CACHE.put(
+      `refresh_token:${refreshToken}`,
+      JSON.stringify({
+        userId,
+        createdAt: new Date().toISOString(),
+        expiresAt: new Date((now + REFRESH_TOKEN_EXPIRY) * 1000).toISOString(),
+      }),
+      { expirationTtl: REFRESH_TOKEN_EXPIRY }
+    );
   } catch (error) {
+    console.error('Cache storage error:', error);
     throw new Error('Failed to store refresh token');
   }
 
-  return { accessToken, refreshToken };
+  return {
+    accessToken,
+    refreshToken,
+    expiresIn: ACCESS_TOKEN_EXPIRY,
+  };
 };
 
 // Google OAuth
@@ -222,10 +277,30 @@ authRouter.post('/google', async c => {
       return c.json({ error: 'Invalid Google token format' }, 400);
     }
 
-    // Verify Google token
-    const googleResponse = await fetch(
-      `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${encodeURIComponent(token)}`
-    );
+    // Verify Google token with timeout and validation
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+    let googleResponse;
+    try {
+      googleResponse = await fetch(
+        `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${encodeURIComponent(token)}`,
+        {
+          method: 'GET',
+          headers: { 'User-Agent': 'HUMMBL/1.0' },
+          signal: controller.signal,
+        }
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        return c.json({ error: 'Request timeout' }, 408);
+      }
+      console.error('Google API request failed:', error);
+      return c.json({ error: 'Failed to verify Google token' }, 400);
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
     if (!googleResponse.ok) {
       return c.json({ error: 'Invalid Google token' }, 400);
     }
@@ -257,7 +332,7 @@ authRouter.post('/google', async c => {
 
     // Create user if not exists
     if (!user) {
-      const userId = crypto.randomUUID();
+      const userId = generateUUID();
       await c.env.DB.prepare(
         'INSERT INTO users (id, email, name, avatar_url, provider, provider_id, email_verified) VALUES (?, ?, ?, ?, ?, ?, ?)'
       )
@@ -320,19 +395,35 @@ authRouter.post('/github', async c => {
       return c.json({ error: 'Invalid authorization code format' }, 400);
     }
 
-    // Exchange code for access token
-    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        client_id: c.env.GITHUB_CLIENT_ID,
-        client_secret: c.env.GITHUB_CLIENT_SECRET,
-        code,
-      }),
-    });
+    // Exchange code for access token with timeout
+    const tokenController = new AbortController();
+    const tokenTimeoutId = setTimeout(() => tokenController.abort(), 10000); // 10 second timeout
+
+    let tokenResponse;
+    try {
+      tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'User-Agent': 'HUMMBL/1.0',
+        },
+        body: JSON.stringify({
+          client_id: c.env.GITHUB_CLIENT_ID,
+          client_secret: c.env.GITHUB_CLIENT_SECRET,
+          code,
+        }),
+        signal: tokenController.signal,
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        return c.json({ error: 'Request timeout' }, 408);
+      }
+      console.error('GitHub token request failed:', error);
+      return c.json({ error: 'Failed to authenticate with GitHub' }, 400);
+    } finally {
+      clearTimeout(tokenTimeoutId);
+    }
 
     if (!tokenResponse.ok) {
       return c.json({ error: 'Failed to authenticate with GitHub' }, 400);
@@ -438,7 +529,7 @@ authRouter.post('/github', async c => {
 
     // Create user if not exists with comprehensive validation
     if (!user) {
-      const userId = crypto.randomUUID();
+      const userId = generateUUID();
       if (!userId || typeof userId !== 'string' || userId.length !== 36) {
         console.error('Invalid UUID generated for GitHub user');
         return c.json({ error: 'Authentication failed' }, 500);
@@ -635,18 +726,14 @@ authRouter.post('/register', async c => {
       );
     }
 
-    // Hash password using PBKDF2 for better security
+    // Hash password using PBKDF2 with per-user salt
     let hashedPasswordStr;
+    let userSalt;
     try {
-      if (
-        !c.env.PASSWORD_SALT ||
-        typeof c.env.PASSWORD_SALT !== 'string' ||
-        c.env.PASSWORD_SALT.length < 16
-      ) {
-        throw new Error('Invalid password salt configuration');
-      }
-      hashedPasswordStr = await hashPassword(password, c.env.PASSWORD_SALT);
-      if (!hashedPasswordStr || hashedPasswordStr.length !== 64) {
+      userSalt = generateSalt();
+      hashedPasswordStr = await hashPassword(password, userSalt);
+      if (!hashedPasswordStr || hashedPasswordStr.length !== 128) {
+        // SHA-512 produces 128 char hex
         throw new Error('Invalid password hash generated');
       }
     } catch (error) {
@@ -657,8 +744,8 @@ authRouter.post('/register', async c => {
     // Create user
     let userId, verificationToken;
     try {
-      userId = crypto.randomUUID();
-      verificationToken = crypto.randomUUID();
+      userId = generateUUID();
+      verificationToken = generateUUID();
       if (
         !userId ||
         !verificationToken ||
@@ -696,9 +783,9 @@ authRouter.post('/register', async c => {
 
       const result = await c.env.DB.prepare(
         `INSERT INTO users (
-          id, email, name, provider, provider_id, password_hash,
+          id, email, name, provider, provider_id, password_hash, salt,
           email_verified, email_verification_token, email_verification_expires_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
         .bind(
           userId,
@@ -707,6 +794,7 @@ authRouter.post('/register', async c => {
           'email',
           userId,
           hashedPasswordStr,
+          userSalt,
           false,
           verificationToken,
           verificationExpiry.toISOString()
@@ -796,30 +884,29 @@ authRouter.post('/login', async c => {
     // Sanitize inputs
     const sanitizedEmail = email.trim().toLowerCase();
 
-    // Hash password using PBKDF2 for comparison
-    let hashedPasswordStr;
-    try {
-      if (
-        !c.env.PASSWORD_SALT ||
-        typeof c.env.PASSWORD_SALT !== 'string' ||
-        c.env.PASSWORD_SALT.length < 16
-      ) {
-        throw new Error('Invalid password salt configuration');
-      }
-      hashedPasswordStr = await hashPassword(password, c.env.PASSWORD_SALT);
-    } catch (error) {
-      console.error('Password hashing error during login:', error);
-      return c.json({ error: 'Login failed' }, 500);
-    }
-
     // Find user with timing attack protection
     let user;
     try {
       user = await c.env.DB.prepare('SELECT * FROM users WHERE email = ? AND provider = ?')
         .bind(sanitizedEmail, 'email')
-        .first();
+        .first<User>();
     } catch (error) {
       console.error('Database error during login:', error);
+      return c.json({ error: 'Login failed' }, 500);
+    }
+
+    // Hash password using PBKDF2 with user's salt for comparison
+    let hashedPasswordStr;
+    try {
+      if (!user?.salt || typeof user.salt !== 'string' || user.salt.length < 64) {
+        // Always hash to prevent timing attacks, even if user doesn't exist
+        const dummySalt = generateSalt();
+        hashedPasswordStr = await hashPassword(password, dummySalt);
+        return c.json({ error: 'Invalid credentials' }, 401);
+      }
+      hashedPasswordStr = await hashPassword(password, user.salt);
+    } catch (error) {
+      console.error('Password hashing error during login:', error);
       return c.json({ error: 'Login failed' }, 500);
     }
 
@@ -1048,7 +1135,7 @@ authRouter.post('/verify-email', async c => {
         .bind(user.id)
         .run();
 
-      if (!result || !result.success || result.changes === 0) {
+      if (!result || !result.success) {
         throw new Error('No rows updated');
       }
     } catch (error) {
@@ -1086,13 +1173,19 @@ authRouter.post('/refresh', async c => {
       return c.json({ error: 'Invalid refresh token' }, 400);
     }
 
-    // Verify refresh token
+    // Verify refresh token with proper parsing
+    let tokenData;
     let userId;
     try {
       if (!/^[A-Za-z0-9._\-]+$/.test(refreshToken)) {
         throw new Error('Invalid refresh token format');
       }
-      userId = await c.env.CACHE.get(`refresh_token:${refreshToken}`);
+      const tokenString = await c.env.CACHE.get(`refresh_token:${refreshToken}`);
+      if (!tokenString) {
+        throw new Error('Token not found');
+      }
+      tokenData = JSON.parse(tokenString);
+      userId = tokenData.userId;
     } catch (error) {
       console.error('Cache error during refresh token validation:', error);
       return c.json({ error: 'Failed to refresh token' }, 500);
@@ -1194,7 +1287,7 @@ authRouter.post('/logout', async c => {
     let requestData;
     try {
       requestData = await c.req.json();
-    } catch (error) {
+    } catch {
       // Ignore JSON parsing errors for logout - always succeed
       return c.json({ message: 'Logged out successfully' });
     }

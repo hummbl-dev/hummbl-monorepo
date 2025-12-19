@@ -109,11 +109,11 @@ transformationsRouter.get('/:type', async c => {
               code, 
               name, 
               transformation, 
-              description as definition, 
-              description as whenToUse, 
+              definition, 
+              whenToUse, 
               COALESCE(example, '') as example,
-              1 as priority,
-              '' as system_prompt
+              priority,
+              COALESCE(systemPrompt, '') as system_prompt
             FROM mental_models
             WHERE transformation = ?
             ORDER BY code

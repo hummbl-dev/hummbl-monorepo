@@ -1,0 +1,3 @@
+INSERT INTO mental_models (code, name, transformation, definition, whenToUse, example, systemPrompt, priority) VALUES 
+('RE1', 'Iterative Improvement', 'RE', 'Apply small improvements repeatedly', 'For continuous improvement', 'Kaizen methodology', 'Focus on incremental progress', 1),
+('RE2', 'Bootstrapping', 'RE', 'Start minimal and build up', 'When resources are limited', 'Build tools to build better tools', 'Start small and compound', 2);
