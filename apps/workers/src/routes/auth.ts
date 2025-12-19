@@ -227,6 +227,18 @@ const isValidEmail = (email: string): boolean => {
   return true;
 };
 
+// Comprehensive sanitization function to prevent XSS
+const sanitizeUserData = (input: string | null | undefined, maxLength: number = 100): string => {
+  if (!input || typeof input !== 'string') return '';
+  return input
+    .replace(/[<>"'&\x00-\x1f\x7f-\x9f]/g, '') // Remove dangerous characters
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/data:/gi, '') // Remove data: protocol
+    .replace(/vbscript:/gi, '') // Remove vbscript: protocol
+    .substring(0, maxLength)
+    .trim();
+};
+
 // Password hashing utility function with per-user salt
 const hashPassword = async (password: string, salt: string): Promise<string> => {
   const encoder = new TextEncoder();
@@ -640,7 +652,7 @@ authRouter.post('/github', async c => {
       (githubUser.avatar_url &&
         (typeof githubUser.avatar_url !== 'string' ||
           githubUser.avatar_url.length > 500 ||
-          !/^https:\/\//.test(githubUser.avatar_url)))
+          !githubUser.avatar_url.startsWith('https://')))
     ) {
       return c.json({ error: 'Invalid GitHub user data' }, 400);
     }
@@ -676,7 +688,8 @@ authRouter.post('/github', async c => {
         githubUser.avatar_url &&
         typeof githubUser.avatar_url === 'string' &&
         githubUser.avatar_url.length <= 500 &&
-        /^https:\/\/[a-zA-Z0-9.-]+\.githubusercontent\.com\//.test(githubUser.avatar_url)
+        githubUser.avatar_url.startsWith('https://') &&
+        githubUser.avatar_url.includes('.githubusercontent.com/')
           ? githubUser.avatar_url
           : null;
 
@@ -1115,10 +1128,7 @@ authRouter.post('/login', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name:
-        typeof user.name === 'string'
-          ? user.name.replace(/[<>"'&\x00-\x1f\x7f-\x9f]/g, '').substring(0, 100)
-          : '',
+      name: sanitizeUserData(user.name, 100),
       avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
       email_verified: !!user.email_verified,
@@ -1263,10 +1273,7 @@ authRouter.get('/verify', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name:
-        typeof user.name === 'string'
-          ? user.name.replace(/[<>"'&\x00-\x1f\x7f-\x9f]/g, '').substring(0, 100)
-          : '',
+      name: sanitizeUserData(user.name, 100),
       avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
     };
@@ -1510,10 +1517,7 @@ authRouter.post('/refresh', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name:
-        typeof user.name === 'string'
-          ? user.name.replace(/[<>"'&\x00-\x1f\x7f-\x9f]/g, '').substring(0, 100)
-          : '',
+      name: sanitizeUserData(user.name, 100),
       avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
       email_verified: !!user.email_verified,
