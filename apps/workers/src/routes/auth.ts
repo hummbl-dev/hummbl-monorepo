@@ -81,6 +81,33 @@ interface GitHubTokenResponse {
 
 const authRouter = new Hono<{ Bindings: Env }>();
 
+// CSRF protection middleware for POST requests
+authRouter.use('*', async (c, next) => {
+  if (c.req.method === 'POST') {
+    const origin = c.req.header('Origin');
+    const referer = c.req.header('Referer');
+    const host = c.req.header('Host');
+
+    // Basic origin validation
+    if (!origin && !referer) {
+      return c.json({ error: 'Missing origin header' }, 403);
+    }
+
+    const allowedOrigins = [
+      'https://hummbl.dev',
+      'https://www.hummbl.dev',
+      'http://localhost:3000',
+      'http://localhost:5173',
+    ];
+
+    const requestOrigin = origin || (referer ? new URL(referer).origin : null);
+    if (requestOrigin && !allowedOrigins.includes(requestOrigin)) {
+      return c.json({ error: 'Invalid origin' }, 403);
+    }
+  }
+  return await next();
+});
+
 // Rate limiting middleware
 authRouter.use('*', async (c, next) => {
   interface RateLimitData {
@@ -146,12 +173,7 @@ const constantTimeEquals = (a: string, b: string): boolean => {
 
 // Generate cryptographically secure random UUID
 const generateUUID = (): string => {
-  const bytes = new Uint8Array(16);
-  crypto.getRandomValues(bytes);
-  bytes[6] = (bytes[6] & 0x0f) | 0x40; // version 4
-  bytes[8] = (bytes[8] & 0x3f) | 0x80; // variant 10
-  const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+  return crypto.randomUUID();
 };
 
 // Generate per-user salt
@@ -252,8 +274,8 @@ const generateTokens = async (c: { env: Env }, userId: string, email: string) =>
   }
 
   // Generate refresh token with rotation
-  const refreshToken = generateUUID();
-  if (!refreshToken || typeof refreshToken !== 'string' || refreshToken.length < 10) {
+  const refreshToken = crypto.randomUUID();
+  if (!refreshToken || typeof refreshToken !== 'string' || refreshToken.length !== 36) {
     throw new Error('Invalid refresh token generated');
   }
 
@@ -297,14 +319,28 @@ authRouter.post('/google', async c => {
 
     const { token } = requestData;
 
-    if (
-      !token ||
-      typeof token !== 'string' ||
-      token.length < 10 ||
-      token.length > 2048 ||
-      !/^[A-Za-z0-9._/+=-]+$/.test(token)
-    ) {
+    if (!token || typeof token !== 'string' || token.length < 10 || token.length > 2048) {
       return c.json({ error: 'Invalid Google token format' }, 400);
+    }
+
+    // Safe character validation without regex
+    for (let i = 0; i < token.length; i++) {
+      const char = token.charCodeAt(i);
+      if (
+        !(
+          (char >= 48 && char <= 57) || // 0-9
+          (char >= 65 && char <= 90) || // A-Z
+          (char >= 97 && char <= 122) || // a-z
+          char === 46 ||
+          char === 95 ||
+          char === 47 ||
+          char === 43 ||
+          char === 61 ||
+          char === 45 // ._/+=-
+        )
+      ) {
+        return c.json({ error: 'Invalid Google token format' }, 400);
+      }
     }
 
     // Verify Google token with timeout and validation
@@ -714,18 +750,24 @@ authRouter.post('/register', async c => {
     if (password.length < 8 || password.length > 128) {
       return c.json({ error: 'Password must be between 8 and 128 characters' }, 400);
     }
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+
+    // Safe character-based validation
+    let hasLower = false,
+      hasUpper = false,
+      hasDigit = false;
+    for (let i = 0; i < password.length; i++) {
+      const char = password.charCodeAt(i);
+      if (char >= 97 && char <= 122) hasLower = true;
+      else if (char >= 65 && char <= 90) hasUpper = true;
+      else if (char >= 48 && char <= 57) hasDigit = true;
+    }
+    if (!hasLower || !hasUpper || !hasDigit) {
       return c.json(
         { error: 'Password must contain lowercase, uppercase, and numeric characters' },
         400
       );
     }
-    if (
-      /^(..)\1+$/.test(password) ||
-      /012|123|234|345|456|567|678|789|890|abc|bcd|cde|def/.test(password.toLowerCase())
-    ) {
-      return c.json({ error: 'Password cannot contain sequential or repeated patterns' }, 400);
-    }
+
     const commonWords = ['password', '123456', 'qwerty', 'admin', 'login', 'user'];
     if (commonWords.some(word => password.toLowerCase().includes(word))) {
       return c.json({ error: 'Password cannot contain common words' }, 400);
@@ -738,20 +780,38 @@ authRouter.post('/register', async c => {
     if (sanitizedName.length === 0 || sanitizedName.length > 100) {
       return c.json({ error: 'Name must be between 1 and 100 characters' }, 400);
     }
-    if (!/^[a-zA-Z0-9\s\-_.]+$/.test(sanitizedName)) {
-      return c.json(
-        {
-          error:
-            'Name can only contain letters, numbers, spaces, hyphens, underscores, and periods',
-        },
-        400
-      );
+
+    // Safe character validation
+    let hasValidChar = false;
+    let consecutiveSpaces = 0;
+    for (let i = 0; i < sanitizedName.length; i++) {
+      const char = sanitizedName.charCodeAt(i);
+      if (
+        (char >= 48 && char <= 57) || // 0-9
+        (char >= 65 && char <= 90) || // A-Z
+        (char >= 97 && char <= 122) || // a-z
+        char === 32 ||
+        char === 45 ||
+        char === 95 ||
+        char === 46 // space - _ .
+      ) {
+        if (char >= 48 && char <= 122 && char !== 32) hasValidChar = true;
+        consecutiveSpaces = char === 32 ? consecutiveSpaces + 1 : 0;
+        if (consecutiveSpaces > 1) {
+          return c.json({ error: 'Name cannot contain multiple consecutive spaces' }, 400);
+        }
+      } else {
+        return c.json(
+          {
+            error:
+              'Name can only contain letters, numbers, spaces, hyphens, underscores, and periods',
+          },
+          400
+        );
+      }
     }
-    if (/^[\s\-_.]+$/.test(sanitizedName) || /\s{2,}/.test(sanitizedName)) {
-      return c.json(
-        { error: 'Name cannot be only special characters or contain multiple consecutive spaces' },
-        400
-      );
+    if (!hasValidChar) {
+      return c.json({ error: 'Name cannot be only special characters' }, 400);
     }
     const reservedWords = ['admin', 'root', 'system', 'null', 'undefined', 'test'];
     if (reservedWords.some(word => sanitizedName.toLowerCase().includes(word))) {
@@ -1274,8 +1334,19 @@ authRouter.post('/refresh', async c => {
     // Get user from database
     let user;
     try {
-      if (!/^[A-Za-z0-9-]+$/.test(userId)) {
-        throw new Error('Invalid user ID format');
+      // Safe character validation for user ID
+      for (let i = 0; i < userId.length; i++) {
+        const char = userId.charCodeAt(i);
+        if (
+          !(
+            (char >= 48 && char <= 57) || // 0-9
+            (char >= 65 && char <= 90) || // A-Z
+            (char >= 97 && char <= 122) || // a-z
+            char === 45 // -
+          )
+        ) {
+          throw new Error('Invalid user ID format');
+        }
       }
       user = await c.env.DB.prepare(
         'SELECT id, email, name, avatar_url, provider, email_verified FROM users WHERE id = ?'
