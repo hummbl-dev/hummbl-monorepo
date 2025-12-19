@@ -89,7 +89,11 @@ authRouter.use('*', async (c, next) => {
   }
 
   try {
-    const ip = c.req.header('CF-Connecting-IP') || 'unknown';
+    const ip =
+      c.req.header('CF-Connecting-IP') ||
+      c.req.header('X-Forwarded-For')?.split(',')[0]?.trim() ||
+      c.req.header('X-Real-IP') ||
+      'unknown';
     const key = `rate_limit:${ip}`;
 
     // Get current count and reset time
@@ -130,14 +134,14 @@ authRouter.use('*', async (c, next) => {
 
 // Constant-time string comparison to prevent timing attacks
 const constantTimeEquals = (a: string, b: string): boolean => {
-  const maxLen = Math.max(a.length, b.length);
-  const aPadded = a.padEnd(maxLen, '\0');
-  const bPadded = b.padEnd(maxLen, '\0');
-  let result = 0;
-  for (let i = 0; i < maxLen; i++) {
-    result |= aPadded.charCodeAt(i) ^ bPadded.charCodeAt(i);
+  if (a.length !== b.length) {
+    return false;
   }
-  return result === 0 && a.length === b.length;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
 };
 
 // Generate cryptographically secure random UUID
@@ -155,6 +159,28 @@ const generateSalt = (): string => {
   const saltBytes = new Uint8Array(32);
   crypto.getRandomValues(saltBytes);
   return Array.from(saltBytes, b => b.toString(16).padStart(2, '0')).join('');
+};
+
+// Safe GitHub name validation without regex
+const isValidGitHubName = (name: string): boolean => {
+  for (let i = 0; i < name.length; i++) {
+    const char = name.charCodeAt(i);
+    if (
+      !(
+        (char >= 48 && char <= 57) || // 0-9
+        (char >= 65 && char <= 90) || // A-Z
+        (char >= 97 && char <= 122) || // a-z
+        char === 32 ||
+        char === 45 ||
+        char === 95 ||
+        char === 46 ||
+        char === 64 // space - _ . @
+      )
+    ) {
+      return false;
+    }
+  }
+  return true;
 };
 
 // Password hashing utility function with per-user salt
@@ -243,7 +269,11 @@ const generateTokens = async (c: { env: Env }, userId: string, email: string) =>
       { expirationTtl: REFRESH_TOKEN_EXPIRY }
     );
   } catch (error) {
-    console.error('Cache storage error:', error);
+    console.error('Cache storage error for refresh token:', {
+      error: error instanceof Error ? error.message : String(error),
+      userId: userId.substring(0, 8) + '...',
+      timestamp: new Date().toISOString(),
+    });
     throw new Error('Failed to store refresh token');
   }
 
@@ -283,14 +313,19 @@ authRouter.post('/google', async c => {
 
     let googleResponse;
     try {
-      googleResponse = await fetch(
-        `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${encodeURIComponent(token)}`,
-        {
-          method: 'GET',
-          headers: { 'User-Agent': 'HUMMBL/1.0' },
-          signal: controller.signal,
-        }
-      );
+      const googleApiUrl = 'https://www.googleapis.com/oauth2/v2/userinfo';
+      const url = new URL(googleApiUrl);
+
+      // Validate URL to prevent SSRF
+      if (url.hostname !== 'www.googleapis.com' || url.protocol !== 'https:') {
+        throw new Error('Invalid Google API URL');
+      }
+
+      googleResponse = await fetch(`${googleApiUrl}?access_token=${encodeURIComponent(token)}`, {
+        method: 'GET',
+        headers: { 'User-Agent': 'HUMMBL/1.0' },
+        signal: controller.signal,
+      });
     } catch (error: unknown) {
       if (error instanceof Error && error.name === 'AbortError') {
         return c.json({ error: 'Request timeout' }, 408);
@@ -401,7 +436,15 @@ authRouter.post('/github', async c => {
 
     let tokenResponse;
     try {
-      tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+      const githubTokenUrl = 'https://github.com/login/oauth/access_token';
+      const url = new URL(githubTokenUrl);
+
+      // Validate URL to prevent SSRF
+      if (url.hostname !== 'github.com' || url.protocol !== 'https:') {
+        throw new Error('Invalid GitHub OAuth URL');
+      }
+
+      tokenResponse = await fetch(githubTokenUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -453,7 +496,15 @@ authRouter.post('/github', async c => {
 
     let userResponse;
     try {
-      userResponse = await fetch('https://api.github.com/user', {
+      const githubApiUrl = 'https://api.github.com/user';
+      const url = new URL(githubApiUrl);
+
+      // Validate URL to prevent SSRF
+      if (url.hostname !== 'api.github.com' || url.protocol !== 'https:') {
+        throw new Error('Invalid GitHub API URL');
+      }
+
+      userResponse = await fetch(githubApiUrl, {
         headers: {
           Authorization: `Bearer ${tokenData.access_token}`,
           'User-Agent': 'HUMMBL/1.0',
@@ -501,7 +552,7 @@ authRouter.post('/github', async c => {
         (typeof githubUser.name !== 'string' ||
           githubUser.name.length > 100 ||
           githubUser.name.length === 0 ||
-          !/^[a-zA-Z0-9\s\-_.@]+$/.test(githubUser.name))) ||
+          !isValidGitHubName(githubUser.name))) ||
       (githubUser.avatar_url &&
         (typeof githubUser.avatar_url !== 'string' ||
           githubUser.avatar_url.length > 500 ||
@@ -517,7 +568,7 @@ authRouter.post('/github', async c => {
         'SELECT * FROM users WHERE email = ? OR (provider = ? AND provider_id = ?)'
       )
         .bind(
-          githubUser.email || `${githubUser.id}@example.com`,
+          githubUser.email || `github-${githubUser.id}@noreply.hummbl.dev`,
           'github',
           githubUser.id.toString()
         )
@@ -535,7 +586,7 @@ authRouter.post('/github', async c => {
         return c.json({ error: 'Authentication failed' }, 500);
       }
 
-      const userEmail = githubUser.email || `${githubUser.id}@example.com`;
+      const userEmail = githubUser.email || `github-${githubUser.id}@noreply.hummbl.dev`;
       const userName = (githubUser.name && githubUser.name.trim()) || `GitHubUser${githubUser.id}`;
       const avatarUrl =
         githubUser.avatar_url &&
@@ -675,7 +726,8 @@ authRouter.post('/register', async c => {
     ) {
       return c.json({ error: 'Password cannot contain sequential or repeated patterns' }, 400);
     }
-    if (/password|123456|qwerty|admin|login|user/i.test(password)) {
+    const commonWords = ['password', '123456', 'qwerty', 'admin', 'login', 'user'];
+    if (commonWords.some(word => password.toLowerCase().includes(word))) {
       return c.json({ error: 'Password cannot contain common words' }, 400);
     }
     if (password.toLowerCase().includes(sanitizedEmail.split('@')[0].toLowerCase())) {
@@ -701,7 +753,8 @@ authRouter.post('/register', async c => {
         400
       );
     }
-    if (/admin|root|system|null|undefined|test/i.test(sanitizedName)) {
+    const reservedWords = ['admin', 'root', 'system', 'null', 'undefined', 'test'];
+    if (reservedWords.some(word => sanitizedName.toLowerCase().includes(word))) {
       return c.json({ error: 'Name cannot contain reserved words' }, 400);
     }
 
@@ -976,8 +1029,25 @@ authRouter.get('/verify', async c => {
 
     const token = authHeader.substring(7);
 
-    if (token.length < 10 || token.length > 1000 || !/^[A-Za-z0-9._-]+$/.test(token)) {
+    if (token.length < 10 || token.length > 1000) {
       return c.json({ error: 'Invalid token' }, 401);
+    }
+
+    // Safe character validation without regex
+    for (let i = 0; i < token.length; i++) {
+      const char = token.charCodeAt(i);
+      if (
+        !(
+          (char >= 48 && char <= 57) || // 0-9
+          (char >= 65 && char <= 90) || // A-Z
+          (char >= 97 && char <= 122) || // a-z
+          char === 46 ||
+          char === 95 ||
+          char === 45 // . _ -
+        )
+      ) {
+        return c.json({ error: 'Invalid token' }, 401);
+      }
     }
 
     let payload;
@@ -997,12 +1067,12 @@ authRouter.get('/verify', async c => {
 
     if (
       !payload ||
-      !payload.userId ||
+      !payload.sub ||
       !payload.email ||
-      typeof payload.userId !== 'string' ||
+      typeof payload.sub !== 'string' ||
       typeof payload.email !== 'string' ||
-      payload.userId.length === 0 ||
-      payload.userId.length > 100 ||
+      payload.sub.length === 0 ||
+      payload.sub.length > 100 ||
       payload.email.length === 0 ||
       payload.email.length > 254 ||
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)
@@ -1014,7 +1084,7 @@ authRouter.get('/verify', async c => {
     try {
       if (
         !/^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/.test(
-          payload.userId
+          payload.sub
         )
       ) {
         throw new Error('Invalid user ID format');
@@ -1022,7 +1092,7 @@ authRouter.get('/verify', async c => {
       user = await c.env.DB.prepare(
         'SELECT id, email, name, avatar_url, provider FROM users WHERE id = ?'
       )
-        .bind(payload.userId)
+        .bind(payload.sub)
         .first();
     } catch (error) {
       console.error('Database error during token verification:', error);
