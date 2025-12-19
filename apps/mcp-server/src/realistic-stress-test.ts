@@ -98,7 +98,11 @@ async function runRealisticStressTest() {
         latencies.push(latency);
       } catch (error) {
         errors++;
-        console.error(`❌ Request ${i} failed:`, error);
+        // Sanitize error message to prevent log injection
+        const sanitizedError = String(error)
+          .replace(/[\r\n\t]/g, ' ')
+          .substring(0, 200);
+        console.error(`❌ Request ${i} failed: ${sanitizedError}`);
       } finally {
         completed++;
         if (completed % 40 === 0) {
@@ -163,7 +167,11 @@ async function runRealisticStressTest() {
       process.exit(0);
     }
   } catch (error) {
-    console.error('💥 Fatal Test Error:', error);
+    // Sanitize error message to prevent log injection
+    const sanitizedError = String(error)
+      .replace(/[\r\n\t]/g, ' ')
+      .substring(0, 200);
+    console.error(`💥 Fatal Test Error: ${sanitizedError}`);
     process.exit(1);
   }
 }

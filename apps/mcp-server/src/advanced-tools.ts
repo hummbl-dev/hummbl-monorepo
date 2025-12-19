@@ -87,6 +87,24 @@ function getUsageAnalytics(timeframe: string) {
 
 const WORKER_URL = process.env.WORKER_URL ?? 'http://localhost:8787';
 
+// SSRF protection: validate URLs
+function isValidWorkerUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return false;
+    }
+    const allowedHosts = ['localhost', '127.0.0.1', 'hummbl-workers.hummbl.workers.dev'];
+    return allowedHosts.includes(parsed.hostname);
+  } catch {
+    return false;
+  }
+}
+
+if (!isValidWorkerUrl(WORKER_URL)) {
+  throw new Error(`Invalid WORKER_URL: ${WORKER_URL}`);
+}
+
 const server = new Server(
   { name: 'hummbl-advanced', version: '1.0.0' },
   { capabilities: { tools: {} } }
@@ -165,7 +183,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
 
     try {
       const promises = ids.map(async id => {
-        const response = await fetch(`${WORKER_URL}/v1/models/${id}`);
+        const sanitizedId = id.replace(/[^a-zA-Z0-9_-]/g, '');
+        if (!sanitizedId || sanitizedId !== id) {
+          return null;
+        }
+        const response = await fetch(`${WORKER_URL}/v1/models/${sanitizedId}`);
         if (response.ok) {
           const data = (await response.json()) as { value: unknown };
           return data.value;
@@ -218,7 +240,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
 
     try {
       const promises = ids.map(async id => {
-        const response = await fetch(`${WORKER_URL}/v1/models/${id}`);
+        const sanitizedId = id.replace(/[^a-zA-Z0-9_-]/g, '');
+        if (!sanitizedId || sanitizedId !== id) {
+          return null;
+        }
+        const response = await fetch(`${WORKER_URL}/v1/models/${sanitizedId}`);
         if (response.ok) {
           const data = (await response.json()) as { value: unknown };
           return data.value;

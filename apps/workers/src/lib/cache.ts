@@ -24,7 +24,7 @@ export const clearMemoryCache = () => {
 const WORKERS_CACHE_NAME = 'hummbl-workers';
 
 const buildCacheRequest = (key: string) => {
-  return new Request(`https://cache.hummbl.internal/${key}`);
+  return new Request(`https://cache.internal/${key}`);
 };
 
 const getWorkersCache = async () => {
@@ -43,7 +43,12 @@ const readMemoryCache = <T>(key: string): T | null => {
     return null;
   }
 
-  return JSON.parse(entry.value) as T;
+  try {
+    return JSON.parse(entry.value) as T;
+  } catch (error) {
+    memoryCache.delete(key);
+    return null;
+  }
 };
 
 const writeMemoryCache = (key: string, payload: string, ttlSeconds: number) => {
@@ -71,9 +76,14 @@ export const getCachedResult = async <T>(
   try {
     const kvPayload = await env.CACHE.get(cacheKey);
     if (kvPayload) {
-      const parsed = JSON.parse(kvPayload) as T;
-      writeMemoryCache(cacheKey, kvPayload, memoryTtl);
-      return Result.ok(parsed);
+      try {
+        const parsed = JSON.parse(kvPayload) as T;
+        writeMemoryCache(cacheKey, kvPayload, memoryTtl);
+        return Result.ok(parsed);
+      } catch (parseError) {
+        await env.CACHE.delete(cacheKey);
+        logCacheError(`KV parse failed for key ${cacheKey}`, parseError);
+      }
     }
   } catch (error) {
     logCacheError(`KV read failed for key ${cacheKey}`, error);
@@ -85,10 +95,15 @@ export const getCachedResult = async <T>(
     const cacheResponse = await cfCache.match(cacheRequest);
     if (cacheResponse) {
       const payload = await cacheResponse.text();
-      const parsed = JSON.parse(payload) as T;
-      writeMemoryCache(cacheKey, payload, memoryTtl);
-      await env.CACHE.put(cacheKey, payload, { expirationTtl: kvTtl });
-      return Result.ok(parsed);
+      try {
+        const parsed = JSON.parse(payload) as T;
+        writeMemoryCache(cacheKey, payload, memoryTtl);
+        await env.CACHE.put(cacheKey, payload, { expirationTtl: kvTtl });
+        return Result.ok(parsed);
+      } catch (parseError) {
+        await cfCache.delete(cacheRequest);
+        logCacheError(`Workers cache parse failed for key ${cacheKey}`, parseError);
+      }
     }
   } catch (error) {
     logCacheError(`Workers cache read failed for key ${cacheKey}`, error);

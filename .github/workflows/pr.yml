@@ -14,17 +14,22 @@ jobs:
           fetch-depth: 0
 
       - name: Check PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          IS_DRAFT: ${{ github.event.pull_request.draft }}
         run: |
-          if [ "${{ github.event.pull_request.draft }}" == "true" ]; then
+          if [ "$IS_DRAFT" == "true" ]; then
             echo "PR is a draft, skipping validation"
             exit 0
           fi
-          echo "PR title: ${{ github.event.pull_request.title }}"
+          echo "PR title: $PR_TITLE"
 
       - name: Check for merge conflicts
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: |
-          git fetch origin main:${{ github.event.pull_request.base.ref }}
-          git merge-base --is-ancestor origin/${{ github.event.pull_request.base.ref }} HEAD || {
+          git fetch origin "main:$BASE_REF"
+          git merge-base --is-ancestor "origin/$BASE_REF" HEAD || {
             echo "⚠️  Warning: Branch may be out of date with base branch"
             echo "This is not a blocking issue, but consider rebasing"
           }

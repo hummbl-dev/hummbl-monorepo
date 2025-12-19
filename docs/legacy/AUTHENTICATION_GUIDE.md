@@ -103,7 +103,7 @@ Login with email and password.
 ```json
 {
   "email": "user@example.com",
-  "password": "securePassword123"
+  "password": "<password>"
 }
 ```
 
@@ -120,7 +120,7 @@ Login with email and password.
     "createdAt": 1703001600000,
     "lastLoginAt": 1703001600000
   },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "token": "<jwt_token>"
 }
 ```
 
@@ -139,7 +139,7 @@ Create a new user account.
 ```json
 {
   "email": "newuser@example.com",
-  "password": "securePassword123",
+  "password": "<password>",
   "name": "Jane Smith"
 }
 ```
@@ -157,7 +157,7 @@ Create a new user account.
     "createdAt": 1703001600000,
     "lastLoginAt": 1703001600000
   },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "token": "<jwt_token>"
 }
 ```
 

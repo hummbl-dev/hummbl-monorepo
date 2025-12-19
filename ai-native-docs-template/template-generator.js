@@ -180,21 +180,34 @@ describe('${domainName} Validation', () => {
 `,
   };
 
-  // Create directory structure
-  const dirs = ['', 'src', 'docs', 'docs/protocols', 'docs/examples', 'docs/bugs', 'tests'];
+  try {
+    // Create directory structure
+    const dirs = ['', 'src', 'docs', 'docs/protocols', 'docs/examples', 'docs/bugs', 'tests'];
 
-  dirs.forEach(dir => {
-    const fullPath = path.join(outputDir, dir);
-    if (!fs.existsSync(fullPath)) {
-      fs.mkdirSync(fullPath, { recursive: true });
-    }
-  });
+    dirs.forEach(dir => {
+      const fullPath = path.join(outputDir, dir);
+      try {
+        if (!fs.existsSync(fullPath)) {
+          fs.mkdirSync(fullPath, { recursive: true });
+        }
+      } catch (error) {
+        throw new Error(`Failed to create directory ${fullPath}: ${error.message}`);
+      }
+    });
 
-  // Write template files
-  Object.entries(templates).forEach(([filename, content]) => {
-    const fullPath = path.join(outputDir, filename);
-    fs.writeFileSync(fullPath, content);
-  });
+    // Write template files
+    Object.entries(templates).forEach(([filename, content]) => {
+      const fullPath = path.join(outputDir, filename);
+      try {
+        fs.writeFileSync(fullPath, content);
+      } catch (error) {
+        throw new Error(`Failed to write file ${fullPath}: ${error.message}`);
+      }
+    });
+  } catch (error) {
+    console.error(`❌ Template generation failed: ${error.message}`);
+    throw error;
+  }
 
   console.log(`✅ AI-Native Documentation template generated for ${domainName}`);
   console.log(`📁 Location: ${outputDir}`);
@@ -211,7 +224,12 @@ if (require.main === module) {
     process.exit(1);
   }
 
-  generateTemplate(domainName, outputDir);
+  try {
+    generateTemplate(domainName, outputDir);
+  } catch (error) {
+    console.error(`❌ Failed to generate template: ${error.message}`);
+    process.exit(1);
+  }
 }
 
 module.exports = { generateTemplate };

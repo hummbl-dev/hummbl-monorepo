@@ -33,15 +33,34 @@ export function blackScholes(
   sigma: number // Volatility
 ): number | null {
   if (S <= 0 || K <= 0 || T <= 0 || sigma <= 0) return null;
+  if (!isFinite(S) || !isFinite(K) || !isFinite(T) || !isFinite(r) || !isFinite(sigma)) return null;
 
-  const d1 = (Math.log(S / K) + (r + 0.5 * sigma * sigma) * T) / (sigma * Math.sqrt(T));
-  const d2 = d1 - sigma * Math.sqrt(T);
+  try {
+    const logRatio = Math.log(S / K);
+    const sqrtT = Math.sqrt(T);
 
-  // Simplified normal CDF approximation
-  const N = (x: number) =>
-    0.5 * (1 + Math.sign(x) * Math.sqrt(1 - Math.exp((-2 * x * x) / Math.PI)));
+    if (!isFinite(logRatio) || !isFinite(sqrtT)) return null;
 
-  return S * N(d1) - K * Math.exp(-r * T) * N(d2);
+    const d1 = (logRatio + (r + 0.5 * sigma * sigma) * T) / (sigma * sqrtT);
+    const d2 = d1 - sigma * sqrtT;
+
+    if (!isFinite(d1) || !isFinite(d2)) return null;
+
+    // Simplified normal CDF approximation
+    const N = (x: number) => {
+      try {
+        const result = 0.5 * (1 + Math.sign(x) * Math.sqrt(1 - Math.exp((-2 * x * x) / Math.PI)));
+        return isFinite(result) ? result : 0.5;
+      } catch {
+        return 0.5;
+      }
+    };
+
+    const callPrice = S * N(d1) - K * Math.exp(-r * T) * N(d2);
+    return isFinite(callPrice) ? callPrice : null;
+  } catch {
+    return null;
+  }
 }
 
 // Portfolio Value at Risk (Monte Carlo)
@@ -50,24 +69,43 @@ export function calculateVaR(
   confidence: number = 0.95,
   timeHorizon: number = 1
 ): number {
-  if (positions.length === 0) return 0;
+  try {
+    if (positions.length === 0) return 0;
+    if (confidence <= 0 || confidence >= 1) return 0;
+    if (timeHorizon <= 0 || !isFinite(timeHorizon)) return 0;
 
-  const portfolioValue = positions.reduce((sum, pos) => sum + pos.price, 0);
-  const volatility = 0.15; // Simplified assumption
+    const portfolioValue = positions.reduce((sum, pos) => {
+      if (!isFinite(pos.price) || pos.price < 0) return sum;
+      return sum + pos.price;
+    }, 0);
 
-  // Monte Carlo simulation (simplified)
-  const scenarios = 10000;
-  const returns: number[] = [];
+    if (portfolioValue <= 0) return 0;
 
-  for (let i = 0; i < scenarios; i++) {
-    const randomReturn = Math.random() * volatility * Math.sqrt(timeHorizon);
-    returns.push(randomReturn);
+    const volatility = 0.15; // Simplified assumption
+    const scenarios = 10000;
+    const returns: number[] = [];
+
+    for (let i = 0; i < scenarios; i++) {
+      const sqrtTime = Math.sqrt(timeHorizon);
+      if (!isFinite(sqrtTime)) continue;
+
+      const randomReturn = Math.random() * volatility * sqrtTime;
+      if (isFinite(randomReturn)) {
+        returns.push(randomReturn);
+      }
+    }
+
+    if (returns.length === 0) return 0;
+
+    returns.sort((a, b) => a - b);
+    const varIndex = Math.floor((1 - confidence) * returns.length);
+    const varReturn = returns[Math.max(0, Math.min(varIndex, returns.length - 1))];
+
+    const result = Math.abs(varReturn * portfolioValue);
+    return isFinite(result) ? result : 0;
+  } catch {
+    return 0;
   }
-
-  returns.sort((a, b) => a - b);
-  const varIndex = Math.floor((1 - confidence) * scenarios);
-
-  return Math.abs(returns[varIndex] * portfolioValue);
 }
 
 // Regulatory Validation

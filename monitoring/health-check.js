@@ -43,7 +43,7 @@ async function healthCheck() {
   }
 
   const allHealthy = results.every(r => r.ok);
-  const avgResponseTime = results.reduce((sum, r) => sum + r.duration, 0) / results.length;
+  const avgResponseTime = results.length > 0 ? results.reduce((sum, r) => sum + r.duration, 0) / results.length : 0;
 
   console.log(`\n📊 Summary:`);
   console.log(`Status: ${allHealthy ? '✅ Healthy' : '❌ Unhealthy'}`);
@@ -51,31 +51,44 @@ async function healthCheck() {
   console.log(`Timestamp: ${new Date().toISOString()}`);
 
   // Save results
-  const fs = await import('fs');
-  const today = new Date().toISOString().split('T')[0];
-  const logPath = `monitoring/health-${today}.json`;
-
-  let logs = [];
   try {
-    logs = JSON.parse(fs.readFileSync(logPath, 'utf8'));
-  } catch {}
+    const fs = await import('fs');
+    const today = new Date().toISOString().split('T')[0];
+    const logPath = `monitoring/health-${today}.json`;
 
-  logs.push({
-    timestamp: new Date().toISOString(),
-    healthy: allHealthy,
-    avgResponseTime,
-    results,
-  });
+    let logs = [];
+    try {
+      const data = fs.readFileSync(logPath, 'utf8');
+      logs = JSON.parse(data);
+      if (!Array.isArray(logs)) logs = [];
+    } catch {
+      logs = [];
+    }
 
-  // Keep only last 100 entries
-  if (logs.length > 100) {
-    logs = logs.slice(-100);
+    logs.push({
+      timestamp: new Date().toISOString(),
+      healthy: allHealthy,
+      avgResponseTime,
+      results,
+    });
+
+    // Keep only last 100 entries
+    if (logs.length > 100) {
+      logs = logs.slice(-100);
+    }
+
+    fs.writeFileSync(logPath, JSON.stringify(logs, null, 2));
+  } catch (error) {
+    console.error(`⚠️  Failed to save health check results: ${error.message}`);
   }
-
-  fs.writeFileSync(logPath, JSON.stringify(logs, null, 2));
 
   return allHealthy;
 }
 
-const healthy = await healthCheck();
-process.exit(healthy ? 0 : 1);
+try {
+  const healthy = await healthCheck();
+  process.exit(healthy ? 0 : 1);
+} catch (error) {
+  console.error(`💥 Health check failed: ${error.message}`);
+  process.exit(1);
+}

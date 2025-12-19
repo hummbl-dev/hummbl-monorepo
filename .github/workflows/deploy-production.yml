@@ -32,25 +32,58 @@ jobs:
         run: pnpm test:e2e
 
       - name: Deploy Workers to Production
-        run: pnpm --filter @hummbl/workers deploy:production
+        run: |
+          if ! pnpm --filter @hummbl/workers deploy:production; then
+            echo "❌ Deployment failed"
+            exit 1
+          fi
+          echo "✅ Deployment successful"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Health Check
         run: |
+          echo "⏳ Waiting for deployment to stabilize..."
           sleep 15
-          curl -f https://hummbl-workers.hummbl.workers.dev/health || exit 1
+
+          for i in {1..5}; do
+            if curl -f -s https://hummbl-workers.hummbl.workers.dev/health; then
+              echo "✅ Health check passed"
+              break
+            elif [ $i -eq 5 ]; then
+              echo "❌ Health check failed after 5 attempts"
+              exit 1
+            else
+              echo "⚠️ Health check attempt $i failed, retrying..."
+              sleep 10
+            fi
+          done
 
       - name: Smoke Tests
         run: |
-          curl -f https://hummbl-workers.hummbl.workers.dev/v1/models/P1 || exit 1
-          curl -f https://hummbl-workers.hummbl.workers.dev/v1/transformations/RE || exit 1
+          echo "🧪 Running smoke tests..."
+
+          if ! curl -f -s https://hummbl-workers.hummbl.workers.dev/v1/models/P1 > /dev/null; then
+            echo "❌ Models endpoint test failed"
+            exit 1
+          fi
+          echo "✅ Models endpoint test passed"
+
+          if ! curl -f -s https://hummbl-workers.hummbl.workers.dev/v1/transformations/RE > /dev/null; then
+            echo "❌ Transformations endpoint test failed"
+            exit 1
+          fi
+          echo "✅ Transformations endpoint test passed"
 
       - name: Create Deployment Record
         run: |
-          echo "Deployment: $(date)" >> deployment-log.txt
-          echo "Version: ${{ github.ref_name }}" >> deployment-log.txt
+          {
+            echo "Deployment: $(date)"
+            echo "Version: ${{ github.ref_name }}"
+            echo "Commit: ${{ github.sha }}"
+            echo "Status: Success"
+          } >> deployment-log.txt || echo "⚠️ Failed to create deployment record"
 
       - name: Notify Success
         if: success()

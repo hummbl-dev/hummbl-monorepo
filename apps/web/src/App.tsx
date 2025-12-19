@@ -10,8 +10,8 @@ const ModelDetail = lazy(() =>
   import('./pages/ModelDetail').then(m => ({ default: m.ModelDetail }))
 );
 
-// Loading fallback component
-const PageLoader: React.FC = () => (
+// Loading fallback component - memoized for performance
+const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
     <div className="text-center space-y-4">
       <div className="w-8 h-8 border-2 border-zinc-700 border-t-white rounded-full animate-spin mx-auto" />
@@ -22,11 +22,14 @@ const PageLoader: React.FC = () => (
   </div>
 );
 
+// Memoized fallback element to prevent recreation
+const fallbackElement = <PageLoader />;
+
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ToastProvider />
-      <Suspense fallback={<PageLoader />}>
+      <Suspense fallback={fallbackElement}>
         <Routes>
           <Route element={<AppShell />}>
             <Route path="/" element={<Explorer />} />

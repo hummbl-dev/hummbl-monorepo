@@ -60,6 +60,24 @@ type TransformationArgs = {
 
 const WORKER_URL = process.env.WORKER_URL ?? 'http://localhost:8787';
 
+// SSRF protection: validate URLs
+function isValidWorkerUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return false;
+    }
+    const allowedHosts = ['localhost', '127.0.0.1', 'hummbl-workers.hummbl.workers.dev'];
+    return allowedHosts.includes(parsed.hostname);
+  } catch {
+    return false;
+  }
+}
+
+if (!isValidWorkerUrl(WORKER_URL)) {
+  throw new Error(`Invalid WORKER_URL: ${WORKER_URL}`);
+}
+
 const server = new Server(
   { name: 'hummbl-base120', version: '1.0.0' },
   { capabilities: { tools: {} } }
@@ -160,8 +178,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
 
   if (request.params.name === 'get_model_details') {
     const { id } = request.params.arguments as DetailArgs;
+    const sanitizedId = id.replace(/[^a-zA-Z0-9_-]/g, '');
+    if (!sanitizedId || sanitizedId !== id) {
+      return {
+        content: [{ type: 'text', text: 'Invalid model ID format' }],
+        isError: true,
+      };
+    }
     try {
-      const response = await fetch(`${WORKER_URL}/v1/models/${id}`);
+      const response = await fetch(`${WORKER_URL}/v1/models/${sanitizedId}`);
       const payload = (await response.json()) as ApiResponse<Model>;
 
       if (!payload?.ok) {
@@ -214,10 +239,16 @@ Example: search_models(query="feedback", transformation="${code}")
 
   if (request.params.name === 'get_related_models') {
     const { code } = request.params.arguments as { code: string };
-    const modelCode = code.toUpperCase();
+    const sanitizedCode = code.replace(/[^a-zA-Z0-9_-]/g, '').toUpperCase();
+    if (!sanitizedCode || sanitizedCode !== code.toUpperCase()) {
+      return {
+        content: [{ type: 'text', text: 'Invalid model code format' }],
+        isError: true,
+      };
+    }
 
     try {
-      const response = await fetch(`${WORKER_URL}/v1/models/${modelCode}/relationships`);
+      const response = await fetch(`${WORKER_URL}/v1/models/${sanitizedCode}/relationships`);
 
       if (!response.ok) {
         throw new Error(`API returned ${response.status}: ${response.statusText}`);

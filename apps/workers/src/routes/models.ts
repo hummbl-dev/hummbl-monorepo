@@ -51,9 +51,13 @@ const buildModelsQuery = (filters: { transformation?: TransformationType; search
   }
 
   if (filters.search) {
-    const searchTerm = `%${filters.search.toLowerCase()}%`;
+    if (filters.search.length > 100) {
+      throw new Error('Search term too long');
+    }
+    const sanitizedSearch = filters.search.replace(/[%_]/g, '\\$&');
+    const searchTerm = `%${sanitizedSearch.toLowerCase()}%`;
     clauses.push('(LOWER(description) LIKE ? OR LOWER(name) LIKE ? OR code LIKE ?)');
-    params.push(searchTerm, searchTerm, `%${filters.search.toUpperCase()}%`);
+    params.push(searchTerm, searchTerm, `%${sanitizedSearch.toUpperCase()}%`);
   }
 
   const whereClause = clauses.length ? ` WHERE ${clauses.join(' AND ')}` : '';
@@ -133,7 +137,19 @@ modelsRouter.get('/', async c => {
 
 // GET /v1/models/:code - Get a specific model by code
 modelsRouter.get('/:code', async c => {
-  const code = c.req.param('code').toUpperCase();
+  const rawCode = c.req.param('code');
+  if (
+    !rawCode ||
+    typeof rawCode !== 'string' ||
+    rawCode.length > 10 ||
+    !/^[A-Z0-9]+$/.test(rawCode.toUpperCase())
+  ) {
+    return respondWithResult(
+      c,
+      Result.err(createApiError('invalid_code', 'Model code is invalid', 400))
+    );
+  }
+  const code = rawCode.toUpperCase();
   const parsed = ModelCodeSchema.safeParse({ code });
 
   if (!parsed.success) {
@@ -178,7 +194,19 @@ modelsRouter.get('/:code', async c => {
 
 // GET /v1/models/:code/relationships - Get relationships for a model
 modelsRouter.get('/:code/relationships', async c => {
-  const code = c.req.param('code').toUpperCase();
+  const rawCode = c.req.param('code');
+  if (
+    !rawCode ||
+    typeof rawCode !== 'string' ||
+    rawCode.length > 10 ||
+    !/^[A-Z0-9]+$/.test(rawCode.toUpperCase())
+  ) {
+    return respondWithResult(
+      c,
+      Result.err(createApiError('invalid_code', 'Model code is invalid', 400))
+    );
+  }
+  const code = rawCode.toUpperCase();
   const parsed = ModelCodeSchema.safeParse({ code });
 
   if (!parsed.success) {
@@ -248,23 +276,59 @@ const recommendSchema = z.object({
 
 modelsRouter.post('/recommend', async c => {
   try {
-    const body = await c.req.json();
+    let body;
+    try {
+      body = await c.req.json();
+    } catch (error) {
+      return respondWithResult(
+        c,
+        Result.err(createApiError('invalid_request', 'Invalid JSON format', 400))
+      );
+    }
     const { problem } = recommendSchema.parse(body);
 
-    const keywords = problem.toLowerCase().split(/\s+/);
-    const searchTerm = `%${keywords[0]}%`;
+    if (problem.length > 1000) {
+      return respondWithResult(
+        c,
+        Result.err(createApiError('invalid_request', 'Problem description too long', 400))
+      );
+    }
+    const keywords = problem
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(k => k.length > 0);
+    if (keywords.length === 0) {
+      return respondWithResult(
+        c,
+        Result.err(createApiError('invalid_request', 'Problem description is empty', 400))
+      );
+    }
+    const searchTerm = `%${keywords[0].substring(0, 50)}%`;
 
-    const { results } = await c.env.DB.prepare(
-      `
-        SELECT code, name, transformation, description
-        FROM mental_models
-        WHERE LOWER(description) LIKE ? OR LOWER(name) LIKE ?
-        ORDER BY priority DESC
-        LIMIT 10
-      `
-    )
-      .bind(searchTerm, searchTerm)
-      .all<Pick<DbMentalModel, 'code' | 'name' | 'transformation' | 'description'>>();
+    let results;
+    try {
+      const dbResult = await c.env.DB.prepare(
+        `
+          SELECT code, name, transformation, description
+          FROM mental_models
+          WHERE LOWER(description) LIKE ? OR LOWER(name) LIKE ?
+          ORDER BY priority DESC
+          LIMIT 10
+        `
+      )
+        .bind(searchTerm, searchTerm)
+        .all<Pick<DbMentalModel, 'code' | 'name' | 'transformation' | 'description'>>();
+      results = dbResult.results;
+    } catch (dbError) {
+      return respondWithResult(
+        c,
+        Result.err(
+          createApiError('db_error', 'Failed to query recommendations', 500, {
+            cause: dbError instanceof Error ? dbError.message : String(dbError),
+          })
+        )
+      );
+    }
 
     return respondWithResult(
       c,

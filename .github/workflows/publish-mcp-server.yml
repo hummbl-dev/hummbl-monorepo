@@ -48,17 +48,23 @@ jobs:
       - name: Publish to npm
         run: |
           cd apps/mcp-server
-          npm publish --provenance --access public
+          if npm publish --provenance --access public; then
+            echo "✅ Successfully published @hummbl/mcp-server to npm"
+          else
+            echo "❌ Failed to publish @hummbl/mcp-server"
+            exit 1
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub Release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
+        if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref_name || inputs.tag }}
-          release_name: '@hummbl/mcp-server ${{ github.ref_name || inputs.tag }}'
+          name: '@hummbl/mcp-server ${{ github.ref_name || inputs.tag }}'
           body: |
             Published @hummbl/mcp-server to npm registry with provenance
 

@@ -67,20 +67,35 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
       }>;
     };
 
-    const builder = TransformationBuilder.create()
-      .withCode(code)
-      .withName(name)
-      .withDescription(description);
+    try {
+      const builder = TransformationBuilder.create()
+        .withCode(code)
+        .withName(name)
+        .withDescription(description);
 
-    if (author) builder.withAuthor(author);
+      if (author) builder.withAuthor(author);
 
-    models.forEach(model => builder.addModel(model));
+      models.forEach(model => {
+        try {
+          builder.addModel(model);
+        } catch (error) {
+          throw new Error(`Invalid model ${model.code}: ${String(error)}`);
+        }
+      });
 
-    const result = builder.build();
+      const result = builder.build();
 
-    if (!result.ok) {
+      if (!result.ok) {
+        return {
+          content: [{ type: 'text', text: `Validation Error: ${result.error}` }],
+          isError: true,
+        };
+      }
+
+      return result;
+    } catch (error) {
       return {
-        content: [{ type: 'text', text: `Error: ${result.error}` }],
+        content: [{ type: 'text', text: `Build Error: ${String(error)}` }],
         isError: true,
       };
     }
@@ -132,5 +147,10 @@ ${transformation.author ? `- **Author**: ${transformation.author}` : ''}
   return { content: [{ type: 'text', text: 'Tool not found' }], isError: true };
 });
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
+try {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+} catch (error) {
+  console.error(`Failed to start transformation builder server: ${String(error)}`);
+  process.exit(1);
+}

@@ -45,17 +45,23 @@ jobs:
       - name: Publish to npm
         run: |
           cd packages/core
-          npm publish --provenance --access public
+          if npm publish --provenance --access public; then
+            echo "✅ Successfully published @hummbl/core to npm"
+          else
+            echo "❌ Failed to publish @hummbl/core"
+            exit 1
+          fi
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
+        if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref_name || inputs.tag }}
-          release_name: '@hummbl/core ${{ github.ref_name || inputs.tag }}'
+          name: '@hummbl/core ${{ github.ref_name || inputs.tag }}'
           body: |
             Published @hummbl/core to npm registry with provenance
 

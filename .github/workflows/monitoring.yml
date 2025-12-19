@@ -18,10 +18,32 @@ jobs:
           node-version: '20'
 
       - name: Run Health Check
-        run: node monitoring/health-check.js
+        run: |
+          if [ ! -f "monitoring/health-check.js" ]; then
+            echo "❌ Health check script not found"
+            exit 1
+          fi
+
+          echo "🏥 Starting health check..."
+          if ! node monitoring/health-check.js; then
+            echo "❌ Health check failed"
+            exit 1
+          fi
+          echo "✅ Health check completed successfully"
 
       - name: Check Alerts
-        run: node monitoring/alert-system.js
+        run: |
+          if [ ! -f "monitoring/alert-system.js" ]; then
+            echo "⚠️ Alert system script not found, skipping"
+            exit 0
+          fi
+
+          echo "🚨 Running alert system..."
+          if ! node monitoring/alert-system.js; then
+            echo "⚠️ Alert system encountered issues but continuing"
+          else
+            echo "✅ Alert system completed successfully"
+          fi
         continue-on-error: true
 
       - name: Upload Monitoring Data

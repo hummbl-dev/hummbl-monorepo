@@ -44,50 +44,73 @@ const NAV_SECTIONS: NavSection[] = [
   },
 ];
 
+// Reusable style constants
+const STYLES = {
+  container:
+    'relative min-h-screen bg-gradient-to-br from-obsidian-950 via-zinc-950 to-black text-white',
+  backdrop:
+    'pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(120,119,198,0.08),_transparent_55%)]',
+  header: 'relative z-50 border-b border-white/5 backdrop-blur-sm bg-obsidian-950/80',
+  logo: {
+    container:
+      'flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-obsidian-400 rounded-lg',
+    icon: 'w-16 h-16 border border-obsidian-700/80 rounded-full flex items-center justify-center text-2xl font-bold font-mono lg:w-12 lg:h-12 lg:text-lg',
+    blur: 'absolute inset-0 blur-xl bg-obsidian-500/30',
+    brand: 'text-[14px] tracking-[0.35em] text-zinc-400 font-mono uppercase lg:text-[11px]',
+    title: 'text-2xl font-light lg:text-xl',
+  },
+  menuButton:
+    'lg:hidden p-4 bg-obsidian-900/80 border border-obsidian-700/80 rounded-lg backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-obsidian-400',
+  nav: 'lg:hidden absolute top-full left-0 right-0 bg-obsidian-950/95 border-b border-white/5 backdrop-blur-lg z-40',
+  navLink: {
+    base: 'block rounded-md border px-6 py-4 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-obsidian-400 focus:ring-offset-2 focus:ring-offset-black',
+    active: 'border-obsidian-500/70 bg-obsidian-900/80',
+    inactive: 'border-obsidian-800/80 hover:border-obsidian-600/80',
+  },
+  text: {
+    sectionTitle: 'text-[14px] font-mono text-zinc-500 uppercase tracking-[0.4em] lg:text-[10px]',
+    itemCode: 'text-[14px] text-zinc-400 font-mono lg:text-[10px]',
+    itemLabel: 'flex items-center justify-between font-semibold tracking-wide text-xl',
+    itemDesc: 'text-lg text-zinc-500 lg:text-sm',
+  },
+  main: 'flex-1 min-h-screen overflow-y-auto px-6 py-8 lg:px-8 lg:py-8',
+} as const;
+
 export const AppShell: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
+  const getNavLinkClassName = (isActive: boolean) =>
+    `${STYLES.navLink.base} ${isActive ? STYLES.navLink.active : STYLES.navLink.inactive}`;
+
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-obsidian-950 via-zinc-950 to-black text-white">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(120,119,198,0.08),_transparent_55%)]"
-        aria-hidden="true"
-      />
+    <div className={STYLES.container}>
+      <div className={STYLES.backdrop} aria-hidden="true" />
 
       {/* Mobile Header */}
-      <header className="relative z-50 border-b border-white/5 backdrop-blur-sm bg-obsidian-950/80">
+      <header className={STYLES.header}>
         <div className="px-4 py-6">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <NavLink
-              to="/"
-              className="flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-obsidian-400 rounded-lg"
-              aria-label="HUMMBL Base120 Home"
-            >
+            <NavLink to="/" className={STYLES.logo.container} aria-label="HUMMBL Base120 Home">
               <div className="relative">
-                <span
-                  className="w-16 h-16 border border-obsidian-700/80 rounded-full flex items-center justify-center text-2xl font-bold font-mono lg:w-12 lg:h-12 lg:text-lg"
-                  aria-hidden="true"
-                >
+                <span className={STYLES.logo.icon} aria-hidden="true">
                   H
                 </span>
-                <span className="absolute inset-0 blur-xl bg-obsidian-500/30" aria-hidden="true" />
+                <span className={STYLES.logo.blur} aria-hidden="true" />
               </div>
               <div>
-                <p className="text-[14px] tracking-[0.35em] text-zinc-400 font-mono uppercase lg:text-[11px]">
-                  HUMMBL
-                </p>
-                <p className="text-2xl font-light lg:text-xl">Base120</p>
+                <p className={STYLES.logo.brand}>HUMMBL</p>
+                <p className={STYLES.logo.title}>Base120</p>
               </div>
             </NavLink>
 
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className="lg:hidden p-4 bg-obsidian-900/80 border border-obsidian-700/80 rounded-lg backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-obsidian-400"
+              className={STYLES.menuButton}
               aria-label="Toggle navigation menu"
             >
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,44 +136,28 @@ export const AppShell: React.FC = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <nav className="lg:hidden absolute top-full left-0 right-0 bg-obsidian-950/95 border-b border-white/5 backdrop-blur-lg z-40">
+          <nav className={STYLES.nav}>
             <div className="px-4 py-6 space-y-4">
               {NAV_SECTIONS.map(section => (
                 <div key={section.title} className="space-y-4">
-                  <p className="text-[14px] font-mono text-zinc-500 uppercase tracking-[0.4em] lg:text-[10px]">
-                    {section.title}
-                  </p>
+                  <p className={STYLES.text.sectionTitle}>{section.title}</p>
                   <ul className="space-y-3" role="list">
                     {section.items.map(item => (
                       <li key={item.code}>
                         <NavLink
                           to={item.to}
-                          className={({ isActive }) =>
-                            [
-                              'block rounded-md border px-6 py-4 transition-all duration-300',
-                              'focus:outline-none focus:ring-2 focus:ring-obsidian-400 focus:ring-offset-2 focus:ring-offset-black',
-                              isActive
-                                ? 'border-obsidian-500/70 bg-obsidian-900/80'
-                                : 'border-obsidian-800/80 hover:border-obsidian-600/80',
-                            ].join(' ')
-                          }
+                          className={({ isActive }) => getNavLinkClassName(isActive)}
                           aria-describedby={`nav-desc-${item.code}`}
                           onClick={closeMobileMenu}
                         >
                           <div>
-                            <span className="flex items-center justify-between font-semibold tracking-wide text-xl">
+                            <span className={STYLES.text.itemLabel}>
                               {item.label}
-                              <span
-                                className="text-[14px] text-zinc-400 font-mono lg:text-[10px]"
-                                aria-hidden="true"
-                              >
+                              <span className={STYLES.text.itemCode} aria-hidden="true">
                                 {item.code}
                               </span>
                             </span>
-                            <p
-                              id={`nav-desc-${item.code}`}
-                              className="text-lg text-zinc-500 lg:text-sm"
-                            >
+                            <p id={`nav-desc-${item.code}`} className={STYLES.text.itemDesc}>
                               {item.description}
                             </p>
                           </div>
@@ -166,12 +173,7 @@ export const AppShell: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main
-        id="main-content"
-        className="flex-1 min-h-screen overflow-y-auto px-6 py-8 lg:px-8 lg:py-8"
-        role="main"
-        tabIndex={-1}
-      >
+      <main id="main-content" className={STYLES.main} role="main" tabIndex={-1}>
         <div className="max-w-7xl mx-auto">
           <div className="text-2xl lg:text-lg">
             <Outlet />

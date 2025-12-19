@@ -64,7 +64,10 @@ async function runStressTest() {
         }
       } catch (_e) {
         errors++;
-        console.error(`Request ${i} failed:`, _e);
+        const sanitizedError = String(_e)
+          .replace(/[\r\n\t]/g, ' ')
+          .substring(0, 200);
+        console.error(`Request ${i} failed: ${sanitizedError}`);
       } finally {
         completed++;
         if (completed % 20 === 0) {
@@ -110,7 +113,10 @@ async function runStressTest() {
       process.exit(0);
     }
   } catch (error) {
-    console.error('Fatal Test Error:', error);
+    const sanitizedError = String(error)
+      .replace(/[\r\n\t]/g, ' ')
+      .substring(0, 200);
+    console.error(`Fatal Test Error: ${sanitizedError}`);
     process.exit(1);
   }
 }
