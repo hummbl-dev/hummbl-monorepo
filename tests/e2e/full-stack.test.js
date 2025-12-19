@@ -7,7 +7,7 @@ const WORKER_URL = 'https://hummbl-workers.hummbl.workers.dev';
 
 test('E2E: Full Stack Integration', async () => {
   // Test 1: MCP Server → Workers API → Response
-  const response = await fetch(`${WORKER_URL}/api/models/search?q=feedback`);
+  const response = await fetch(`${WORKER_URL}/v1/models?search=feedback`);
   expect(response.ok).toBe(true);
   
   const data = await response.json();
@@ -15,7 +15,7 @@ test('E2E: Full Stack Integration', async () => {
   expect(data.models.length).toBeGreaterThan(0);
   
   // Test 2: Model Details Retrieval
-  const detailResponse = await fetch(`${WORKER_URL}/api/models/RE2`);
+  const detailResponse = await fetch(`${WORKER_URL}/v1/models/RE2`);
   expect(detailResponse.ok).toBe(true);
   
   const model = await detailResponse.json();
@@ -23,7 +23,7 @@ test('E2E: Full Stack Integration', async () => {
   expect(model.name).toBe('Feedback Loops');
   
   // Test 3: Transformation Validation
-  const transformResponse = await fetch(`${WORKER_URL}/api/transformations/RE`);
+  const transformResponse = await fetch(`${WORKER_URL}/v1/transformations/RE`);
   expect(transformResponse.ok).toBe(true);
   
   const transform = await transformResponse.json();
@@ -65,7 +65,7 @@ test('E2E: Performance Regression', async () => {
   const start = Date.now();
   
   const promises = Array.from({ length: 10 }, () =>
-    fetch(`${WORKER_URL}/api/models/search?q=complexity`)
+    fetch(`${WORKER_URL}/v1/models?search=complexity`)
   );
   
   const responses = await Promise.all(promises);

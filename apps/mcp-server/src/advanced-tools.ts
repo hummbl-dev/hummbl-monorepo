@@ -9,23 +9,23 @@ import {
 
 // Usage analytics
 const usageStats = {
-  requests: [] as Array<{ tool: string; timestamp: number; args: any }>,
+  requests: [] as Array<{ tool: string; timestamp: number; args: Record<string, unknown> }>,
   modelAccess: new Map<string, number>(),
   cacheHits: 0,
   cacheMisses: 0,
 };
 
 // Simple cache
-const cache = new Map<string, { data: any; timestamp: number }>();
+const cache = new Map<string, { data: unknown; timestamp: number }>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-function logUsage(tool: string, args: any) {
+function logUsage(tool: string, args: Record<string, unknown>) {
   usageStats.requests.push({ tool, timestamp: Date.now(), args });
 
-  if (args.id) {
+  if (args.id && typeof args.id === 'string') {
     usageStats.modelAccess.set(args.id, (usageStats.modelAccess.get(args.id) || 0) + 1);
   }
-  if (args.ids) {
+  if (args.ids && Array.isArray(args.ids)) {
     args.ids.forEach((id: string) => {
       usageStats.modelAccess.set(id, (usageStats.modelAccess.get(id) || 0) + 1);
     });
@@ -36,7 +36,7 @@ function getCachedData<T>(key: string): T | null {
   const cached = cache.get(key);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
     usageStats.cacheHits++;
-    return cached.data;
+    return cached.data as T;
   }
   cache.delete(key);
   usageStats.cacheMisses++;
@@ -167,7 +167,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
       const promises = ids.map(async id => {
         const response = await fetch(`${WORKER_URL}/v1/models/${id}`);
         if (response.ok) {
-          const data = await response.json();
+          const data = (await response.json()) as { value: unknown };
           return data.value;
         }
         return null;
@@ -177,10 +177,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
       const validModels = models.filter(Boolean);
 
       const result = `# Batch Results (${validModels.length}/${ids.length} found)\n\n${validModels
-        .map(
-          model =>
-            `## ${model.code}: ${model.name}\n${model.definition}\n*Priority: ${model.base_level}*`
-        )
+        .map((model: unknown) => {
+          const m = model as Record<string, unknown>;
+          return `## ${m.code}: ${m.name}\n${m.definition}\n*Priority: ${m.base_level}*`;
+        })
         .join('\n\n')}`;
 
       setCachedData(cacheKey, result);
@@ -220,7 +220,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
       const promises = ids.map(async id => {
         const response = await fetch(`${WORKER_URL}/v1/models/${id}`);
         if (response.ok) {
-          const data = await response.json();
+          const data = (await response.json()) as { value: unknown };
           return data.value;
         }
         return null;
@@ -240,7 +240,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest)
         };
       }
 
-      const comparison = `# Model Comparison\n\n| Aspect | ${validModels.map(m => m.code).join(' | ')} |\n|--------|${validModels.map(() => '---').join('|')}|\n| **Name** | ${validModels.map(m => m.name).join(' | ')} |\n| **Transformation** | ${validModels.map(m => m.transformation_code).join(' | ')} |\n| **Level** | ${validModels.map(m => m.base_level).join(' | ')} |\n\n## Definitions\n\n${validModels.map(m => `**${m.code}:** ${m.definition}`).join('\n\n')}`;
+      const comparison = `# Model Comparison\n\n| Aspect | ${validModels.map((m: unknown) => (m as Record<string, unknown>).code).join(' | ')} |\n|--------|${validModels.map(() => '---').join('|')}|\n| **Name** | ${validModels.map((m: unknown) => (m as Record<string, unknown>).name).join(' | ')} |\n| **Transformation** | ${validModels.map((m: unknown) => (m as Record<string, unknown>).transformation_code).join(' | ')} |\n| **Level** | ${validModels.map((m: unknown) => (m as Record<string, unknown>).base_level).join(' | ')} |\n\n## Definitions\n\n${validModels.map((m: unknown) => `**${(m as Record<string, unknown>).code}:** ${(m as Record<string, unknown>).definition}`).join('\n\n')}`;
 
       setCachedData(cacheKey, comparison);
       logUsage('compare_models', { modelCount: validModels.length });
