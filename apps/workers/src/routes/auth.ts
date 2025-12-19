@@ -205,6 +205,28 @@ const isValidGitHubName = (name: string): boolean => {
   return true;
 };
 
+// Safe email validation without regex
+const isValidEmail = (email: string): boolean => {
+  if (email.length < 3 || email.length > 254) return false;
+
+  const atIndex = email.indexOf('@');
+  if (atIndex <= 0 || atIndex >= email.length - 1) return false;
+
+  const localPart = email.substring(0, atIndex);
+  const domainPart = email.substring(atIndex + 1);
+
+  if (localPart.length === 0 || domainPart.length === 0) return false;
+  if (domainPart.indexOf('.') === -1) return false;
+
+  // Basic character validation
+  for (let i = 0; i < email.length; i++) {
+    const char = email.charCodeAt(i);
+    if (char === 32 || char < 32 || char > 126) return false; // No spaces or control chars
+  }
+
+  return true;
+};
+
 // Password hashing utility function with per-user salt
 const hashPassword = async (password: string, salt: string): Promise<string> => {
   const encoder = new TextEncoder();
@@ -391,7 +413,7 @@ authRouter.post('/google', async c => {
       googleUser.email.length > 254 ||
       googleUser.name.length > 100 ||
       googleUser.picture.length > 500 ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(googleUser.email)
+      !isValidEmail(googleUser.email)
     ) {
       return c.json({ error: 'Invalid Google user data' }, 400);
     }
@@ -456,14 +478,24 @@ authRouter.post('/github', async c => {
 
     const { code } = requestData;
 
-    if (
-      !code ||
-      typeof code !== 'string' ||
-      code.length < 10 ||
-      code.length > 1000 ||
-      !/^[A-Za-z0-9_-]+$/.test(code)
-    ) {
+    if (!code || typeof code !== 'string' || code.length < 10 || code.length > 1000) {
       return c.json({ error: 'Invalid authorization code format' }, 400);
+    }
+
+    // Safe character validation for authorization code
+    for (let i = 0; i < code.length; i++) {
+      const char = code.charCodeAt(i);
+      if (
+        !(
+          (char >= 48 && char <= 57) || // 0-9
+          (char >= 65 && char <= 90) || // A-Z
+          (char >= 97 && char <= 122) || // a-z
+          char === 95 ||
+          char === 45 // _ -
+        )
+      ) {
+        return c.json({ error: 'Invalid authorization code format' }, 400);
+      }
     }
 
     // Exchange code for access token with timeout
@@ -520,10 +552,26 @@ authRouter.post('/github', async c => {
       !tokenData.access_token ||
       typeof tokenData.access_token !== 'string' ||
       tokenData.access_token.length < 10 ||
-      tokenData.access_token.length > 255 ||
-      !/^[A-Za-z0-9._-]+$/.test(tokenData.access_token)
+      tokenData.access_token.length > 255
     ) {
       return c.json({ error: 'Invalid GitHub access token' }, 400);
+    }
+
+    // Safe character validation for GitHub access token
+    for (let i = 0; i < tokenData.access_token.length; i++) {
+      const char = tokenData.access_token.charCodeAt(i);
+      if (
+        !(
+          (char >= 48 && char <= 57) || // 0-9
+          (char >= 65 && char <= 90) || // A-Z
+          (char >= 97 && char <= 122) || // a-z
+          char === 46 ||
+          char === 95 ||
+          char === 45 // ._-
+        )
+      ) {
+        return c.json({ error: 'Invalid GitHub access token' }, 400);
+      }
     }
 
     // Get user info with timeout and validation
@@ -583,7 +631,7 @@ authRouter.post('/github', async c => {
         (typeof githubUser.email !== 'string' ||
           githubUser.email.length > 254 ||
           githubUser.email.length < 3 ||
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(githubUser.email))) ||
+          !isValidEmail(githubUser.email))) ||
       (githubUser.name &&
         (typeof githubUser.name !== 'string' ||
           githubUser.name.length > 100 ||
@@ -741,8 +789,7 @@ authRouter.post('/register', async c => {
     const sanitizedName = name.trim();
 
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(sanitizedEmail)) {
+    if (!isValidEmail(sanitizedEmail)) {
       return c.json({ error: 'Invalid email format' }, 400);
     }
 
@@ -997,6 +1044,9 @@ authRouter.post('/login', async c => {
     // Sanitize inputs
     const sanitizedEmail = email.trim().toLowerCase();
 
+    // Generate dummy salt before user lookup for timing attack protection
+    const dummySalt = generateSalt();
+
     // Find user with timing attack protection
     let user;
     try {
@@ -1014,13 +1064,15 @@ authRouter.post('/login', async c => {
     // Hash password using PBKDF2 with user's salt for comparison
     let hashedPasswordStr;
     try {
+      const saltToUse =
+        user?.salt && typeof user.salt === 'string' && user.salt.length >= 64
+          ? user.salt
+          : dummySalt;
+      hashedPasswordStr = await hashPassword(password, saltToUse);
+
       if (!user?.salt || typeof user.salt !== 'string' || user.salt.length < 64) {
-        // Always hash to prevent timing attacks, even if user doesn't exist
-        const dummySalt = generateSalt();
-        hashedPasswordStr = await hashPassword(password, dummySalt);
         return c.json({ error: 'Invalid credentials' }, 401);
       }
-      hashedPasswordStr = await hashPassword(password, user.salt);
     } catch (error) {
       console.error('Password hashing error during login:', {
         error: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
@@ -1147,7 +1199,7 @@ authRouter.get('/verify', async c => {
       payload.sub.length > 100 ||
       payload.email.length === 0 ||
       payload.email.length > 254 ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)
+      !isValidEmail(payload.email)
     ) {
       return c.json({ error: 'Invalid token' }, 401);
     }
