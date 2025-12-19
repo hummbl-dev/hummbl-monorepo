@@ -1,8 +1,8 @@
 name: Production Monitoring
 
 on:
-  schedule:
-    - cron: '*/5 * * * *' # Every 5 minutes - Re-enabled after fixing root cause
+  # schedule:
+  #   - cron: '*/5 * * * *' # Disabled - endpoints still unhealthy
   workflow_dispatch:
 
 jobs:

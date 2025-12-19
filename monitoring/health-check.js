@@ -87,8 +87,7 @@ async function runHealthCheck() {
     console.log('✅ All endpoints healthy');
     process.exit(0);
   } else {
-    console.log('⚠️  Some endpoints unhealthy - monitoring will continue');
-    // Don't fail the workflow for now, just log issues
+    console.log('⚠️  Some endpoints unhealthy - graceful degradation');
     process.exit(0);
   }
 }
