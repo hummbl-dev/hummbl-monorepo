@@ -81,9 +81,7 @@ describe('getCachedResult', () => {
     expect(fetcher).toHaveBeenCalledTimes(1);
 
     expect(env.CACHE.put).toHaveBeenCalledWith(
-      'models:test',
-      JSON.stringify({ value: 42 }),
-      { expirationTtl: 60 }
+      'models:test', JSON.stringify({ value: 42 }), { expirationTtl: 60 },
     );
 
     expect(cache.put).toHaveBeenCalledTimes(1);
@@ -151,9 +149,7 @@ describe('getCachedResult', () => {
     expect(fetcher).not.toHaveBeenCalled();
 
     expect(env.CACHE.put).toHaveBeenCalledWith(
-      'models:cf-hit',
-      payload,
-      { expirationTtl: 123 }
+      'models:cf-hit', payload, { expirationTtl: 123 }
     );
   });
 
