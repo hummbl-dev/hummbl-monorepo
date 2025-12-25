@@ -51,6 +51,14 @@ const setupCaches = () => {
   return { cache, storage };
 };
 
+const unwrap = <T>(result: ResultType<T, unknown>): T => {
+  if (!result.ok) {
+    // Include error to make failures easier to debug during tests
+    throw new Error(`Expected ok result, got error: ${JSON.stringify((result as any).error)}`);
+  }
+  return result.value;
+};
+
 describe('getCachedResult', () => {
   beforeEach(() => {
     clearMemoryCache();
@@ -67,12 +75,17 @@ describe('getCachedResult', () => {
       cfTtlSeconds: 30,
       kvTtlSeconds: 60,
     });
+
     const resolved = unwrap(result);
     expect(resolved).toEqual({ value: 42 });
     expect(fetcher).toHaveBeenCalledTimes(1);
-    expect(env.CACHE.put).toHaveBeenCalledWith('models:test', JSON.stringify({ value: 42 }), {
-      expirationTtl: 60,
-    });
+
+    expect(env.CACHE.put).toHaveBeenCalledWith(
+      'models:test',
+      JSON.stringify({ value: 42 }),
+      { expirationTtl: 60 }
+    );
+
     expect(cache.put).toHaveBeenCalledTimes(1);
   });
 
@@ -89,11 +102,75 @@ describe('getCachedResult', () => {
     expect(fetcher).toHaveBeenCalledTimes(1);
     expect(env.CACHE.get).toHaveBeenCalledTimes(1);
   });
-});
 
-const unwrap = <T>(result: ResultType<T, unknown>): T => {
-  if (!result.ok) {
-    throw new Error('Expected ok result');
-  }
-  return result.value;
-};
+  it('returns KV hit, warms memory, and skips fetcher', async () => {
+    const env = createEnv();
+    setupCaches();
+    const payload = JSON.stringify({ kv: true });
+
+    (env.CACHE.get as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(payload);
+    const fetcher = vi.fn();
+
+    const result = await getCachedResult(env, 'models:kv-hit', fetcher, {
+      memoryTtlSeconds: 10,
+    });
+
+    const resolved = unwrap(result);
+    expect(resolved).toEqual({ kv: true });
+    expect(fetcher).not.toHaveBeenCalled();
+    expect(env.CACHE.get).toHaveBeenCalledTimes(1);
+
+    // Second call should now be a memory hit, so KV is not queried again
+    const second = await getCachedResult(env, 'models:kv-hit', fetcher);
+    const secondResolved = unwrap(second);
+    expect(secondResolved).toEqual({ kv: true });
+    expect(env.CACHE.get).toHaveBeenCalledTimes(1);
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+
+  it('returns CF cache hit, writes back to KV, and skips fetcher', async () => {
+    const env = createEnv();
+    const { cache } = setupCaches();
+    const payload = JSON.stringify({ cf: true });
+
+    (cache.match as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+      new Response(payload, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+
+    const fetcher = vi.fn();
+
+    const result = await getCachedResult(env, 'models:cf-hit', fetcher, {
+      kvTtlSeconds: 123,
+      memoryTtlSeconds: 10,
+    });
+
+    const resolved = unwrap(result);
+    expect(resolved).toEqual({ cf: true });
+    expect(fetcher).not.toHaveBeenCalled();
+
+    expect(env.CACHE.put).toHaveBeenCalledWith(
+      'models:cf-hit',
+      payload,
+      { expirationTtl: 123 }
+    );
+  });
+
+  it('propagates fetcher error result without caching', async () => {
+    const env = createEnv();
+    const { cache } = setupCaches();
+
+    const error = { code: 'NOT_FOUND', message: 'missing' };
+    const fetcher = vi.fn().mockResolvedValue(Result.err(error));
+
+    const result = await getCachedResult(env, 'models:error', fetcher);
+
+    expect(result.ok).toBe(false);
+    expect((result as any).error).toEqual(error);
+
+    // No writes to KV or CF cache on error
+    expect(env.CACHE.put).not.toHaveBeenCalled();
+    expect(cache.put).not.toHaveBeenCalled();
+  });
+});
