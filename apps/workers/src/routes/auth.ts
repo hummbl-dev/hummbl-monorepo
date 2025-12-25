@@ -158,10 +158,12 @@ authRouter.use('*', async (c, next) => {
     // Only trust CF-Connecting-IP from Cloudflare to prevent IP spoofing
     const cfIP = c.req.header('CF-Connecting-IP');
     const ip = cfIP && /^[0-9a-f.:]+$/i.test(cfIP) ? cfIP : 'unknown';
-    
+
     // If no valid CF IP, use a more restrictive rate limit
     const isValidIP = ip !== 'unknown';
-    const maxRequests = isValidIP ? RATE_LIMIT_MAX_REQUESTS : Math.floor(RATE_LIMIT_MAX_REQUESTS / 2);
+    const maxRequests = isValidIP
+      ? RATE_LIMIT_MAX_REQUESTS
+      : Math.floor(RATE_LIMIT_MAX_REQUESTS / 2);
     const key = `rate_limit:${ip}`;
 
     // Get current count and reset time
@@ -313,7 +315,7 @@ const sendVerificationEmail = async (
   token: string
 ): Promise<void> => {
   const verificationUrl = `https://hummbl.dev/verify-email?token=${token}`;
-  
+
   const emailContent = {
     to: email,
     subject: 'Verify your HUMMBL account',
@@ -335,7 +337,7 @@ const sendVerificationEmail = async (
     await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${env.EMAIL_API_KEY}`,
+        Authorization: `Bearer ${env.EMAIL_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -1678,7 +1680,9 @@ authRouter.post('/resend-verification', async c => {
 
     if (!user) {
       // Don't reveal if user exists or is already verified
-      return c.json({ message: 'If the email exists and is unverified, a verification email has been sent.' });
+      return c.json({
+        message: 'If the email exists and is unverified, a verification email has been sent.',
+      });
     }
 
     // Generate new verification token
