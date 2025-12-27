@@ -54,7 +54,7 @@ const setupCaches = () => {
 const unwrap = <T>(result: ResultType<T, unknown>): T => {
   if (!result.ok) {
     // Include error to make failures easier to debug during tests
-    throw new Error(`Expected ok result, got error: ${JSON.stringify((result as any).error)}`);
+    throw new Error(`Expected ok result, got error: ${JSON.stringify((result).error)}`);
   }
   return result.value;
 };
@@ -163,7 +163,7 @@ describe('getCachedResult', () => {
     const result = await getCachedResult(env, 'models:error', fetcher);
 
     expect(result.ok).toBe(false);
-    expect((result as any).error).toEqual(error);
+    expect((result).error).toEqual(error);
 
     // No writes to KV or CF cache on error
     expect(env.CACHE.put).not.toHaveBeenCalled();
