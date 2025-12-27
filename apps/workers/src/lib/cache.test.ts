@@ -1,9 +1,9 @@
-58
-  57
-    import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getCachedResult, clearMemoryCache } from './cache';
+58;
+57;
 import { Result, type Result as ResultType } from '@hummbl/core';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Env } from '../env';
+import { clearMemoryCache, getCachedResult } from './cache';
 
 const createEnv = () => {
   const kvNamespace = {
@@ -56,8 +56,10 @@ const setupCaches = () => {
 const unwrap = <T>(result: ResultType<T, unknown>): T => {
   if (!result.ok) {
     // Include error to make failures easier to debug during tests
-    throw new Error(`Expected ok result, got error: ${JSON.stringify(!result.ok ? result.error : 'unknown')}`166
-    
+    throw new Error(
+      `Expected ok result, got error: ${JSON.stringify(!result.ok ? result.error : 'unknown')}`
+    );
+  }
   return result.value;
 };
 
@@ -82,9 +84,9 @@ describe('getCachedResult', () => {
     expect(resolved).toEqual({ value: 42 });
     expect(fetcher).toHaveBeenCalledTimes(1);
 
-    expect(env.CACHE.put).toHaveBeenCalledWith(
-      'models:test', JSON.stringify({ value: 42 }), { expirationTtl: 60 },
-    );
+    expect(env.CACHE.put).toHaveBeenCalledWith('models:test', JSON.stringify({ value: 42 }), {
+      expirationTtl: 60,
+    });
 
     expect(cache.put).toHaveBeenCalledTimes(1);
   });
@@ -92,10 +94,12 @@ describe('getCachedResult', () => {
   it('returns memory hit without invoking fetcher twice', async () => {
     const env = createEnv();
     setupCaches();
+    clearMemoryCache(); // Ensure cache is clear before test
     const fetcher = vi.fn().mockResolvedValue(Result.ok({ models: 1 }));
 
-    const first = unwrap(await getCachedResult(env, 'models:memory', fetcher));
-    const second = unwrap(await getCachedResult(env, 'models:memory', fetcher));
+    const key = 'models:memory';
+    const first = unwrap(await getCachedResult(env, key, fetcher));
+    const second = unwrap(await getCachedResult(env, key, fetcher));
 
     expect(first).toEqual({ models: 1 });
     expect(second).toEqual({ models: 1 });
@@ -150,9 +154,7 @@ describe('getCachedResult', () => {
     expect(resolved).toEqual({ cf: true });
     expect(fetcher).not.toHaveBeenCalled();
 
-    expect(env.CACHE.put).toHaveBeenCalledWith(
-      'models:cf-hit', payload, { expirationTtl: 123 }
-    );
+    expect(env.CACHE.put).toHaveBeenCalledWith('models:cf-hit', payload, { expirationTtl: 123 });
   });
 
   it('propagates fetcher error result without caching', async () => {
@@ -165,7 +167,7 @@ describe('getCachedResult', () => {
     const result = await getCachedResult(env, 'models:error', fetcher);
 
     expect(result.ok).toBe(false);
-    expect(!result.ok ? result.error : undefined).toEqual(error)
+    expect(!result.ok ? result.error : undefined).toEqual(error);
     // No writes to KV or CF cache on error
     expect(env.CACHE.put).not.toHaveBeenCalled();
     expect(cache.put).not.toHaveBeenCalled();
