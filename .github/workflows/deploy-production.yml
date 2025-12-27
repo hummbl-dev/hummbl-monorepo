@@ -15,7 +15,7 @@ jobs:
       id-token: write
     name: Deploy to Production
     runs-on: ubuntu-latest
-    environment: production
+    # environment: production
 
     steps:
       - uses: actions/checkout@v4
