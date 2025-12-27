@@ -7,6 +7,8 @@ on:
 
 jobs:
   health-check:
+    permissions:
+      contents: read
     name: Health Check
     runs-on: ubuntu-latest
 

@@ -8,6 +8,8 @@ on:
 
 jobs:
   format:
+    permissions:
+      contents: read
     name: Format Check
     runs-on: ubuntu-latest
     steps:
@@ -23,6 +25,8 @@ jobs:
       - run: pnpm format:check
 
   lint:
+    permissions:
+      contents: read
     name: Lint
     runs-on: ubuntu-latest
     steps:
@@ -38,6 +42,8 @@ jobs:
       - run: pnpm lint
 
   type-check:
+    permissions:
+      contents: read
     name: Type Check
     runs-on: ubuntu-latest
     steps:
@@ -53,6 +59,8 @@ jobs:
       - run: pnpm type-check
 
   test:
+    permissions:
+      contents: read
     name: Test
     runs-on: ubuntu-latest
     steps:
@@ -68,6 +76,8 @@ jobs:
       - run: pnpm test
 
   build:
+    permissions:
+      contents: read
     name: Build
     runs-on: ubuntu-latest
     steps:
