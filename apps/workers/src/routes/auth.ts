@@ -81,6 +81,72 @@ interface GitHubTokenResponse {
 
 const authRouter = new Hono<{ Bindings: Env }>();
 
+// Enhanced CSRF protection middleware for POST requests
+authRouter.use('*', async (c, next) => {
+  if (c.req.method === 'POST') {
+    // CSRF Token validation
+    const csrfToken = c.req.header('X-CSRF-Token') || c.req.header('X-Requested-With');
+    const origin = c.req.header('Origin');
+    const referer = c.req.header('Referer');
+    const contentType = c.req.header('Content-Type');
+
+    // Require either CSRF token or valid origin
+    if (!csrfToken && !origin && !referer) {
+      return c.json(
+        {
+          error: 'CSRF protection: Missing required headers',
+          code: 'CSRF_TOKEN_MISSING',
+        },
+        403
+      );
+    }
+
+    // Validate CSRF token if present
+    if (csrfToken && csrfToken !== 'XMLHttpRequest' && csrfToken.length < 8) {
+      return c.json(
+        {
+          error: 'CSRF protection: Invalid token format',
+          code: 'CSRF_TOKEN_INVALID',
+        },
+        403
+      );
+    }
+
+    // Origin validation for requests without CSRF token
+    if (!csrfToken) {
+      const allowedOrigins = [
+        'https://hummbl.dev',
+        'https://www.hummbl.dev',
+        'http://localhost:3000',
+        'http://localhost:5173',
+      ];
+
+      const requestOrigin = origin || (referer ? new URL(referer).origin : null);
+      if (!requestOrigin || !allowedOrigins.includes(requestOrigin)) {
+        return c.json(
+          {
+            error: 'CSRF protection: Invalid or missing origin',
+            code: 'CSRF_ORIGIN_INVALID',
+          },
+          403
+        );
+      }
+    }
+
+    // Additional protection for JSON requests
+    if (contentType && contentType.includes('application/json') && !csrfToken && !origin) {
+      return c.json(
+        {
+          error: 'CSRF protection: JSON requests require origin or CSRF token',
+          code: 'CSRF_JSON_PROTECTION',
+        },
+        403
+      );
+    }
+  }
+  return await next();
+});
+
 // Rate limiting middleware
 authRouter.use('*', async (c, next) => {
   interface RateLimitData {
@@ -89,7 +155,15 @@ authRouter.use('*', async (c, next) => {
   }
 
   try {
-    const ip = c.req.header('CF-Connecting-IP') || 'unknown';
+    // Only trust CF-Connecting-IP from Cloudflare to prevent IP spoofing
+    const cfIP = c.req.header('CF-Connecting-IP');
+    const ip = cfIP && /^[0-9a-f.:]+$/i.test(cfIP) ? cfIP : 'unknown';
+
+    // If no valid CF IP, use a more restrictive rate limit
+    const isValidIP = ip !== 'unknown';
+    const maxRequests = isValidIP
+      ? RATE_LIMIT_MAX_REQUESTS
+      : Math.floor(RATE_LIMIT_MAX_REQUESTS / 2);
     const key = `rate_limit:${ip}`;
 
     // Get current count and reset time
@@ -103,7 +177,7 @@ authRouter.use('*', async (c, next) => {
     }
 
     // Check if rate limit exceeded
-    if (count >= RATE_LIMIT_MAX_REQUESTS) {
+    if (count >= maxRequests) {
       c.status(429);
       c.header('Retry-After', (resetTime - now).toString());
       return c.json({ error: 'Too many requests, please try again later' });
@@ -130,24 +204,19 @@ authRouter.use('*', async (c, next) => {
 
 // Constant-time string comparison to prevent timing attacks
 const constantTimeEquals = (a: string, b: string): boolean => {
-  const maxLen = Math.max(a.length, b.length);
-  const aPadded = a.padEnd(maxLen, '\0');
-  const bPadded = b.padEnd(maxLen, '\0');
-  let result = 0;
-  for (let i = 0; i < maxLen; i++) {
-    result |= aPadded.charCodeAt(i) ^ bPadded.charCodeAt(i);
+  if (a.length !== b.length) {
+    return false;
   }
-  return result === 0 && a.length === b.length;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
 };
 
 // Generate cryptographically secure random UUID
 const generateUUID = (): string => {
-  const bytes = new Uint8Array(16);
-  crypto.getRandomValues(bytes);
-  bytes[6] = (bytes[6] & 0x0f) | 0x40; // version 4
-  bytes[8] = (bytes[8] & 0x3f) | 0x80; // variant 10
-  const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+  return crypto.randomUUID();
 };
 
 // Generate per-user salt
@@ -155,6 +224,69 @@ const generateSalt = (): string => {
   const saltBytes = new Uint8Array(32);
   crypto.getRandomValues(saltBytes);
   return Array.from(saltBytes, b => b.toString(16).padStart(2, '0')).join('');
+};
+
+// Safe GitHub name validation without regex
+const isValidGitHubName = (name: string): boolean => {
+  for (let i = 0; i < name.length; i++) {
+    const char = name.charCodeAt(i);
+    if (
+      !(
+        (char >= 48 && char <= 57) || // 0-9
+        (char >= 65 && char <= 90) || // A-Z
+        (char >= 97 && char <= 122) || // a-z
+        char === 32 ||
+        char === 45 ||
+        char === 95 ||
+        char === 46 ||
+        char === 64 // space - _ . @
+      )
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// Safe email validation without regex
+const isValidEmail = (email: string): boolean => {
+  if (email.length < 3 || email.length > 254) return false;
+
+  const atIndex = email.indexOf('@');
+  if (atIndex <= 0 || atIndex >= email.length - 1) return false;
+
+  const localPart = email.substring(0, atIndex);
+  const domainPart = email.substring(atIndex + 1);
+
+  if (localPart.length === 0 || domainPart.length === 0) return false;
+  if (domainPart.indexOf('.') === -1) return false;
+
+  // Basic character validation
+  for (let i = 0; i < email.length; i++) {
+    const char = email.charCodeAt(i);
+    if (char === 32 || char < 32 || char > 126) return false; // No spaces or control chars
+  }
+
+  return true;
+};
+
+// Comprehensive sanitization function to prevent XSS
+const sanitizeUserData = (input: string | null | undefined, maxLength: number = 100): string => {
+  if (!input || typeof input !== 'string') return '';
+  // Remove dangerous characters: < > " ' & and all control chars (0-31, 127-159)
+  return input
+    .replace(/[<>"'&]/g, '')
+    .split('')
+    .filter(c => {
+      const code = c.charCodeAt(0);
+      return (code >= 32 && code <= 126) || code > 159;
+    })
+    .join('')
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/data:/gi, '') // Remove data: protocol
+    .replace(/vbscript:/gi, '') // Remove vbscript: protocol
+    .substring(0, maxLength)
+    .trim();
 };
 
 // Password hashing utility function with per-user salt
@@ -171,7 +303,7 @@ const hashPassword = async (password: string, salt: string): Promise<string> => 
     {
       name: 'PBKDF2',
       salt: saltData,
-      iterations: 210000, // OWASP recommended minimum
+      iterations: 100000, // Cloudflare Workers limit (max 100k)
       hash: 'SHA-512',
     },
     key,
@@ -180,6 +312,47 @@ const hashPassword = async (password: string, salt: string): Promise<string> => 
 
   const hashArray = Array.from(new Uint8Array(hashedPassword));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+};
+
+// Email sending utility function
+const sendVerificationEmail = async (
+  env: Env,
+  email: string,
+  name: string,
+  token: string
+): Promise<void> => {
+  const verificationUrl = `https://hummbl.dev/verify-email?token=${token}`;
+
+  const emailContent = {
+    to: email,
+    subject: 'Verify your HUMMBL account',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Welcome to HUMMBL, ${sanitizeUserData(name)}!</h2>
+        <p>Please verify your email address by clicking the link below:</p>
+        <a href="${verificationUrl}" style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">Verify Email</a>
+        <p>Or copy and paste this link: ${verificationUrl}</p>
+        <p>This link will expire in 24 hours.</p>
+        <p>If you didn't create this account, please ignore this email.</p>
+      </div>
+    `,
+    text: `Welcome to HUMMBL, ${sanitizeUserData(name)}! Please verify your email by visiting: ${verificationUrl}`,
+  };
+
+  // Send via Cloudflare Email Workers or external service
+  if (env.EMAIL_API_KEY) {
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.EMAIL_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'HUMMBL <noreply@hummbl.dev>',
+        ...emailContent,
+      }),
+    });
+  }
 };
 
 // Helper function to generate tokens with proper JWT claims
@@ -226,8 +399,8 @@ const generateTokens = async (c: { env: Env }, userId: string, email: string) =>
   }
 
   // Generate refresh token with rotation
-  const refreshToken = generateUUID();
-  if (!refreshToken || typeof refreshToken !== 'string' || refreshToken.length < 10) {
+  const refreshToken = crypto.randomUUID();
+  if (!refreshToken || typeof refreshToken !== 'string' || refreshToken.length !== 36) {
     throw new Error('Invalid refresh token generated');
   }
 
@@ -243,7 +416,11 @@ const generateTokens = async (c: { env: Env }, userId: string, email: string) =>
       { expirationTtl: REFRESH_TOKEN_EXPIRY }
     );
   } catch (error) {
-    console.error('Cache storage error:', error);
+    console.error('Cache storage error for refresh token:', {
+      error: error instanceof Error ? error.message : String(error),
+      userId: userId.substring(0, 8) + '...',
+      timestamp: new Date().toISOString(),
+    });
     throw new Error('Failed to store refresh token');
   }
 
@@ -267,14 +444,28 @@ authRouter.post('/google', async c => {
 
     const { token } = requestData;
 
-    if (
-      !token ||
-      typeof token !== 'string' ||
-      token.length < 10 ||
-      token.length > 2048 ||
-      !/^[A-Za-z0-9._/+=-]+$/.test(token)
-    ) {
+    if (!token || typeof token !== 'string' || token.length < 10 || token.length > 2048) {
       return c.json({ error: 'Invalid Google token format' }, 400);
+    }
+
+    // Safe character validation without regex
+    for (let i = 0; i < token.length; i++) {
+      const char = token.charCodeAt(i);
+      if (
+        !(
+          (char >= 48 && char <= 57) || // 0-9
+          (char >= 65 && char <= 90) || // A-Z
+          (char >= 97 && char <= 122) || // a-z
+          char === 46 ||
+          char === 95 ||
+          char === 47 ||
+          char === 43 ||
+          char === 61 ||
+          char === 45 // ._/+=-
+        )
+      ) {
+        return c.json({ error: 'Invalid Google token format' }, 400);
+      }
     }
 
     // Verify Google token with timeout and validation
@@ -283,14 +474,19 @@ authRouter.post('/google', async c => {
 
     let googleResponse;
     try {
-      googleResponse = await fetch(
-        `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${encodeURIComponent(token)}`,
-        {
-          method: 'GET',
-          headers: { 'User-Agent': 'HUMMBL/1.0' },
-          signal: controller.signal,
-        }
-      );
+      const googleApiUrl = 'https://www.googleapis.com/oauth2/v2/userinfo';
+      const url = new URL(googleApiUrl);
+
+      // Validate URL to prevent SSRF
+      if (url.hostname !== 'www.googleapis.com' || url.protocol !== 'https:') {
+        throw new Error('Invalid Google API URL');
+      }
+
+      googleResponse = await fetch(`${googleApiUrl}?access_token=${encodeURIComponent(token)}`, {
+        method: 'GET',
+        headers: { 'User-Agent': 'HUMMBL/1.0' },
+        signal: controller.signal,
+      });
     } catch (error: unknown) {
       if (error instanceof Error && error.name === 'AbortError') {
         return c.json({ error: 'Request timeout' }, 408);
@@ -320,7 +516,7 @@ authRouter.post('/google', async c => {
       googleUser.email.length > 254 ||
       googleUser.name.length > 100 ||
       googleUser.picture.length > 500 ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(googleUser.email)
+      !isValidEmail(googleUser.email)
     ) {
       return c.json({ error: 'Invalid Google user data' }, 400);
     }
@@ -385,14 +581,24 @@ authRouter.post('/github', async c => {
 
     const { code } = requestData;
 
-    if (
-      !code ||
-      typeof code !== 'string' ||
-      code.length < 10 ||
-      code.length > 1000 ||
-      !/^[A-Za-z0-9_-]+$/.test(code)
-    ) {
+    if (!code || typeof code !== 'string' || code.length < 10 || code.length > 1000) {
       return c.json({ error: 'Invalid authorization code format' }, 400);
+    }
+
+    // Safe character validation for authorization code
+    for (let i = 0; i < code.length; i++) {
+      const char = code.charCodeAt(i);
+      if (
+        !(
+          (char >= 48 && char <= 57) || // 0-9
+          (char >= 65 && char <= 90) || // A-Z
+          (char >= 97 && char <= 122) || // a-z
+          char === 95 ||
+          char === 45 // _ -
+        )
+      ) {
+        return c.json({ error: 'Invalid authorization code format' }, 400);
+      }
     }
 
     // Exchange code for access token with timeout
@@ -401,7 +607,15 @@ authRouter.post('/github', async c => {
 
     let tokenResponse;
     try {
-      tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+      const githubTokenUrl = 'https://github.com/login/oauth/access_token';
+      const url = new URL(githubTokenUrl);
+
+      // Validate URL to prevent SSRF
+      if (url.hostname !== 'github.com' || url.protocol !== 'https:') {
+        throw new Error('Invalid GitHub OAuth URL');
+      }
+
+      tokenResponse = await fetch(githubTokenUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -441,10 +655,26 @@ authRouter.post('/github', async c => {
       !tokenData.access_token ||
       typeof tokenData.access_token !== 'string' ||
       tokenData.access_token.length < 10 ||
-      tokenData.access_token.length > 255 ||
-      !/^[A-Za-z0-9._-]+$/.test(tokenData.access_token)
+      tokenData.access_token.length > 255
     ) {
       return c.json({ error: 'Invalid GitHub access token' }, 400);
+    }
+
+    // Safe character validation for GitHub access token
+    for (let i = 0; i < tokenData.access_token.length; i++) {
+      const char = tokenData.access_token.charCodeAt(i);
+      if (
+        !(
+          (char >= 48 && char <= 57) || // 0-9
+          (char >= 65 && char <= 90) || // A-Z
+          (char >= 97 && char <= 122) || // a-z
+          char === 46 ||
+          char === 95 ||
+          char === 45 // ._-
+        )
+      ) {
+        return c.json({ error: 'Invalid GitHub access token' }, 400);
+      }
     }
 
     // Get user info with timeout and validation
@@ -453,7 +683,15 @@ authRouter.post('/github', async c => {
 
     let userResponse;
     try {
-      userResponse = await fetch('https://api.github.com/user', {
+      const githubApiUrl = 'https://api.github.com/user';
+      const url = new URL(githubApiUrl);
+
+      // Validate URL to prevent SSRF
+      if (url.hostname !== 'api.github.com' || url.protocol !== 'https:') {
+        throw new Error('Invalid GitHub API URL');
+      }
+
+      userResponse = await fetch(githubApiUrl, {
         headers: {
           Authorization: `Bearer ${tokenData.access_token}`,
           'User-Agent': 'HUMMBL/1.0',
@@ -496,16 +734,16 @@ authRouter.post('/github', async c => {
         (typeof githubUser.email !== 'string' ||
           githubUser.email.length > 254 ||
           githubUser.email.length < 3 ||
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(githubUser.email))) ||
+          !isValidEmail(githubUser.email))) ||
       (githubUser.name &&
         (typeof githubUser.name !== 'string' ||
           githubUser.name.length > 100 ||
           githubUser.name.length === 0 ||
-          !/^[a-zA-Z0-9\s\-_.@]+$/.test(githubUser.name))) ||
+          !isValidGitHubName(githubUser.name))) ||
       (githubUser.avatar_url &&
         (typeof githubUser.avatar_url !== 'string' ||
           githubUser.avatar_url.length > 500 ||
-          !/^https:\/\//.test(githubUser.avatar_url)))
+          !githubUser.avatar_url.startsWith('https://')))
     ) {
       return c.json({ error: 'Invalid GitHub user data' }, 400);
     }
@@ -517,7 +755,7 @@ authRouter.post('/github', async c => {
         'SELECT * FROM users WHERE email = ? OR (provider = ? AND provider_id = ?)'
       )
         .bind(
-          githubUser.email || `${githubUser.id}@example.com`,
+          githubUser.email || `github-${githubUser.id}@noreply.hummbl.dev`,
           'github',
           githubUser.id.toString()
         )
@@ -535,13 +773,14 @@ authRouter.post('/github', async c => {
         return c.json({ error: 'Authentication failed' }, 500);
       }
 
-      const userEmail = githubUser.email || `${githubUser.id}@example.com`;
+      const userEmail = githubUser.email || `github-${githubUser.id}@noreply.hummbl.dev`;
       const userName = (githubUser.name && githubUser.name.trim()) || `GitHubUser${githubUser.id}`;
       const avatarUrl =
         githubUser.avatar_url &&
         typeof githubUser.avatar_url === 'string' &&
         githubUser.avatar_url.length <= 500 &&
-        /^https:\/\/[a-zA-Z0-9.-]+\.githubusercontent\.com\//.test(githubUser.avatar_url)
+        githubUser.avatar_url.startsWith('https://') &&
+        githubUser.avatar_url.includes('.githubusercontent.com/')
           ? githubUser.avatar_url
           : null;
 
@@ -654,8 +893,7 @@ authRouter.post('/register', async c => {
     const sanitizedName = name.trim();
 
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(sanitizedEmail)) {
+    if (!isValidEmail(sanitizedEmail)) {
       return c.json({ error: 'Invalid email format' }, 400);
     }
 
@@ -663,19 +901,34 @@ authRouter.post('/register', async c => {
     if (password.length < 8 || password.length > 128) {
       return c.json({ error: 'Password must be between 8 and 128 characters' }, 400);
     }
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+
+    // Safe character-based validation
+    let hasLower = false,
+      hasUpper = false,
+      hasDigit = false;
+    for (let i = 0; i < password.length; i++) {
+      const char = password.charCodeAt(i);
+      if (char >= 97 && char <= 122) hasLower = true;
+      else if (char >= 65 && char <= 90) hasUpper = true;
+      else if (char >= 48 && char <= 57) hasDigit = true;
+    }
+    if (!hasLower || !hasUpper || !hasDigit) {
       return c.json(
         { error: 'Password must contain lowercase, uppercase, and numeric characters' },
         400
       );
     }
+
+    // Check for common weak patterns
+    const lowerPassword = password.toLowerCase();
     if (
-      /^(..)\1+$/.test(password) ||
-      /012|123|234|345|456|567|678|789|890|abc|bcd|cde|def/.test(password.toLowerCase())
+      lowerPassword.includes('password') ||
+      lowerPassword.includes('123456') ||
+      lowerPassword.includes('qwerty') ||
+      lowerPassword.includes('admin') ||
+      lowerPassword.includes('login') ||
+      lowerPassword.includes('user')
     ) {
-      return c.json({ error: 'Password cannot contain sequential or repeated patterns' }, 400);
-    }
-    if (/password|123456|qwerty|admin|login|user/i.test(password)) {
       return c.json({ error: 'Password cannot contain common words' }, 400);
     }
     if (password.toLowerCase().includes(sanitizedEmail.split('@')[0].toLowerCase())) {
@@ -686,22 +939,49 @@ authRouter.post('/register', async c => {
     if (sanitizedName.length === 0 || sanitizedName.length > 100) {
       return c.json({ error: 'Name must be between 1 and 100 characters' }, 400);
     }
-    if (!/^[a-zA-Z0-9\s\-_.]+$/.test(sanitizedName)) {
-      return c.json(
-        {
-          error:
-            'Name can only contain letters, numbers, spaces, hyphens, underscores, and periods',
-        },
-        400
-      );
+
+    // Safe character validation
+    let hasValidChar = false;
+    let consecutiveSpaces = 0;
+    for (let i = 0; i < sanitizedName.length; i++) {
+      const char = sanitizedName.charCodeAt(i);
+      if (
+        (char >= 48 && char <= 57) || // 0-9
+        (char >= 65 && char <= 90) || // A-Z
+        (char >= 97 && char <= 122) || // a-z
+        char === 32 ||
+        char === 45 ||
+        char === 95 ||
+        char === 46 // space - _ .
+      ) {
+        if (char >= 48 && char <= 122 && char !== 32) hasValidChar = true;
+        consecutiveSpaces = char === 32 ? consecutiveSpaces + 1 : 0;
+        if (consecutiveSpaces > 1) {
+          return c.json({ error: 'Name cannot contain multiple consecutive spaces' }, 400);
+        }
+      } else {
+        return c.json(
+          {
+            error:
+              'Name can only contain letters, numbers, spaces, hyphens, underscores, and periods',
+          },
+          400
+        );
+      }
     }
-    if (/^[\s\-_.]+$/.test(sanitizedName) || /\s{2,}/.test(sanitizedName)) {
-      return c.json(
-        { error: 'Name cannot be only special characters or contain multiple consecutive spaces' },
-        400
-      );
+    if (!hasValidChar) {
+      return c.json({ error: 'Name cannot be only special characters' }, 400);
     }
-    if (/admin|root|system|null|undefined|test/i.test(sanitizedName)) {
+    // Check for reserved name patterns
+    const lowerName = sanitizedName.toLowerCase();
+    if (
+      lowerName.includes('admin') ||
+      lowerName.includes('root') ||
+      lowerName.includes('system') ||
+      lowerName.includes('null') ||
+      lowerName.includes('undefined') ||
+      lowerName.includes('test')
+    ) {
       return c.json({ error: 'Name cannot contain reserved words' }, 400);
     }
 
@@ -844,9 +1124,18 @@ authRouter.post('/register', async c => {
       return c.json({ error: 'Token generation failed' }, 500);
     }
 
+    // Send verification email
+    try {
+      await sendVerificationEmail(c.env, sanitizedEmail, sanitizedName, verificationToken);
+    } catch (error) {
+      console.error('Failed to send verification email:', error);
+      // Don't fail registration if email sending fails
+    }
+
     return c.json({
       user,
       token: jwtToken,
+      message: 'Registration successful. Please check your email to verify your account.',
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -884,6 +1173,9 @@ authRouter.post('/login', async c => {
     // Sanitize inputs
     const sanitizedEmail = email.trim().toLowerCase();
 
+    // Generate dummy salt before user lookup for timing attack protection
+    const dummySalt = generateSalt();
+
     // Find user with timing attack protection
     let user;
     try {
@@ -891,22 +1183,30 @@ authRouter.post('/login', async c => {
         .bind(sanitizedEmail, 'email')
         .first<User>();
     } catch (error) {
-      console.error('Database error during login:', error);
+      console.error('Database error during login:', {
+        error: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
+        timestamp: new Date().toISOString(),
+      });
       return c.json({ error: 'Login failed' }, 500);
     }
 
     // Hash password using PBKDF2 with user's salt for comparison
     let hashedPasswordStr;
     try {
+      const saltToUse =
+        user?.salt && typeof user.salt === 'string' && user.salt.length >= 64
+          ? user.salt
+          : dummySalt;
+      hashedPasswordStr = await hashPassword(password, saltToUse);
+
       if (!user?.salt || typeof user.salt !== 'string' || user.salt.length < 64) {
-        // Always hash to prevent timing attacks, even if user doesn't exist
-        const dummySalt = generateSalt();
-        hashedPasswordStr = await hashPassword(password, dummySalt);
         return c.json({ error: 'Invalid credentials' }, 401);
       }
-      hashedPasswordStr = await hashPassword(password, user.salt);
     } catch (error) {
-      console.error('Password hashing error during login:', error);
+      console.error('Password hashing error during login:', {
+        error: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
+        timestamp: new Date().toISOString(),
+      });
       return c.json({ error: 'Login failed' }, 500);
     }
 
@@ -933,7 +1233,10 @@ authRouter.post('/login', async c => {
       accessToken = tokens.accessToken;
       refreshToken = tokens.refreshToken;
     } catch (error) {
-      console.error('Token generation error during login:', error);
+      console.error('Token generation error during login:', {
+        error: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
+        timestamp: new Date().toISOString(),
+      });
       return c.json({ error: 'Token generation failed' }, 500);
     }
 
@@ -941,8 +1244,8 @@ authRouter.post('/login', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name: (user.name || '').replace(/[<>"'&]/g, ''),
-      avatar_url: user.avatar_url || null,
+      name: sanitizeUserData(user.name as string | null | undefined, 100),
+      avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
       email_verified: !!user.email_verified,
     };
@@ -976,8 +1279,25 @@ authRouter.get('/verify', async c => {
 
     const token = authHeader.substring(7);
 
-    if (token.length < 10 || token.length > 1000 || !/^[A-Za-z0-9._-]+$/.test(token)) {
+    if (token.length < 10 || token.length > 1000) {
       return c.json({ error: 'Invalid token' }, 401);
+    }
+
+    // Safe character validation without regex
+    for (let i = 0; i < token.length; i++) {
+      const char = token.charCodeAt(i);
+      if (
+        !(
+          (char >= 48 && char <= 57) || // 0-9
+          (char >= 65 && char <= 90) || // A-Z
+          (char >= 97 && char <= 122) || // a-z
+          char === 46 ||
+          char === 95 ||
+          char === 45 // . _ -
+        )
+      ) {
+        return c.json({ error: 'Invalid token' }, 401);
+      }
     }
 
     let payload;
@@ -997,32 +1317,48 @@ authRouter.get('/verify', async c => {
 
     if (
       !payload ||
-      !payload.userId ||
+      !payload.sub ||
       !payload.email ||
-      typeof payload.userId !== 'string' ||
+      typeof payload.sub !== 'string' ||
       typeof payload.email !== 'string' ||
-      payload.userId.length === 0 ||
-      payload.userId.length > 100 ||
+      payload.sub.length === 0 ||
+      payload.sub.length > 100 ||
       payload.email.length === 0 ||
       payload.email.length > 254 ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)
+      !isValidEmail(payload.email)
     ) {
       return c.json({ error: 'Invalid token' }, 401);
     }
 
     let user;
     try {
+      // Safe UUID validation
       if (
-        !/^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/.test(
-          payload.userId
-        )
+        payload.sub.length !== 36 ||
+        payload.sub[8] !== '-' ||
+        payload.sub[13] !== '-' ||
+        payload.sub[18] !== '-' ||
+        payload.sub[23] !== '-'
       ) {
         throw new Error('Invalid user ID format');
+      }
+      for (let i = 0; i < payload.sub.length; i++) {
+        if (i === 8 || i === 13 || i === 18 || i === 23) continue;
+        const char = payload.sub.charCodeAt(i);
+        if (
+          !(
+            (char >= 48 && char <= 57) || // 0-9
+            (char >= 65 && char <= 70) || // A-F
+            (char >= 97 && char <= 102) // a-f
+          )
+        ) {
+          throw new Error('Invalid user ID format');
+        }
       }
       user = await c.env.DB.prepare(
         'SELECT id, email, name, avatar_url, provider FROM users WHERE id = ?'
       )
-        .bind(payload.userId)
+        .bind(payload.sub)
         .first();
     } catch (error) {
       console.error('Database error during token verification:', error);
@@ -1053,7 +1389,7 @@ authRouter.get('/verify', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name: typeof user.name === 'string' ? user.name.substring(0, 100) : '',
+      name: sanitizeUserData(user.name as string | null | undefined, 100),
       avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
     };
@@ -1078,14 +1414,23 @@ authRouter.post('/verify-email', async c => {
 
     const { token } = requestData;
 
-    if (
-      !token ||
-      typeof token !== 'string' ||
-      token.length < 10 ||
-      token.length > 100 ||
-      !/^[A-Za-z0-9-]+$/.test(token)
-    ) {
+    if (!token || typeof token !== 'string' || token.length < 10 || token.length > 100) {
       return c.json({ error: 'Invalid verification token' }, 400);
+    }
+
+    // Safe character validation
+    for (let i = 0; i < token.length; i++) {
+      const char = token.charCodeAt(i);
+      if (
+        !(
+          (char >= 48 && char <= 57) || // 0-9
+          (char >= 65 && char <= 90) || // A-Z
+          (char >= 97 && char <= 122) || // a-z
+          char === 45 // -
+        )
+      ) {
+        return c.json({ error: 'Invalid verification token' }, 400);
+      }
     }
 
     // Find user by verification token
@@ -1177,8 +1522,21 @@ authRouter.post('/refresh', async c => {
     let tokenData;
     let userId;
     try {
-      if (!/^[A-Za-z0-9._-]+$/.test(refreshToken)) {
-        throw new Error('Invalid refresh token format');
+      // Safe character validation for refresh token
+      for (let i = 0; i < refreshToken.length; i++) {
+        const char = refreshToken.charCodeAt(i);
+        if (
+          !(
+            (char >= 48 && char <= 57) || // 0-9
+            (char >= 65 && char <= 90) || // A-Z
+            (char >= 97 && char <= 122) || // a-z
+            char === 46 ||
+            char === 95 ||
+            char === 45 // ._-
+          )
+        ) {
+          throw new Error('Invalid refresh token format');
+        }
       }
       const tokenString = await c.env.CACHE.get(`refresh_token:${refreshToken}`);
       if (!tokenString) {
@@ -1204,8 +1562,19 @@ authRouter.post('/refresh', async c => {
     // Get user from database
     let user;
     try {
-      if (!/^[A-Za-z0-9-]+$/.test(userId)) {
-        throw new Error('Invalid user ID format');
+      // Safe character validation for user ID
+      for (let i = 0; i < userId.length; i++) {
+        const char = userId.charCodeAt(i);
+        if (
+          !(
+            (char >= 48 && char <= 57) || // 0-9
+            (char >= 65 && char <= 90) || // A-Z
+            (char >= 97 && char <= 122) || // a-z
+            char === 45 // -
+          )
+        ) {
+          throw new Error('Invalid user ID format');
+        }
       }
       user = await c.env.DB.prepare(
         'SELECT id, email, name, avatar_url, provider, email_verified FROM users WHERE id = ?'
@@ -1264,7 +1633,7 @@ authRouter.post('/refresh', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name: typeof user.name === 'string' ? user.name.substring(0, 100) : '',
+      name: sanitizeUserData(user.name, 100),
       avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
       email_verified: !!user.email_verified,
@@ -1278,6 +1647,84 @@ authRouter.post('/refresh', async c => {
   } catch (error) {
     console.error('Token refresh error:', error);
     return c.json({ error: 'Failed to refresh token' }, 500);
+  }
+});
+
+// Resend verification email
+authRouter.post('/resend-verification', async c => {
+  try {
+    let requestData;
+    try {
+      requestData = await c.req.json();
+    } catch (error) {
+      console.error('JSON parsing error during resend verification:', error);
+      return c.json({ error: 'Invalid request format' }, 400);
+    }
+
+    const { email } = requestData;
+
+    if (!email || typeof email !== 'string' || email.length > 254) {
+      return c.json({ error: 'Invalid email format' }, 400);
+    }
+
+    const sanitizedEmail = email.trim().toLowerCase();
+    if (!isValidEmail(sanitizedEmail)) {
+      return c.json({ error: 'Invalid email format' }, 400);
+    }
+
+    // Find unverified user
+    let user;
+    try {
+      user = await c.env.DB.prepare(
+        'SELECT * FROM users WHERE email = ? AND email_verified = FALSE AND provider = ?'
+      )
+        .bind(sanitizedEmail, 'email')
+        .first();
+    } catch (error) {
+      console.error('Database error during resend verification lookup:', error);
+      return c.json({ error: 'Failed to resend verification' }, 500);
+    }
+
+    if (!user) {
+      // Don't reveal if user exists or is already verified
+      return c.json({
+        message: 'If the email exists and is unverified, a verification email has been sent.',
+      });
+    }
+
+    // Generate new verification token
+    const newVerificationToken = generateUUID();
+    const verificationExpiry = new Date();
+    verificationExpiry.setHours(verificationExpiry.getHours() + 24);
+
+    try {
+      await c.env.DB.prepare(
+        'UPDATE users SET email_verification_token = ?, email_verification_expires_at = ? WHERE id = ?'
+      )
+        .bind(newVerificationToken, verificationExpiry.toISOString(), user.id)
+        .run();
+    } catch (error) {
+      console.error('Database error during verification token update:', error);
+      return c.json({ error: 'Failed to resend verification' }, 500);
+    }
+
+    // Send verification email
+    try {
+      await sendVerificationEmail(
+        c.env,
+        sanitizedEmail,
+        typeof user.name === 'string' && user.name.length > 0 ? user.name : 'User',
+        newVerificationToken
+      );
+    } catch (error) {
+      console.error('Failed to send verification email:', error);
+      return c.json({ error: 'Failed to send verification email' }, 500);
+    }
+
+    return c.json({ message: 'Verification email sent successfully.' });
+  } catch (error) {
+    console.error('Resend verification error:', error);
+    return c.json({ error: 'Failed to resend verification' }, 500);
   }
 });
 

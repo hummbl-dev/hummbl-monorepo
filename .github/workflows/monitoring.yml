@@ -5,8 +5,13 @@ on:
   #   - cron: '*/5 * * * *' # Disabled - endpoints still unhealthy
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   health-check:
+    permissions:
+      contents: read
     name: Health Check
     runs-on: ubuntu-latest
 

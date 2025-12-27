@@ -6,6 +6,8 @@ on:
 
 jobs:
   validate-pr:
+    permissions:
+      contents: read
     name: Validate PR
     runs-on: ubuntu-latest
     steps:
@@ -35,6 +37,8 @@ jobs:
           }
 
   pr-checks:
+    permissions:
+      contents: read
     name: PR Checks
     needs: validate-pr
     runs-on: ubuntu-latest
