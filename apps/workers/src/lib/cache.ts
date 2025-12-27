@@ -1,7 +1,7 @@
 import { Result } from '@hummbl/core';
 import type { Env } from '../env';
-import { logCacheError } from './api';
 import type { ApiError } from './api';
+import { logCacheError } from './api';
 
 interface CacheEntry {
   value: string;
@@ -14,7 +14,7 @@ interface CacheConfig {
   memoryTtlSeconds?: number;
 }
 
-const memoryCache = new Map<string, CacheEntry>();
+export const memoryCache = new Map<string, CacheEntry>();
 
 export const clearMemoryCache = () => {
   // Using DE3 (Decomposition) to keep test hooks separate from runtime logic
@@ -33,6 +33,14 @@ const getWorkersCache = async () => {
 
 const readMemoryCache = <T>(key: string): T | null => {
   const entry = memoryCache.get(key);
+  // DEBUG: Log memory cache read
+  // eslint-disable-next-line no-console
+  console.log('[MEMORY CACHE] read', {
+    key,
+    has: !!entry,
+    expiresAt: entry?.expiresAt,
+    now: Date.now(),
+  });
 
   if (!entry) {
     return null;
@@ -40,6 +48,8 @@ const readMemoryCache = <T>(key: string): T | null => {
 
   if (entry.expiresAt < Date.now()) {
     memoryCache.delete(key);
+    // eslint-disable-next-line no-console
+    console.log('[MEMORY CACHE] expired', { key });
     return null;
   }
 
@@ -48,23 +58,32 @@ const readMemoryCache = <T>(key: string): T | null => {
     if (
       parsed &&
       typeof parsed === 'object' &&
-      ('__proto__' in parsed || 'constructor' in parsed)
+      (Object.prototype.hasOwnProperty.call(parsed, '__proto__') ||
+        Object.prototype.hasOwnProperty.call(parsed, 'constructor'))
     ) {
       memoryCache.delete(key);
+      // eslint-disable-next-line no-console
+      console.log('[MEMORY CACHE] prototype pollution detected', { key });
       return null;
     }
     return parsed as T;
   } catch {
     memoryCache.delete(key);
+    // eslint-disable-next-line no-console
+    console.log('[MEMORY CACHE] parse error', { key });
     return null;
   }
 };
 
 const writeMemoryCache = (key: string, payload: string, ttlSeconds: number) => {
+  const expiresAt = Date.now() + ttlSeconds * 1000;
   memoryCache.set(key, {
     value: payload,
-    expiresAt: Date.now() + ttlSeconds * 1000,
+    expiresAt,
   });
+  // DEBUG: Log memory cache write
+  // eslint-disable-next-line no-console
+  console.log('[MEMORY CACHE] write', { key, expiresAt });
 };
 
 export const getCachedResult = async <T>(
@@ -90,13 +109,18 @@ export const getCachedResult = async <T>(
         if (
           parsed &&
           typeof parsed === 'object' &&
-          ('__proto__' in parsed || 'constructor' in parsed)
+          (Object.prototype.hasOwnProperty.call(parsed, '__proto__') ||
+            Object.prototype.hasOwnProperty.call(parsed, 'constructor'))
         ) {
           await env.CACHE.delete(cacheKey);
           logCacheError(
             `KV prototype pollution attempt for key ${cacheKey}`,
             new Error('Prototype pollution detected')
           );
+          return Result.err({
+            code: 'PROTOTYPE_POLLUTION',
+            message: 'Prototype pollution detected in KV cache',
+          });
         } else {
           writeMemoryCache(cacheKey, kvPayload, memoryTtl);
           return Result.ok(parsed as T);
@@ -121,13 +145,18 @@ export const getCachedResult = async <T>(
         if (
           parsed &&
           typeof parsed === 'object' &&
-          ('__proto__' in parsed || 'constructor' in parsed)
+          (Object.prototype.hasOwnProperty.call(parsed, '__proto__') ||
+            Object.prototype.hasOwnProperty.call(parsed, 'constructor'))
         ) {
           await cfCache.delete(cacheRequest);
           logCacheError(
             `Workers cache prototype pollution attempt for key ${cacheKey}`,
             new Error('Prototype pollution detected')
           );
+          return Result.err({
+            code: 'PROTOTYPE_POLLUTION',
+            message: 'Prototype pollution detected in Workers cache',
+          });
         } else {
           writeMemoryCache(cacheKey, payload, memoryTtl);
           await env.CACHE.put(cacheKey, payload, { expirationTtl: kvTtl });
