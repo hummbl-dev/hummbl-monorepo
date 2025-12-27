@@ -10,9 +10,12 @@ permissions:
 
 jobs:
   deploy-staging:
+    permissions:
+      contents: read
+      id-token: write
     name: Deploy to Staging
     runs-on: ubuntu-latest
-    environment: staging
+    # environment: staging
 
     steps:
       - uses: actions/checkout@v4
