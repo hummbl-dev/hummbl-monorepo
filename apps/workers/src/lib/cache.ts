@@ -120,6 +120,7 @@ export const getCachedResult = async <T>(
           return Result.err({
             code: 'PROTOTYPE_POLLUTION',
             message: 'Prototype pollution detected in KV cache',
+            status: 400,
           });
         } else {
           writeMemoryCache(cacheKey, kvPayload, memoryTtl);
@@ -156,6 +157,7 @@ export const getCachedResult = async <T>(
           return Result.err({
             code: 'PROTOTYPE_POLLUTION',
             message: 'Prototype pollution detected in Workers cache',
+            status: 400,
           });
         } else {
           writeMemoryCache(cacheKey, payload, memoryTtl);
