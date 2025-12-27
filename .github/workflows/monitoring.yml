@@ -5,7 +5,7 @@ on:
   #   - cron: '*/5 * * * *' # Disabled - endpoints still unhealthy
   workflow_dispatch:
 
-  permissions:
+permissions:
   contents: read
 
 jobs:
