@@ -52,7 +52,11 @@ const config: Config = {
       },
     },
   },
+  corePlugins: {
+    ringWidth: true,
+    ringColor: true,
+  },
   plugins: [],
 };
 
-export default config;
+export default config as any;
