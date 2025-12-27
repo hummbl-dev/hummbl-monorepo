@@ -273,8 +273,15 @@ const isValidEmail = (email: string): boolean => {
 // Comprehensive sanitization function to prevent XSS
 const sanitizeUserData = (input: string | null | undefined, maxLength: number = 100): string => {
   if (!input || typeof input !== 'string') return '';
+  // Remove dangerous characters: < > " ' & and all control chars (0-31, 127-159)
   return input
-    .replace(/[<>"'&\x00-\x1f\x7f-\x9f]/g, '') // Remove dangerous characters
+    .replace(/[<>"'&]/g, '')
+    .split('')
+    .filter(c => {
+      const code = c.charCodeAt(0);
+      return (code >= 32 && code <= 126) || code > 159;
+    })
+    .join('')
     .replace(/javascript:/gi, '') // Remove javascript: protocol
     .replace(/data:/gi, '') // Remove data: protocol
     .replace(/vbscript:/gi, '') // Remove vbscript: protocol
