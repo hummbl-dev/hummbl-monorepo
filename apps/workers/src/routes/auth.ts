@@ -1389,7 +1389,7 @@ authRouter.get('/verify', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name: sanitizeUserData(user.name, 100),
+      name: sanitizeUserData(user.name as string | null | undefined, 100),
       avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
     };
@@ -1710,7 +1710,12 @@ authRouter.post('/resend-verification', async c => {
 
     // Send verification email
     try {
-      await sendVerificationEmail(c.env, sanitizedEmail, user.name || 'User', newVerificationToken);
+      await sendVerificationEmail(
+        c.env,
+        sanitizedEmail,
+        typeof user.name === 'string' && user.name.length > 0 ? user.name : 'User',
+        newVerificationToken
+      );
     } catch (error) {
       console.error('Failed to send verification email:', error);
       return c.json({ error: 'Failed to send verification email' }, 500);
