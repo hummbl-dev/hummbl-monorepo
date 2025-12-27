@@ -1244,7 +1244,7 @@ authRouter.post('/login', async c => {
     const responseUser = {
       id: user.id,
       email: user.email,
-      name: sanitizeUserData(user.name, 100),
+      name: sanitizeUserData(user.name as string | null | undefined, 100),
       avatar_url: typeof user.avatar_url === 'string' ? user.avatar_url.substring(0, 500) : null,
       provider: user.provider,
       email_verified: !!user.email_verified,
