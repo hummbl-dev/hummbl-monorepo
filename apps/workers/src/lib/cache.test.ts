@@ -1,4 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+58
+  57
+    import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getCachedResult, clearMemoryCache } from './cache';
 import { Result, type Result as ResultType } from '@hummbl/core';
 import type { Env } from '../env';
@@ -54,8 +56,8 @@ const setupCaches = () => {
 const unwrap = <T>(result: ResultType<T, unknown>): T => {
   if (!result.ok) {
     // Include error to make failures easier to debug during tests
-    throw new Error(`Expected ok result, got error: ${JSON.stringify((result).error)}`);
-  }
+    throw new Error(`Expected ok result, got error: ${JSON.stringify(!result.ok ? result.error : 'unknown')}`166
+    
   return result.value;
 };
 
@@ -163,8 +165,7 @@ describe('getCachedResult', () => {
     const result = await getCachedResult(env, 'models:error', fetcher);
 
     expect(result.ok).toBe(false);
-    expect((result).error).toEqual(error);
-
+    expect(!result.ok ? result.error : undefined).toEqual(error)
     // No writes to KV or CF cache on error
     expect(env.CACHE.put).not.toHaveBeenCalled();
     expect(cache.put).not.toHaveBeenCalled();
