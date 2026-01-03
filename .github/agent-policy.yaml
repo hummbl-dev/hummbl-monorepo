@@ -1,0 +1,125 @@
+# Base120 Agent Policy
+# Version: 1.0.0
+# Status: Frozen
+# Effective: 2026-01-03
+#
+# This policy is DECLARATIVE and PROHIBITIVE BY DEFAULT.
+# No executable logic. Policy only.
+
+policy_version: '1.0.0'
+status: frozen
+effective_date: '2026-01-03'
+
+# Repository identity
+repository:
+  name: base120
+  purpose: artifact_validator
+  invariant: 'This repo validates artifacts about Base120 — not Base120 itself.'
+
+# Version governance
+version_status:
+  base120_version: '1.0.0'
+  frozen: true
+  scope: entire_repository
+
+# What this repo IS and IS NOT
+system_distinction:
+  artifact_validator:
+    implemented: true
+    input_schema: '{ id, domain, class, instance, models }'
+    failure_modes: 'FM1-FM30'
+    status: canonical
+  corpus_validator:
+    implemented: false
+    status: 'conceptual / future / separate project'
+
+# Explicitly permitted changes
+allowed_changes:
+  - type: documentation_clarification
+    constraint: 'no semantic changes'
+  - type: sealed_canonical_artifacts
+    constraint: 'must include hash + MRCC'
+  - type: test_additions
+    constraint: 'must not alter behavior'
+
+# Explicitly forbidden changes
+forbidden_changes:
+  - retroactive_spec_rewrites
+  - validator_logic_changes
+  - failure_mode_redefinitions
+  - schema_modifications
+  - semantic_altering_refactors
+
+# Default assumption when uncertain
+default_assumption: forbidden
+
+# Mandatory agent behavior on ambiguity
+clarification_behavior:
+  trigger_conditions:
+    - spec_implementation_mismatch
+    - conflicting_semantics
+    - ambiguous_terminology
+    - uncertain_permission
+  required_action: stop_and_ask
+  forbidden_actions:
+    - resolve_by_assumption
+    - apply_helpful_fixes_without_approval
+    - infer_intent_from_context
+
+# Artifact vs corpus distinction
+artifact_vs_corpus:
+  distinction: explicit
+  conflation: forbidden
+
+# Canonical artifact handling
+canonical_artifacts:
+  requirements:
+    - deterministically_normalized
+    - sha256_hashed
+    - mrcc_bound
+  validation_by_artifact_validator: false
+  allowed_location: '/artifacts/'
+  forbidden_location: '/tests/corpus/'
+
+# Observability contract
+observability:
+  event_emission:
+    affects_validation_outcome: false
+    raises_upstream_exceptions: false
+    structure: deterministic
+  mode: best_effort_non_blocking
+
+# MRCC compliance
+mrcc:
+  version: '1.0'
+  required_fields:
+    - artifact_path
+    - sha256
+    - governance_version
+    - claims
+    - non_claims
+    - timestamp
+  new_schema_invention: forbidden
+  canonical_definition: 'Base120 governance spec'
+
+# Prohibited agent behaviors
+prohibited_behaviors:
+  - treating_repo_as_corpus_validator
+  - modifying_frozen_schemas
+  - redefining_failure_modes
+  - assuming_change_permission
+  - resolving_ambiguity_without_asking
+  - referencing_future_capabilities
+  - conflating_artifact_corpus_systems
+
+# Default posture
+default_posture:
+  mode: prohibitive
+  assumption: frozen
+  action: ask_before_acting
+
+# References
+references:
+  protocol: 'docs/protocols/base120-agent-onboarding.md'
+  quick_reference: 'docs/AGENTS.md'
+  mrcc_reference: 'docs/reference/mrcc-v1.0.md'

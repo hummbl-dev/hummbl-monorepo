@@ -149,4 +149,11 @@ code,
   box-shadow: 
     0 0 0 2px #18181b,
     0 0 0 4px rgba(255, 255, 255, 0.5);
+.focus-ring {
+  @apply focus:outline-none focus:ring-offset-2;
+}
+
+/* High visibility focus for navigation */
+.focus-navigation {
+  @apply focus:outline-none focus:ring-offset-2;
 }

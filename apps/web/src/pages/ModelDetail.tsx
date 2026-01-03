@@ -1,8 +1,8 @@
-import { useState, useMemo, useCallback } from 'react';
-import { Link, Navigate, useParams, useNavigate } from 'react-router-dom';
-import { useModels, type Base120Model } from '../hooks/useModels';
+import { useCallback, useMemo, useState } from 'react';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { StatusStrip } from '../components/StatusStrip';
 import { toast } from '../components/Toast';
+import { useModels, type Base120Model } from '../hooks/useModels';
 
 export const ModelDetail: React.FC = () => {
   const { id } = useParams();
@@ -222,7 +222,7 @@ export const ModelDetail: React.FC = () => {
                 aria-selected={activeSection === tab ? 'true' : 'false'}
                 aria-controls={`tabpanel-${tab}`}
                 onClick={() => setActiveSection(tab)}
-                className={`px-4 py-2.5 text-xs font-mono uppercase tracking-[0.3em] transition-colors border-b-2 -mb-px focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
+                className={`px-4 py-2.5 text-xs font-mono uppercase tracking-[0.3em] transition-colors border-b-2 -mb-px focus:outline-none focus:ring-inset ${
                   activeSection === tab
                     ? 'border-white text-white'
                     : 'border-transparent text-zinc-500 hover:text-zinc-300'
