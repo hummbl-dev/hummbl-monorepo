@@ -1,0 +1,36 @@
+# HUMMBL Monorepo Code Owners
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @hummbl-dev/core-team
+
+# Documentation
+/docs/ @hummbl-dev/docs-team
+*.md @hummbl-dev/docs-team
+
+# Core package - requires careful review
+/packages/core/ @hummbl-dev/core-team @hummbl-dev/architecture-team
+
+# MCP Server
+/apps/mcp-server/ @hummbl-dev/mcp-team
+
+# Web application
+/apps/web/ @hummbl-dev/frontend-team
+
+# Workers API
+/apps/workers/ @hummbl-dev/backend-team
+
+# CI/CD and workflows
+/.github/ @hummbl-dev/devops-team
+/.github/workflows/ @hummbl-dev/devops-team
+
+# Security and governance
+/SECURITY.md @hummbl-dev/security-team
+/.github/agent-policy.yaml @hummbl-dev/governance-team
+/docs/AGENTS.md @hummbl-dev/governance-team
+
+# Configuration files
+package.json @hummbl-dev/core-team
+pnpm-workspace.yaml @hummbl-dev/core-team
+turbo.json @hummbl-dev/core-team
+tsconfig.json @hummbl-dev/core-team
