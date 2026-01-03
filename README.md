@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/hummbl-dev/hummbl-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/hummbl-dev/hummbl-monorepo/actions/workflows/ci.yml)
 [![PR Checks](https://github.com/hummbl-dev/hummbl-monorepo/actions/workflows/pr.yml/badge.svg)](https://github.com/hummbl-dev/hummbl-monorepo/actions/workflows/pr.yml)
+[![CodeQL](https://github.com/hummbl-dev/hummbl-monorepo/actions/workflows/codeql.yml/badge.svg)](https://github.com/hummbl-dev/hummbl-monorepo/actions/workflows/codeql.yml)
+![Audit Score](https://img.shields.io/badge/Audit%20Score-78%2F100%20(B%2B)-brightgreen)
 
 **Sovereign Intelligence Stack** - A pnpm monorepo for HUMMBL projects and packages.
 
@@ -161,11 +163,18 @@ pnpm -r build
 
 ## Documentation
 
+### Core Documentation
 - **[Transformation Reference](docs/reference/transformations-reference.md)** - Quick reference for all 6 transformations
 - **[Validation Protocol](docs/protocols/transformation-validation.md)** - How to validate transformation references
 - **[Training Examples](docs/examples/transformation-validation-examples.md)** - Correct/incorrect patterns
 - **[Bug Reports](docs/bugs/)** - Incident documentation and fixes
 - **[Improvement Proposals](docs/proposals/)** - Architecture enhancements
+
+### Audit Reports
+- **[Audit Executive Summary](AUDIT_EXECUTIVE_SUMMARY.md)** - Quick overview of repository health (B+ grade)
+- **[Comprehensive Audit Report](COMPREHENSIVE_AUDIT_REPORT.md)** - Detailed analysis of all aspects
+- **[Action Items](ACTION_ITEMS.md)** - Prioritized remediation checklist
+- **[Day 2 Operational Readiness](DAY2_AUDIT.md)** - Production deployment readiness
 
 ## Adding a New Package
 
