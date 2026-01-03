@@ -146,3 +146,12 @@ code,
   outline: 2px solid #FFD700;
   border-radius: 4px;
 }
+.focus-navigation {
+  @apply focus:outline-none focus:ring-offset-2;
+}
+
+.focus-navigation:focus {
+  outline: 3px solid #3b82f6;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
