@@ -181,7 +181,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ models, onFilt
                       type="checkbox"
                       checked={filters.tags.includes(tag)}
                       onChange={() => handleTagToggle(tag)}
-                      className="w-3 h-3 text-blue-500 bg-zinc-900 border-zinc-700 rounded focus:ring-blue-500 focus:ring-1"
+                      className="w-3 h-3 text-blue-500 bg-zinc-900 border-zinc-700 rounded"
                     />
                     <span className="text-xs text-zinc-300">{tag}</span>
                   </label>
@@ -216,7 +216,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ models, onFilt
                   type="checkbox"
                   checked={filters.hasRelatedModels}
                   onChange={handleRelatedModelsToggle}
-                  className="w-3 h-3 text-blue-500 bg-zinc-900 border-zinc-700 rounded focus:ring-blue-500 focus:ring-1"
+                  className="w-3 h-3 text-blue-500 bg-zinc-900 border-zinc-700 rounded"
                 />
                 <span className="text-xs text-zinc-300">Only models with related models</span>
               </label>

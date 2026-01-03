@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://hummbl.dev/schemas/v1.0.0/artifact.schema.json",
+  "title": "Base120 Artifact",
+  "description": "Schema for Base120 governance and compliance artifacts. Version 1.0.0 - FROZEN.",
+  "type": "object",
+  "required": ["id", "domain", "class", "instance", "models"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the artifact",
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "domain": {
+      "type": "string",
+      "description": "Domain classification of the artifact",
+      "minLength": 1
+    },
+    "class": {
+      "type": "string",
+      "description": "Class within the domain",
+      "minLength": 1
+    },
+    "instance": {
+      "type": "string",
+      "description": "Specific instance identifier",
+      "minLength": 1
+    },
+    "models": {
+      "type": "array",
+      "description": "Array of model references used in this artifact",
+      "items": {
+        "type": "object",
+        "required": ["id", "transformation"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Model identifier (e.g., 'RE8', 'SY15')",
+            "pattern": "^(P|IN|CO|DE|RE|SY)[0-9]{1,2}$"
+          },
+          "transformation": {
+            "type": "string",
+            "description": "Transformation code",
+            "enum": ["P", "IN", "CO", "DE", "RE", "SY"]
+          },
+          "weight": {
+            "type": "number",
+            "description": "Optional weight/importance of this model in the artifact",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "rationale": {
+            "type": "string",
+            "description": "Optional rationale for model selection"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional metadata about the artifact",
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 creation timestamp"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 last update timestamp"
+        },
+        "version": {
+          "type": "string",
+          "description": "Artifact version"
+        },
+        "author": {
+          "type": "string",
+          "description": "Artifact author or system"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

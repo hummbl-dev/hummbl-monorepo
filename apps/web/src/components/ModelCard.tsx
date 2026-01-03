@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Base120Model } from '../hooks/useModels';
-import { toast } from './Toast';
 import { ModelPreview } from './ModelPreview';
+import { toast } from './Toast';
 
 const getTransformationColor = (code: string): string => {
   const colors: Record<string, string> = {
@@ -130,7 +130,7 @@ export const ModelCard: React.FC<{ model: Base120Model }> = ({ model }) => {
           <button
             type="button"
             onClick={handleSessionStart}
-            className="flex items-center gap-1 font-mono text-[10px] text-zinc-400 transition-colors hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1"
+            className="flex items-center gap-1 font-mono text-[10px] text-zinc-400 transition-colors hover:text-white focus:outline-none rounded px-2 py-1"
             aria-label={`Copy system prompt for ${model.name} to clipboard`}
           >
             OPEN SESSION
