@@ -1,0 +1,207 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://hummbl.dev/registries/v1.0.0/failure-modes.json",
+  "title": "Base120 Failure Modes Registry",
+  "description": "Registered failure modes (FM1-FM30) for artifact validation. Version 1.0.0 - FROZEN.",
+  "version": "1.0.0",
+  "status": "frozen",
+  "failure_modes": {
+    "FM1": {
+      "code": "FM1",
+      "name": "MISSING_REQUIRED_FIELD",
+      "severity": "error",
+      "description": "A required field is missing from the artifact"
+    },
+    "FM2": {
+      "code": "FM2",
+      "name": "INVALID_FIELD_TYPE",
+      "severity": "error",
+      "description": "A field has an incorrect data type"
+    },
+    "FM3": {
+      "code": "FM3",
+      "name": "INVALID_ID_FORMAT",
+      "severity": "error",
+      "description": "Artifact ID does not match required pattern"
+    },
+    "FM4": {
+      "code": "FM4",
+      "name": "INVALID_MODEL_REFERENCE",
+      "severity": "error",
+      "description": "Model ID does not match valid Base120 model pattern"
+    },
+    "FM5": {
+      "code": "FM5",
+      "name": "INVALID_TRANSFORMATION_CODE",
+      "severity": "error",
+      "description": "Transformation code is not one of: P, IN, CO, DE, RE, SY"
+    },
+    "FM6": {
+      "code": "FM6",
+      "name": "MODEL_TRANSFORMATION_MISMATCH",
+      "severity": "error",
+      "description": "Model ID prefix does not match declared transformation"
+    },
+    "FM7": {
+      "code": "FM7",
+      "name": "EMPTY_MODELS_ARRAY",
+      "severity": "error",
+      "description": "Models array must contain at least one model"
+    },
+    "FM8": {
+      "code": "FM8",
+      "name": "DUPLICATE_MODEL_REFERENCE",
+      "severity": "warning",
+      "description": "Same model referenced multiple times in artifact"
+    },
+    "FM9": {
+      "code": "FM9",
+      "name": "INVALID_WEIGHT_RANGE",
+      "severity": "error",
+      "description": "Model weight must be between 0 and 1"
+    },
+    "FM10": {
+      "code": "FM10",
+      "name": "INVALID_TIMESTAMP_FORMAT",
+      "severity": "error",
+      "description": "Timestamp does not conform to ISO 8601 format"
+    },
+    "FM11": {
+      "code": "FM11",
+      "name": "UNEXPECTED_FIELD",
+      "severity": "warning",
+      "description": "Artifact contains field not defined in schema"
+    },
+    "FM12": {
+      "code": "FM12",
+      "name": "SCHEMA_VERSION_MISMATCH",
+      "severity": "error",
+      "description": "Artifact schema version does not match validator"
+    },
+    "FM13": {
+      "code": "FM13",
+      "name": "EMPTY_STRING_VALUE",
+      "severity": "error",
+      "description": "Required string field is empty"
+    },
+    "FM14": {
+      "code": "FM14",
+      "name": "INVALID_DOMAIN_VALUE",
+      "severity": "warning",
+      "description": "Domain value not in recommended domain list"
+    },
+    "FM15": {
+      "code": "FM15",
+      "name": "INVALID_CLASS_VALUE",
+      "severity": "warning",
+      "description": "Class value not in recommended class list"
+    },
+    "FM16": {
+      "code": "FM16",
+      "name": "NORMALIZATION_FAILURE",
+      "severity": "error",
+      "description": "Artifact could not be normalized deterministically"
+    },
+    "FM17": {
+      "code": "FM17",
+      "name": "HASH_MISMATCH",
+      "severity": "error",
+      "description": "Artifact hash does not match declared SHA-256"
+    },
+    "FM18": {
+      "code": "FM18",
+      "name": "MRCC_MISSING",
+      "severity": "warning",
+      "description": "Canonical artifact lacks MRCC binding"
+    },
+    "FM19": {
+      "code": "FM19",
+      "name": "MRCC_INVALID",
+      "severity": "error",
+      "description": "MRCC does not conform to v1.0 structure"
+    },
+    "FM20": {
+      "code": "FM20",
+      "name": "GOVERNANCE_VERSION_INVALID",
+      "severity": "error",
+      "description": "Governance version not recognized"
+    },
+    "FM21": {
+      "code": "FM21",
+      "name": "MODEL_OUT_OF_RANGE",
+      "severity": "error",
+      "description": "Model number exceeds valid range (1-20)"
+    },
+    "FM22": {
+      "code": "FM22",
+      "name": "CIRCULAR_REFERENCE",
+      "severity": "error",
+      "description": "Artifact contains circular model references"
+    },
+    "FM23": {
+      "code": "FM23",
+      "name": "DOMINANCE_VIOLATION",
+      "severity": "warning",
+      "description": "Model selection violates dominance rules"
+    },
+    "FM24": {
+      "code": "FM24",
+      "name": "INSUFFICIENT_COVERAGE",
+      "severity": "warning",
+      "description": "Artifact does not cover minimum transformation types"
+    },
+    "FM25": {
+      "code": "FM25",
+      "name": "OBSERVABILITY_EMISSION_FAILURE",
+      "severity": "info",
+      "description": "Event emission failed (non-blocking)"
+    },
+    "FM26": {
+      "code": "FM26",
+      "name": "TIMESTAMP_FUTURE",
+      "severity": "warning",
+      "description": "Timestamp is in the future"
+    },
+    "FM27": {
+      "code": "FM27",
+      "name": "ENCODING_ERROR",
+      "severity": "error",
+      "description": "Artifact contains invalid character encoding"
+    },
+    "FM28": {
+      "code": "FM28",
+      "name": "SIZE_LIMIT_EXCEEDED",
+      "severity": "error",
+      "description": "Artifact exceeds maximum allowed size"
+    },
+    "FM29": {
+      "code": "FM29",
+      "name": "RESERVED_FIELD_USED",
+      "severity": "warning",
+      "description": "Artifact uses a reserved field name"
+    },
+    "FM30": {
+      "code": "FM30",
+      "name": "VALIDATION_TIMEOUT",
+      "severity": "error",
+      "description": "Validation exceeded maximum allowed time"
+    }
+  },
+  "severity_levels": {
+    "error": {
+      "level": 0,
+      "description": "Validation failure - artifact is invalid",
+      "blocks_compliance": true
+    },
+    "warning": {
+      "level": 1,
+      "description": "Potential issue - review recommended",
+      "blocks_compliance": false
+    },
+    "info": {
+      "level": 2,
+      "description": "Informational - no action required",
+      "blocks_compliance": false
+    }
+  }
+}
