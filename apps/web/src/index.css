@@ -143,7 +143,7 @@ code,
 
 /* High visibility focus for navigation */
 .focus-navigation:focus {
-  outline: 2px solid #FFD700;
+  outline: 2px solid #ffd700;
   border-radius: 4px;
 }
 .focus-navigation {
