@@ -268,6 +268,7 @@ HUMMBL uses **AI-Native Documentation** to prevent hallucination:
 ---
 
 **Questions?** Check [README.md](../README.md) or ask for clarification. When uncertain about transformations, always validate rather than guess.
+
 - **Monorepo** managed with `pnpm` and Turbo, containing:
   - `apps/`: Main applications (`mcp-server`, `web`, `workers`)
   - `packages/`: Shared libraries (e.g., `core`)
