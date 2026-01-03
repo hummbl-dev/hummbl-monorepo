@@ -204,13 +204,8 @@ analytics.get('/stats', c => {
 
 analytics.get('/health', c => {
   try {
-    let uptime;
-    try {
-      uptime = typeof process !== 'undefined' && process.uptime ? process.uptime() : 0;
-    } catch (error) {
-      console.warn('Unable to get process uptime:', error);
-      uptime = 0;
-    }
+    // Cloudflare Workers don't have process.uptime(), use 0 as fallback
+    const uptime = 0;
 
     const healthData = {
       status: 'healthy',
