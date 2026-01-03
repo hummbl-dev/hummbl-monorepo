@@ -137,10 +137,12 @@ code,
 
 /* Custom focus ring for dark UI */
 .focus-ring {
-  @apply focus:outline-none focus:ring-offset-2;
+  outline: none;
+  box-shadow: 0 4px 4px rgba(0, 0, 255, 0.15);
 }
 
 /* High visibility focus for navigation */
-.focus-navigation {
-  @apply focus:outline-none focus:ring-offset-2;
+.focus-navigation:focus {
+  outline: 2px solid #FFD700;
+  border-radius: 4px;
 }
