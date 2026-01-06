@@ -37,10 +37,10 @@ importers:
         version: link:../../packages/core
       '@modelcontextprotocol/sdk':
         specifier: ^1.25.1
-        version: 1.25.1(hono@4.11.3)(zod@4.3.4)
+        version: 1.25.1(hono@4.11.3)(zod@4.3.5)
       zod:
-        specifier: ^4.1.13
-        version: 4.3.4
+        specifier: ^4.3.5
+        version: 4.3.5
     devDependencies:
       '@hummbl/eslint-config':
         specifier: workspace:*
@@ -173,8 +173,8 @@ importers:
         specifier: ^4.11.1
         version: 4.11.3
       zod:
-        specifier: ^4.1.13
-        version: 4.3.4
+        specifier: ^4.3.5
+        version: 4.3.5
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20251221.0
@@ -201,8 +201,8 @@ importers:
   packages/core:
     dependencies:
       zod:
-        specifier: ^4.1.13
-        version: 4.3.4
+        specifier: ^4.3.5
+        version: 4.3.5
     devDependencies:
       '@hummbl/tsconfig':
         specifier: workspace:*
@@ -299,7 +299,7 @@ importers:
         version: link:../packages/core
       '@modelcontextprotocol/sdk':
         specifier: ^1.24.3
-        version: 1.25.1(hono@4.11.3)(zod@4.3.4)
+        version: 1.25.1(hono@4.11.3)(zod@4.3.5)
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^4.0.16
@@ -3229,8 +3229,8 @@ packages:
   zod@3.22.3:
     resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
 
-  zod@4.3.4:
-    resolution: {integrity: sha512-Zw/uYiiyF6pUT1qmKbZziChgNPRu+ZRneAsMUDU6IwmXdWt5JwcUfy2bvLOCUtz5UniaN/Zx5aFttZYbYc7O/A==}
+  zod@4.3.5:
+    resolution: {integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==}
 
 snapshots:
 
@@ -3821,7 +3821,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@modelcontextprotocol/sdk@1.25.1(hono@4.11.3)(zod@4.3.4)':
+  '@modelcontextprotocol/sdk@1.25.1(hono@4.11.3)(zod@4.3.5)':
     dependencies:
       '@hono/node-server': 1.19.7(hono@4.11.3)
       ajv: 8.17.1
@@ -3837,8 +3837,8 @@ snapshots:
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.1
       raw-body: 3.0.2
-      zod: 4.3.4
-      zod-to-json-schema: 3.25.1(zod@4.3.4)
+      zod: 4.3.5
+      zod-to-json-schema: 3.25.1(zod@4.3.5)
     transitivePeerDependencies:
       - hono
       - supports-color
@@ -4726,8 +4726,8 @@ snapshots:
       '@babel/parser': 7.28.5
       eslint: 9.39.2(jiti@2.6.1)
       hermes-parser: 0.25.1
-      zod: 4.3.4
-      zod-validation-error: 4.0.2(zod@4.3.4)
+      zod: 4.3.5
+      zod-validation-error: 4.0.2(zod@4.3.5)
     transitivePeerDependencies:
       - supports-color
 
@@ -5878,14 +5878,14 @@ snapshots:
       cookie: 1.1.1
       youch-core: 0.3.3
 
-  zod-to-json-schema@3.25.1(zod@4.3.4):
+  zod-to-json-schema@3.25.1(zod@4.3.5):
     dependencies:
-      zod: 4.3.4
+      zod: 4.3.5
 
-  zod-validation-error@4.0.2(zod@4.3.4):
+  zod-validation-error@4.0.2(zod@4.3.5):
     dependencies:
-      zod: 4.3.4
+      zod: 4.3.5
 
   zod@3.22.3: {}
 
-  zod@4.3.4: {}
+  zod@4.3.5: {}
