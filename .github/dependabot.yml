@@ -2,7 +2,7 @@ version: 2
 updates:
   # Enable version updates for npm
   - package-ecosystem: 'npm'
-    directory: '/'
+    directory: '/hummbl-monorepo'
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 10
