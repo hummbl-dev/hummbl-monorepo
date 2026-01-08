@@ -45,6 +45,7 @@ if (isOk(res)) {
   /* res.value */
 }
 ```
+
 - Workspace deps: declare `"@hummbl/core": "workspace:*"`. Keep package versions as workspace references.
 - Artifacts: only under [artifacts](../artifacts); must be normalized, hashed (SHA-256), MRCC-bound. Validator does not validate canonical artifacts.
 
