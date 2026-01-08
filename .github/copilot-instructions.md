@@ -49,6 +49,9 @@ if (isOk(res)) {
 - Workspace deps: declare `"@hummbl/core": "workspace:*"`. Keep package versions as workspace references.
 - Artifacts: only under [artifacts](../artifacts); must be normalized, hashed (SHA-256), MRCC-bound. Validator does not validate canonical artifacts.
 
+- Workspace deps: declare `"@hummbl/core": "workspace:*"`. Keep package versions as workspace references.
+- Artifacts: only under [artifacts](../artifacts); must be normalized, hashed (SHA-256), MRCC-bound. Validator does not validate canonical artifacts.
+
 ## Integration Points
 
 - Use MCP commands for Base120 data; never hardcode failure modes or transformation semantics.
