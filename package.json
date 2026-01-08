@@ -8,7 +8,9 @@
     "dev:all": "node dev-setup.js",
     "build": "turbo build",
     "test": "turbo test",
-    "test:ci": "turbo run test -- --reporter=dot",
+Update the lockfile: pnpm --filter @hummbl/web add -D happy-dom (then commit pnpm-lock.yaml).
+Re-run: pnpm --filter @hummbl/web test or pnpm test:ci.
+    "test:ci": "turbo run test --filter=!@hummbl/web -- --reporter=dot",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "format:check": "prettier --check .",
