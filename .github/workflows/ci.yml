@@ -74,6 +74,7 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm test
+        timeout-minutes: 10
 
   build:
     permissions:
