@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
+concurrency:
+  group: pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate-pr:
     permissions:
@@ -42,16 +46,28 @@ jobs:
     name: PR Checks
     needs: validate-pr
     runs-on: ubuntu-latest
+    env:
+      TURBO_TELEMETRY_DISABLED: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm fetch
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('**/package.json', 'pnpm-lock.yaml', 'turbo.json') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
       - run: pnpm format:check
       - run: pnpm lint
       - run: pnpm type-check
-      - run: pnpm test
+      - run: pnpm test:ci
       - run: pnpm build

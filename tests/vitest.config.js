@@ -4,6 +4,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    exclude: ['e2e/**', '**/e2e/**', '**/tests/e2e/**'],
     testTimeout: 30000,
     coverage: {
       provider: 'v8',
