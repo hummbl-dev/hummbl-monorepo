@@ -1,61 +1,48 @@
-# HUMMBL Monorepo - AI Agent Instructions
+# HUMMBL Monorepo — AI Agent Guide
 
-## Architecture
+Short, actionable rules for this pnpm + Turbo monorepo implementing Base120 (6 transformations × 20 models). Keep outputs concise and aligned with frozen governance.
 
-**pnpm monorepo** (Turbo build) implementing Base120 cognitive framework (6 transformations × 20 models).
+## Architecture & Boundaries
+- Apps: [apps/mcp-server](../apps/mcp-server) (MCP stdio: `search_models`, `get_model_details`, `get_transformation`); [apps/web](../apps/web) (React 19 + Vite + TanStack Query + Tailwind v4); [apps/workers](../apps/workers) (Cloudflare Workers: Hono, D1, KV, R2).
+- Packages: [packages/core](../packages/core) (Result pattern, Zod schemas, shared types); [packages/ui](../packages/ui) shared UI.
+- Registries/Schemas: [registries/failure-modes.json](../registries/failure-modes.json) (FM1–FM30, frozen), [schemas/v1.0.0](../schemas/v1.0.0) (frozen), [artifacts](../artifacts) (sealed, SHA-256 + MRCC).
 
-| Directory          | Purpose                                                                              |
-| ------------------ | ------------------------------------------------------------------------------------ |
-| `apps/mcp-server/` | MCP stdio server exposing `search_models`, `get_model_details`, `get_transformation` |
-| `apps/web/`        | React 19 + Vite + TanStack Query + Tailwind v4                                       |
-| `apps/workers/`    | Cloudflare Workers (Hono, D1, KV, R2)                                                |
-| `packages/core/`   | Result pattern, Zod schemas, shared types                                            |
+## Governance (Frozen)
+- Base120 v1.0.0 is frozen. Allowed: doc clarifications, sealed artifacts, non-behavior tests. Forbidden: validator logic changes, schema mods, failure mode edits. On ambiguity: STOP and ask. Sources: [docs/AGENTS.md](../docs/AGENTS.md), [.github/agent-policy.yaml](agent-policy.yaml).
 
-## ⚠️ CRITICAL: Transformation Validation
-
-**NEVER fabricate transformation meanings.** Always validate first:
-
-```typescript
-// ❌ WRONG: "RE means Reconstruct"
-// ✅ RIGHT: Call get_transformation({ code: 'RE' }) → Returns "Recursion"
+## Transformation Validation
+- Never invent meanings. Always call MCP first:
+```ts
+const t = await get_transformation({ code: 'RE' }); // Recursion
 ```
+- Codes: P, IN, CO, DE, RE, SY. See [docs/bugs/HUMMBL-TRANSFORM-001.md](../docs/bugs/HUMMBL-TRANSFORM-001.md).
 
-Codes: **P** (Perspective), **IN** (Inversion), **CO** (Composition), **DE** (Decomposition), **RE** (Recursion), **SY** (Meta-Systems)
+## Toolchain & Workflows
+- Node 20, pnpm 9.14.4. Use `pnpm fetch` + `pnpm install --frozen-lockfile --prefer-offline` when scripting CI.
+- Pre-commit: `pnpm validate` (lint → type-check → test → build via Turbo).
+- Dev web: `pnpm --filter @hummbl/web dev`; MCP: `pnpm --filter @hummbl/mcp-server dev`; Workers: `pnpm --filter @hummbl/workers dev` (wrangler).
+- If core types fail: `pnpm --filter @hummbl/core build`. Cache issues: `pnpm clean && pnpm install`.
 
-## Governance: Base120 v1.0.0 is FROZEN
+## Testing
+- PR checks use `pnpm test:ci` → `turbo run test --filter=!@hummbl/web -- --reporter=dot` (web tests temporarily skipped due to jsdom/ESM issue). Do not re-enable without fixing `apps/web` Vitest env.
+- Tests co-locate as `*.test.ts`; use Vitest. Coverage lives in `tests/` (see [tests/vitest.config.js](../tests/vitest.config.js)).
 
-- **Allowed**: Doc clarifications (no semantic changes), sealed artifacts with hash+MRCC, non-behavior-altering tests
-- **Forbidden**: Validator logic changes, schema modifications, failure mode redefinitions
-- **On ambiguity**: STOP and ask — do not resolve by assumption
-
-See [docs/AGENTS.md](../docs/AGENTS.md) and [.github/agent-policy.yaml](agent-policy.yaml).
-
-## Key Commands
-
-```bash
-pnpm validate              # Run all checks before commits (lint + type-check + test + build)
-pnpm --filter @hummbl/web dev  # Dev single app
-pnpm clean                 # Fix Turbo cache issues
-```
-
-## Code Patterns
-
-**Result pattern** (never throw in `@hummbl/core`):
-
-```typescript
+## Patterns & Conventions
+- Result pattern in core (no throws):
+```ts
 import { Result, isOk } from '@hummbl/core';
-const result = await Result.fromPromise(asyncOp(), e => new Error(`Failed: ${e}`));
-if (isOk(result)) {
-  /* result.value */
-}
+const res = await Result.fromPromise(asyncOp(), e => new Error(`Failed: ${e}`));
+if (isOk(res)) { /* res.value */ }
 ```
+- Workspace deps: declare `"@hummbl/core": "workspace:*"`. Keep package versions as workspace references.
+- Artifacts: only under [artifacts](../artifacts); must be normalized, hashed (SHA-256), MRCC-bound. Validator does not validate canonical artifacts.
 
-**Workspace deps**: Always use `"@hummbl/core": "workspace:*"` in package.json.
+## Integration Points
+- Use MCP commands for Base120 data; never hardcode failure modes or transformation semantics.
+- Workers/Web boundary: Workers expose REST (Hono) on Cloudflare (D1/KV/R2); Web consumes via TanStack Query. Do not couple to validator internals.
+- Failure modes are read-only: [registries/failure-modes.json](../registries/failure-modes.json).
 
-**Tests**: Co-locate as `*.test.ts`, use Vitest.
+## Do / Don’t
+- Do run `pnpm validate` before commits; prefer Result flows in core; check transformation via MCP.
+- Don’t touch frozen schemas/validator logic/failure modes; don’t bypass MCP for transformations; don’t re-enable web tests in PR checks until jsdom/ESM is fixed.
 
-## Common Fixes
-
-- **Type errors from core**: Run `pnpm --filter @hummbl/core build` first
-- **Build issues**: Run `pnpm clean` then `pnpm install`
-- **Transformation bugs**: See [docs/bugs/HUMMBL-TRANSFORM-001.md](../docs/bugs/HUMMBL-TRANSFORM-001.md)
