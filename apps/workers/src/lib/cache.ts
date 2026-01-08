@@ -34,7 +34,6 @@ const getWorkersCache = async () => {
 const readMemoryCache = <T>(key: string): T | null => {
   const entry = memoryCache.get(key);
   // DEBUG: Log memory cache read
-  // eslint-disable-next-line no-console
   console.log('[MEMORY CACHE] read', {
     key,
     has: !!entry,
@@ -48,7 +47,6 @@ const readMemoryCache = <T>(key: string): T | null => {
 
   if (entry.expiresAt < Date.now()) {
     memoryCache.delete(key);
-    // eslint-disable-next-line no-console
     console.log('[MEMORY CACHE] expired', { key });
     return null;
   }
@@ -62,14 +60,12 @@ const readMemoryCache = <T>(key: string): T | null => {
         Object.prototype.hasOwnProperty.call(parsed, 'constructor'))
     ) {
       memoryCache.delete(key);
-      // eslint-disable-next-line no-console
       console.log('[MEMORY CACHE] prototype pollution detected', { key });
       return null;
     }
     return parsed as T;
   } catch {
     memoryCache.delete(key);
-    // eslint-disable-next-line no-console
     console.log('[MEMORY CACHE] parse error', { key });
     return null;
   }
@@ -82,7 +78,6 @@ const writeMemoryCache = (key: string, payload: string, ttlSeconds: number) => {
     expiresAt,
   });
   // DEBUG: Log memory cache write
-  // eslint-disable-next-line no-console
   console.log('[MEMORY CACHE] write', { key, expiresAt });
 };
 
