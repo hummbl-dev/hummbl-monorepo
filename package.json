@@ -33,6 +33,7 @@
     "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.52.0",
     "eslint": "^9.17.0",
+    "markdownlint-cli": "^0.47.0",
     "prettier": "^3.4.2",
     "turbo": "^2.7.3",
     "typescript": "^5.7.2"
