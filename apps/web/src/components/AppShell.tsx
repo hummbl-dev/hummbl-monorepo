@@ -52,18 +52,17 @@ const STYLES = {
     'pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(120,119,198,0.08),_transparent_55%)]',
   header: 'relative z-50 border-b border-white/5 backdrop-blur-sm bg-obsidian-950/80',
   logo: {
-    container:
-      'flex items-center gap-4 focus:outline-none focus:ring-2 focus:ring-obsidian-400 rounded-lg',
+    container: 'flex items-center gap-4 focus:outline-none rounded-lg',
     icon: 'w-16 h-16 border border-obsidian-700/80 rounded-full flex items-center justify-center text-2xl font-bold font-mono lg:w-12 lg:h-12 lg:text-lg',
     blur: 'absolute inset-0 blur-xl bg-obsidian-500/30',
     brand: 'text-[14px] tracking-[0.35em] text-zinc-400 font-mono uppercase lg:text-[11px]',
     title: 'text-2xl font-light lg:text-xl',
   },
   menuButton:
-    'lg:hidden p-4 bg-obsidian-900/80 border border-obsidian-700/80 rounded-lg backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-obsidian-400',
+    'lg:hidden p-4 bg-obsidian-900/80 border border-obsidian-700/80 rounded-lg backdrop-blur-sm focus:outline-none',
   nav: 'lg:hidden absolute top-full left-0 right-0 bg-obsidian-950/95 border-b border-white/5 backdrop-blur-lg z-40',
   navLink: {
-    base: 'block rounded-md border px-6 py-4 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-obsidian-400 focus:ring-offset-2 focus:ring-offset-black',
+    base: 'block rounded-md border px-6 py-4 transition-all duration-300 focus:outline-none focus:ring-offset-2',
     active: 'border-obsidian-500/70 bg-obsidian-900/80',
     inactive: 'border-obsidian-800/80 hover:border-obsidian-600/80',
   },

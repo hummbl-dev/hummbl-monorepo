@@ -55,7 +55,7 @@ const Toast: React.FC<ToastProps> = ({ message, type = 'system', onClose }) => {
         </div>
         <button
           onClick={onClose}
-          className="text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 rounded p-1"
+          className="text-zinc-500 hover:text-zinc-200 transition-colors focus:outline-none rounded p-1"
           aria-label="Dismiss notification"
         >
           <svg

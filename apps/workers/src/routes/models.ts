@@ -54,7 +54,7 @@ const buildModelsQuery = (filters: { transformation?: TransformationType; search
     if (filters.search.length > 100) {
       throw new Error('Search term too long');
     }
-    const sanitizedSearch = filters.search.replace(/[%_]/g, '\\$&');
+    const sanitizedSearch = filters.search.replace(/[\\%_]/g, '\\$&');
     const searchTerm = `%${sanitizedSearch.toLowerCase()}%`;
     clauses.push('(LOWER(description) LIKE ? OR LOWER(name) LIKE ? OR code LIKE ?)');
     params.push(searchTerm, searchTerm, `%${sanitizedSearch.toUpperCase()}%`);

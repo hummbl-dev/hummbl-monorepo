@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Copilot Instructions for HUMMBL Monorepo
 
 ## Project Architecture
@@ -75,6 +76,8 @@ const re = await get_transformation({ code: 'RE' });
 
 For unclear or missing conventions, check the main [README.md](../README.md) or ask for clarification.
 =======
+=======
+>>>>>>> 3d3cbbff4bea511361276a7e17dff0380b19ab1b
 # HUMMBL Monorepo — AI Agent Guide
 
 Short, actionable rules for this pnpm + Turbo monorepo implementing Base120 (6 transformations × 20 models). Keep outputs concise and aligned with frozen governance.
@@ -139,4 +142,7 @@ if (isOk(res)) {
 
 - Do run `pnpm validate` before commits; prefer Result flows in core; check transformation via MCP.
 - Don’t touch frozen schemas/validator logic/failure modes; don’t bypass MCP for transformations; don’t re-enable web tests in PR checks until jsdom/ESM is fixed.
+<<<<<<< HEAD
+>>>>>>> 3d3cbbff4bea511361276a7e17dff0380b19ab1b
+=======
 >>>>>>> 3d3cbbff4bea511361276a7e17dff0380b19ab1b

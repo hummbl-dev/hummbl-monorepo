@@ -8,6 +8,7 @@
     "dev:all": "node dev-setup.js",
     "build": "turbo build",
     "test": "turbo test",
+    "test:ci": "turbo run test --filter=!@hummbl/web -- --reporter=dot",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "format:check": "prettier --check .",
@@ -28,12 +29,13 @@
     "check-alerts": "node monitoring/alert-system.js"
   },
   "devDependencies": {
-    "@types/node": "^22.10.2",
+    "@types/node": "^25.0.3",
     "@typescript-eslint/eslint-plugin": "^8.18.1",
-    "@typescript-eslint/parser": "^8.18.1",
+    "@typescript-eslint/parser": "^8.52.0",
     "eslint": "^9.17.0",
+    "markdownlint-cli": "^0.47.0",
     "prettier": "^3.4.2",
-    "turbo": "^2.3.3",
+    "turbo": "^2.7.3",
     "typescript": "^5.7.2"
   },
   "packageManager": "pnpm@9.14.4",

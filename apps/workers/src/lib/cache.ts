@@ -1,7 +1,7 @@
 import { Result } from '@hummbl/core';
 import type { Env } from '../env';
-import { logCacheError } from './api';
 import type { ApiError } from './api';
+import { logCacheError } from './api';
 
 interface CacheEntry {
   value: string;
@@ -14,7 +14,7 @@ interface CacheConfig {
   memoryTtlSeconds?: number;
 }
 
-const memoryCache = new Map<string, CacheEntry>();
+export const memoryCache = new Map<string, CacheEntry>();
 
 export const clearMemoryCache = () => {
   // Using DE3 (Decomposition) to keep test hooks separate from runtime logic
@@ -33,6 +33,13 @@ const getWorkersCache = async () => {
 
 const readMemoryCache = <T>(key: string): T | null => {
   const entry = memoryCache.get(key);
+  // DEBUG: Log memory cache read
+  console.log('[MEMORY CACHE] read', {
+    key,
+    has: !!entry,
+    expiresAt: entry?.expiresAt,
+    now: Date.now(),
+  });
 
   if (!entry) {
     return null;
@@ -40,22 +47,38 @@ const readMemoryCache = <T>(key: string): T | null => {
 
   if (entry.expiresAt < Date.now()) {
     memoryCache.delete(key);
+    console.log('[MEMORY CACHE] expired', { key });
     return null;
   }
 
   try {
-    return JSON.parse(entry.value) as T;
+    const parsed = JSON.parse(entry.value);
+    if (
+      parsed &&
+      typeof parsed === 'object' &&
+      (Object.prototype.hasOwnProperty.call(parsed, '__proto__') ||
+        Object.prototype.hasOwnProperty.call(parsed, 'constructor'))
+    ) {
+      memoryCache.delete(key);
+      console.log('[MEMORY CACHE] prototype pollution detected', { key });
+      return null;
+    }
+    return parsed as T;
   } catch {
     memoryCache.delete(key);
+    console.log('[MEMORY CACHE] parse error', { key });
     return null;
   }
 };
 
 const writeMemoryCache = (key: string, payload: string, ttlSeconds: number) => {
+  const expiresAt = Date.now() + ttlSeconds * 1000;
   memoryCache.set(key, {
     value: payload,
-    expiresAt: Date.now() + ttlSeconds * 1000,
+    expiresAt,
   });
+  // DEBUG: Log memory cache write
+  console.log('[MEMORY CACHE] write', { key, expiresAt });
 };
 
 export const getCachedResult = async <T>(
@@ -77,9 +100,27 @@ export const getCachedResult = async <T>(
     const kvPayload = await env.CACHE.get(cacheKey);
     if (kvPayload) {
       try {
-        const parsed = JSON.parse(kvPayload) as T;
-        writeMemoryCache(cacheKey, kvPayload, memoryTtl);
-        return Result.ok(parsed);
+        const parsed = JSON.parse(kvPayload);
+        if (
+          parsed &&
+          typeof parsed === 'object' &&
+          (Object.prototype.hasOwnProperty.call(parsed, '__proto__') ||
+            Object.prototype.hasOwnProperty.call(parsed, 'constructor'))
+        ) {
+          await env.CACHE.delete(cacheKey);
+          logCacheError(
+            `KV prototype pollution attempt for key ${cacheKey}`,
+            new Error('Prototype pollution detected')
+          );
+          return Result.err({
+            code: 'PROTOTYPE_POLLUTION',
+            message: 'Prototype pollution detected in KV cache',
+            status: 400,
+          });
+        } else {
+          writeMemoryCache(cacheKey, kvPayload, memoryTtl);
+          return Result.ok(parsed as T);
+        }
       } catch (parseError) {
         await env.CACHE.delete(cacheKey);
         logCacheError(`KV parse failed for key ${cacheKey}`, parseError);
@@ -96,10 +137,28 @@ export const getCachedResult = async <T>(
     if (cacheResponse) {
       const payload = await cacheResponse.text();
       try {
-        const parsed = JSON.parse(payload) as T;
-        writeMemoryCache(cacheKey, payload, memoryTtl);
-        await env.CACHE.put(cacheKey, payload, { expirationTtl: kvTtl });
-        return Result.ok(parsed);
+        const parsed = JSON.parse(payload);
+        if (
+          parsed &&
+          typeof parsed === 'object' &&
+          (Object.prototype.hasOwnProperty.call(parsed, '__proto__') ||
+            Object.prototype.hasOwnProperty.call(parsed, 'constructor'))
+        ) {
+          await cfCache.delete(cacheRequest);
+          logCacheError(
+            `Workers cache prototype pollution attempt for key ${cacheKey}`,
+            new Error('Prototype pollution detected')
+          );
+          return Result.err({
+            code: 'PROTOTYPE_POLLUTION',
+            message: 'Prototype pollution detected in Workers cache',
+            status: 400,
+          });
+        } else {
+          writeMemoryCache(cacheKey, payload, memoryTtl);
+          await env.CACHE.put(cacheKey, payload, { expirationTtl: kvTtl });
+          return Result.ok(parsed as T);
+        }
       } catch (parseError) {
         await cfCache.delete(cacheRequest);
         logCacheError(`Workers cache parse failed for key ${cacheKey}`, parseError);
