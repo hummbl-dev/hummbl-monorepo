@@ -341,10 +341,10 @@ export class ProtectedDatabase {
 
     // Auth sessions/tokens tables are always auth
     const hasAuthTable = authOnlyTables.some(table => query.includes(table));
-    
+
     // Users table is only auth if combined with auth keywords
-    const hasUsersWithAuth = query.includes('users') && 
-                             authKeywords.some(keyword => query.includes(keyword));
+    const hasUsersWithAuth =
+      query.includes('users') && authKeywords.some(keyword => query.includes(keyword));
 
     return hasAuthTable || hasUsersWithAuth;
   }

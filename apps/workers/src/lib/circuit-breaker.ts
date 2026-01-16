@@ -131,7 +131,7 @@ export class CircuitBreaker {
 
       // Record success
       this.onSuccess();
-			this.updateState(); // Check if we should transition to CLOSED
+      this.updateState(); // Check if we should transition to CLOSED
       return result;
     } catch (error) {
       // Record failure

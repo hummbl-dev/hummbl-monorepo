@@ -108,9 +108,7 @@ export function errorTrackingMiddleware() {
       const responseTime = Date.now() - startTime;
 
       // Classify and track the error
-      const classification = classifyError(
-        err instanceof Error ? error : new Error(String(err))
-      );
+      const classification = classifyError(err instanceof Error ? error : new Error(String(err)));
 
       const errorId = trackError(
         err instanceof Error ? error : new Error(String(err)),
