@@ -107,15 +107,14 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     // Get or create session ID
     let sessionId = sessionStorage.getItem('hummbl-session-id');
     if (!sessionId) {
-      // Generate cryptographically secure random string
+            // Generate cryptographically secure random string
       const randomBytes = new Uint8Array(9);
       window.crypto.getRandomValues(randomBytes);
       const randomStr = Array.from(randomBytes)
-        .map(b => b.toString(36))
+        .map((b) => b.toString(36))
         .join('')
         .substr(0, 9);
-      sessionId = `session_${Date.now()}_${randomStr}`;      sessionStorage.setItem('hummbl-session-id', sessionId);
-    }
+      sessionId = `session_${Date.now()}_${randomStr}`;
     return sessionId;
   }
 
