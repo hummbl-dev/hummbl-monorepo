@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:analyze": "tsc -b && vite build --config vite.config.analyze.ts",
+    "analyze": "pnpm build:analyze && open dist/bundle-analysis.html",
+    "bundle-size": "node scripts/bundle-size-check.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
@@ -25,7 +28,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-force-graph-2d": "^1.29.0",
-    "react-router-dom": "^7.0.2",
+    "react-router-dom": "^7.12.0",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
@@ -44,8 +47,9 @@
     "postcss": "^8.4.47",
     "sonner": "^2.0.7",
     "tailwindcss": "^4.1.18",
-    "typescript": "~5.9.3",
+    "typescript": "^5.7.2",
     "vite": "^7.3.0",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.16",
+    "rollup-plugin-visualizer": "^6.0.5"
   }
 }
