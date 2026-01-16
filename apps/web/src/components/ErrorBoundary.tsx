@@ -109,7 +109,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   private getComponentName(componentStack: string): string {
     // Extract component name from stack trace
-    const match = componentStack.match(/in (\\w+)/);
+    const match = componentStack.match(/in ($\w+)/);
     return match ? match[1] : 'Unknown';
   }
 
