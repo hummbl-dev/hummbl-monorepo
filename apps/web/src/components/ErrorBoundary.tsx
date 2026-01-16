@@ -117,6 +117,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       sessionId = `session_${Date.now()}_${randomStr}`;
     return sessionId;
   }
+      }
 
   private schedulePageReload(): void {
     if (this.retryTimeoutId) {
