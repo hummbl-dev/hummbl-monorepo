@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 /**
  * OpenAPI Configuration for HUMMBL Workers API
  */

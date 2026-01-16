@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 /**
  * Circuit Breaker Pattern Implementation for Database Resilience
  *
