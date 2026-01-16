@@ -16,7 +16,7 @@ import {
 import { createApiError, respondWithResult } from '../lib/api';
 import { getCachedResult } from '../lib/cache';
 import type { ApiError } from '../lib/api';
-import { createProtectedDatabase, ProtectedDatabase, executeWithFallback } from '../lib/db-wrapper';
+import { createProtectedDatabase, ProtectedDatabase } from '../lib/db-wrapper';
 import type { DbOperationContext } from '../lib/db-wrapper';
 
 // Create logger instance for models routes
@@ -440,7 +440,7 @@ modelsRouter.post('/recommend', async c => {
     // Use parameterized query with escaped search terms
     const searchTerm = `%${keywords[0].substring(0, 30)}%`;
 
-    let results;
+    let results: any[] = [];
     try {
       const protectedDb = getProtectedDb(c.env);
       const context: DbOperationContext = {

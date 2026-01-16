@@ -8,4 +8,6 @@
     "types": ["@cloudflare/workers-types"]
   },
   "include": ["src/**/*"]
+,
+  "exclude": ["src/examples/**/*"]
 }

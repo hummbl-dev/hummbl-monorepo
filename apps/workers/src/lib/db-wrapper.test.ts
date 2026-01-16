@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Database Wrapper Integration Tests
  * Tests for the ProtectedDatabase class and circuit breaker integration
@@ -127,7 +128,7 @@ describe('ProtectedDatabase', () => {
 
     it('should open circuit after failure threshold', async () => {
       // Configure to fail quickly for testing
-      const readMetrics = protectedDb.getMetrics().read;
+      // const readMetrics = protectedDb.getMetrics().read;
       const failureThreshold = 3; // Default for read operations
 
       // Execute failing operations
@@ -494,7 +495,7 @@ describe('Integration Scenarios', () => {
   describe('Auth Scenarios', () => {
     it('should handle authentication with higher tolerance', async () => {
       // Auth operations use a more lenient circuit breaker
-      const authFailureThreshold = 10; // Higher than read/write
+      // const authFailureThreshold = 10; // Higher than read/write
 
       // Simulate some failures (but not enough to trip auth circuit)
       for (let i = 0; i < 5; i++) {

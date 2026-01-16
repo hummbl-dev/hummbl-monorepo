@@ -5,7 +5,7 @@
 
 import type { Context, Next } from 'hono';
 import type { Env } from '../env';
-import { createLogger, logError } from '@hummbl/core';
+import { logError } from '@hummbl/core';
 
 // Rate limiting configurations for different endpoint types
 const RATE_LIMITS = {

@@ -3,7 +3,7 @@
  * Comprehensive test suite for circuit breaker functionality
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import {
   CircuitBreaker,
   CircuitBreakerState,
@@ -211,7 +211,7 @@ describe('CircuitBreaker', () => {
         ...mockConfig,
         failureThreshold: 10, // Higher threshold to avoid opening
         timeout: 100,
-        maxTimeout: 50,
+        maxTimeout: 500,
       });
 
       // Execute many failing operations

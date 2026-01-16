@@ -220,7 +220,7 @@ export const logCacheError = (message: string, error: unknown) => {
 
     logger.warn(sanitizedMessage, {
       context: 'cache-error-logging',
-      ...sanitizedError,
+      ...(typeof sanitizedError === "object" && sanitizedError !== null ? sanitizedError : {}),
       timestamp: new Date().toISOString(),
     });
   } catch (logError) {

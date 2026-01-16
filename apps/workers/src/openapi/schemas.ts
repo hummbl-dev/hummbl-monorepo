@@ -3,7 +3,6 @@
  */
 
 import { z } from 'zod';
-import { createRoute } from '@hono/zod-openapi';
 
 // Common schemas
 export const ErrorSchema = z
