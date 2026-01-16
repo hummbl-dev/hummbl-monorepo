@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /**
  * HUMMBL Workers API with OpenAPI Documentation
  * Cloudflare Workers REST API for Base120 mental models

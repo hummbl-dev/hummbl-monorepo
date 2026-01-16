@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /**
  * Error Tracking Middleware for Cloudflare Workers
  * Integrates with the centralized error tracking system

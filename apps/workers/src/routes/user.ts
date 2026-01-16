@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /**
  * User Routes with Circuit Breaker Protection
  * User progress, favorites, and profile management

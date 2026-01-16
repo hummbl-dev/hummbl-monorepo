@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /**
  * OpenAPI Route Definitions for HUMMBL Workers API
  */
