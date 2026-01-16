@@ -115,8 +115,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         .join('')
         .substr(0, 9);
       sessionId = `session_${Date.now()}_${randomStr}`;
+            sessionStorage.setItem('hummbl-session-id', sessionId);
     return sessionId;
   }
+        return sessionId;
       }
 
   private schedulePageReload(): void {
