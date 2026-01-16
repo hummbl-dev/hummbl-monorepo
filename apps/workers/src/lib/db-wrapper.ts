@@ -263,7 +263,7 @@ export class ProtectedDatabase {
    */
   static handleCircuitBreakerError(
     error: CircuitBreakerError,
-    _context?: DbOperationContext
+    context?: DbOperationContext
   ): FallbackResponse {
     console.warn(`[DB_WRAPPER] Providing fallback response for ${error.code}`, {
       operation: context?.operation,
@@ -391,7 +391,7 @@ export class ProtectedDatabase {
   /**
    * Get fallback response for read operations
    */
-  private static getReadFallback(_context?: DbOperationContext): FallbackResponse {
+  private static getReadFallback(context?: DbOperationContext): FallbackResponse {
     // For models/transformations, return empty but valid structure
     if (context?.table === 'mental_models') {
       return {
@@ -410,7 +410,7 @@ export class ProtectedDatabase {
   /**
    * Get fallback response for auth operations
    */
-  private static getAuthFallback(_context?: DbOperationContext): FallbackResponse {
+  private static getAuthFallback(context?: DbOperationContext): FallbackResponse {
     return {
       message: 'Authentication service temporarily unavailable. Please try again shortly.',
       cached: false,
@@ -420,7 +420,7 @@ export class ProtectedDatabase {
   /**
    * Get fallback response for write operations
    */
-  private static getWriteFallback(_context?: DbOperationContext): FallbackResponse {
+  private static getWriteFallback(context?: DbOperationContext): FallbackResponse {
     return {
       message:
         'Write operations temporarily unavailable. Your request has been noted and will be processed when service is restored.',

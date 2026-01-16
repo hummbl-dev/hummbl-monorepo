@@ -122,7 +122,7 @@ export class CircuitBreaker {
         this.getMetrics()
       );
       this.logError(error);
-      throw err;
+      throw error;
     }
 
     try {
@@ -133,22 +133,22 @@ export class CircuitBreaker {
       this.onSuccess();
 			this.updateState(); // Check if we should transition to CLOSED
       return result;
-    } catch {
+    } catch (error) {
       // Record failure
       this.onFailure(error);
 
       // Wrap and re-throw the error with circuit breaker context
-      if (this.isCircuitBreakerError(err)) {
+      if (this.isCircuitBreakerError(error)) {
         throw err;
       }
 
       const cbError = createCircuitBreakerError(
-        `Database operation failed in ${this.config.name}: ${err instanceof Error ? err.message : String(err)}`,
+        `Database operation failed in ${this.config.name}: ${error instanceof Error ? error.message : String(error)}`,
         'DB_ERROR',
         this.state,
         this.getMetrics()
       );
-      this.logError(cbError, err);
+      this.logError(cbError, error);
       throw cbError;
     }
   }
