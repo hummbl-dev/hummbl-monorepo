@@ -130,7 +130,6 @@ export class CircuitBreaker {
 
       // Record success
       this.onSuccess();
-			this.updateState(); // Check if we should transition to CLOSED
       return result;
     } catch (error) {
       // Record failure
@@ -212,7 +211,7 @@ export class CircuitBreaker {
 
       case CircuitBreakerState.OPEN:
         // Check if timeout has elapsed to try half-open
-        if (this.openedAt && now - this.openedAt >= this.config.timeout) {
+        if (this.openedAt && now - this.openedAt >= this.getTimeoutWithBackoff()) {
           this.state = CircuitBreakerState.HALF_OPEN;
           this.consecutiveSuccesses = 0;
           this.logStateChange('HALF_OPEN', 'Timeout elapsed, testing if service recovered');

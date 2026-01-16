@@ -333,19 +333,13 @@ export class ProtectedDatabase {
    * Check if query is authentication-related
    */
   private isAuthQuery(query: string): boolean {
-    // Only classify as auth if doing specific auth operations
-    // Simple table mention isn't enough - check for auth-specific operations
-    const authOnlyTables = ['user_sessions', 'refresh_tokens'];
-    const authKeywords = ['password', 'token', 'login', 'register'];
+    const authTables = ['users', 'user_sessions', 'refresh_tokens'];
+    const authKeywords = ['password', 'token', 'auth', 'login', 'register'];
 
-    // Auth sessions/tokens tables are always auth
-    const hasAuthTable = authOnlyTables.some(table => query.includes(table));
-    
-    // Users table is only auth if combined with auth keywords
-    const hasUsersWithAuth = query.includes('users') && 
-                             authKeywords.some(keyword => query.includes(keyword));
-
-    return hasAuthTable || hasUsersWithAuth;
+    return (
+      authTables.some(table => query.includes(table)) ||
+      authKeywords.some(keyword => query.includes(keyword))
+    );
   }
 
   /**

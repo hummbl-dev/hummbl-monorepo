@@ -17,7 +17,7 @@ describe('CircuitBreaker', () => {
   const mockConfig = {
     failureThreshold: 3,
     timeout: 100,
-    maxTimeout: 5000,
+    maxTimeout: 500,
     successThreshold: 2,
     monitoringWindow: 10000,
     name: 'test-circuit',
@@ -46,7 +46,7 @@ describe('CircuitBreaker', () => {
     });
 
     it('should throw error for invalid maxTimeout', () => {
-      expect(() => new CircuitBreaker({ ...mockConfig, maxTimeout: 500 })).toThrow(
+      expect(() => new CircuitBreaker({ ...mockConfig, maxTimeout: 50 })).toThrow(
         'maxTimeout must be greater than timeout'
       );
     });
@@ -185,6 +185,7 @@ describe('CircuitBreaker', () => {
     it('should increase timeout with consecutive failures', async () => {
       const cb = new CircuitBreaker({
         ...mockConfig,
+        failureThreshold: 10, // Higher threshold to avoid opening
         timeout: 100,
         maxTimeout: 1000,
       });
@@ -208,9 +209,9 @@ describe('CircuitBreaker', () => {
     it('should cap timeout at maxTimeout', async () => {
       const cb = new CircuitBreaker({
         ...mockConfig,
-        timeout: 100,
-        maxTimeout: 500,
         failureThreshold: 10, // Higher threshold to avoid opening
+        timeout: 100,
+        maxTimeout: 50,
       });
 
       // Execute many failing operations
