@@ -271,6 +271,12 @@ export class CircuitBreaker {
     if (this.state === CircuitBreakerState.HALF_OPEN) {
       this.openCircuit(Date.now());
     }
+
+    // Check if we should open the circuit due to consecutive failures
+    if (this.state === CircuitBreakerState.CLOSED &&
+        this.consecutiveFailures >= this.config.failureThreshold) {
+      this.openCircuit(Date.now());
+    }
   }
 
   /**

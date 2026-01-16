@@ -3,10 +3,9 @@
  * Provides tailored tracking for authentication, database, rate limiting, and MCP tool failures
  */
 
-import { trackError, addBreadcrumb, ErrorSeverity, ErrorCategory, type ErrorMetadata } from './error-tracking';
-import { createLogger } from './logger';
+import { trackError, addBreadcrumb, ErrorSeverity, ErrorCategory } from './error-tracking';
 
-const logger = createLogger('specialized-tracking');
+// TODO: Add structured logging for specialized tracking operations
 
 // ===== Authentication Error Tracking =====
 
@@ -70,7 +69,6 @@ export class AuthErrorTracker {
         },
       },
       {
-        authMethod: context.authMethod,
         clientId: context.clientId,
         attemptCount: newAttempts,
         consecutiveFailures: this.getConsecutiveFailures(identifier),
@@ -183,7 +181,6 @@ export class DatabaseErrorTracker {
         },
       },
       {
-        operation,
         table,
         query: context.query ? this.sanitizeQuery(context.query) : undefined,
         rowsAffected: context.rowsAffected,
@@ -299,10 +296,6 @@ export class RateLimitTracker {
         },
       },
       {
-        limit: context.limit,
-        current: context.current,
-        window: context.window,
-        resetTime: new Date(context.resetTime).toISOString(),
         recentViolationCount: recentViolations.length,
         violationPattern: this.analyzeViolationPattern(violations),
         ...context,

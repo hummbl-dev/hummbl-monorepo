@@ -16,7 +16,7 @@ describe('CircuitBreaker', () => {
   let circuitBreaker: CircuitBreaker;
   const mockConfig = {
     failureThreshold: 3,
-    timeout: 1000,
+    timeout: 100,
     maxTimeout: 5000,
     successThreshold: 2,
     monitoringWindow: 10000,
@@ -100,7 +100,7 @@ describe('CircuitBreaker', () => {
       expect(circuitBreaker.getMetrics().state).toBe(CircuitBreakerState.OPEN);
 
       // Wait for timeout and try again
-      await new Promise(resolve => setTimeout(resolve, mockConfig.timeout + 100));
+      await new Promise(resolve => setTimeout(resolve, mockConfig.timeout + 50));
 
       // Next execution should transition to HALF_OPEN
       try {
@@ -129,7 +129,7 @@ describe('CircuitBreaker', () => {
       }
 
       // Wait for timeout
-      await new Promise(resolve => setTimeout(resolve, mockConfig.timeout + 100));
+      await new Promise(resolve => setTimeout(resolve, mockConfig.timeout + 50));
 
       // Execute successful operations to close circuit
       for (let i = 0; i < mockConfig.successThreshold; i++) {
@@ -156,7 +156,7 @@ describe('CircuitBreaker', () => {
       }
 
       // Wait for timeout
-      await new Promise(resolve => setTimeout(resolve, mockConfig.timeout + 100));
+      await new Promise(resolve => setTimeout(resolve, mockConfig.timeout + 50));
 
       // Execute one successful operation to get to HALF_OPEN
       await circuitBreaker.execute(async () => {

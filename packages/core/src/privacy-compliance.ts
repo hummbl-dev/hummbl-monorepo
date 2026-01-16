@@ -88,7 +88,7 @@ class PrivacyCompliantTracker {
     // Check consent if required
     if (this.config.consentRequired && userId) {
       const consent = this.checkConsent(userId);
-      if (!consent.hasConsent) {
+      if (!consent.granted) {
         return this.createMinimalErrorData(data, 'consent_not_granted');
       }
     }
@@ -154,7 +154,7 @@ class PrivacyCompliantTracker {
    * Handle data subject rights requests (GDPR Article 15-22)
    */
   handleDataSubjectRequest(userId: string, requestType: DataSubjectRightType): DataSubjectResponse {
-    const hashedUserId = this.hashUserId(userId);
+    // TODO: Use hashedUserId for secure data subject operations
 
     switch (requestType) {
       case 'access':
@@ -402,7 +402,7 @@ class PrivacyCompliantTracker {
     };
   }
 
-  private createMinimalErrorData(originalData: Record<string, unknown>, reason: string): SanitizedData {
+  private createMinimalErrorData(_originalData: Record<string, unknown>, reason: string): SanitizedData {
     return {
       data: {
         error: 'Error data unavailable',
@@ -480,7 +480,7 @@ class PrivacyCompliantTracker {
     };
   }
 
-  private handleRectificationRequest(userId: string): DataSubjectResponse {
+  private handleRectificationRequest(_userId: string): DataSubjectResponse {
     return {
       requestType: 'rectification',
       status: 'completed',
@@ -489,7 +489,7 @@ class PrivacyCompliantTracker {
     };
   }
 
-  private handlePortabilityRequest(userId: string): DataSubjectResponse {
+  private handlePortabilityRequest(_userId: string): DataSubjectResponse {
     return {
       requestType: 'portability',
       status: 'completed',
@@ -501,7 +501,7 @@ class PrivacyCompliantTracker {
     };
   }
 
-  private handleObjectionRequest(userId: string): DataSubjectResponse {
+  private handleObjectionRequest(_userId: string): DataSubjectResponse {
     return {
       requestType: 'objection',
       status: 'completed',
@@ -510,7 +510,7 @@ class PrivacyCompliantTracker {
     };
   }
 
-  private handleRestrictionRequest(userId: string): DataSubjectResponse {
+  private handleRestrictionRequest(_userId: string): DataSubjectResponse {
     return {
       requestType: 'restriction',
       status: 'completed',

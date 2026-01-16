@@ -6,10 +6,14 @@ import {
   ListToolsRequestSchema,
   type CallToolRequest,
 } from '@modelcontextprotocol/sdk/types.js';
-import { TransformationBuilder, TRANSFORMATION_TEMPLATES, createLogger, logError } from '@hummbl/core';
+import {
+  TransformationBuilder,
+  TRANSFORMATION_TEMPLATES,
+  logError,
+} from '@hummbl/core';
 
 // Create logger instance for MCP server
-const logger = createLogger('mcp-server');
+// TODO: Use logger for operation tracking
 
 const server = new Server(
   { name: 'hummbl-transformation-builder', version: '1.0.0' },
