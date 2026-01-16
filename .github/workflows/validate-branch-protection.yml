@@ -1,0 +1,309 @@
+name: Validate Branch Protection
+
+on:
+  schedule:
+    # Run daily at 9 AM UTC to check branch protection status
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/validate-branch-protection.yml'
+      - '.github/branch-protection-config.json'
+      - '.github/BRANCH_PROTECTION_SETUP.md'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  validate-protection:
+    name: Validate Branch Protection Rules
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate branch protection configuration
+        id: validate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+
+          # Colors for output
+          RED='\033[0;31m'
+          GREEN='\033[0;32m'
+          YELLOW='\033[1;33m'
+          NC='\033[0m' # No Color
+
+          echo "🔍 Validating branch protection rules for main branch..."
+
+          # Get current branch protection settings
+          PROTECTION_DATA=$(gh api repos/${{ github.repository }}/branches/main/protection 2>/dev/null || echo "null")
+
+          if [ "$PROTECTION_DATA" = "null" ]; then
+            echo -e "${RED}❌ No branch protection rules found for main branch${NC}"
+            echo "::set-output name=status::failed"
+            echo "::set-output name=message::No branch protection rules configured"
+            exit 1
+          fi
+
+          # Load expected configuration
+          EXPECTED_CONFIG=$(cat .github/branch-protection-config.json)
+
+          # Validation flags
+          VALIDATION_FAILED=false
+          ISSUES_FOUND=""
+
+          echo -e "${YELLOW}📋 Checking required status checks...${NC}"
+
+          # Extract status check contexts from API response
+          STATUS_CHECKS=$(echo "$PROTECTION_DATA" | jq -r '.required_status_checks.contexts[]? // empty' 2>/dev/null || true)
+
+          # Expected status checks from config
+          EXPECTED_CHECKS=$(echo "$EXPECTED_CONFIG" | jq -r '.protectionRules.requiredStatusChecks.contexts[]')
+
+          # Check each expected status check
+          while IFS= read -r expected_check; do
+            if echo "$STATUS_CHECKS" | grep -Fxq "$expected_check"; then
+              echo -e "${GREEN}✅ ${expected_check}${NC}"
+            else
+              echo -e "${RED}❌ Missing: ${expected_check}${NC}"
+              VALIDATION_FAILED=true
+              ISSUES_FOUND="${ISSUES_FOUND}- Missing required status check: ${expected_check}\n"
+            fi
+          done <<< "$EXPECTED_CHECKS"
+
+          echo -e "${YELLOW}🔒 Checking pull request review requirements...${NC}"
+
+          # Check PR review requirements
+          PR_REVIEWS=$(echo "$PROTECTION_DATA" | jq '.required_pull_request_reviews // {}')
+
+          REQUIRED_APPROVALS=$(echo "$PR_REVIEWS" | jq -r '.required_approving_review_count // 0')
+          DISMISS_STALE=$(echo "$PR_REVIEWS" | jq -r '.dismiss_stale_reviews // false')
+          REQUIRE_CODE_OWNERS=$(echo "$PR_REVIEWS" | jq -r '.require_code_owner_reviews // false')
+
+          if [ "$REQUIRED_APPROVALS" -ge 1 ]; then
+            echo -e "${GREEN}✅ Required approving reviews: ${REQUIRED_APPROVALS}${NC}"
+          else
+            echo -e "${RED}❌ Required approving reviews: ${REQUIRED_APPROVALS} (should be ≥1)${NC}"
+            VALIDATION_FAILED=true
+            ISSUES_FOUND="${ISSUES_FOUND}- Insufficient required approving reviews\n"
+          fi
+
+          if [ "$DISMISS_STALE" = "true" ]; then
+            echo -e "${GREEN}✅ Dismiss stale reviews: enabled${NC}"
+          else
+            echo -e "${RED}❌ Dismiss stale reviews: disabled${NC}"
+            VALIDATION_FAILED=true
+            ISSUES_FOUND="${ISSUES_FOUND}- Stale review dismissal not enabled\n"
+          fi
+
+          if [ "$REQUIRE_CODE_OWNERS" = "true" ]; then
+            echo -e "${GREEN}✅ Require code owner reviews: enabled${NC}"
+          else
+            echo -e "${RED}❌ Require code owner reviews: disabled${NC}"
+            VALIDATION_FAILED=true
+            ISSUES_FOUND="${ISSUES_FOUND}- Code owner review requirement not enabled\n"
+          fi
+
+          echo -e "${YELLOW}👑 Checking admin enforcement...${NC}"
+
+          ENFORCE_ADMINS=$(echo "$PROTECTION_DATA" | jq -r '.enforce_admins.enabled // false')
+          if [ "$ENFORCE_ADMINS" = "true" ]; then
+            echo -e "${GREEN}✅ Enforce restrictions for administrators: enabled${NC}"
+          else
+            echo -e "${RED}❌ Enforce restrictions for administrators: disabled${NC}"
+            VALIDATION_FAILED=true
+            ISSUES_FOUND="${ISSUES_FOUND}- Administrator enforcement not enabled\n"
+          fi
+
+          echo -e "${YELLOW}🚫 Checking deletion and force push restrictions...${NC}"
+
+          ALLOW_DELETIONS=$(echo "$PROTECTION_DATA" | jq -r '.allow_deletions.enabled // true')
+          ALLOW_FORCE_PUSHES=$(echo "$PROTECTION_DATA" | jq -r '.allow_force_pushes.enabled // true')
+
+          if [ "$ALLOW_DELETIONS" = "false" ]; then
+            echo -e "${GREEN}✅ Allow deletions: disabled${NC}"
+          else
+            echo -e "${RED}❌ Allow deletions: enabled (should be disabled)${NC}"
+            VALIDATION_FAILED=true
+            ISSUES_FOUND="${ISSUES_FOUND}- Branch deletion is allowed\n"
+          fi
+
+          if [ "$ALLOW_FORCE_PUSHES" = "false" ]; then
+            echo -e "${GREEN}✅ Allow force pushes: disabled${NC}"
+          else
+            echo -e "${RED}❌ Allow force pushes: enabled (should be disabled)${NC}"
+            VALIDATION_FAILED=true
+            ISSUES_FOUND="${ISSUES_FOUND}- Force pushes are allowed\n"
+          fi
+
+          # Check if CODEOWNERS file exists
+          echo -e "${YELLOW}📝 Checking CODEOWNERS file...${NC}"
+          if [ -f ".github/CODEOWNERS" ]; then
+            echo -e "${GREEN}✅ CODEOWNERS file exists${NC}"
+            OWNERS_COUNT=$(grep -v '^#' .github/CODEOWNERS | grep -v '^$' | wc -l | tr -d ' ')
+            echo -e "${GREEN}   Found ${OWNERS_COUNT} ownership rules${NC}"
+          else
+            echo -e "${RED}❌ CODEOWNERS file missing${NC}"
+            VALIDATION_FAILED=true
+            ISSUES_FOUND="${ISSUES_FOUND}- CODEOWNERS file not found\n"
+          fi
+
+          # Set outputs
+          if [ "$VALIDATION_FAILED" = "true" ]; then
+            echo -e "${RED}🚨 Branch protection validation FAILED${NC}"
+            echo "::set-output name=status::failed"
+            echo "::set-output name=message::${ISSUES_FOUND}"
+
+            # Create summary
+            cat >> $GITHUB_STEP_SUMMARY << EOF
+          ## 🚨 Branch Protection Validation Failed
+
+          The following issues were found with the main branch protection rules:
+
+          ${ISSUES_FOUND}
+
+          ### Next Steps
+          1. Review the [Branch Protection Setup Guide](.github/BRANCH_PROTECTION_SETUP.md)
+          2. Apply the missing configurations using GitHub UI or CLI
+          3. Re-run this workflow to verify fixes
+
+          ### Current Configuration
+          \`\`\`json
+          $(echo "$PROTECTION_DATA" | jq '.')
+          \`\`\`
+          EOF
+
+            exit 1
+          else
+            echo -e "${GREEN}🎉 All branch protection rules are correctly configured!${NC}"
+            echo "::set-output name=status::passed"
+            echo "::set-output name=message::All validations passed"
+
+            # Create success summary
+            cat >> $GITHUB_STEP_SUMMARY << EOF
+          ## ✅ Branch Protection Validation Passed
+
+          All required branch protection rules are correctly configured for the main branch:
+
+          - ✅ Required status checks are enforced
+          - ✅ Pull request reviews are required
+          - ✅ Code owner reviews are required
+          - ✅ Stale review dismissal is enabled
+          - ✅ Administrator restrictions are enforced
+          - ✅ Deletions and force pushes are blocked
+          - ✅ CODEOWNERS file is present
+
+          Last validated: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          EOF
+          fi
+
+      - name: Create issue for failed validation
+        if: failure() && steps.validate.outputs.status == 'failed'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🚨 Branch Protection Rules Validation Failed';
+            const body = `
+            ## Issue Summary
+            The automated branch protection validation has failed. The main branch does not have the required protection rules properly configured.
+
+            ## Issues Found
+            ${process.env.ISSUES_FOUND || 'See workflow logs for details'}
+
+            ## Action Required
+            1. Review the [Branch Protection Setup Guide](.github/BRANCH_PROTECTION_SETUP.md)
+            2. Apply the missing configurations using one of the provided methods
+            3. Re-run the [validation workflow](${context.payload.repository.html_url}/actions/workflows/validate-branch-protection.yml)
+
+            ## Workflow Run
+            - **Run ID**: ${context.runId}
+            - **Triggered by**: ${context.eventName}
+            - **Timestamp**: ${new Date().toISOString()}
+
+            ## Related Files
+            - Configuration: [\`.github/branch-protection-config.json\`](.github/branch-protection-config.json)
+            - Setup Guide: [\`.github/BRANCH_PROTECTION_SETUP.md\`](.github/BRANCH_PROTECTION_SETUP.md)
+
+            ---
+            This issue was automatically created by the branch protection validation workflow.
+            `;
+
+            // Check if an issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['security', 'branch-protection']
+            });
+
+            const existingIssue = issues.data.find(issue =>
+              issue.title.includes('Branch Protection Rules Validation Failed')
+            );
+
+            if (existingIssue) {
+              // Update existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `## 🔄 Validation Failed Again\n\n${body}`
+              });
+              console.log(`Updated existing issue #${existingIssue.number}`);
+            } else {
+              // Create new issue
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['security', 'branch-protection', 'high-priority']
+              });
+              console.log(`Created new issue #${issue.data.number}`);
+            }
+        env:
+          ISSUES_FOUND: ${{ steps.validate.outputs.message }}
+
+      - name: Close resolved issues
+        if: success() && steps.validate.outputs.status == 'passed'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Find and close any open branch protection issues
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['security', 'branch-protection']
+            });
+
+            for (const issue of issues.data) {
+              if (issue.title.includes('Branch Protection Rules Validation Failed')) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: '✅ **Resolved**: Branch protection rules validation is now passing. Closing this issue automatically.'
+                });
+
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                  state_reason: 'completed'
+                });
+
+                console.log(`Closed resolved issue #${issue.number}`);
+              }
+            }

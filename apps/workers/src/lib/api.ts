@@ -2,6 +2,10 @@ import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import type { Env } from '../env';
 import type { Result } from '@hummbl/core';
+import { createLogger, logError } from '@hummbl/core';
+
+// Create logger instance for API operations
+const logger = createLogger('api');
 
 export interface ApiError {
   code: string;
@@ -39,7 +43,7 @@ export const createApiError = (
 
     return error;
   } catch (error) {
-    console.error('Error creating API error:', error);
+    logError(error, { context: 'api-error-creation', timestamp: new Date().toISOString() });
     return {
       code: 'error_creation_failed',
       message: 'Failed to create error response',
@@ -60,7 +64,10 @@ export const respondWithResult = <T>(
       try {
         sanitizedValue = sanitizeResponseData(result.value);
       } catch (error) {
-        console.error('Error sanitizing response data:', error);
+        logError(error, {
+          context: 'api-response-sanitization',
+          timestamp: new Date().toISOString(),
+        });
         return c.json(
           {
             ok: false,
@@ -111,7 +118,7 @@ export const respondWithResult = <T>(
       status
     );
   } catch (error) {
-    console.error('Error in respondWithResult:', error);
+    logError(error, { context: 'api-respond-with-result', timestamp: new Date().toISOString() });
     return c.json(
       {
         ok: false,
@@ -211,8 +218,16 @@ export const logCacheError = (message: string, error: unknown) => {
       sanitizedError = 'Unknown error type';
     }
 
-    console.warn(`[CACHE] ${sanitizedMessage}`, sanitizedError);
+    logger.warn(sanitizedMessage, {
+      context: 'cache-error-logging',
+      ...(typeof sanitizedError === 'object' && sanitizedError !== null ? sanitizedError : {}),
+      timestamp: new Date().toISOString(),
+    });
   } catch (logError) {
-    console.warn('[CACHE] Error logging cache error:', logError);
+    logger.error('Error logging cache error', {
+      context: 'cache-error-logging-failure',
+      error: logError,
+      timestamp: new Date().toISOString(),
+    });
   }
 };

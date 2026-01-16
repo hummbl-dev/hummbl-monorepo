@@ -7,6 +7,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "dev": "wrangler dev",
+    "dev:docs": "wrangler dev src/index-openapi.ts",
     "deploy": "wrangler deploy",
     "deploy:staging": "wrangler deploy --env staging",
     "deploy:production": "wrangler deploy --env production",
@@ -14,11 +15,16 @@
     "build": "tsc",
     "type-check": "tsc --noEmit",
     "lint": "eslint src",
-    "test": "vitest run"
+    "test": "vitest run",
+    "docs:validate": "tsx scripts/validate-docs.ts",
+    "docs:dev": "wrangler dev src/index-openapi.ts",
+    "docs:preview": "echo 'Visit http://localhost:8787/docs for Swagger UI and /redoc for ReDoc'"
   },
   "dependencies": {
+    "@hono/swagger-ui": "^0.5.3",
+    "@hono/zod-openapi": "^1.2.0",
     "@hummbl/core": "workspace:*",
-    "hono": "^4.11.1",
+    "hono": "^4.11.4",
     "zod": "^4.3.5"
   },
   "devDependencies": {
@@ -26,7 +32,9 @@
     "@hummbl/eslint-config": "workspace:*",
     "@hummbl/tsconfig": "workspace:*",
     "@types/node": "^25.0.3",
-    "typescript": "~5.9.3",
+    "chalk": "^5.6.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.2",
     "vitest": "^4.0.16",
     "wrangler": "^4.53.0"
   }
