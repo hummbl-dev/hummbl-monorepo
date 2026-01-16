@@ -16,6 +16,9 @@ on:
       - 'package.json'
       - 'pnpm-lock.yaml'
 
+permissions:
+  contents: read
+
 jobs:
   bundle-size:
     name: Check Bundle Size
