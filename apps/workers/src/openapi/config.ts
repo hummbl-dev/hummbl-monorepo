@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * OpenAPI Configuration for HUMMBL Workers API
  */

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * User Routes with Circuit Breaker Protection
  * User progress, favorites, and profile management

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * OpenAPI Route Definitions for HUMMBL Workers API
  */
