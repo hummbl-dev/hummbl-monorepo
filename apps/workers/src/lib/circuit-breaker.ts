@@ -9,9 +9,9 @@
  */
 
 export enum CircuitBreakerState {
-  CLOSED = 'CLOSED',     // Normal operation
-  OPEN = 'OPEN',         // Circuit tripped, failing fast
-  HALF_OPEN = 'HALF_OPEN' // Testing if service recovered
+  CLOSED = 'CLOSED', // Normal operation
+  OPEN = 'OPEN', // Circuit tripped, failing fast
+  HALF_OPEN = 'HALF_OPEN', // Testing if service recovered
 }
 
 export interface CircuitBreakerConfig {
@@ -235,7 +235,10 @@ export class CircuitBreaker {
     this.openedAt = now;
     this.circuitOpens++;
     this.consecutiveSuccesses = 0;
-    this.logStateChange('OPEN', `Circuit opened due to ${this.consecutiveFailures} consecutive failures`);
+    this.logStateChange(
+      'OPEN',
+      `Circuit opened due to ${this.consecutiveFailures} consecutive failures`
+    );
   }
 
   /**
@@ -245,7 +248,10 @@ export class CircuitBreaker {
     this.state = CircuitBreakerState.CLOSED;
     this.openedAt = null;
     this.consecutiveFailures = 0;
-    this.logStateChange('CLOSED', `Circuit closed after ${this.consecutiveSuccesses} consecutive successes`);
+    this.logStateChange(
+      'CLOSED',
+      `Circuit closed after ${this.consecutiveSuccesses} consecutive successes`
+    );
   }
 
   /**
@@ -273,8 +279,10 @@ export class CircuitBreaker {
     }
 
     // Check if we should open the circuit due to consecutive failures
-    if (this.state === CircuitBreakerState.CLOSED &&
-        this.consecutiveFailures >= this.config.failureThreshold) {
+    if (
+      this.state === CircuitBreakerState.CLOSED &&
+      this.consecutiveFailures >= this.config.failureThreshold
+    ) {
       this.openCircuit(Date.now());
     }
   }
@@ -299,7 +307,7 @@ export class CircuitBreaker {
       totalRequests: this.totalRequests,
       circuitOpens: this.circuitOpens,
       failureRate,
-      uptime
+      uptime,
     };
   }
 
@@ -322,8 +330,8 @@ export class CircuitBreaker {
         failures: metrics.failures,
         successes: metrics.successes,
         consecutiveFailures: metrics.consecutiveFailures,
-        uptime: `${(metrics.uptime / 1000).toFixed(1)}s`
-      }
+        uptime: `${(metrics.uptime / 1000).toFixed(1)}s`,
+      },
     });
   }
 
@@ -334,16 +342,19 @@ export class CircuitBreaker {
     console.error(`[CIRCUIT_BREAKER][${this.config.name}] ${error.message}`, {
       code: error.code,
       state: error.circuitState,
-      cause: cause instanceof Error ? {
-        name: cause.name,
-        message: cause.message,
-        stack: cause.stack?.substring(0, 500)
-      } : String(cause).substring(0, 200),
+      cause:
+        cause instanceof Error
+          ? {
+              name: cause.name,
+              message: cause.message,
+              stack: cause.stack?.substring(0, 500),
+            }
+          : String(cause).substring(0, 200),
       metrics: {
         failureRate: error.metrics.failureRate.toFixed(3),
         consecutiveFailures: error.metrics.consecutiveFailures,
-        totalRequests: error.metrics.totalRequests
-      }
+        totalRequests: error.metrics.totalRequests,
+      },
     });
   }
 
@@ -368,34 +379,34 @@ export class CircuitBreaker {
  * Default circuit breaker configuration for database operations
  */
 export const DEFAULT_DB_CIRCUIT_CONFIG: CircuitBreakerConfig = {
-  failureThreshold: 5,      // Open after 5 consecutive failures
-  timeout: 10000,           // 10 second timeout
-  maxTimeout: 60000,        // Max 1 minute with backoff
-  successThreshold: 3,      // Close after 3 consecutive successes
-  monitoringWindow: 60000,  // 1 minute monitoring window
-  name: 'database'
+  failureThreshold: 5, // Open after 5 consecutive failures
+  timeout: 10000, // 10 second timeout
+  maxTimeout: 60000, // Max 1 minute with backoff
+  successThreshold: 3, // Close after 3 consecutive successes
+  monitoringWindow: 60000, // 1 minute monitoring window
+  name: 'database',
 };
 
 /**
  * Circuit breaker configuration for authentication operations (more lenient)
  */
 export const AUTH_CIRCUIT_CONFIG: CircuitBreakerConfig = {
-  failureThreshold: 10,     // Open after 10 failures (auth is critical)
-  timeout: 5000,            // 5 second timeout
-  maxTimeout: 30000,        // Max 30 seconds with backoff
-  successThreshold: 2,      // Close after 2 successes
-  monitoringWindow: 30000,  // 30 second monitoring window
-  name: 'auth-database'
+  failureThreshold: 10, // Open after 10 failures (auth is critical)
+  timeout: 5000, // 5 second timeout
+  maxTimeout: 30000, // Max 30 seconds with backoff
+  successThreshold: 2, // Close after 2 successes
+  monitoringWindow: 30000, // 30 second monitoring window
+  name: 'auth-database',
 };
 
 /**
  * Circuit breaker configuration for read operations (most lenient)
  */
 export const READ_CIRCUIT_CONFIG: CircuitBreakerConfig = {
-  failureThreshold: 3,      // Open after 3 failures (reads can fail fast)
-  timeout: 3000,            // 3 second timeout
-  maxTimeout: 15000,        // Max 15 seconds with backoff
-  successThreshold: 2,      // Close after 2 successes
-  monitoringWindow: 30000,  // 30 second monitoring window
-  name: 'read-database'
+  failureThreshold: 3, // Open after 3 failures (reads can fail fast)
+  timeout: 3000, // 3 second timeout
+  maxTimeout: 15000, // Max 15 seconds with backoff
+  successThreshold: 2, // Close after 2 successes
+  monitoringWindow: 30000, // 30 second monitoring window
+  name: 'read-database',
 };

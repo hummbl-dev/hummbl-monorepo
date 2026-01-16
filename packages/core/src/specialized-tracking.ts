@@ -18,7 +18,12 @@ export interface AuthErrorContext {
   ipAddress?: string;
   userAgent?: string;
   endpoint: string;
-  reason: 'invalid_credentials' | 'expired_token' | 'malformed_token' | 'missing_token' | 'insufficient_permissions';
+  reason:
+    | 'invalid_credentials'
+    | 'expired_token'
+    | 'malformed_token'
+    | 'missing_token'
+    | 'insufficient_permissions';
 }
 
 export class AuthErrorTracker {
@@ -39,17 +44,12 @@ export class AuthErrorTracker {
     if (newAttempts >= 10) severity = ErrorSeverity.HIGH;
     if (newAttempts >= 20) severity = ErrorSeverity.CRITICAL;
 
-    addBreadcrumb(
-      'auth-failure',
-      `Authentication failure: ${context.reason}`,
-      'warning',
-      {
-        method: context.authMethod,
-        endpoint: context.endpoint,
-        attempts: newAttempts,
-        reason: context.reason,
-      }
-    );
+    addBreadcrumb('auth-failure', `Authentication failure: ${context.reason}`, 'warning', {
+      method: context.authMethod,
+      endpoint: context.endpoint,
+      attempts: newAttempts,
+      reason: context.reason,
+    });
 
     return trackError(
       new Error(`Authentication failed: ${context.reason}`),
@@ -83,12 +83,10 @@ export class AuthErrorTracker {
     this.failureAttempts.delete(identifier);
     this.lastAttemptTime.delete(identifier);
 
-    addBreadcrumb(
-      'auth-success',
-      `Successful authentication for user: ${userId}`,
-      'info',
-      { userId, ipAddress }
-    );
+    addBreadcrumb('auth-success', `Successful authentication for user: ${userId}`, 'info', {
+      userId,
+      ipAddress,
+    });
   }
 
   private getConsecutiveFailures(identifier: string): number {
@@ -191,30 +189,33 @@ export class DatabaseErrorTracker {
     );
   }
 
-  trackSlowQuery(query: string, executionTime: number, context: Partial<DatabaseErrorContext> = {}): void {
-    if (executionTime > 1000) { // Slower than 1 second
-      addBreadcrumb(
-        'slow-query',
-        `Slow query detected: ${executionTime}ms`,
-        'warning',
-        { executionTime, table: context.table }
-      );
+  trackSlowQuery(
+    query: string,
+    executionTime: number,
+    context: Partial<DatabaseErrorContext> = {}
+  ): void {
+    if (executionTime > 1000) {
+      // Slower than 1 second
+      addBreadcrumb('slow-query', `Slow query detected: ${executionTime}ms`, 'warning', {
+        executionTime,
+        table: context.table,
+      });
 
-      this.trackDatabaseError(
-        new Error(`Slow query: ${executionTime}ms`),
-        {
-          operation: 'read',
-          queryTime: executionTime,
-          query,
-          ...context,
-        }
-      );
+      this.trackDatabaseError(new Error(`Slow query: ${executionTime}ms`), {
+        operation: 'read',
+        queryTime: executionTime,
+        query,
+        ...context,
+      });
     }
   }
 
   private hashQuery(query: string): string {
     // Simple hash for query identification (remove parameters)
-    const normalized = query.replace(/\$\d+|\?\?|\'/g, '?').replace(/\s+/g, ' ').trim();
+    const normalized = query
+      .replace(/\$\d+|\?\?|\'/g, '?')
+      .replace(/\s+/g, ' ')
+      .trim();
     return normalized.substring(0, 100);
   }
 
@@ -313,7 +314,9 @@ export class RateLimitTracker {
     if (violations.length < 2) return 'isolated';
 
     const recentViolations = violations.slice(-5);
-    const timeDiffs = recentViolations.slice(1).map((v, i) => v.timestamp - recentViolations[i].timestamp);
+    const timeDiffs = recentViolations
+      .slice(1)
+      .map((v, i) => v.timestamp - recentViolations[i].timestamp);
     const averageInterval = timeDiffs.reduce((sum, diff) => sum + diff, 0) / timeDiffs.length;
 
     if (averageInterval < 1000) return 'burst';
@@ -365,17 +368,12 @@ export class MCPToolTracker {
       severity = ErrorSeverity.HIGH;
     }
 
-    addBreadcrumb(
-      'mcp-tool-error',
-      `MCP tool failure: ${toolName}.${operation}`,
-      'error',
-      {
-        toolName,
-        operation,
-        retryAttempt: context.retryAttempt,
-        providerId: context.providerId,
-      }
-    );
+    addBreadcrumb('mcp-tool-error', `MCP tool failure: ${toolName}.${operation}`, 'error', {
+      toolName,
+      operation,
+      retryAttempt: context.retryAttempt,
+      providerId: context.providerId,
+    });
 
     return trackError(
       error,
@@ -426,7 +424,8 @@ export class MCPToolTracker {
 
     for (const [toolKey, stats] of this.toolReliability.entries()) {
       const [toolName, operation] = toolKey.split(':');
-      const successRate = stats.attempts > 0 ? ((stats.attempts - stats.failures) / stats.attempts) * 100 : 0;
+      const successRate =
+        stats.attempts > 0 ? ((stats.attempts - stats.failures) / stats.attempts) * 100 : 0;
 
       report[toolKey] = {
         toolName,
@@ -486,7 +485,11 @@ export function trackDatabaseError(error: Error, context: DatabaseErrorContext):
   return databaseErrorTracker.trackDatabaseError(error, context);
 }
 
-export function trackSlowQuery(query: string, executionTime: number, context?: Partial<DatabaseErrorContext>): void {
+export function trackSlowQuery(
+  query: string,
+  executionTime: number,
+  context?: Partial<DatabaseErrorContext>
+): void {
   databaseErrorTracker.trackSlowQuery(query, executionTime, context);
 }
 

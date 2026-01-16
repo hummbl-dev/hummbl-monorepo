@@ -38,15 +38,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     const { level = 'component', onError } = this.props;
 
     // Add breadcrumb for the error context
-    addBreadcrumb(
-      'react-error',
-      `Error boundary caught error: ${error.message}`,
-      'error',
-      {
-        componentStack: errorInfo.componentStack,
-        level,
-      }
-    );
+    addBreadcrumb('react-error', `Error boundary caught error: ${error.message}`, 'error', {
+      componentStack: errorInfo.componentStack,
+      level,
+    });
 
     // Determine error severity based on level
     const severity = this.getSeverityFromLevel(level);
@@ -132,12 +127,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       this.retryTimeoutId = null;
     }
 
-    addBreadcrumb(
-      'user-action',
-      'User retried after error boundary catch',
-      'info',
-      { errorId: this.state.errorId }
-    );
+    addBreadcrumb('user-action', 'User retried after error boundary catch', 'info', {
+      errorId: this.state.errorId,
+    });
 
     this.setState({
       hasError: false,
@@ -176,7 +168,12 @@ interface DefaultErrorFallbackProps {
   onRetry: () => void;
 }
 
-function DefaultErrorFallback({ level, errorMessage, errorId, onRetry }: DefaultErrorFallbackProps) {
+function DefaultErrorFallback({
+  level,
+  errorMessage,
+  errorId,
+  onRetry,
+}: DefaultErrorFallbackProps) {
   const isPageLevel = level === 'page' || level === 'critical';
 
   return (

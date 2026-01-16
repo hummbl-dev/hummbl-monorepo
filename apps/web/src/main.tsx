@@ -15,33 +15,27 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 1000 * 60 * 5,
       retry: 1,
-      onError: (error) => {
-        trackError(
-          error instanceof Error ? error : new Error(String(error)),
-          {
-            severity: ErrorSeverity.MEDIUM,
-            category: ErrorCategory.NETWORK,
-            tags: {
-              type: 'query-error',
-              source: 'react-query',
-            },
-          }
-        );
+      onError: error => {
+        trackError(error instanceof Error ? error : new Error(String(error)), {
+          severity: ErrorSeverity.MEDIUM,
+          category: ErrorCategory.NETWORK,
+          tags: {
+            type: 'query-error',
+            source: 'react-query',
+          },
+        });
       },
     },
     mutations: {
-      onError: (error) => {
-        trackError(
-          error instanceof Error ? error : new Error(String(error)),
-          {
-            severity: ErrorSeverity.HIGH,
-            category: ErrorCategory.NETWORK,
-            tags: {
-              type: 'mutation-error',
-              source: 'react-query',
-            },
-          }
-        );
+      onError: error => {
+        trackError(error instanceof Error ? error : new Error(String(error)), {
+          severity: ErrorSeverity.HIGH,
+          category: ErrorCategory.NETWORK,
+          tags: {
+            type: 'mutation-error',
+            source: 'react-query',
+          },
+        });
       },
     },
   },

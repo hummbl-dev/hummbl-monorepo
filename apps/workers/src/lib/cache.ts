@@ -50,7 +50,11 @@ const readMemoryCache = <T>(key: string): T | null => {
 
   if (entry.expiresAt < Date.now()) {
     memoryCache.delete(key);
-    logger.debug('Memory cache entry expired', { context: 'cache-expiry', key, timestamp: new Date().toISOString() });
+    logger.debug('Memory cache entry expired', {
+      context: 'cache-expiry',
+      key,
+      timestamp: new Date().toISOString(),
+    });
     return null;
   }
 
@@ -63,13 +67,21 @@ const readMemoryCache = <T>(key: string): T | null => {
         Object.prototype.hasOwnProperty.call(parsed, 'constructor'))
     ) {
       memoryCache.delete(key);
-      logger.warn('Prototype pollution detected in cache key', { context: 'cache-security', key, timestamp: new Date().toISOString() });
+      logger.warn('Prototype pollution detected in cache key', {
+        context: 'cache-security',
+        key,
+        timestamp: new Date().toISOString(),
+      });
       return null;
     }
     return parsed as T;
   } catch {
     memoryCache.delete(key);
-    logger.error('Cache parse error', { context: 'cache-parse-error', key, timestamp: new Date().toISOString() });
+    logger.error('Cache parse error', {
+      context: 'cache-parse-error',
+      key,
+      timestamp: new Date().toISOString(),
+    });
     return null;
   }
 };
@@ -81,7 +93,12 @@ const writeMemoryCache = (key: string, payload: string, ttlSeconds: number) => {
     expiresAt,
   });
   // DEBUG: Log memory cache write
-  logger.debug('Memory cache write', { context: 'cache-write', key, expiresAt, timestamp: new Date().toISOString() });
+  logger.debug('Memory cache write', {
+    context: 'cache-write',
+    key,
+    expiresAt,
+    timestamp: new Date().toISOString(),
+  });
 };
 
 export const getCachedResult = async <T>(

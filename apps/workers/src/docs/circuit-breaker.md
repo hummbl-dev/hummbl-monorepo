@@ -27,16 +27,19 @@ The HUMMBL Workers API implements a comprehensive circuit breaker pattern to pro
 ## Circuit Breaker States
 
 ### CLOSED (Normal Operation)
+
 - All requests pass through to the database
 - Failure count is tracked
 - Transitions to OPEN when failure threshold is reached
 
 ### OPEN (Failing Fast)
+
 - Requests fail immediately without calling the database
 - Prevents cascading failures
 - Transitions to HALF_OPEN after timeout period
 
 ### HALF_OPEN (Testing Recovery)
+
 - Limited requests are allowed through to test service recovery
 - Transitions to CLOSED after successful requests
 - Transitions back to OPEN on any failure
@@ -48,32 +51,32 @@ The HUMMBL Workers API implements a comprehensive circuit breaker pattern to pro
 ```typescript
 // Read operations (most lenient)
 export const READ_CIRCUIT_CONFIG = {
-  failureThreshold: 3,      // Open after 3 failures
-  timeout: 3000,            // 3 second timeout
-  maxTimeout: 15000,        // Max 15 seconds with backoff
-  successThreshold: 2,      // Close after 2 successes
-  monitoringWindow: 30000,  // 30 second monitoring window
-  name: 'read-database'
+  failureThreshold: 3, // Open after 3 failures
+  timeout: 3000, // 3 second timeout
+  maxTimeout: 15000, // Max 15 seconds with backoff
+  successThreshold: 2, // Close after 2 successes
+  monitoringWindow: 30000, // 30 second monitoring window
+  name: 'read-database',
 };
 
 // Write operations (balanced)
 export const DEFAULT_DB_CIRCUIT_CONFIG = {
-  failureThreshold: 5,      // Open after 5 consecutive failures
-  timeout: 10000,           // 10 second timeout
-  maxTimeout: 60000,        // Max 1 minute with backoff
-  successThreshold: 3,      // Close after 3 consecutive successes
-  monitoringWindow: 60000,  // 1 minute monitoring window
-  name: 'database'
+  failureThreshold: 5, // Open after 5 consecutive failures
+  timeout: 10000, // 10 second timeout
+  maxTimeout: 60000, // Max 1 minute with backoff
+  successThreshold: 3, // Close after 3 consecutive successes
+  monitoringWindow: 60000, // 1 minute monitoring window
+  name: 'database',
 };
 
 // Auth operations (most tolerant)
 export const AUTH_CIRCUIT_CONFIG = {
-  failureThreshold: 10,     // Open after 10 failures (auth is critical)
-  timeout: 5000,            // 5 second timeout
-  maxTimeout: 30000,        // Max 30 seconds with backoff
-  successThreshold: 2,      // Close after 2 successes
-  monitoringWindow: 30000,  // 30 second monitoring window
-  name: 'auth-database'
+  failureThreshold: 10, // Open after 10 failures (auth is critical)
+  timeout: 5000, // 5 second timeout
+  maxTimeout: 30000, // Max 30 seconds with backoff
+  successThreshold: 2, // Close after 2 successes
+  monitoringWindow: 30000, // 30 second monitoring window
+  name: 'auth-database',
 };
 ```
 
@@ -81,12 +84,12 @@ export const AUTH_CIRCUIT_CONFIG = {
 
 ```typescript
 const customConfig: CircuitBreakerConfig = {
-  failureThreshold: 5,      // Number of failures before opening
-  timeout: 10000,           // Base timeout in milliseconds
-  maxTimeout: 60000,        // Maximum timeout with exponential backoff
-  successThreshold: 3,      // Successes needed to close from half-open
-  monitoringWindow: 60000,  // Time window for failure rate calculation
-  name: 'custom-circuit'    // Name for logging and metrics
+  failureThreshold: 5, // Number of failures before opening
+  timeout: 10000, // Base timeout in milliseconds
+  maxTimeout: 60000, // Maximum timeout with exponential backoff
+  successThreshold: 3, // Successes needed to close from half-open
+  monitoringWindow: 60000, // Time window for failure rate calculation
+  name: 'custom-circuit', // Name for logging and metrics
 };
 
 const circuitBreaker = new CircuitBreaker(customConfig);
@@ -103,16 +106,14 @@ import { createProtectedDatabase } from '../lib/db-wrapper';
 const protectedDb = createProtectedDatabase(c.env.DB);
 
 // Read operation with circuit protection
-const models = await protectedDb.prepare(
-  'SELECT * FROM mental_models WHERE transformation = ?',
-  {
+const models = await protectedDb
+  .prepare('SELECT * FROM mental_models WHERE transformation = ?', {
     operation: 'read',
     table: 'mental_models',
-    query: 'SELECT ... FROM mental_models WHERE ...'
-  }
-)
-.bind(transformation)
-.all();
+    query: 'SELECT ... FROM mental_models WHERE ...',
+  })
+  .bind(transformation)
+  .all();
 ```
 
 ### Error Handling with Fallbacks
@@ -126,12 +127,12 @@ try {
     // Circuit is open - provide fallback response
     console.warn('Circuit breaker active', {
       state: error.circuitState,
-      operation: context.operation
+      operation: context.operation,
     });
 
     return Result.ok({
       models: [], // Empty fallback
-      message: 'Models temporarily unavailable'
+      message: 'Models temporarily unavailable',
     });
   }
 
@@ -144,15 +145,13 @@ try {
 
 ```typescript
 // High-priority operations use auth circuit breaker
-const user = await protectedDb.prepare(
-  'SELECT * FROM users WHERE email = ? AND provider = ?',
-  {
+const user = await protectedDb
+  .prepare('SELECT * FROM users WHERE email = ? AND provider = ?', {
     operation: 'auth',
-    table: 'users'
-  }
-)
-.bind(email, 'email')
-.first();
+    table: 'users',
+  })
+  .bind(email, 'email')
+  .first();
 
 if (!user) {
   return c.json({ error: 'Invalid credentials' }, 401);
@@ -164,7 +163,7 @@ if (!user) {
 ```typescript
 const statements = [
   db.prepare('INSERT INTO user_progress VALUES (?, ?, ?)'),
-  db.prepare('UPDATE users SET updated_at = ? WHERE id = ?')
+  db.prepare('UPDATE users SET updated_at = ? WHERE id = ?'),
 ];
 
 const results = await protectedDb.batch(statements);
@@ -259,16 +258,19 @@ curl -X POST /v1/circuit-breaker/reset/read
 ## Fallback Strategies
 
 ### Read Operations
+
 - Return empty arrays for list endpoints
 - Return cached data when available
 - Provide "temporarily unavailable" messages
 
 ### Write Operations
+
 - Return "operation queued" messages
 - Log requests for later processing
 - Maintain user experience with optimistic UI
 
 ### Authentication
+
 - Allow cached token validation when possible
 - Provide clear error messages about service availability
 - Maintain security while degrading gracefully
@@ -276,6 +278,7 @@ curl -X POST /v1/circuit-breaker/reset/read
 ## Error Types and Responses
 
 ### Circuit Open Error
+
 ```javascript
 {
   code: 'CIRCUIT_OPEN',
@@ -286,6 +289,7 @@ curl -X POST /v1/circuit-breaker/reset/read
 ```
 
 ### Database Error
+
 ```javascript
 {
   code: 'DB_ERROR',
@@ -296,6 +300,7 @@ curl -X POST /v1/circuit-breaker/reset/read
 ```
 
 ### Timeout Error
+
 ```javascript
 {
   code: 'TIMEOUT',
@@ -308,20 +313,24 @@ curl -X POST /v1/circuit-breaker/reset/read
 ## Best Practices
 
 ### 1. Operation Classification
+
 Always specify the operation type for optimal circuit breaker selection:
 
 ```typescript
 // Good - explicit operation type
-const result = await protectedDb.prepare(query, {
-  operation: 'read',
-  table: 'mental_models'
-}).all();
+const result = await protectedDb
+  .prepare(query, {
+    operation: 'read',
+    table: 'mental_models',
+  })
+  .all();
 
 // Okay - will auto-detect from query
 const result = await protectedDb.prepare('SELECT * FROM mental_models').all();
 ```
 
 ### 2. Graceful Degradation
+
 Always provide meaningful fallbacks:
 
 ```typescript
@@ -329,12 +338,13 @@ if (ProtectedDatabase.isCircuitBreakerError(error)) {
   return {
     models: [],
     message: 'Service temporarily unavailable. Please try again shortly.',
-    degraded: true
+    degraded: true,
   };
 }
 ```
 
 ### 3. Monitoring Integration
+
 Use structured logging for better monitoring:
 
 ```typescript
@@ -343,11 +353,12 @@ logger.warn('Circuit breaker activated', {
   circuit: 'read',
   state: error.circuitState,
   path: c.req.path,
-  timestamp: new Date().toISOString()
+  timestamp: new Date().toISOString(),
 });
 ```
 
 ### 4. Testing Circuit Behavior
+
 Use the circuit reset endpoint for testing:
 
 ```typescript
@@ -361,16 +372,19 @@ fetch('/v1/circuit-breaker/reset/read', { method: 'POST' });
 ## Performance Considerations
 
 ### 1. Circuit Breaker Overhead
+
 - Minimal latency impact (< 1ms per operation)
 - Memory usage scales with operation volume
 - Exponential backoff prevents resource waste
 
 ### 2. Database Connection Pooling
+
 - Circuit breakers work with D1's built-in connection management
 - Failures are detected at the operation level, not connection level
 - Multiple workers can have independent circuit states
 
 ### 3. Cache Integration
+
 - Circuit breakers complement the existing KV cache layer
 - Failed operations can trigger cache fallbacks
 - Cache misses are not treated as circuit failures
@@ -380,6 +394,7 @@ fetch('/v1/circuit-breaker/reset/read', { method: 'POST' });
 ### Recommended Alerts
 
 1. **Circuit Open Alert** - Immediate notification
+
    ```javascript
    if (circuitState === 'OPEN') {
      alert('Database circuit breaker opened');
@@ -387,6 +402,7 @@ fetch('/v1/circuit-breaker/reset/read', { method: 'POST' });
    ```
 
 2. **High Failure Rate** - Warning notification
+
    ```javascript
    if (failureRate > 0.1) {
      warn('Database failure rate above 10%');
@@ -403,25 +419,29 @@ fetch('/v1/circuit-breaker/reset/read', { method: 'POST' });
 ### Integration Examples
 
 #### Slack Webhook
+
 ```typescript
 await fetch(SLACK_WEBHOOK_URL, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     text: `🚨 Circuit Breaker Alert: ${circuit} circuit is ${state}`,
-    blocks: [{
-      type: 'section',
-      fields: [
-        { type: 'mrkdwn', text: `*Circuit:* ${circuit}` },
-        { type: 'mrkdwn', text: `*State:* ${state}` },
-        { type: 'mrkdwn', text: `*Failure Rate:* ${(failureRate * 100).toFixed(2)}%` }
-      ]
-    }]
-  })
+    blocks: [
+      {
+        type: 'section',
+        fields: [
+          { type: 'mrkdwn', text: `*Circuit:* ${circuit}` },
+          { type: 'mrkdwn', text: `*State:* ${state}` },
+          { type: 'mrkdwn', text: `*Failure Rate:* ${(failureRate * 100).toFixed(2)}%` },
+        ],
+      },
+    ],
+  }),
 });
 ```
 
 #### PagerDuty Integration
+
 ```typescript
 await fetch('https://events.pagerduty.com/v2/enqueue', {
   method: 'POST',
@@ -432,9 +452,9 @@ await fetch('https://events.pagerduty.com/v2/enqueue', {
     payload: {
       summary: `Database circuit breaker opened: ${circuit}`,
       source: 'hummbl-workers-api',
-      severity: 'critical'
-    }
-  })
+      severity: 'critical',
+    },
+  }),
 });
 ```
 

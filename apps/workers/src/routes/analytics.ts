@@ -17,7 +17,11 @@ export function trackRequest(endpoint: string, userAgent?: string) {
   try {
     // Validate and sanitize inputs
     if (!endpoint || typeof endpoint !== 'string' || endpoint.length > 200) {
-      logger.warn('Invalid endpoint for tracking', { context: 'analytics-invalid-endpoint', endpoint: endpoint?.substring(0, 100), timestamp: new Date().toISOString() });
+      logger.warn('Invalid endpoint for tracking', {
+        context: 'analytics-invalid-endpoint',
+        endpoint: endpoint?.substring(0, 100),
+        timestamp: new Date().toISOString(),
+      });
       return;
     }
 
@@ -52,7 +56,11 @@ export function trackModelAccess(modelId: string) {
       modelId.length > 20 ||
       !/^[A-Z0-9]+$/.test(modelId)
     ) {
-      logger.warn('Invalid model ID for tracking', { context: 'analytics-invalid-model-id', modelId: modelId?.substring(0, 50), timestamp: new Date().toISOString() });
+      logger.warn('Invalid model ID for tracking', {
+        context: 'analytics-invalid-model-id',
+        modelId: modelId?.substring(0, 50),
+        timestamp: new Date().toISOString(),
+      });
       return;
     }
 
@@ -80,7 +88,11 @@ export function trackSearch(query: string) {
   try {
     // Validate and sanitize query
     if (!query || typeof query !== 'string' || query.length > 200) {
-      logger.warn('Invalid search query for tracking', { context: 'analytics-invalid-search', query: query?.substring(0, 100), timestamp: new Date().toISOString() });
+      logger.warn('Invalid search query for tracking', {
+        context: 'analytics-invalid-search',
+        query: query?.substring(0, 100),
+        timestamp: new Date().toISOString(),
+      });
       return;
     }
 
@@ -125,7 +137,10 @@ analytics.get('/stats', c => {
         r => r && typeof r.timestamp === 'number' && r.timestamp > last24h && r.timestamp <= now
       );
     } catch (error) {
-      logError(error, { context: 'analytics-filter-requests', timestamp: new Date().toISOString() });
+      logError(error, {
+        context: 'analytics-filter-requests',
+        timestamp: new Date().toISOString(),
+      });
       recentRequests = [];
     }
 

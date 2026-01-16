@@ -5,6 +5,7 @@ This is a condensed guide for immediately implementing branch protection rules f
 ## 🚀 Immediate Implementation (5 minutes)
 
 ### Option 1: GitHub Web UI (Recommended)
+
 1. Go to your repository → **Settings** → **Branches**
 2. Click **"Add rule"**
 3. Branch name pattern: `main`
@@ -31,6 +32,7 @@ This is a condensed guide for immediately implementing branch protection rules f
 5. Click **"Create"**
 
 ### Option 2: GitHub CLI (Power Users)
+
 ```bash
 gh api repos/:owner/:repo/branches/main/protection --method PUT --field required_status_checks='{"strict": true, "contexts": ["CI / Format Check", "CI / Lint", "CI / Type Check", "CI / Test", "CI / Build", "CodeQL Security Scanning / Analyze"]}' --field enforce_admins=true --field required_pull_request_reviews='{"required_approving_review_count": 1, "dismiss_stale_reviews": true, "require_code_owner_reviews": true}' --field restrictions=null --field allow_deletions=false --field allow_force_pushes=false --field require_conversation_resolution=true
 ```
@@ -66,14 +68,17 @@ CodeQL Security Scanning / Analyze
 ## 🆘 Troubleshooting
 
 **Status checks not appearing?**
+
 - Wait for CI to run once on main branch first
 - Check exact names in your workflow files
 
 **Code owner reviews not working?**
+
 - CODEOWNERS file exists at `/Users/others/Developer/hummbl/hummbl-monorepo/.github/CODEOWNERS`
 - Team `@hummbl-dev` has repository access
 
 **Need help?**
+
 - See full guide: [BRANCH_PROTECTION_SETUP.md](/Users/others/Developer/hummbl/hummbl-monorepo/.github/BRANCH_PROTECTION_SETUP.md)
 - Use checklist: [BRANCH_PROTECTION_CHECKLIST.md](/Users/others/Developer/hummbl/hummbl-monorepo/.github/BRANCH_PROTECTION_CHECKLIST.md)
 

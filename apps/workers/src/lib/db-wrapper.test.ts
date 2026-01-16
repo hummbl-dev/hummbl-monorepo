@@ -74,9 +74,12 @@ describe('ProtectedDatabase', () => {
     it('should detect auth operations from table name', async () => {
       mockDb._mockStatement.first.mockResolvedValue({ id: '1' });
 
-      await protectedDb.prepare('SELECT * FROM users WHERE email = ?', {
-        operation: 'auth'
-      }).bind('test@example.com').first();
+      await protectedDb
+        .prepare('SELECT * FROM users WHERE email = ?', {
+          operation: 'auth',
+        })
+        .bind('test@example.com')
+        .first();
 
       expect(mockDb.prepare).toHaveBeenCalled();
     });
@@ -84,10 +87,12 @@ describe('ProtectedDatabase', () => {
     it('should use explicit operation context', async () => {
       mockDb._mockStatement.all.mockResolvedValue({ results: [] });
 
-      await protectedDb.prepare('SELECT * FROM some_table', {
-        operation: 'write',
-        table: 'some_table'
-      }).all();
+      await protectedDb
+        .prepare('SELECT * FROM some_table', {
+          operation: 'write',
+          table: 'some_table',
+        })
+        .all();
 
       // Should work regardless of query pattern if explicitly specified
       expect(mockDb.prepare).toHaveBeenCalled();
@@ -179,9 +184,12 @@ describe('ProtectedDatabase', () => {
 
       // Write operations should still work
       mockDb._mockStatement.run.mockResolvedValue({ success: true });
-      await protectedDb.prepare('INSERT INTO users VALUES (?, ?)', {
-        operation: 'write'
-      }).bind('1', 'test').run();
+      await protectedDb
+        .prepare('INSERT INTO users VALUES (?, ?)', {
+          operation: 'write',
+        })
+        .bind('1', 'test')
+        .run();
 
       const metrics = protectedDb.getMetrics();
       expect(metrics.read.state).toBe(CircuitBreakerState.OPEN);
@@ -200,7 +208,7 @@ describe('ProtectedDatabase', () => {
 
       const fallback = ProtectedDatabase.handleCircuitBreakerError(error, {
         operation: 'read',
-        table: 'mental_models'
+        table: 'mental_models',
       });
 
       expect(fallback.models).toEqual([]);
@@ -217,21 +225,21 @@ describe('ProtectedDatabase', () => {
       // Read fallback
       const readFallback = ProtectedDatabase.handleCircuitBreakerError(error, {
         operation: 'read',
-        table: 'mental_models'
+        table: 'mental_models',
       });
       expect(readFallback.models).toEqual([]);
 
       // Auth fallback
       const authFallback = ProtectedDatabase.handleCircuitBreakerError(error, {
         operation: 'auth',
-        table: 'users'
+        table: 'users',
       });
       expect(authFallback.message).toContain('Authentication service');
 
       // Write fallback
       const writeFallback = ProtectedDatabase.handleCircuitBreakerError(error, {
         operation: 'write',
-        table: 'user_progress'
+        table: 'user_progress',
       });
       expect(writeFallback.message).toContain('Write operations');
     });
@@ -284,13 +292,10 @@ describe('ProtectedDatabase', () => {
     it('should handle batch operations through circuit breaker', async () => {
       const mockStatements = [
         { bind: vi.fn().mockReturnThis() },
-        { bind: vi.fn().mockReturnThis() }
+        { bind: vi.fn().mockReturnThis() },
       ];
 
-      mockDb.batch.mockResolvedValue([
-        { success: true },
-        { success: true }
-      ]);
+      mockDb.batch.mockResolvedValue([{ success: true }, { success: true }]);
 
       const result = await protectedDb.batch(mockStatements as any);
 
@@ -299,9 +304,7 @@ describe('ProtectedDatabase', () => {
     });
 
     it('should handle batch operation failures', async () => {
-      const mockStatements = [
-        { bind: vi.fn().mockReturnThis() }
-      ];
+      const mockStatements = [{ bind: vi.fn().mockReturnThis() }];
 
       mockDb.batch.mockRejectedValue(new Error('Batch failed'));
 
@@ -345,9 +348,12 @@ describe('ProtectedDatabase', () => {
       await protectedDb.prepare('SELECT * FROM users').all();
 
       mockDb._mockStatement.run.mockResolvedValue({ success: true });
-      await protectedDb.prepare('INSERT INTO users VALUES (?)', {
-        operation: 'write'
-      }).bind('test').run();
+      await protectedDb
+        .prepare('INSERT INTO users VALUES (?)', {
+          operation: 'write',
+        })
+        .bind('test')
+        .run();
 
       // Reset
       protectedDb.resetCircuitBreakers();
@@ -396,14 +402,14 @@ describe('Integration Scenarios', () => {
       mockDb._mockStatement.all.mockResolvedValue({
         results: [
           { code: 'TEST1', name: 'Test Model 1' },
-          { code: 'TEST2', name: 'Test Model 2' }
-        ]
+          { code: 'TEST2', name: 'Test Model 2' },
+        ],
       });
 
-      const statement = protectedDb.prepare(
-        'SELECT code, name FROM mental_models ORDER BY code',
-        { operation: 'read', table: 'mental_models' }
-      );
+      const statement = protectedDb.prepare('SELECT code, name FROM mental_models ORDER BY code', {
+        operation: 'read',
+        table: 'mental_models',
+      });
 
       const result = await statement.all();
 
@@ -419,13 +425,16 @@ describe('Integration Scenarios', () => {
     it('should handle model recommendations with fallback', async () => {
       // First successful call
       mockDb._mockStatement.all.mockResolvedValueOnce({
-        results: [{ code: 'TEST1', name: 'Test Model' }]
+        results: [{ code: 'TEST1', name: 'Test Model' }],
       });
 
-      const result1 = await protectedDb.prepare(
-        'SELECT code, name FROM mental_models WHERE description LIKE ?',
-        { operation: 'read', table: 'mental_models' }
-      ).bind('%problem%').all();
+      const result1 = await protectedDb
+        .prepare('SELECT code, name FROM mental_models WHERE description LIKE ?', {
+          operation: 'read',
+          table: 'mental_models',
+        })
+        .bind('%problem%')
+        .all();
 
       expect(result1.results).toHaveLength(1);
 
@@ -433,10 +442,13 @@ describe('Integration Scenarios', () => {
       mockDb._mockStatement.all.mockRejectedValue(new Error('Database connection lost'));
 
       try {
-        await protectedDb.prepare(
-          'SELECT code, name FROM mental_models WHERE description LIKE ?',
-          { operation: 'read', table: 'mental_models' }
-        ).bind('%problem%').all();
+        await protectedDb
+          .prepare('SELECT code, name FROM mental_models WHERE description LIKE ?', {
+            operation: 'read',
+            table: 'mental_models',
+          })
+          .bind('%problem%')
+          .all();
       } catch (error: any) {
         expect(error.isCircuitBreakerError).toBe(true);
       }
@@ -447,25 +459,29 @@ describe('Integration Scenarios', () => {
     it('should handle user progress tracking', async () => {
       // Get progress
       mockDb._mockStatement.all.mockResolvedValueOnce({
-        results: [
-          { model_id: 'TEST1', completed_at: '2023-01-01' }
-        ]
+        results: [{ model_id: 'TEST1', completed_at: '2023-01-01' }],
       });
 
-      const progressResult = await protectedDb.prepare(
-        'SELECT model_id, completed_at FROM user_progress WHERE user_id = ?',
-        { operation: 'read', table: 'user_progress' }
-      ).bind('user-123').all();
+      const progressResult = await protectedDb
+        .prepare('SELECT model_id, completed_at FROM user_progress WHERE user_id = ?', {
+          operation: 'read',
+          table: 'user_progress',
+        })
+        .bind('user-123')
+        .all();
 
       expect(progressResult.results).toHaveLength(1);
 
       // Add progress
       mockDb._mockStatement.run.mockResolvedValueOnce({ success: true });
 
-      const addResult = await protectedDb.prepare(
-        'INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)',
-        { operation: 'write', table: 'user_progress' }
-      ).bind('progress-123', 'user-123', 'TEST2').run();
+      const addResult = await protectedDb
+        .prepare('INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)', {
+          operation: 'write',
+          table: 'user_progress',
+        })
+        .bind('progress-123', 'user-123', 'TEST2')
+        .run();
 
       expect(addResult.success).toBe(true);
 
@@ -484,10 +500,10 @@ describe('Integration Scenarios', () => {
       for (let i = 0; i < 5; i++) {
         mockDb._mockStatement.first.mockRejectedValueOnce(new Error('Auth error'));
         try {
-          await protectedDb.prepare(
-            'SELECT * FROM users WHERE email = ?',
-            { operation: 'auth', table: 'users' }
-          ).bind('test@example.com').first();
+          await protectedDb
+            .prepare('SELECT * FROM users WHERE email = ?', { operation: 'auth', table: 'users' })
+            .bind('test@example.com')
+            .first();
         } catch (error) {
           // Expected to fail
         }
@@ -501,13 +517,13 @@ describe('Integration Scenarios', () => {
       // Successful auth should still work
       mockDb._mockStatement.first.mockResolvedValue({
         id: 'user-123',
-        email: 'test@example.com'
+        email: 'test@example.com',
       });
 
-      const result = await protectedDb.prepare(
-        'SELECT * FROM users WHERE email = ?',
-        { operation: 'auth', table: 'users' }
-      ).bind('test@example.com').first();
+      const result = await protectedDb
+        .prepare('SELECT * FROM users WHERE email = ?', { operation: 'auth', table: 'users' })
+        .bind('test@example.com')
+        .first();
 
       expect(result.id).toBe('user-123');
     });
@@ -522,9 +538,12 @@ describe('Integration Scenarios', () => {
       // Failed write (should not affect read circuit)
       mockDb._mockStatement.run.mockRejectedValueOnce(new Error('Write failed'));
       try {
-        await protectedDb.prepare('INSERT INTO users VALUES (?)', {
-          operation: 'write'
-        }).bind('test').run();
+        await protectedDb
+          .prepare('INSERT INTO users VALUES (?)', {
+            operation: 'write',
+          })
+          .bind('test')
+          .run();
       } catch (error) {
         // Expected to fail
       }

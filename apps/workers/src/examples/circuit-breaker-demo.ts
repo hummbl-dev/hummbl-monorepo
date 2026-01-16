@@ -17,12 +17,12 @@ async function basicCircuitBreakerExample() {
 
   // Create a circuit breaker with custom config
   const circuitBreaker = new CircuitBreaker({
-    failureThreshold: 3,    // Open after 3 failures
-    timeout: 2000,          // 2 second timeout
-    maxTimeout: 10000,      // Max 10 seconds with backoff
-    successThreshold: 2,    // Close after 2 successes
-    monitoringWindow: 30000,// 30 second window
-    name: 'demo-circuit'
+    failureThreshold: 3, // Open after 3 failures
+    timeout: 2000, // 2 second timeout
+    maxTimeout: 10000, // Max 10 seconds with backoff
+    successThreshold: 2, // Close after 2 successes
+    monitoringWindow: 30000, // 30 second window
+    name: 'demo-circuit',
   });
 
   // Simulate a database operation function
@@ -106,12 +106,12 @@ async function databaseWrapperExample() {
             throw new Error('Write operation failed');
           }
           return { success: true, meta: { changes: 1 } };
-        }
-      })
+        },
+      }),
     }),
     batch: async () => [{ success: true }],
     exec: async () => ({ success: true }),
-    dump: async () => new ArrayBuffer(0)
+    dump: async () => new ArrayBuffer(0),
   };
 
   const protectedDb = createProtectedDatabase(mockDatabase as any);
@@ -122,10 +122,12 @@ async function databaseWrapperExample() {
   // Example 1: Successful read operations
   console.log('\n📖 Read Operations:');
   try {
-    const models = await protectedDb.prepare(
-      'SELECT * FROM mental_models ORDER BY code',
-      { operation: 'read', table: 'mental_models' }
-    ).all();
+    const models = await protectedDb
+      .prepare('SELECT * FROM mental_models ORDER BY code', {
+        operation: 'read',
+        table: 'mental_models',
+      })
+      .all();
     console.log(`✅ Read operation successful: ${models.results.length} records`);
   } catch (error: any) {
     console.log(`❌ Read operation failed: ${error.message}`);
@@ -134,10 +136,13 @@ async function databaseWrapperExample() {
   // Example 2: Write operations
   console.log('\n✍️  Write Operations:');
   try {
-    const result = await protectedDb.prepare(
-      'INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)',
-      { operation: 'write', table: 'user_progress' }
-    ).bind('progress-123', 'user-123', 'MODEL1').run();
+    const result = await protectedDb
+      .prepare('INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)', {
+        operation: 'write',
+        table: 'user_progress',
+      })
+      .bind('progress-123', 'user-123', 'MODEL1')
+      .run();
     console.log(`✅ Write operation successful: ${result.success}`);
   } catch (error: any) {
     console.log(`❌ Write operation failed: ${error.message}`);
@@ -146,10 +151,10 @@ async function databaseWrapperExample() {
   // Example 3: Authentication operations
   console.log('\n🔐 Authentication Operations:');
   try {
-    const user = await protectedDb.prepare(
-      'SELECT * FROM users WHERE email = ?',
-      { operation: 'auth', table: 'users' }
-    ).bind('user@example.com').first();
+    const user = await protectedDb
+      .prepare('SELECT * FROM users WHERE email = ?', { operation: 'auth', table: 'users' })
+      .bind('user@example.com')
+      .first();
     console.log(`✅ Auth operation successful: ${user?.email}`);
   } catch (error: any) {
     console.log(`❌ Auth operation failed: ${error.message}`);
@@ -179,12 +184,18 @@ async function failureScenarioExample() {
         },
         run: async () => {
           throw new Error('Database write failed');
-        }
-      })
+        },
+      }),
     }),
-    batch: async () => { throw new Error('Batch operation failed'); },
-    exec: async () => { throw new Error('Database not available'); },
-    dump: async () => { throw new Error('Dump operation failed'); }
+    batch: async () => {
+      throw new Error('Batch operation failed');
+    },
+    exec: async () => {
+      throw new Error('Database not available');
+    },
+    dump: async () => {
+      throw new Error('Dump operation failed');
+    },
   };
 
   const protectedDb = createProtectedDatabase(mockFailingDatabase as any);
@@ -192,18 +203,21 @@ async function failureScenarioExample() {
   // Simulate API endpoint behavior with fallbacks
   const getModelsWithFallback = async (transformation?: string) => {
     try {
-      const models = await protectedDb.prepare(
-        'SELECT code, name, transformation FROM mental_models WHERE transformation = ?',
-        { operation: 'read', table: 'mental_models' }
-      ).bind(transformation || 'DECOMPOSITION').all();
+      const models = await protectedDb
+        .prepare('SELECT code, name, transformation FROM mental_models WHERE transformation = ?', {
+          operation: 'read',
+          table: 'mental_models',
+        })
+        .bind(transformation || 'DECOMPOSITION')
+        .all();
 
       return {
         ok: true,
         data: {
           models: models.results,
           count: models.results.length,
-          transformation
-        }
+          transformation,
+        },
       };
     } catch (error: any) {
       if (ProtectedDatabase.isCircuitBreakerError(error)) {
@@ -217,8 +231,8 @@ async function failureScenarioExample() {
             count: 0,
             transformation,
             message: 'Models temporarily unavailable. Please try again shortly.',
-            fallback: true
-          }
+            fallback: true,
+          },
         };
       }
 
@@ -229,14 +243,17 @@ async function failureScenarioExample() {
 
   const addUserProgressWithFallback = async (userId: string, modelId: string) => {
     try {
-      const result = await protectedDb.prepare(
-        'INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)',
-        { operation: 'write', table: 'user_progress' }
-      ).bind(`progress-${Date.now()}`, userId, modelId).run();
+      const result = await protectedDb
+        .prepare('INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)', {
+          operation: 'write',
+          table: 'user_progress',
+        })
+        .bind(`progress-${Date.now()}`, userId, modelId)
+        .run();
 
       return {
         ok: true,
-        data: { success: result.success, progressId: `progress-${Date.now()}` }
+        data: { success: result.success, progressId: `progress-${Date.now()}` },
       };
     } catch (error: any) {
       if (ProtectedDatabase.isCircuitBreakerError(error)) {
@@ -249,8 +266,8 @@ async function failureScenarioExample() {
             success: false,
             message: 'Progress tracking temporarily unavailable. Your progress has been noted.',
             queued: true,
-            fallback: true
-          }
+            fallback: true,
+          },
         };
       }
 
@@ -266,7 +283,7 @@ async function failureScenarioExample() {
       ok: result.ok,
       count: result.data.count,
       fallback: result.data.fallback,
-      message: result.data.message?.substring(0, 50) + '...'
+      message: result.data.message?.substring(0, 50) + '...',
     });
 
     // Add delay to see circuit breaker behavior change
@@ -280,7 +297,7 @@ async function failureScenarioExample() {
       ok: result.ok,
       success: result.data.success,
       fallback: result.data.fallback,
-      queued: result.data.queued
+      queued: result.data.queued,
     });
   }
 
@@ -322,12 +339,12 @@ async function recoveryAndMonitoringExample() {
             throw new Error('Write operation failed');
           }
           return { success: true, meta: { changes: 1 } };
-        }
-      })
+        },
+      }),
     }),
     batch: async () => [{ success: !dbFailureMode }],
     exec: async () => ({ success: !dbFailureMode }),
-    dump: async () => new ArrayBuffer(0)
+    dump: async () => new ArrayBuffer(0),
   };
 
   const protectedDb = createProtectedDatabase(mockRecoveringDatabase as any);
@@ -336,8 +353,12 @@ async function recoveryAndMonitoringExample() {
   const printMetrics = (label: string) => {
     const metrics = protectedDb.getMetrics();
     console.log(`\n📈 ${label}:`);
-    console.log(`Read - State: ${metrics.read.state}, Failures: ${metrics.read.failures}, Successes: ${metrics.read.successes}`);
-    console.log(`Write - State: ${metrics.write.state}, Failures: ${metrics.write.failures}, Successes: ${metrics.write.successes}`);
+    console.log(
+      `Read - State: ${metrics.read.state}, Failures: ${metrics.read.failures}, Successes: ${metrics.read.successes}`
+    );
+    console.log(
+      `Write - State: ${metrics.write.state}, Failures: ${metrics.write.failures}, Successes: ${metrics.write.successes}`
+    );
   };
 
   // Phase 1: Cause failures to trip circuits
@@ -350,7 +371,10 @@ async function recoveryAndMonitoringExample() {
     }
 
     try {
-      await protectedDb.prepare('INSERT INTO log VALUES (?)', { operation: 'write' }).bind('test').run();
+      await protectedDb
+        .prepare('INSERT INTO log VALUES (?)', { operation: 'write' })
+        .bind('test')
+        .run();
     } catch (error) {
       console.log(`Write attempt ${i + 1} failed`);
     }
@@ -376,7 +400,10 @@ async function recoveryAndMonitoringExample() {
     }
 
     try {
-      const result = await protectedDb.prepare('INSERT INTO log VALUES (?)', { operation: 'write' }).bind('test').run();
+      const result = await protectedDb
+        .prepare('INSERT INTO log VALUES (?)', { operation: 'write' })
+        .bind('test')
+        .run();
       console.log(`✅ Write attempt ${i + 1} succeeded: ${result.success}`);
     } catch (error: any) {
       console.log(`❌ Write attempt ${i + 1} failed: ${error.message}`);
@@ -414,9 +441,13 @@ async function realWorldApiExample() {
             }
             return {
               results: [
-                { code: 'DEC1', name: 'First Principles Thinking', transformation: 'DECOMPOSITION' },
-                { code: 'DEC2', name: 'Root Cause Analysis', transformation: 'DECOMPOSITION' }
-              ]
+                {
+                  code: 'DEC1',
+                  name: 'First Principles Thinking',
+                  transformation: 'DECOMPOSITION',
+                },
+                { code: 'DEC2', name: 'Root Cause Analysis', transformation: 'DECOMPOSITION' },
+              ],
             };
           },
           first: async () => {
@@ -430,13 +461,13 @@ async function realWorldApiExample() {
               throw new Error('Insert failed');
             }
             return { success: true, meta: { changes: 1 } };
-          }
-        })
+          },
+        }),
       }),
       batch: async () => [{ success: true }],
       exec: async () => ({ success: true }),
-      dump: async () => new ArrayBuffer(0)
-    }
+      dump: async () => new ArrayBuffer(0),
+    },
   };
 
   // Simulate the models API endpoint
@@ -451,7 +482,7 @@ async function realWorldApiExample() {
       const context = {
         operation: 'read' as const,
         table: 'mental_models',
-        query: query.substring(0, 50) + '...'
+        query: query.substring(0, 50) + '...',
       };
 
       const statement = transformation
@@ -465,8 +496,8 @@ async function realWorldApiExample() {
         value: {
           models: result.results,
           count: result.results.length,
-          transformation: transformation || null
-        }
+          transformation: transformation || null,
+        },
       };
     } catch (error: any) {
       if (ProtectedDatabase.isCircuitBreakerError(error)) {
@@ -480,8 +511,8 @@ async function realWorldApiExample() {
             count: 0,
             transformation: transformation || null,
             message: 'Model data temporarily unavailable. Please refresh the page.',
-            degraded: true
-          }
+            degraded: true,
+          },
         };
       }
 
@@ -490,8 +521,8 @@ async function realWorldApiExample() {
         error: {
           code: 'DB_ERROR',
           message: 'Failed to fetch models',
-          status: 500
-        }
+          status: 500,
+        },
       };
     }
   };
@@ -502,28 +533,34 @@ async function realWorldApiExample() {
 
     try {
       // First verify model exists
-      const modelExists = await protectedDb.prepare(
-        'SELECT code FROM mental_models WHERE code = ?',
-        { operation: 'read', table: 'mental_models' }
-      ).bind(modelId).first();
+      const modelExists = await protectedDb
+        .prepare('SELECT code FROM mental_models WHERE code = ?', {
+          operation: 'read',
+          table: 'mental_models',
+        })
+        .bind(modelId)
+        .first();
 
       if (!modelExists) {
         return {
           ok: false,
-          error: { code: 'NOT_FOUND', message: 'Model not found', status: 404 }
+          error: { code: 'NOT_FOUND', message: 'Model not found', status: 404 },
         };
       }
 
       // Add progress
       const progressId = `progress-${Date.now()}`;
-      const result = await protectedDb.prepare(
-        'INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)',
-        { operation: 'write', table: 'user_progress' }
-      ).bind(progressId, userId, modelId).run();
+      const result = await protectedDb
+        .prepare('INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)', {
+          operation: 'write',
+          table: 'user_progress',
+        })
+        .bind(progressId, userId, modelId)
+        .run();
 
       return {
         ok: true,
-        value: { success: result.success, progressId }
+        value: { success: result.success, progressId },
       };
     } catch (error: any) {
       if (ProtectedDatabase.isCircuitBreakerError(error)) {
@@ -536,8 +573,8 @@ async function realWorldApiExample() {
             success: true,
             progressId: `queued-${Date.now()}`,
             message: 'Progress tracked locally. Will sync when service is available.',
-            queued: true
-          }
+            queued: true,
+          },
         };
       }
 
@@ -546,8 +583,8 @@ async function realWorldApiExample() {
         error: {
           code: 'DB_ERROR',
           message: 'Failed to add progress',
-          status: 500
-        }
+          status: 500,
+        },
       };
     }
   };
@@ -560,7 +597,9 @@ async function realWorldApiExample() {
     const result = await getModels('DECOMPOSITION');
     if (result.ok) {
       const data = result.value;
-      console.log(`Models API ${i + 1}: ${data.count} models${data.degraded ? ' (degraded)' : ''}${data.message ? ` - ${data.message}` : ''}`);
+      console.log(
+        `Models API ${i + 1}: ${data.count} models${data.degraded ? ' (degraded)' : ''}${data.message ? ` - ${data.message}` : ''}`
+      );
     } else {
       console.log(`Models API ${i + 1}: Error - ${result.error.message}`);
     }
@@ -576,7 +615,9 @@ async function realWorldApiExample() {
     const result = await addUserProgress('user-123', 'DEC1');
     if (result.ok) {
       const data = result.value;
-      console.log(`Progress API ${i + 1}: Success ${data.success}${data.queued ? ' (queued)' : ''}${data.message ? ` - ${data.message}` : ''}`);
+      console.log(
+        `Progress API ${i + 1}: Success ${data.success}${data.queued ? ' (queued)' : ''}${data.message ? ` - ${data.message}` : ''}`
+      );
     } else {
       console.log(`Progress API ${i + 1}: Error - ${result.error.message}`);
     }
@@ -611,7 +652,6 @@ async function runCircuitBreakerDemo() {
     console.log('   • Automatic recovery handles intermittent issues');
     console.log('   • Comprehensive monitoring enables quick issue resolution');
     console.log('\n🔗 For more details, see: /src/docs/circuit-breaker.md');
-
   } catch (error) {
     console.error('❌ Demo failed with error:', error);
   }

@@ -64,7 +64,10 @@ export const respondWithResult = <T>(
       try {
         sanitizedValue = sanitizeResponseData(result.value);
       } catch (error) {
-        logError(error, { context: 'api-response-sanitization', timestamp: new Date().toISOString() });
+        logError(error, {
+          context: 'api-response-sanitization',
+          timestamp: new Date().toISOString(),
+        });
         return c.json(
           {
             ok: false,
@@ -215,8 +218,16 @@ export const logCacheError = (message: string, error: unknown) => {
       sanitizedError = 'Unknown error type';
     }
 
-    logger.warn(sanitizedMessage, { context: 'cache-error-logging', ...sanitizedError, timestamp: new Date().toISOString() });
+    logger.warn(sanitizedMessage, {
+      context: 'cache-error-logging',
+      ...sanitizedError,
+      timestamp: new Date().toISOString(),
+    });
   } catch (logError) {
-    logger.error('Error logging cache error', { context: 'cache-error-logging-failure', error: logError, timestamp: new Date().toISOString() });
+    logger.error('Error logging cache error', {
+      context: 'cache-error-logging-failure',
+      error: logError,
+      timestamp: new Date().toISOString(),
+    });
   }
 };

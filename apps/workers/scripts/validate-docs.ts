@@ -43,7 +43,7 @@ class DocumentationValidator {
     return {
       valid: this.errors.length === 0,
       errors: this.errors,
-      warnings: this.warnings
+      warnings: this.warnings,
     };
   }
 
@@ -63,12 +63,16 @@ class DocumentationValidator {
       // Check for example consistency
       const exampleCount = (schemasContent.match(/example:/g) || []).length;
       if (exampleCount < 10) {
-        this.warnings.push(`Only ${exampleCount} schema examples found. Consider adding more examples.`);
+        this.warnings.push(
+          `Only ${exampleCount} schema examples found. Consider adding more examples.`
+        );
       }
 
       console.log(chalk.green('    ✓ Schema consistency check passed'));
     } catch (error) {
-      this.errors.push(`Schema validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      this.errors.push(
+        `Schema validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -84,15 +88,11 @@ class DocumentationValidator {
 
       // Find discrepancies
       const undocumented = implementedRoutes.filter(
-        impl => !documentedRoutes.some(doc =>
-          doc.method === impl.method && doc.path === impl.path
-        )
+        impl => !documentedRoutes.some(doc => doc.method === impl.method && doc.path === impl.path)
       );
 
       const unimplemented = documentedRoutes.filter(
-        doc => !implementedRoutes.some(impl =>
-          impl.method === doc.method && impl.path === doc.path
-        )
+        doc => !implementedRoutes.some(impl => impl.method === doc.method && impl.path === doc.path)
       );
 
       if (undocumented.length > 0) {
@@ -107,9 +107,13 @@ class DocumentationValidator {
         );
       }
 
-      console.log(chalk.green(`    ✓ Route coverage check passed (${implementedRoutes.length} routes)`));
+      console.log(
+        chalk.green(`    ✓ Route coverage check passed (${implementedRoutes.length} routes)`)
+      );
     } catch (error) {
-      this.errors.push(`Route coverage validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      this.errors.push(
+        `Route coverage validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -123,7 +127,7 @@ class DocumentationValidator {
         '../src/routes/models.ts',
         '../src/routes/transformations.ts',
         '../src/routes/user.ts',
-        '../src/routes/analytics.ts'
+        '../src/routes/analytics.ts',
       ];
 
       for (const routeFile of routeFiles) {
@@ -142,7 +146,7 @@ class DocumentationValidator {
               method: method.toUpperCase(),
               path: this.normalizePath(path),
               documented: false,
-              implemented: true
+              implemented: true,
             });
           }
         }
@@ -163,7 +167,9 @@ class DocumentationValidator {
       const content = readFileSync(routesPath, 'utf-8');
 
       // Extract createRoute calls
-      const routeMatches = content.matchAll(/method:\s*['"`](\w+)['"`][\s\S]*?path:\s*['"`]([^'"`]+)['"`]/g);
+      const routeMatches = content.matchAll(
+        /method:\s*['"`](\w+)['"`][\s\S]*?path:\s*['"`]([^'"`]+)['"`]/g
+      );
 
       for (const match of routeMatches) {
         const method = match[1].toUpperCase();
@@ -173,7 +179,7 @@ class DocumentationValidator {
           method,
           path: this.normalizePath(path),
           documented: true,
-          implemented: false
+          implemented: false,
         });
       }
     } catch (error) {
@@ -216,7 +222,9 @@ class DocumentationValidator {
 
       console.log(chalk.green('    ✓ Examples validation passed'));
     } catch (error) {
-      this.errors.push(`Examples validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      this.errors.push(
+        `Examples validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -243,7 +251,9 @@ class DocumentationValidator {
 
       console.log(chalk.green('    ✓ Security documentation check passed'));
     } catch (error) {
-      this.errors.push(`Security validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      this.errors.push(
+        `Security validation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -289,7 +299,6 @@ class DocumentationValidator {
       console.log(`💡 Example snippets: ${stats.totalExamples}`);
       console.log(`🔐 Security schemes: ${stats.securitySchemes}`);
       console.log(`🏷️  Documentation tags: ${stats.tags}`);
-
     } catch (error) {
       console.warn(chalk.yellow(`Could not generate documentation summary: ${error}`));
     }
@@ -301,7 +310,7 @@ class DocumentationValidator {
       totalSchemas: 0,
       totalExamples: 0,
       securitySchemes: 0,
-      tags: 0
+      tags: 0,
     };
 
     try {
@@ -325,7 +334,6 @@ class DocumentationValidator {
       const configContent = readFileSync(configPath, 'utf-8');
       stats.securitySchemes = (configContent.match(/BearerAuth/g) || []).length;
       stats.tags = (configContent.match(/name:\s*['"`]/g) || []).length;
-
     } catch (error) {
       console.warn(`Error collecting stats: ${error}`);
     }
@@ -347,7 +355,6 @@ async function main() {
 
     // Exit with error code if validation failed
     process.exit(result.valid ? 0 : 1);
-
   } catch (error) {
     console.error(chalk.red('❌ Validation script failed:'), error);
     process.exit(1);

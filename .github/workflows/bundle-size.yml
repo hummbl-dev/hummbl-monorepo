@@ -163,11 +163,11 @@ jobs:
       - name: Compressed Size Action
         uses: preactjs/compressed-size-action@v2
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          pattern: "apps/web/dist/**/*.{js,css,html}"
-          exclude: "{**/*.map,**/node_modules/**}"
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          pattern: 'apps/web/dist/**/*.{js,css,html}'
+          exclude: '{**/*.map,**/node_modules/**}'
           minimum-change-threshold: 100
-          omit-unchanged: "diff-only"
+          omit-unchanged: 'diff-only'
 
       - name: Comment PR with Bundle Report
         if: github.event_name == 'pull_request'

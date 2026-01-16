@@ -26,7 +26,7 @@ import {
   GitHubAuthRequestSchema,
   RefreshTokenRequestSchema,
   AddProgressRequestSchema,
-  AddFavoriteRequestSchema
+  AddFavoriteRequestSchema,
 } from './schemas';
 
 // Health and Info Routes
@@ -40,12 +40,12 @@ export const healthRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: HealthResponseSchema
-        }
+          schema: HealthResponseSchema,
+        },
       },
-      description: 'API is healthy'
-    }
-  }
+      description: 'API is healthy',
+    },
+  },
 });
 
 export const rootRoute = createRoute({
@@ -62,13 +62,13 @@ export const rootRoute = createRoute({
             name: z.string(),
             version: z.string(),
             environment: z.string(),
-            status: z.string()
-          })
-        }
+            status: z.string(),
+          }),
+        },
       },
-      description: 'API information'
-    }
-  }
+      description: 'API information',
+    },
+  },
 });
 
 // Authentication Routes
@@ -81,45 +81,45 @@ export const loginRoute = createRoute({
   requestBody: {
     content: {
       'application/json': {
-        schema: LoginRequestSchema
-      }
+        schema: LoginRequestSchema,
+      },
     },
-    description: 'Login credentials'
+    description: 'Login credentials',
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(AuthResponseSchema)
-        }
+          schema: SuccessResponseSchema(AuthResponseSchema),
+        },
       },
-      description: 'Login successful'
+      description: 'Login successful',
     },
     401: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid credentials'
+      description: 'Invalid credentials',
     },
     400: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid request format'
+      description: 'Invalid request format',
     },
     429: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Too many requests'
-    }
-  }
+      description: 'Too many requests',
+    },
+  },
 });
 
 export const registerRoute = createRoute({
@@ -131,47 +131,49 @@ export const registerRoute = createRoute({
   requestBody: {
     content: {
       'application/json': {
-        schema: RegisterRequestSchema
-      }
+        schema: RegisterRequestSchema,
+      },
     },
-    description: 'Registration details'
+    description: 'Registration details',
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(AuthResponseSchema.extend({
-            message: z.string().describe('Registration success message')
-          }))
-        }
+          schema: SuccessResponseSchema(
+            AuthResponseSchema.extend({
+              message: z.string().describe('Registration success message'),
+            })
+          ),
+        },
       },
-      description: 'Registration successful'
+      description: 'Registration successful',
     },
     400: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid request or validation error'
+      description: 'Invalid request or validation error',
     },
     409: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'User already exists'
+      description: 'User already exists',
     },
     429: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Too many requests'
-    }
-  }
+      description: 'Too many requests',
+    },
+  },
 });
 
 export const googleAuthRoute = createRoute({
@@ -183,37 +185,37 @@ export const googleAuthRoute = createRoute({
   requestBody: {
     content: {
       'application/json': {
-        schema: GoogleAuthRequestSchema
-      }
+        schema: GoogleAuthRequestSchema,
+      },
     },
-    description: 'Google OAuth token'
+    description: 'Google OAuth token',
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(AuthResponseSchema)
-        }
+          schema: SuccessResponseSchema(AuthResponseSchema),
+        },
       },
-      description: 'Google authentication successful'
+      description: 'Google authentication successful',
     },
     400: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid token or request'
+      description: 'Invalid token or request',
     },
     429: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Too many requests'
-    }
-  }
+      description: 'Too many requests',
+    },
+  },
 });
 
 export const githubAuthRoute = createRoute({
@@ -225,37 +227,37 @@ export const githubAuthRoute = createRoute({
   requestBody: {
     content: {
       'application/json': {
-        schema: GitHubAuthRequestSchema
-      }
+        schema: GitHubAuthRequestSchema,
+      },
     },
-    description: 'GitHub OAuth authorization code'
+    description: 'GitHub OAuth authorization code',
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(AuthResponseSchema)
-        }
+          schema: SuccessResponseSchema(AuthResponseSchema),
+        },
       },
-      description: 'GitHub authentication successful'
+      description: 'GitHub authentication successful',
     },
     400: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid authorization code or request'
+      description: 'Invalid authorization code or request',
     },
     429: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Too many requests'
-    }
-  }
+      description: 'Too many requests',
+    },
+  },
 });
 
 export const verifyTokenRoute = createRoute({
@@ -269,30 +271,32 @@ export const verifyTokenRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(z.object({
-            user: UserSchema
-          }))
-        }
+          schema: SuccessResponseSchema(
+            z.object({
+              user: UserSchema,
+            })
+          ),
+        },
       },
-      description: 'Token is valid'
+      description: 'Token is valid',
     },
     401: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid or expired token'
+      description: 'Invalid or expired token',
     },
     404: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'User not found'
-    }
-  }
+      description: 'User not found',
+    },
+  },
 });
 
 export const refreshTokenRoute = createRoute({
@@ -304,37 +308,37 @@ export const refreshTokenRoute = createRoute({
   requestBody: {
     content: {
       'application/json': {
-        schema: RefreshTokenRequestSchema
-      }
+        schema: RefreshTokenRequestSchema,
+      },
     },
-    description: 'Refresh token'
+    description: 'Refresh token',
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(AuthResponseSchema)
-        }
+          schema: SuccessResponseSchema(AuthResponseSchema),
+        },
       },
-      description: 'Token refreshed successfully'
+      description: 'Token refreshed successfully',
     },
     401: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid or expired refresh token'
+      description: 'Invalid or expired refresh token',
     },
     404: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'User not found'
-    }
-  }
+      description: 'User not found',
+    },
+  },
 });
 
 // Models Routes
@@ -343,33 +347,36 @@ export const getModelsRoute = createRoute({
   path: '/v1/models',
   tags: ['Models'],
   summary: 'List Mental Models',
-  description: 'Get a list of mental models with optional filtering by transformation type or search query',
+  description:
+    'Get a list of mental models with optional filtering by transformation type or search query',
   request: {
-    query: ModelFilterQuerySchema
+    query: ModelFilterQuerySchema,
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(z.object({
-            models: z.array(MentalModelSchema),
-            count: z.number(),
-            transformation: z.string().nullable(),
-            search: z.string().nullable()
-          }))
-        }
+          schema: SuccessResponseSchema(
+            z.object({
+              models: z.array(MentalModelSchema),
+              count: z.number(),
+              transformation: z.string().nullable(),
+              search: z.string().nullable(),
+            })
+          ),
+        },
       },
-      description: 'List of mental models'
+      description: 'List of mental models',
     },
     400: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid query parameters'
-    }
-  }
+      description: 'Invalid query parameters',
+    },
+  },
 });
 
 export const getModelRoute = createRoute({
@@ -380,37 +387,42 @@ export const getModelRoute = createRoute({
   description: 'Get detailed information about a specific mental model',
   request: {
     params: z.object({
-      code: z.string().regex(/^[A-Z0-9]+$/, 'Invalid model code format').describe('Model code (e.g., P1, SY12)')
-    })
+      code: z
+        .string()
+        .regex(/^[A-Z0-9]+$/, 'Invalid model code format')
+        .describe('Model code (e.g., P1, SY12)'),
+    }),
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(z.object({
-            model: MentalModelSchema
-          }))
-        }
+          schema: SuccessResponseSchema(
+            z.object({
+              model: MentalModelSchema,
+            })
+          ),
+        },
       },
-      description: 'Mental model details'
+      description: 'Mental model details',
     },
     400: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid model code'
+      description: 'Invalid model code',
     },
     404: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Model not found'
-    }
-  }
+      description: 'Model not found',
+    },
+  },
 });
 
 export const getModelRelationshipsRoute = createRoute({
@@ -421,39 +433,44 @@ export const getModelRelationshipsRoute = createRoute({
   description: 'Get relationships for a specific mental model',
   request: {
     params: z.object({
-      code: z.string().regex(/^[A-Z0-9]+$/, 'Invalid model code format').describe('Model code')
-    })
+      code: z
+        .string()
+        .regex(/^[A-Z0-9]+$/, 'Invalid model code format')
+        .describe('Model code'),
+    }),
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(z.object({
-            model: z.string(),
-            relationships: z.array(ModelRelationshipSchema),
-            count: z.number()
-          }))
-        }
+          schema: SuccessResponseSchema(
+            z.object({
+              model: z.string(),
+              relationships: z.array(ModelRelationshipSchema),
+              count: z.number(),
+            })
+          ),
+        },
       },
-      description: 'Model relationships'
+      description: 'Model relationships',
     },
     400: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid model code'
+      description: 'Invalid model code',
     },
     404: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Model not found'
-    }
-  }
+      description: 'Model not found',
+    },
+  },
 });
 
 export const recommendModelsRoute = createRoute({
@@ -465,29 +482,29 @@ export const recommendModelsRoute = createRoute({
   requestBody: {
     content: {
       'application/json': {
-        schema: RecommendRequestSchema
-      }
+        schema: RecommendRequestSchema,
+      },
     },
-    description: 'Problem description'
+    description: 'Problem description',
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(RecommendResponseSchema)
-        }
+          schema: SuccessResponseSchema(RecommendResponseSchema),
+        },
       },
-      description: 'Model recommendations'
+      description: 'Model recommendations',
     },
     400: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid request or problem description'
-    }
-  }
+      description: 'Invalid request or problem description',
+    },
+  },
 });
 
 // Transformations Routes
@@ -501,15 +518,17 @@ export const getTransformationsRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(z.object({
-            transformations: z.record(z.string(), TransformationSchema),
-            count: z.number()
-          }))
-        }
+          schema: SuccessResponseSchema(
+            z.object({
+              transformations: z.record(z.string(), TransformationSchema),
+              count: z.number(),
+            })
+          ),
+        },
       },
-      description: 'List of transformation types'
-    }
-  }
+      description: 'List of transformation types',
+    },
+  },
 });
 
 export const getTransformationRoute = createRoute({
@@ -520,38 +539,40 @@ export const getTransformationRoute = createRoute({
   description: 'Get detailed information about a transformation type and its models',
   request: {
     params: z.object({
-      type: z.enum(['P', 'IN', 'CO', 'DE', 'RE', 'SY']).describe('Transformation type code')
-    })
+      type: z.enum(['P', 'IN', 'CO', 'DE', 'RE', 'SY']).describe('Transformation type code'),
+    }),
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(TransformationSchema.extend({
-            models: z.array(MentalModelSchema),
-            modelCount: z.number()
-          }))
-        }
+          schema: SuccessResponseSchema(
+            TransformationSchema.extend({
+              models: z.array(MentalModelSchema),
+              modelCount: z.number(),
+            })
+          ),
+        },
       },
-      description: 'Transformation details with models'
+      description: 'Transformation details with models',
     },
     400: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid transformation type'
+      description: 'Invalid transformation type',
     },
     404: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Transformation not found'
-    }
-  }
+      description: 'Transformation not found',
+    },
+  },
 });
 
 // User Routes
@@ -567,21 +588,21 @@ export const getUserProgressRoute = createRoute({
       content: {
         'application/json': {
           schema: z.object({
-            progress: z.array(UserProgressSchema)
-          })
-        }
+            progress: z.array(UserProgressSchema),
+          }),
+        },
       },
-      description: 'User progress data'
+      description: 'User progress data',
     },
     401: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Authentication required'
-    }
-  }
+      description: 'Authentication required',
+    },
+  },
 });
 
 export const addProgressRoute = createRoute({
@@ -594,10 +615,10 @@ export const addProgressRoute = createRoute({
   requestBody: {
     content: {
       'application/json': {
-        schema: AddProgressRequestSchema
-      }
+        schema: AddProgressRequestSchema,
+      },
     },
-    description: 'Model to mark as completed'
+    description: 'Model to mark as completed',
   },
   responses: {
     200: {
@@ -605,45 +626,45 @@ export const addProgressRoute = createRoute({
         'application/json': {
           schema: z.object({
             success: z.boolean(),
-            progressId: z.string()
-          })
-        }
+            progressId: z.string(),
+          }),
+        },
       },
-      description: 'Model marked as completed'
+      description: 'Model marked as completed',
     },
     400: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Invalid model ID'
+      description: 'Invalid model ID',
     },
     404: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Model not found'
+      description: 'Model not found',
     },
     409: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Model already completed'
+      description: 'Model already completed',
     },
     401: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Authentication required'
-    }
-  }
+      description: 'Authentication required',
+    },
+  },
 });
 
 export const getUserFavoritesRoute = createRoute({
@@ -658,21 +679,21 @@ export const getUserFavoritesRoute = createRoute({
       content: {
         'application/json': {
           schema: z.object({
-            favorites: z.array(UserFavoriteSchema)
-          })
-        }
+            favorites: z.array(UserFavoriteSchema),
+          }),
+        },
       },
-      description: 'User favorites data'
+      description: 'User favorites data',
     },
     401: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Authentication required'
-    }
-  }
+      description: 'Authentication required',
+    },
+  },
 });
 
 export const getUserProfileRoute = createRoute({
@@ -686,28 +707,28 @@ export const getUserProfileRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: UserProfileSchema
-        }
+          schema: UserProfileSchema,
+        },
       },
-      description: 'User profile and statistics'
+      description: 'User profile and statistics',
     },
     401: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'Authentication required'
+      description: 'Authentication required',
     },
     404: {
       content: {
         'application/json': {
-          schema: ErrorSchema
-        }
+          schema: ErrorSchema,
+        },
       },
-      description: 'User not found'
-    }
-  }
+      description: 'User not found',
+    },
+  },
 });
 
 // Analytics Routes
@@ -721,12 +742,12 @@ export const getAnalyticsStatsRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: AnalyticsStatsSchema
-        }
+          schema: AnalyticsStatsSchema,
+        },
       },
-      description: 'Usage analytics data'
-    }
-  }
+      description: 'Usage analytics data',
+    },
+  },
 });
 
 export const getAnalyticsHealthRoute = createRoute({
@@ -739,10 +760,10 @@ export const getAnalyticsHealthRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: HealthResponseSchema
-        }
+          schema: HealthResponseSchema,
+        },
       },
-      description: 'Analytics health status'
-    }
-  }
+      description: 'Analytics health status',
+    },
+  },
 });

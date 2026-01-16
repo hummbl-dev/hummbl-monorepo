@@ -151,8 +151,8 @@ class ErrorTracker {
 
     let filteredErrors = errors;
     if (timeWindow) {
-      filteredErrors = errors.filter(error =>
-        error.lastSeen >= timeWindow.start && error.lastSeen <= timeWindow.end
+      filteredErrors = errors.filter(
+        error => error.lastSeen >= timeWindow.start && error.lastSeen <= timeWindow.end
       );
     }
 
@@ -214,7 +214,7 @@ class ErrorTracker {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash).toString(36);
@@ -272,11 +272,14 @@ class ErrorTracker {
     items: T[],
     keyFn: (item: T) => K
   ): Record<K, number> {
-    return items.reduce((groups, item) => {
-      const key = keyFn(item);
-      groups[key] = (groups[key] || 0) + 1;
-      return groups;
-    }, {} as Record<K, number>);
+    return items.reduce(
+      (groups, item) => {
+        const key = keyFn(item);
+        groups[key] = (groups[key] || 0) + 1;
+        return groups;
+      },
+      {} as Record<K, number>
+    );
   }
 }
 
@@ -330,7 +333,11 @@ export function classifyError(error: Error): {
   }
 
   // Validation errors
-  if (message.includes('validation') || message.includes('invalid') || message.includes('required')) {
+  if (
+    message.includes('validation') ||
+    message.includes('invalid') ||
+    message.includes('required')
+  ) {
     return { category: ErrorCategory.VALIDATION, severity: ErrorSeverity.LOW };
   }
 

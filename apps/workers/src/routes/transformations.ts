@@ -112,11 +112,12 @@ transformationsRouter.get('/:type', async c => {
         const context: DbOperationContext = {
           operation: 'read',
           table: 'mental_models',
-          query: 'SELECT ... FROM mental_models WHERE transformation = ?'
+          query: 'SELECT ... FROM mental_models WHERE transformation = ?',
         };
 
-        const { results } = await protectedDb.prepare(
-          `
+        const { results } = await protectedDb
+          .prepare(
+            `
             SELECT
               code,
               name,
@@ -130,8 +131,8 @@ transformationsRouter.get('/:type', async c => {
             WHERE transformation = ?
             ORDER BY code
           `,
-          context
-        )
+            context
+          )
           .bind(type)
           .all<DbMentalModel>();
 
@@ -145,7 +146,7 @@ transformationsRouter.get('/:type', async c => {
         if (ProtectedDatabase.isCircuitBreakerError(error)) {
           console.warn(`[TRANSFORMATIONS] Circuit breaker active for transformation ${type}`, {
             state: error.circuitState,
-            type
+            type,
           });
 
           return Result.ok({

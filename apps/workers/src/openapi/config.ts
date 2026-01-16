@@ -45,58 +45,58 @@ Each model includes practical examples, difficulty ratings, and related model su
       contact: {
         name: 'HUMMBL Support',
         email: 'support@hummbl.dev',
-        url: 'https://hummbl.dev/support'
+        url: 'https://hummbl.dev/support',
       },
       license: {
         name: 'MIT',
-        url: 'https://opensource.org/licenses/MIT'
+        url: 'https://opensource.org/licenses/MIT',
       },
-      termsOfService: 'https://hummbl.dev/terms'
+      termsOfService: 'https://hummbl.dev/terms',
     },
     servers: [
       {
         url: 'https://api.hummbl.dev',
-        description: 'Production API'
+        description: 'Production API',
       },
       {
         url: 'https://staging-api.hummbl.dev',
-        description: 'Staging API'
+        description: 'Staging API',
       },
       {
         url: 'http://localhost:8787',
-        description: 'Local development'
-      }
+        description: 'Local development',
+      },
     ],
     tags: [
       {
         name: 'Health',
-        description: 'API health and status endpoints'
+        description: 'API health and status endpoints',
       },
       {
         name: 'Authentication',
-        description: 'User authentication and token management'
+        description: 'User authentication and token management',
       },
       {
         name: 'Models',
-        description: 'Mental models CRUD operations and search'
+        description: 'Mental models CRUD operations and search',
       },
       {
         name: 'Transformations',
-        description: 'Transformation types and related models'
+        description: 'Transformation types and related models',
       },
       {
         name: 'User',
-        description: 'User profile, progress, and favorites management'
+        description: 'User profile, progress, and favorites management',
       },
       {
         name: 'Analytics',
-        description: 'Usage analytics and statistics'
-      }
+        description: 'Usage analytics and statistics',
+      },
     ],
     security: [
       {
-        BearerAuth: []
-      }
+        BearerAuth: [],
+      },
     ],
     components: {
       securitySchemes: {
@@ -104,10 +104,10 @@ Each model includes practical examples, difficulty ratings, and related model su
           type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',
-          description: 'JWT token obtained from authentication endpoints'
-        }
-      }
-    }
+          description: 'JWT token obtained from authentication endpoints',
+        },
+      },
+    },
   });
 
   return app;
@@ -118,7 +118,7 @@ export const setupSwaggerUI = (app: OpenAPIHono<{ Bindings: Env }>) => {
   app.get('/docs', swaggerUI({ url: '/openapi.json' }));
 
   // Alternative ReDoc endpoint
-  app.get('/redoc', (c) => {
+  app.get('/redoc', c => {
     return c.html(`
 <!DOCTYPE html>
 <html>
@@ -140,13 +140,13 @@ export const setupSwaggerUI = (app: OpenAPIHono<{ Bindings: Env }>) => {
   });
 
   // JSON Schema endpoint for direct download
-  app.get('/schema.json', async (c) => {
+  app.get('/schema.json', async c => {
     const openApiDoc = app.getOpenAPIDocument();
     return c.json(openApiDoc);
   });
 
   // YAML Schema endpoint
-  app.get('/schema.yaml', async (c) => {
+  app.get('/schema.yaml', async c => {
     const openApiDoc = app.getOpenAPIDocument();
 
     // Simple JSON to YAML conversion for basic OpenAPI structure
@@ -156,7 +156,12 @@ info:
   title: "${openApiDoc.info.title}"
   version: "${openApiDoc.info.version}"
   description: |
-${openApiDoc.info.description?.split('\n').map(line => `    ${line}`).join('\n') || ''}
+${
+  openApiDoc.info.description
+    ?.split('\n')
+    .map(line => `    ${line}`)
+    .join('\n') || ''
+}
   contact:
     name: "${openApiDoc.info.contact?.name || ''}"
     email: "${openApiDoc.info.contact?.email || ''}"

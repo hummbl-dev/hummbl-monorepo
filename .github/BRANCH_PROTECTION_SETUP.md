@@ -5,6 +5,7 @@ This document provides comprehensive instructions for implementing branch protec
 ## Overview
 
 The branch protection rules enforce security and quality standards by requiring:
+
 - All CI checks to pass before merging
 - Code owner reviews for all changes
 - Up-to-date branches before merging
@@ -15,6 +16,7 @@ The branch protection rules enforce security and quality standards by requiring:
 Based on the existing CI workflows, the following status checks must pass:
 
 ### CI Workflow Checks (`.github/workflows/ci.yml`)
+
 - `CI / Format Check` - Ensures code formatting standards
 - `CI / Lint` - Validates code quality and style
 - `CI / Type Check` - Verifies TypeScript type safety
@@ -22,6 +24,7 @@ Based on the existing CI workflows, the following status checks must pass:
 - `CI / Build` - Confirms successful project build
 
 ### Security Checks (`.github/workflows/codeql.yml`)
+
 - `CodeQL Security Scanning / Analyze` - Scans for security vulnerabilities
 
 ## Implementation Methods
@@ -149,6 +152,7 @@ curl -X PUT \
 After implementing the branch protection rules, verify they are working correctly:
 
 1. **Check Protection Status**
+
    ```bash
    gh api repos/:owner/:repo/branches/main/protection
    ```
@@ -167,14 +171,14 @@ After implementing the branch protection rules, verify they are working correctl
 
 The following table shows the exact status check names as they appear in GitHub:
 
-| Workflow File | Job Name | GitHub Status Check Name |
-|---------------|----------|--------------------------|
-| `ci.yml` | format | `CI / Format Check` |
-| `ci.yml` | lint | `CI / Lint` |
-| `ci.yml` | type-check | `CI / Type Check` |
-| `ci.yml` | test | `CI / Test` |
-| `ci.yml` | build | `CI / Build` |
-| `codeql.yml` | analyze | `CodeQL Security Scanning / Analyze` |
+| Workflow File | Job Name   | GitHub Status Check Name             |
+| ------------- | ---------- | ------------------------------------ |
+| `ci.yml`      | format     | `CI / Format Check`                  |
+| `ci.yml`      | lint       | `CI / Lint`                          |
+| `ci.yml`      | type-check | `CI / Type Check`                    |
+| `ci.yml`      | test       | `CI / Test`                          |
+| `ci.yml`      | build      | `CI / Build`                         |
+| `codeql.yml`  | analyze    | `CodeQL Security Scanning / Analyze` |
 
 ## Troubleshooting
 
@@ -227,6 +231,7 @@ The repository includes a CODEOWNERS file at `/Users/others/Developer/hummbl/hum
 ## Support
 
 For issues with branch protection setup:
+
 1. Check GitHub's branch protection documentation
 2. Verify team permissions and access levels
 3. Test with different user accounts to ensure rules apply correctly

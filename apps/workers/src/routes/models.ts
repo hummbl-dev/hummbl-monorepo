@@ -5,7 +5,14 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
 import type { Env } from '../env';
-import { ModelCodeSchema, ModelFilterSchema, Result, type TransformationType, createLogger, logError } from '@hummbl/core';
+import {
+  ModelCodeSchema,
+  ModelFilterSchema,
+  Result,
+  type TransformationType,
+  createLogger,
+  logError,
+} from '@hummbl/core';
 import { createApiError, respondWithResult } from '../lib/api';
 import { getCachedResult } from '../lib/cache';
 import type { ApiError } from '../lib/api';
@@ -119,10 +126,11 @@ modelsRouter.get('/', async c => {
         const context: DbOperationContext = {
           operation: 'read',
           table: 'mental_models',
-          query: query
+          query: query,
         };
 
-        const { results } = await protectedDb.prepare(query, context)
+        const { results } = await protectedDb
+          .prepare(query, context)
           .bind(...params)
           .all<DbMentalModel>();
 
@@ -140,7 +148,7 @@ modelsRouter.get('/', async c => {
             transformation,
             search,
             state: error.circuitState,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
 
           return Result.ok({
@@ -205,13 +213,14 @@ modelsRouter.get('/:code', async c => {
         const context: DbOperationContext = {
           operation: 'read',
           table: 'mental_models',
-          query: 'SELECT ... FROM mental_models WHERE code = ?'
+          query: 'SELECT ... FROM mental_models WHERE code = ?',
         };
 
-        const model = await protectedDb.prepare(
-          'SELECT code, name, transformation, description, example, tags, difficulty, relatedModels, version, createdAt, updatedAt FROM mental_models WHERE code = ?',
-          context
-        )
+        const model = await protectedDb
+          .prepare(
+            'SELECT code, name, transformation, description, example, tags, difficulty, relatedModels, version, createdAt, updatedAt FROM mental_models WHERE code = ?',
+            context
+          )
           .bind(code)
           .first<DbMentalModel>();
 
@@ -227,12 +236,14 @@ modelsRouter.get('/:code', async c => {
             context: 'model-circuit-breaker',
             state: error.circuitState,
             code,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
-          return Result.err(createApiError('service_unavailable', 'Model data temporarily unavailable', 503, {
-            code,
-            circuitState: error.circuitState
-          }));
+          return Result.err(
+            createApiError('service_unavailable', 'Model data temporarily unavailable', 503, {
+              code,
+              circuitState: error.circuitState,
+            })
+          );
         }
 
         return Result.err(
@@ -285,10 +296,11 @@ modelsRouter.get('/:code/relationships', async c => {
         const protectedDb = getProtectedDb(c.env);
 
         // Check if model exists
-        const modelExists = await protectedDb.prepare('SELECT code FROM mental_models WHERE code = ?', {
-          operation: 'read',
-          table: 'mental_models'
-        })
+        const modelExists = await protectedDb
+          .prepare('SELECT code FROM mental_models WHERE code = ?', {
+            operation: 'read',
+            table: 'mental_models',
+          })
           .bind(code)
           .first();
 
@@ -297,18 +309,19 @@ modelsRouter.get('/:code/relationships', async c => {
         }
 
         // Get relationships
-        const { results } = await protectedDb.prepare(
-          `
+        const { results } = await protectedDb
+          .prepare(
+            `
             SELECT id, source_code, target_code, relationship_type, confidence, evidence, created_at
             FROM model_relationships
             WHERE source_code = ? OR target_code = ?
             ORDER BY confidence DESC, created_at DESC
           `,
-          {
-            operation: 'read',
-            table: 'model_relationships'
-          }
-        )
+            {
+              operation: 'read',
+              table: 'model_relationships',
+            }
+          )
           .bind(code, code)
           .all<DbRelationship>();
 
@@ -324,7 +337,7 @@ modelsRouter.get('/:code/relationships', async c => {
             context: 'relationships-circuit-breaker',
             state: error.circuitState,
             code,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
           return Result.ok({
             model: code,
@@ -364,7 +377,10 @@ modelsRouter.post('/recommend', async c => {
     try {
       body = await c.req.json();
     } catch (error) {
-      logError(error, { context: 'recommendations-json-parsing', timestamp: new Date().toISOString() });
+      logError(error, {
+        context: 'recommendations-json-parsing',
+        timestamp: new Date().toISOString(),
+      });
       return respondWithResult(
         c,
         Result.err(createApiError('invalid_request', 'Invalid JSON format', 400))
@@ -430,11 +446,12 @@ modelsRouter.post('/recommend', async c => {
       const context: DbOperationContext = {
         operation: 'read',
         table: 'mental_models',
-        query: 'SELECT ... FROM mental_models WHERE ... LIMIT 10'
+        query: 'SELECT ... FROM mental_models WHERE ... LIMIT 10',
       };
 
-      const dbResult = await protectedDb.prepare(
-        `
+      const dbResult = await protectedDb
+        .prepare(
+          `
           SELECT code, name, transformation, description
           FROM mental_models
           WHERE (LOWER(description) LIKE ? OR LOWER(name) LIKE ?)
@@ -448,8 +465,8 @@ modelsRouter.post('/recommend', async c => {
             code
           LIMIT 10
         `,
-        context
-      )
+          context
+        )
         .bind(searchTerm, searchTerm, searchTerm, searchTerm)
         .all<Pick<DbMentalModel, 'code' | 'name' | 'transformation' | 'description'>>();
 
@@ -465,13 +482,16 @@ modelsRouter.post('/recommend', async c => {
           context: 'recommendations-circuit-breaker',
           state: dbError.circuitState,
           problem: sanitizedProblem.substring(0, 50),
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
 
         // Return empty recommendations as fallback
         results = [];
       } else {
-        logError(dbError, { context: 'recommendations-db-error', timestamp: new Date().toISOString() });
+        logError(dbError, {
+          context: 'recommendations-db-error',
+          timestamp: new Date().toISOString(),
+        });
         return respondWithResult(
           c,
           Result.err(

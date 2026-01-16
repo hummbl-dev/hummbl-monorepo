@@ -39,7 +39,7 @@ function getFileSizeKB(filePath, compressed = false) {
 
     const content = fs.readFileSync(filePath);
     const size = compressed ? gzipSync(content).length : content.length;
-    return Math.round(size / 1024 * 100) / 100; // Round to 2 decimals
+    return Math.round((size / 1024) * 100) / 100; // Round to 2 decimals
   } catch (error) {
     console.warn(`⚠️  Could not read file: ${filePath}`);
     return 0;
@@ -81,7 +81,7 @@ function categorizeFiles() {
     main: { js: [], css: [] },
     chunks: {},
     vendor: {},
-    other: { js: [], css: [], html: htmlFiles }
+    other: { js: [], css: [], html: htmlFiles },
   };
 
   // Categorize JavaScript files
@@ -133,19 +133,19 @@ function checkBudget(actualSize, budget) {
     return {
       status: 'exceeded',
       message: `exceeds ${budget.limit}KB budget by ${(actualSize - budget.limit).toFixed(1)}KB (${percentage.toFixed(1)}%)`,
-      percentage
+      percentage,
     };
   } else if (actualSize > budget.warning) {
     return {
       status: 'warning',
       message: `approaching ${budget.limit}KB budget (${percentage.toFixed(1)}%)`,
-      percentage
+      percentage,
     };
   } else {
     return {
       status: 'ok',
       message: `within ${budget.limit}KB budget (${percentage.toFixed(1)}%)`,
-      percentage
+      percentage,
     };
   }
 }
@@ -269,11 +269,21 @@ function generateReport(files, budgetChecks) {
   const totalSize = totalJSSize + totalCSSSize;
   const totalCheck = checkBudget(totalSize, budgets.total.assets);
 
-  console.log(`${ jsCheck.status === 'exceeded' ? '❌' : jsCheck.status === 'warning' ? '⚠️' : '✅'} Total JavaScript: ${totalJSSize}KB gzipped (${jsCheck.message})`);
-  console.log(`${cssCheck.status === 'exceeded' ? '❌' : cssCheck.status === 'warning' ? '⚠️' : '✅'} Total CSS: ${totalCSSSize}KB gzipped (${cssCheck.message})`);
-  console.log(`${totalCheck.status === 'exceeded' ? '❌' : totalCheck.status === 'warning' ? '⚠️' : '✅'} Total Assets: ${totalSize}KB gzipped (${totalCheck.message})`);
+  console.log(
+    `${jsCheck.status === 'exceeded' ? '❌' : jsCheck.status === 'warning' ? '⚠️' : '✅'} Total JavaScript: ${totalJSSize}KB gzipped (${jsCheck.message})`
+  );
+  console.log(
+    `${cssCheck.status === 'exceeded' ? '❌' : cssCheck.status === 'warning' ? '⚠️' : '✅'} Total CSS: ${totalCSSSize}KB gzipped (${cssCheck.message})`
+  );
+  console.log(
+    `${totalCheck.status === 'exceeded' ? '❌' : totalCheck.status === 'warning' ? '⚠️' : '✅'} Total Assets: ${totalSize}KB gzipped (${totalCheck.message})`
+  );
 
-  if (jsCheck.status === 'exceeded' || cssCheck.status === 'exceeded' || totalCheck.status === 'exceeded') {
+  if (
+    jsCheck.status === 'exceeded' ||
+    cssCheck.status === 'exceeded' ||
+    totalCheck.status === 'exceeded'
+  ) {
     hasFailures = true;
   }
 

@@ -9,7 +9,7 @@ import {
   CircuitBreakerState,
   DEFAULT_DB_CIRCUIT_CONFIG,
   AUTH_CIRCUIT_CONFIG,
-  READ_CIRCUIT_CONFIG
+  READ_CIRCUIT_CONFIG,
 } from './circuit-breaker';
 
 describe('CircuitBreaker', () => {
@@ -20,7 +20,7 @@ describe('CircuitBreaker', () => {
     maxTimeout: 5000,
     successThreshold: 2,
     monitoringWindow: 10000,
-    name: 'test-circuit'
+    name: 'test-circuit',
   };
 
   beforeEach(() => {
@@ -34,28 +34,33 @@ describe('CircuitBreaker', () => {
     });
 
     it('should throw error for invalid failureThreshold', () => {
-      expect(() => new CircuitBreaker({ ...mockConfig, failureThreshold: 0 }))
-        .toThrow('failureThreshold must be greater than 0');
+      expect(() => new CircuitBreaker({ ...mockConfig, failureThreshold: 0 })).toThrow(
+        'failureThreshold must be greater than 0'
+      );
     });
 
     it('should throw error for invalid timeout', () => {
-      expect(() => new CircuitBreaker({ ...mockConfig, timeout: 0 }))
-        .toThrow('timeout must be greater than 0');
+      expect(() => new CircuitBreaker({ ...mockConfig, timeout: 0 })).toThrow(
+        'timeout must be greater than 0'
+      );
     });
 
     it('should throw error for invalid maxTimeout', () => {
-      expect(() => new CircuitBreaker({ ...mockConfig, maxTimeout: 500 }))
-        .toThrow('maxTimeout must be greater than timeout');
+      expect(() => new CircuitBreaker({ ...mockConfig, maxTimeout: 500 })).toThrow(
+        'maxTimeout must be greater than timeout'
+      );
     });
 
     it('should throw error for invalid successThreshold', () => {
-      expect(() => new CircuitBreaker({ ...mockConfig, successThreshold: 0 }))
-        .toThrow('successThreshold must be greater than 0');
+      expect(() => new CircuitBreaker({ ...mockConfig, successThreshold: 0 })).toThrow(
+        'successThreshold must be greater than 0'
+      );
     });
 
     it('should throw error for invalid monitoringWindow', () => {
-      expect(() => new CircuitBreaker({ ...mockConfig, monitoringWindow: 0 }))
-        .toThrow('monitoringWindow must be greater than 0');
+      expect(() => new CircuitBreaker({ ...mockConfig, monitoringWindow: 0 })).toThrow(
+        'monitoringWindow must be greater than 0'
+      );
     });
   });
 
@@ -112,8 +117,7 @@ describe('CircuitBreaker', () => {
       }
 
       const metrics = circuitBreaker.getMetrics();
-      expect([CircuitBreakerState.HALF_OPEN, CircuitBreakerState.CLOSED])
-        .toContain(metrics.state);
+      expect([CircuitBreakerState.HALF_OPEN, CircuitBreakerState.CLOSED]).toContain(metrics.state);
     });
 
     it('should transition from HALF_OPEN to CLOSED after successful calls', async () => {
@@ -182,7 +186,7 @@ describe('CircuitBreaker', () => {
       const cb = new CircuitBreaker({
         ...mockConfig,
         timeout: 100,
-        maxTimeout: 1000
+        maxTimeout: 1000,
       });
 
       // Execute multiple failing operations
@@ -206,7 +210,7 @@ describe('CircuitBreaker', () => {
         ...mockConfig,
         timeout: 100,
         maxTimeout: 500,
-        failureThreshold: 10 // Higher threshold to avoid opening
+        failureThreshold: 10, // Higher threshold to avoid opening
       });
 
       // Execute many failing operations
@@ -269,7 +273,7 @@ describe('CircuitBreaker', () => {
       }
 
       const metrics = circuitBreaker.getMetrics();
-      expect(metrics.failureRate).toBeCloseTo(1/3); // 1 failure out of 3 total
+      expect(metrics.failureRate).toBeCloseTo(1 / 3); // 1 failure out of 3 total
     });
 
     it('should track uptime', async () => {
@@ -311,7 +315,7 @@ describe('CircuitBreaker', () => {
     it('should handle timeout errors', async () => {
       const cb = new CircuitBreaker({
         ...mockConfig,
-        timeout: 50 // Very short timeout
+        timeout: 50, // Very short timeout
       });
 
       try {
@@ -391,7 +395,9 @@ describe('CircuitBreaker', () => {
     });
 
     it('should have different thresholds for different configs', () => {
-      expect(DEFAULT_DB_CIRCUIT_CONFIG.failureThreshold).not.toBe(AUTH_CIRCUIT_CONFIG.failureThreshold);
+      expect(DEFAULT_DB_CIRCUIT_CONFIG.failureThreshold).not.toBe(
+        AUTH_CIRCUIT_CONFIG.failureThreshold
+      );
       expect(AUTH_CIRCUIT_CONFIG.failureThreshold).not.toBe(READ_CIRCUIT_CONFIG.failureThreshold);
     });
   });
@@ -424,13 +430,15 @@ describe('CircuitBreaker', () => {
       // Execute mixed concurrent operations
       for (let i = 0; i < 10; i++) {
         promises.push(
-          circuitBreaker.execute(async () => {
-            await new Promise(resolve => setTimeout(resolve, Math.random() * 10));
-            if (i % 2 === 0) {
-              throw new Error(`failure-${i}`);
-            }
-            return `success-${i}`;
-          }).catch(error => error) // Catch errors to prevent Promise.all from failing
+          circuitBreaker
+            .execute(async () => {
+              await new Promise(resolve => setTimeout(resolve, Math.random() * 10));
+              if (i % 2 === 0) {
+                throw new Error(`failure-${i}`);
+              }
+              return `success-${i}`;
+            })
+            .catch(error => error) // Catch errors to prevent Promise.all from failing
         );
       }
 
@@ -454,7 +462,7 @@ describe('Circuit Breaker Integration Scenarios', () => {
         maxTimeout: 1000,
         successThreshold: 1,
         monitoringWindow: 5000,
-        name: 'db-connection'
+        name: 'db-connection',
       });
 
       // Simulate database connection failures
@@ -488,7 +496,7 @@ describe('Circuit Breaker Integration Scenarios', () => {
         maxTimeout: 1000,
         successThreshold: 2,
         monitoringWindow: 5000,
-        name: 'db-timeout'
+        name: 'db-timeout',
       });
 
       // Simulate slow database operations
@@ -515,7 +523,7 @@ describe('Circuit Breaker Integration Scenarios', () => {
         maxTimeout: 1000,
         successThreshold: 3,
         monitoringWindow: 5000,
-        name: 'partial-outage'
+        name: 'partial-outage',
       });
 
       // Simulate partial outage (70% failure rate)
@@ -547,7 +555,7 @@ describe('Circuit Breaker Integration Scenarios', () => {
         maxTimeout: 1000,
         successThreshold: 2,
         monitoringWindow: 5000,
-        name: 'recovery-test'
+        name: 'recovery-test',
       });
 
       // Simulate outage

@@ -31,7 +31,7 @@ import {
   getUserFavoritesRoute,
   getUserProfileRoute,
   getAnalyticsStatsRoute,
-  getAnalyticsHealthRoute
+  getAnalyticsHealthRoute,
 } from './openapi/routes';
 
 // Import existing route handlers
@@ -72,7 +72,7 @@ app.use('*', async (c, next) => {
 });
 
 // Health and Info Routes with OpenAPI
-app.openapi(rootRoute, (c) => {
+app.openapi(rootRoute, c => {
   return c.json({
     name: 'HUMMBL Workers API',
     version: c.env.API_VERSION || 'v1',
@@ -81,12 +81,12 @@ app.openapi(rootRoute, (c) => {
   });
 });
 
-app.openapi(healthRoute, (c) => {
+app.openapi(healthRoute, c => {
   return c.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: 0, // Cloudflare Workers don't have persistent uptime
-    version: c.env.API_VERSION || '1.0.0'
+    version: c.env.API_VERSION || '1.0.0',
   });
 });
 
@@ -102,47 +102,47 @@ app.route('/v1/user', userRouter);
 app.route('/v1/analytics', analytics);
 
 // Additional documentation endpoints
-app.get('/health', (c) => {
+app.get('/health', c => {
   return c.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: 0,
-    version: c.env.API_VERSION || '1.0.0'
+    version: c.env.API_VERSION || '1.0.0',
   });
 });
 
 // Rate limiting information endpoint
-app.get('/v1/rate-limit-info', (c) => {
+app.get('/v1/rate-limit-info', c => {
   return c.json({
     description: 'API Rate Limiting Information',
     globalRateLimit: {
       windowSeconds: 60,
       maxRequests: 100,
-      scope: 'per IP address'
+      scope: 'per IP address',
     },
     authRateLimit: {
       windowSeconds: 60,
       maxRequests: 10,
       scope: 'per IP address',
-      endpoints: ['/v1/auth/*']
+      endpoints: ['/v1/auth/*'],
     },
     rateLimitHeaders: {
       'X-RateLimit-Limit': 'Maximum requests per window',
       'X-RateLimit-Remaining': 'Remaining requests in current window',
       'X-RateLimit-Reset': 'Window reset time (Unix timestamp)',
-      'Retry-After': 'Seconds to wait when rate limited (429 responses only)'
+      'Retry-After': 'Seconds to wait when rate limited (429 responses only)',
     },
     bestPractices: [
       'Implement exponential backoff on 429 responses',
       'Cache responses when possible to reduce API calls',
       'Use appropriate User-Agent headers for better rate limit allocation',
-      'Consider using authentication tokens for higher rate limits'
-    ]
+      'Consider using authentication tokens for higher rate limits',
+    ],
   });
 });
 
 // OAuth flow information endpoint
-app.get('/v1/auth/oauth-info', (c) => {
+app.get('/v1/auth/oauth-info', c => {
   return c.json({
     description: 'OAuth Authentication Flow Information',
     providers: {
@@ -151,32 +151,32 @@ app.get('/v1/auth/oauth-info', (c) => {
         authUrl: 'https://accounts.google.com/oauth/authorize',
         scopes: ['openid', 'email', 'profile'],
         implementation: 'Server-side token verification',
-        endpoint: '/v1/auth/google'
+        endpoint: '/v1/auth/google',
       },
       github: {
         name: 'GitHub OAuth 2.0',
         authUrl: 'https://github.com/login/oauth/authorize',
         scopes: ['read:user', 'user:email'],
         implementation: 'Authorization code flow',
-        endpoint: '/v1/auth/github'
-      }
+        endpoint: '/v1/auth/github',
+      },
     },
     tokenFormat: {
       type: 'JWT (JSON Web Token)',
       algorithm: 'HS256',
       expiration: '24 hours',
       refreshable: true,
-      refreshTokenExpiration: '7 days'
+      refreshTokenExpiration: '7 days',
     },
     usage: {
       header: 'Authorization: Bearer <token>',
-      securityScheme: 'BearerAuth'
-    }
+      securityScheme: 'BearerAuth',
+    },
   });
 });
 
 // Base120 system information endpoint
-app.get('/v1/base120-info', (c) => {
+app.get('/v1/base120-info', c => {
   return c.json({
     description: 'Base120 Mental Models System Information',
     overview: 'A comprehensive collection of 120+ mental models organized by transformation types',
@@ -184,40 +184,40 @@ app.get('/v1/base120-info', (c) => {
       P: {
         name: 'Perspective',
         description: 'Models for changing viewpoints and reframing problems',
-        examples: ['First Principles', 'Inversion', 'Devil\'s Advocate']
+        examples: ['First Principles', 'Inversion', "Devil's Advocate"],
       },
       IN: {
         name: 'Input',
         description: 'Models for gathering and processing information',
-        examples: ['Active Listening', 'SWOT Analysis', 'Five Whys']
+        examples: ['Active Listening', 'SWOT Analysis', 'Five Whys'],
       },
       CO: {
         name: 'Connection',
         description: 'Models for finding relationships and patterns',
-        examples: ['Network Effects', 'Analogical Thinking', 'Systems Thinking']
+        examples: ['Network Effects', 'Analogical Thinking', 'Systems Thinking'],
       },
       DE: {
         name: 'Decision',
         description: 'Models for making choices and judgments',
-        examples: ['Decision Trees', 'Expected Value', 'Sunk Cost Fallacy']
+        examples: ['Decision Trees', 'Expected Value', 'Sunk Cost Fallacy'],
       },
       RE: {
         name: 'Reflection',
         description: 'Models for self-awareness and learning',
-        examples: ['Retrospectives', 'Growth Mindset', 'Feedback Loops']
+        examples: ['Retrospectives', 'Growth Mindset', 'Feedback Loops'],
       },
       SY: {
         name: 'System',
         description: 'Models for understanding complex systems',
-        examples: ['Leverage Points', 'Feedback Systems', 'Emergence']
-      }
+        examples: ['Leverage Points', 'Feedback Systems', 'Emergence'],
+      },
     },
     usage: {
       browse: 'GET /v1/models - Browse all models with optional filters',
       search: 'POST /v1/models/recommend - Get recommendations for a problem',
       details: 'GET /v1/models/{code} - Get detailed model information',
-      relationships: 'GET /v1/models/{code}/relationships - Find related models'
-    }
+      relationships: 'GET /v1/models/{code}/relationships - Find related models',
+    },
   });
 });
 
@@ -236,39 +236,42 @@ app.onError((err, c) => {
       error: {
         code: 'internal_error',
         message: 'Internal Server Error',
-        details: c.env.ENVIRONMENT === 'development' ? err.message : undefined
-      }
+        details: c.env.ENVIRONMENT === 'development' ? err.message : undefined,
+      },
     },
     500
   );
 });
 
 // 404 handler
-app.notFound((c) => {
-  return c.json({
-    ok: false,
-    error: {
-      code: 'not_found',
-      message: 'Endpoint not found',
-      details: {
-        path: c.req.path,
-        method: c.req.method,
-        availableEndpoints: [
-          'GET /',
-          'GET /health',
-          'GET /docs - Interactive API documentation',
-          'GET /redoc - Alternative documentation',
-          'GET /openapi.json - OpenAPI specification',
-          'GET /v1/models',
-          'GET /v1/transformations',
-          'POST /v1/auth/login',
-          'POST /v1/auth/register',
-          'GET /v1/user/profile (requires auth)',
-          'GET /v1/analytics/stats'
-        ]
-      }
-    }
-  }, 404);
+app.notFound(c => {
+  return c.json(
+    {
+      ok: false,
+      error: {
+        code: 'not_found',
+        message: 'Endpoint not found',
+        details: {
+          path: c.req.path,
+          method: c.req.method,
+          availableEndpoints: [
+            'GET /',
+            'GET /health',
+            'GET /docs - Interactive API documentation',
+            'GET /redoc - Alternative documentation',
+            'GET /openapi.json - OpenAPI specification',
+            'GET /v1/models',
+            'GET /v1/transformations',
+            'POST /v1/auth/login',
+            'POST /v1/auth/register',
+            'GET /v1/user/profile (requires auth)',
+            'GET /v1/analytics/stats',
+          ],
+        },
+      },
+    },
+    404
+  );
 });
 
 export default app;

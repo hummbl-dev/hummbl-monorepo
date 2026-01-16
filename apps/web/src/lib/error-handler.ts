@@ -8,7 +8,7 @@ import {
   addBreadcrumb,
   ErrorSeverity,
   ErrorCategory,
-  type ErrorMetadata
+  type ErrorMetadata,
 } from '@hummbl/core';
 
 interface UserContext {
@@ -49,12 +49,9 @@ class GlobalErrorHandler {
 
     this.isInitialized = true;
 
-    addBreadcrumb(
-      'system',
-      'Global error handler initialized',
-      'info',
-      { userAgent: this.userContext.userAgent }
-    );
+    addBreadcrumb('system', 'Global error handler initialized', 'info', {
+      userAgent: this.userContext.userAgent,
+    });
   }
 
   /**
@@ -67,12 +64,7 @@ class GlobalErrorHandler {
       timestamp: new Date().toISOString(),
     };
 
-    addBreadcrumb(
-      'auth',
-      userId ? 'User logged in' : 'User logged out',
-      'info',
-      { userId }
-    );
+    addBreadcrumb('auth', userId ? 'User logged in' : 'User logged out', 'info', { userId });
   }
 
   /**
@@ -84,29 +76,20 @@ class GlobalErrorHandler {
     severity: ErrorSeverity = ErrorSeverity.MEDIUM,
     additionalContext?: Record<string, unknown>
   ): string {
-    return trackError(
-      error,
-      this.buildErrorMetadata(category, severity),
-      {
-        ...additionalContext,
-        ...this.userContext,
-      }
-    );
+    return trackError(error, this.buildErrorMetadata(category, severity), {
+      ...additionalContext,
+      ...this.userContext,
+    });
   }
 
   private handleWindowError(event: ErrorEvent): void {
     const { error, message, filename, lineno, colno } = event;
 
-    addBreadcrumb(
-      'javascript-error',
-      `Uncaught error: ${message}`,
-      'error',
-      {
-        filename,
-        line: lineno,
-        column: colno,
-      }
-    );
+    addBreadcrumb('javascript-error', `Uncaught error: ${message}`, 'error', {
+      filename,
+      line: lineno,
+      column: colno,
+    });
 
     trackError(
       error || new Error(message),
@@ -128,18 +111,11 @@ class GlobalErrorHandler {
     const error = event.reason;
     const message = error instanceof Error ? error.message : String(error);
 
-    addBreadcrumb(
-      'unhandled-promise',
-      `Unhandled promise rejection: ${message}`,
-      'error'
-    );
+    addBreadcrumb('unhandled-promise', `Unhandled promise rejection: ${message}`, 'error');
 
     trackError(
       error instanceof Error ? error : new Error(message),
-      this.buildErrorMetadata(
-        this.categorizeError(error),
-        ErrorSeverity.HIGH
-      ),
+      this.buildErrorMetadata(this.categorizeError(error), ErrorSeverity.HIGH),
       {
         type: 'unhandled-promise-rejection',
         ...this.userContext,
@@ -155,12 +131,12 @@ class GlobalErrorHandler {
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
-    history.pushState = function(...args) {
+    history.pushState = function (...args) {
       addBreadcrumb('navigation', `Navigated to ${args[2]}`, 'info');
       return originalPushState.apply(this, args);
     };
 
-    history.replaceState = function(...args) {
+    history.replaceState = function (...args) {
       addBreadcrumb('navigation', `Replaced state ${args[2]}`, 'info');
       return originalReplaceState.apply(this, args);
     };
@@ -179,7 +155,7 @@ class GlobalErrorHandler {
   private setupFetchTracking(): void {
     const originalFetch = window.fetch;
 
-    window.fetch = async function(...args): Promise<Response> {
+    window.fetch = async function (...args): Promise<Response> {
       const startTime = performance.now();
       const url = args[0] instanceof Request ? args[0].url : String(args[0]);
 
@@ -198,7 +174,7 @@ class GlobalErrorHandler {
               status: response.status,
               statusText: response.statusText,
               duration,
-              url
+              url,
             }
           );
 
@@ -283,10 +259,7 @@ class GlobalErrorHandler {
     };
   }
 
-  private buildErrorMetadata(
-    category: ErrorCategory,
-    severity: ErrorSeverity
-  ): ErrorMetadata {
+  private buildErrorMetadata(category: ErrorCategory, severity: ErrorSeverity): ErrorMetadata {
     return {
       severity,
       category,

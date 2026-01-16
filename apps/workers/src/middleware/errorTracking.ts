@@ -10,7 +10,7 @@ import {
   ErrorSeverity,
   ErrorCategory,
   classifyError,
-  type ErrorMetadata
+  type ErrorMetadata,
 } from '@hummbl/core';
 
 interface RequestContext {
@@ -51,16 +51,11 @@ export function errorTrackingMiddleware() {
     }
 
     // Add breadcrumb for the request
-    addBreadcrumb(
-      'http-request',
-      `${requestContext.method} ${requestContext.path}`,
-      'info',
-      {
-        requestId,
-        userAgent: requestContext.userAgent,
-        ip: requestContext.ip,
-      }
-    );
+    addBreadcrumb('http-request', `${requestContext.method} ${requestContext.path}`, 'info', {
+      requestId,
+      userAgent: requestContext.userAgent,
+      ip: requestContext.ip,
+    });
 
     // Store request context for error handling
     c.set('requestContext', requestContext);
@@ -76,15 +71,10 @@ export function errorTrackingMiddleware() {
       if (responseTime > 2000) {
         trackError(
           new Error(`Slow request: ${responseTime}ms`),
-          buildErrorMetadata(
-            ErrorCategory.PERFORMANCE,
-            ErrorSeverity.MEDIUM,
-            requestContext,
-            {
-              responseTime,
-              httpStatus: status,
-            }
-          ),
+          buildErrorMetadata(ErrorCategory.PERFORMANCE, ErrorSeverity.MEDIUM, requestContext, {
+            responseTime,
+            httpStatus: status,
+          }),
           {
             responseTime,
             httpStatus: status,
@@ -95,21 +85,17 @@ export function errorTrackingMiddleware() {
 
       // Track 4xx errors as user input issues
       if (status >= 400 && status < 500) {
-        const category = status === 401 || status === 403
-          ? ErrorCategory.AUTHENTICATION
-          : ErrorCategory.USER_INPUT;
+        const category =
+          status === 401 || status === 403
+            ? ErrorCategory.AUTHENTICATION
+            : ErrorCategory.USER_INPUT;
 
         trackError(
           new Error(`HTTP ${status}: ${c.res.statusText || getStatusText(status)}`),
-          buildErrorMetadata(
-            category,
-            ErrorSeverity.LOW,
-            requestContext,
-            {
-              responseTime: Date.now() - startTime,
-              httpStatus: status,
-            }
-          ),
+          buildErrorMetadata(category, ErrorSeverity.LOW, requestContext, {
+            responseTime: Date.now() - startTime,
+            httpStatus: status,
+          }),
           {
             httpStatus: status,
             responseTime: Date.now() - startTime,
@@ -117,23 +103,19 @@ export function errorTrackingMiddleware() {
           }
         );
       }
-
     } catch (error) {
       const responseTime = Date.now() - startTime;
 
       // Classify and track the error
-      const classification = classifyError(error instanceof Error ? error : new Error(String(error)));
+      const classification = classifyError(
+        error instanceof Error ? error : new Error(String(error))
+      );
 
       const errorId = trackError(
         error instanceof Error ? error : new Error(String(error)),
-        buildErrorMetadata(
-          classification.category,
-          classification.severity,
-          requestContext,
-          {
-            responseTime,
-          }
-        ),
+        buildErrorMetadata(classification.category, classification.severity, requestContext, {
+          responseTime,
+        }),
         {
           stack: error instanceof Error ? error.stack : undefined,
           responseTime,
@@ -156,16 +138,11 @@ export function enhancedErrorHandler() {
     const responseTime = requestContext ? Date.now() - requestContext.startTime : 0;
 
     // Add breadcrumb for the error
-    addBreadcrumb(
-      'error-handler',
-      `Unhandled error: ${error.message}`,
-      'error',
-      {
-        requestId: requestContext?.requestId,
-        path: requestContext?.path,
-        method: requestContext?.method,
-      }
-    );
+    addBreadcrumb('error-handler', `Unhandled error: ${error.message}`, 'error', {
+      requestId: requestContext?.requestId,
+      path: requestContext?.path,
+      method: requestContext?.method,
+    });
 
     // Classify the error
     const classification = classifyError(error);
@@ -173,14 +150,9 @@ export function enhancedErrorHandler() {
     // Track the error if not already tracked
     const errorId = trackError(
       error,
-      buildErrorMetadata(
-        classification.category,
-        classification.severity,
-        requestContext,
-        {
-          responseTime,
-        }
-      ),
+      buildErrorMetadata(classification.category, classification.severity, requestContext, {
+        responseTime,
+      }),
       {
         stack: error.stack,
         responseTime,
@@ -236,10 +208,12 @@ function buildErrorMetadata(
     userAgent: requestContext?.userAgent,
     ip: requestContext?.ip,
     timestamp: new Date().toISOString(),
-    performance: performance ? {
-      responseTime: performance.responseTime,
-      ...(performance.httpStatus && { httpStatus: performance.httpStatus }),
-    } : undefined,
+    performance: performance
+      ? {
+          responseTime: performance.responseTime,
+          ...(performance.httpStatus && { httpStatus: performance.httpStatus }),
+        }
+      : undefined,
     tags: {
       environment: 'cloudflare-workers',
       source: 'backend',
@@ -248,7 +222,10 @@ function buildErrorMetadata(
   };
 }
 
-function getErrorStatusCode(error: Error, classification: { category: ErrorCategory; severity: ErrorSeverity }): number {
+function getErrorStatusCode(
+  error: Error,
+  classification: { category: ErrorCategory; severity: ErrorSeverity }
+): number {
   // Map error types to HTTP status codes
   switch (classification.category) {
     case ErrorCategory.AUTHENTICATION:

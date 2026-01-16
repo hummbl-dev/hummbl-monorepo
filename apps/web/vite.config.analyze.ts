@@ -35,7 +35,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Manual chunk splitting for optimal caching and analysis
-        manualChunks: (id) => {
+        manualChunks: id => {
           // Core React libraries
           if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
             return 'vendor-react';
@@ -45,9 +45,11 @@ export default defineConfig({
             return 'vendor-query';
           }
           // UI utilities
-          if (id.includes('class-variance-authority') ||
-              id.includes('tailwind-merge') ||
-              id.includes('lucide-react')) {
+          if (
+            id.includes('class-variance-authority') ||
+            id.includes('tailwind-merge') ||
+            id.includes('lucide-react')
+          ) {
             return 'vendor-ui';
           }
           // Heavy graph visualization
@@ -96,7 +98,7 @@ export default defineConfig({
       'react-router-dom',
       '@tanstack/react-query',
       'lucide-react',
-      'axios'
+      'axios',
     ],
     // Exclude heavy dependencies from pre-bundling
     exclude: ['react-force-graph-2d'],

@@ -13,7 +13,7 @@ import {
   AUTH_CIRCUIT_CONFIG,
   READ_CIRCUIT_CONFIG,
   type CircuitBreakerError,
-  type CircuitBreakerConfig
+  type CircuitBreakerConfig,
 } from './circuit-breaker';
 
 export interface DbOperationContext {
@@ -107,11 +107,14 @@ export class ProtectedD1PreparedStatement {
     console.error(`[DB_WRAPPER][${this.context.operation}] Database ${method} operation failed`, {
       table: this.context.table,
       query: this.context.query?.substring(0, 200),
-      error: error instanceof Error ? {
-        name: error.name,
-        message: error.message
-      } : String(error).substring(0, 200),
-      circuitState: this.circuitBreaker.getMetrics().state
+      error:
+        error instanceof Error
+          ? {
+              name: error.name,
+              message: error.message,
+            }
+          : String(error).substring(0, 200),
+      circuitState: this.circuitBreaker.getMetrics().state,
     });
   }
 }
@@ -141,14 +144,10 @@ export class ProtectedDatabase {
       operation,
       table: context?.table || this.extractTableFromQuery(query),
       query: query.length > 200 ? query.substring(0, 200) + '...' : query,
-      fallbackData: context?.fallbackData
+      fallbackData: context?.fallbackData,
     };
 
-    return new ProtectedD1PreparedStatement(
-      this.db.prepare(query),
-      circuitBreaker,
-      fullContext
-    );
+    return new ProtectedD1PreparedStatement(this.db.prepare(query), circuitBreaker, fullContext);
   }
 
   /**
@@ -161,7 +160,7 @@ export class ProtectedDatabase {
       } catch (error) {
         console.error('[DB_WRAPPER][write] Batch operation failed', {
           statementCount: statements.length,
-          error: error instanceof Error ? error.message : String(error)
+          error: error instanceof Error ? error.message : String(error),
         });
         throw error;
       }
@@ -181,7 +180,7 @@ export class ProtectedDatabase {
       } catch (error) {
         console.error(`[DB_WRAPPER][${operation}] Exec operation failed`, {
           query: query.substring(0, 200),
-          error: error instanceof Error ? error.message : String(error)
+          error: error instanceof Error ? error.message : String(error),
         });
         throw error;
       }
@@ -204,7 +203,7 @@ export class ProtectedDatabase {
     return {
       read: this.readCircuitBreaker.getMetrics(),
       write: this.writeCircuitBreaker.getMetrics(),
-      auth: this.authCircuitBreaker.getMetrics()
+      auth: this.authCircuitBreaker.getMetrics(),
     };
   }
 
@@ -216,11 +215,13 @@ export class ProtectedDatabase {
     const writeMetrics = this.writeCircuitBreaker.getMetrics();
     const authMetrics = this.authCircuitBreaker.getMetrics();
 
-    const anyCircuitOpen = [readMetrics, writeMetrics, authMetrics]
-      .some(m => m.state === CircuitBreakerState.OPEN);
+    const anyCircuitOpen = [readMetrics, writeMetrics, authMetrics].some(
+      m => m.state === CircuitBreakerState.OPEN
+    );
 
-    const anyCircuitHalfOpen = [readMetrics, writeMetrics, authMetrics]
-      .some(m => m.state === CircuitBreakerState.HALF_OPEN);
+    const anyCircuitHalfOpen = [readMetrics, writeMetrics, authMetrics].some(
+      m => m.state === CircuitBreakerState.HALF_OPEN
+    );
 
     let status: 'healthy' | 'degraded' | 'unhealthy';
     if (anyCircuitOpen) {
@@ -238,32 +239,35 @@ export class ProtectedDatabase {
           state: readMetrics.state,
           failures: readMetrics.failures,
           failureRate: readMetrics.failureRate,
-          uptime: readMetrics.uptime
+          uptime: readMetrics.uptime,
         },
         write: {
           state: writeMetrics.state,
           failures: writeMetrics.failures,
           failureRate: writeMetrics.failureRate,
-          uptime: writeMetrics.uptime
+          uptime: writeMetrics.uptime,
         },
         auth: {
           state: authMetrics.state,
           failures: authMetrics.failures,
           failureRate: authMetrics.failureRate,
-          uptime: authMetrics.uptime
-        }
-      }
+          uptime: authMetrics.uptime,
+        },
+      },
     };
   }
 
   /**
    * Handle circuit breaker errors with appropriate fallback responses
    */
-  static handleCircuitBreakerError(error: CircuitBreakerError, context?: DbOperationContext): FallbackResponse {
+  static handleCircuitBreakerError(
+    error: CircuitBreakerError,
+    context?: DbOperationContext
+  ): FallbackResponse {
     console.warn(`[DB_WRAPPER] Providing fallback response for ${error.code}`, {
       operation: context?.operation,
       table: context?.table,
-      state: error.circuitState
+      state: error.circuitState,
     });
 
     // Return appropriate fallback based on operation type
@@ -277,7 +281,7 @@ export class ProtectedDatabase {
       default:
         return {
           message: 'Service temporarily unavailable. Please try again later.',
-          cached: false
+          cached: false,
         };
     }
   }
@@ -301,7 +305,10 @@ export class ProtectedDatabase {
   /**
    * Determine operation type from SQL query
    */
-  private determineOperation(query: string, explicitOperation?: 'read' | 'write' | 'auth'): 'read' | 'write' | 'auth' {
+  private determineOperation(
+    query: string,
+    explicitOperation?: 'read' | 'write' | 'auth'
+  ): 'read' | 'write' | 'auth' {
     if (explicitOperation) {
       return explicitOperation;
     }
@@ -329,8 +336,10 @@ export class ProtectedDatabase {
     const authTables = ['users', 'user_sessions', 'refresh_tokens'];
     const authKeywords = ['password', 'token', 'auth', 'login', 'register'];
 
-    return authTables.some(table => query.includes(table)) ||
-           authKeywords.some(keyword => query.includes(keyword));
+    return (
+      authTables.some(table => query.includes(table)) ||
+      authKeywords.some(keyword => query.includes(keyword))
+    );
   }
 
   /**
@@ -359,7 +368,7 @@ export class ProtectedDatabase {
       /from\s+([a-zA-Z_][a-zA-Z0-9_]*)/i,
       /insert\s+into\s+([a-zA-Z_][a-zA-Z0-9_]*)/i,
       /update\s+([a-zA-Z_][a-zA-Z0-9_]*)/i,
-      /delete\s+from\s+([a-zA-Z_][a-zA-Z0-9_]*)/i
+      /delete\s+from\s+([a-zA-Z_][a-zA-Z0-9_]*)/i,
     ];
 
     for (const pattern of patterns) {
@@ -381,13 +390,13 @@ export class ProtectedDatabase {
       return {
         models: [],
         message: 'Models temporarily unavailable. Cached data may be available.',
-        cached: false
+        cached: false,
       };
     }
 
     return {
       message: 'Data temporarily unavailable. Please try again in a few moments.',
-      cached: false
+      cached: false,
     };
   }
 
@@ -397,7 +406,7 @@ export class ProtectedDatabase {
   private static getAuthFallback(context?: DbOperationContext): FallbackResponse {
     return {
       message: 'Authentication service temporarily unavailable. Please try again shortly.',
-      cached: false
+      cached: false,
     };
   }
 
@@ -406,8 +415,9 @@ export class ProtectedDatabase {
    */
   private static getWriteFallback(context?: DbOperationContext): FallbackResponse {
     return {
-      message: 'Write operations temporarily unavailable. Your request has been noted and will be processed when service is restored.',
-      cached: false
+      message:
+        'Write operations temporarily unavailable. Your request has been noted and will be processed when service is restored.',
+      cached: false,
     };
   }
 }
@@ -434,7 +444,7 @@ export async function executeWithFallback<T>(
       console.warn('[DB_WRAPPER] Circuit breaker activated, using fallback', {
         operation: context.operation,
         table: context.table,
-        state: error.circuitState
+        state: error.circuitState,
       });
       return fallbackValue;
     }

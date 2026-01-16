@@ -5,6 +5,7 @@ This document describes the bundle size monitoring system for the HUMMBL web app
 ## Overview
 
 Bundle size monitoring helps maintain optimal performance by:
+
 - Tracking bundle size changes over time
 - Preventing performance regressions
 - Providing actionable insights for optimization
@@ -15,11 +16,13 @@ Bundle size monitoring helps maintain optimal performance by:
 The system enforces the following size budgets (gzipped):
 
 ### JavaScript Bundles
+
 - **Main Bundle**: 200KB limit (180KB warning)
 - **Individual Chunks**: 100KB limit (80KB warning)
 - **Total JavaScript**: 600KB limit (500KB warning)
 
 ### Vendor Chunks
+
 - **React Core** (`vendor-react`): 150KB limit
 - **TanStack Query** (`vendor-query`): 50KB limit
 - **UI Libraries** (`vendor-ui`): 80KB limit
@@ -27,10 +30,12 @@ The system enforces the following size budgets (gzipped):
 - **HTTP Client** (`vendor-http`): 30KB limit
 
 ### CSS Bundles
+
 - **CSS Bundle**: 50KB limit (40KB warning)
 - **Total CSS**: 100KB limit (80KB warning)
 
 ### Total Assets
+
 - **All Assets**: 1000KB limit (800KB warning)
 
 ## How It Works
@@ -83,6 +88,7 @@ The bundle size checker provides color-coded output:
 - ❌ **Red**: Exceeds budget
 
 Example output:
+
 ```
 📦 MAIN BUNDLES
 ---------------
@@ -153,10 +159,10 @@ export default defineConfig({
           'vendor-ui': ['@radix-ui/react-dialog', 'lucide-react'],
           // Separate heavy libraries
           'vendor-charts': ['react-force-graph-2d'],
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 });
 ```
 
@@ -172,20 +178,24 @@ export default defineConfig({
 Size increases may be acceptable when:
 
 ### New Features
+
 - **Significant User Value**: Feature provides substantial benefit
 - **No Alternative**: No smaller way to implement functionality
 - **Future Optimization**: Plan exists to optimize later
 - **Temporary**: Short-term increase with optimization roadmap
 
 ### Security Updates
+
 - **Critical Fixes**: Security patches take priority
 - **Dependency Updates**: Required for vulnerability fixes
 
 ### Performance Improvements
+
 - **Better UX**: Slight size increase for significant UX improvement
 - **Runtime Performance**: Trade bundle size for runtime performance
 
 ### Documentation Requirements
+
 Size increases should be documented with:
 
 1. **Justification**: Why the increase is necessary
@@ -204,8 +214,8 @@ export const bundleSizeBudgets = {
   mainJsBundle: {
     limit: 200, // KB
     warning: 180, // KB
-    description: 'Main application bundle'
-  }
+    description: 'Main application bundle',
+  },
   // ... other budgets
 };
 ```
@@ -223,6 +233,7 @@ Modify `.github/workflows/bundle-size.yml`:
 ### Common Issues
 
 1. **Build Failures**:
+
    ```bash
    # Check if dist exists
    ls apps/web/dist
@@ -232,6 +243,7 @@ Modify `.github/workflows/bundle-size.yml`:
    ```
 
 2. **Missing Dependencies**:
+
    ```bash
    # Install analysis tools
    cd apps/web
@@ -279,11 +291,13 @@ DEBUG=bundle-size pnpm --filter @hummbl/web bundle-size
 ## Resources
 
 ### Tools
+
 - [Rollup Plugin Visualizer](https://github.com/btd/rollup-plugin-visualizer)
 - [Compressed Size Action](https://github.com/preactjs/compressed-size-action)
 - [Bundle Buddy](https://bundle-buddy.com/)
 
 ### References
+
 - [Web.dev Bundle Size Optimization](https://web.dev/reduce-javascript-payloads-with-code-splitting/)
 - [Vite Bundle Analysis](https://vitejs.dev/guide/build.html#build-optimizations)
 - [React Code Splitting](https://reactjs.org/docs/code-splitting.html)

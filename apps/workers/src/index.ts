@@ -16,7 +16,11 @@ import { rateLimiter } from './middleware/rateLimiter';
 import { errorTrackingMiddleware, enhancedErrorHandler } from './middleware/errorTracking';
 import { createLogger, addBreadcrumb } from '@hummbl/core';
 import { createProtectedDatabase } from './lib/db-wrapper';
-import { circuitBreakerMonitoring, createCircuitBreakerMetricsRouter, performanceMonitoring } from './middleware/circuit-breaker-monitoring';
+import {
+  circuitBreakerMonitoring,
+  createCircuitBreakerMetricsRouter,
+  performanceMonitoring,
+} from './middleware/circuit-breaker-monitoring';
 
 const app = new Hono<{ Bindings: Env }>();
 const appLogger = createLogger('workers');
@@ -78,22 +82,26 @@ app.get('/health', c => {
         circuitBreakers: {
           read: dbHealth.circuits.read.state,
           write: dbHealth.circuits.write.state,
-          auth: dbHealth.circuits.auth.state
-        }
+          auth: dbHealth.circuits.auth.state,
+        },
       },
       version: c.env.API_VERSION || 'v1',
-      environment: c.env.ENVIRONMENT || 'production'
+      environment: c.env.ENVIRONMENT || 'production',
     });
   } catch (error) {
     // Fallback health response if circuit breaker check fails
-    appLogger.error('Health check error', { context: 'workers-health-check', error: error instanceof Error ? error.message : String(error), timestamp: new Date().toISOString() });
+    appLogger.error('Health check error', {
+      context: 'workers-health-check',
+      error: error instanceof Error ? error.message : String(error),
+      timestamp: new Date().toISOString(),
+    });
     return c.json({
       status: 'degraded',
       timestamp: new Date().toISOString(),
       error: 'Unable to check all health metrics',
       services: {
-        api: 'healthy'
-      }
+        api: 'healthy',
+      },
     });
   }
 });

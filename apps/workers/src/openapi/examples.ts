@@ -8,7 +8,7 @@ export const API_EXAMPLES = {
     login: {
       request: {
         email: 'user@example.com',
-        password: 'SecurePassword123!'
+        password: 'SecurePassword123!',
       },
       response: {
         ok: true,
@@ -20,19 +20,20 @@ export const API_EXAMPLES = {
             avatar_url: 'https://avatars.githubusercontent.com/u/12345',
             provider: 'email',
             provider_id: '123e4567-e89b-12d3-a456-426614174000',
-            email_verified: true
+            email_verified: true,
           },
-          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MDUzMjQ4MDAsImV4cCI6MTcwNTQxMTIwMCwiaXNzIjoiaHVtbWJsLWF1dGgiLCJhdWQiOiJodW1tYmwtd2ViIiwidHlwZSI6ImFjY2VzcyJ9.signature',
+          token:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjNlNDU2Ny1lODliLTEyZDMtYTQ1Ni00MjY2MTQxNzQwMDAiLCJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3MDUzMjQ4MDAsImV4cCI6MTcwNTQxMTIwMCwiaXNzIjoiaHVtbWJsLWF1dGgiLCJhdWQiOiJodW1tYmwtd2ViIiwidHlwZSI6ImFjY2VzcyJ9.signature',
           refreshToken: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-          expiresIn: 86400
-        }
-      }
+          expiresIn: 86400,
+        },
+      },
     },
     register: {
       request: {
         email: 'newuser@example.com',
         password: 'StrongPassword123!',
-        name: 'Jane Smith'
+        name: 'Jane Smith',
       },
       response: {
         ok: true,
@@ -44,14 +45,14 @@ export const API_EXAMPLES = {
             avatar_url: null,
             provider: 'email',
             provider_id: '456e7890-f12b-34d5-a678-901234567890',
-            email_verified: false
+            email_verified: false,
           },
           token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
           refreshToken: 'b2c3d4e5-f6g7-8901-bcde-f23456789012',
-          message: 'Registration successful. Please check your email to verify your account.'
-        }
-      }
-    }
+          message: 'Registration successful. Please check your email to verify your account.',
+        },
+      },
+    },
   },
 
   // Models Examples
@@ -65,34 +66,38 @@ export const API_EXAMPLES = {
               code: 'P1',
               name: 'First Principles',
               transformation: 'P',
-              description: 'Breaking down complex problems into fundamental truths and building up from there.',
-              example: 'Elon Musk analyzing rocket costs by examining raw material prices rather than industry benchmarks.',
+              description:
+                'Breaking down complex problems into fundamental truths and building up from there.',
+              example:
+                'Elon Musk analyzing rocket costs by examining raw material prices rather than industry benchmarks.',
               tags: 'problem-solving,analysis,reasoning',
               difficulty: 'Intermediate',
               relatedModels: 'P2,DE3',
               version: '1.0',
               createdAt: '2024-01-15T10:00:00Z',
-              updatedAt: '2024-01-15T10:00:00Z'
+              updatedAt: '2024-01-15T10:00:00Z',
             },
             {
               code: 'CO1',
               name: 'Network Effects',
               transformation: 'CO',
-              description: 'Understanding how products or services become more valuable as more people use them.',
-              example: 'Social media platforms like Facebook become more valuable as more friends join.',
+              description:
+                'Understanding how products or services become more valuable as more people use them.',
+              example:
+                'Social media platforms like Facebook become more valuable as more friends join.',
               tags: 'systems,networks,exponential-growth',
               difficulty: 'Beginner',
               relatedModels: 'CO2,SY1',
               version: '1.0',
               createdAt: '2024-01-15T10:00:00Z',
-              updatedAt: '2024-01-15T10:00:00Z'
-            }
+              updatedAt: '2024-01-15T10:00:00Z',
+            },
           ],
           count: 2,
           transformation: null,
-          search: null
-        }
-      }
+          search: null,
+        },
+      },
     },
     getModel: {
       response: {
@@ -102,50 +107,57 @@ export const API_EXAMPLES = {
             code: 'P1',
             name: 'First Principles',
             transformation: 'P',
-            description: 'Breaking down complex problems into fundamental truths and building up from there. This mental model encourages questioning assumptions and rebuilding understanding from the ground up.',
-            example: 'Elon Musk analyzing rocket costs by examining raw material prices rather than industry benchmarks. Instead of accepting the high cost of rockets, he broke down the cost of materials (aluminum, titanium, carbon fiber, etc.) and realized rockets should cost a fraction of their market price.',
+            description:
+              'Breaking down complex problems into fundamental truths and building up from there. This mental model encourages questioning assumptions and rebuilding understanding from the ground up.',
+            example:
+              'Elon Musk analyzing rocket costs by examining raw material prices rather than industry benchmarks. Instead of accepting the high cost of rockets, he broke down the cost of materials (aluminum, titanium, carbon fiber, etc.) and realized rockets should cost a fraction of their market price.',
             tags: 'problem-solving,analysis,reasoning,innovation',
             difficulty: 'Intermediate',
             relatedModels: 'P2,DE3,IN1',
             version: '1.0',
             createdAt: '2024-01-15T10:00:00Z',
-            updatedAt: '2024-01-15T10:00:00Z'
-          }
-        }
-      }
+            updatedAt: '2024-01-15T10:00:00Z',
+          },
+        },
+      },
     },
     recommend: {
       request: {
-        problem: 'I need to make a difficult business decision about whether to pivot our product strategy, but I have limited information and high uncertainty about market conditions.'
+        problem:
+          'I need to make a difficult business decision about whether to pivot our product strategy, but I have limited information and high uncertainty about market conditions.',
       },
       response: {
         ok: true,
         value: {
-          problem: 'I need to make a difficult business decision about whether to pivot our product strategy, but I have limited information and high uncertainty about market conditions.',
+          problem:
+            'I need to make a difficult business decision about whether to pivot our product strategy, but I have limited information and high uncertainty about market conditions.',
           recommendations: [
             {
               code: 'DE1',
               name: 'Decision Trees',
               transformation: 'DE',
-              description: 'Structured approach to decision making under uncertainty using branching scenarios'
+              description:
+                'Structured approach to decision making under uncertainty using branching scenarios',
             },
             {
               code: 'DE5',
               name: 'Expected Value',
               transformation: 'DE',
-              description: 'Calculate the average outcome of different choices weighted by their probabilities'
+              description:
+                'Calculate the average outcome of different choices weighted by their probabilities',
             },
             {
               code: 'IN3',
               name: 'Information Theory',
               transformation: 'IN',
-              description: 'Framework for evaluating the value of additional information before making decisions'
-            }
+              description:
+                'Framework for evaluating the value of additional information before making decisions',
+            },
           ],
-          count: 3
-        }
-      }
-    }
+          count: 3,
+        },
+      },
+    },
   },
 
   // Transformations Examples
@@ -160,48 +172,48 @@ export const API_EXAMPLES = {
               name: 'Perspective',
               description: 'Models for changing viewpoints and reframing problems',
               color: '#FF6B6B',
-              icon: 'perspective'
+              icon: 'perspective',
             },
             IN: {
               code: 'IN',
               name: 'Input',
               description: 'Models for gathering and processing information',
               color: '#4ECDC4',
-              icon: 'input'
+              icon: 'input',
             },
             CO: {
               code: 'CO',
               name: 'Connection',
               description: 'Models for finding relationships and patterns',
               color: '#45B7D1',
-              icon: 'connection'
+              icon: 'connection',
             },
             DE: {
               code: 'DE',
               name: 'Decision',
               description: 'Models for making choices and judgments',
               color: '#FFA07A',
-              icon: 'decision'
+              icon: 'decision',
             },
             RE: {
               code: 'RE',
               name: 'Reflection',
               description: 'Models for self-awareness and learning',
               color: '#98D8C8',
-              icon: 'reflection'
+              icon: 'reflection',
             },
             SY: {
               code: 'SY',
               name: 'System',
               description: 'Models for understanding complex systems',
               color: '#F7DC6F',
-              icon: 'system'
-            }
+              icon: 'system',
+            },
           },
-          count: 6
-        }
-      }
-    }
+          count: 6,
+        },
+      },
+    },
   },
 
   // User Examples
@@ -215,32 +227,32 @@ export const API_EXAMPLES = {
           avatar_url: 'https://avatars.githubusercontent.com/u/12345',
           provider: 'github',
           provider_id: '12345',
-          created_at: '2024-01-15T10:00:00Z'
+          created_at: '2024-01-15T10:00:00Z',
         },
         stats: {
           completedModels: 15,
-          favoriteModels: 8
-        }
-      }
+          favoriteModels: 8,
+        },
+      },
     },
     progress: {
       response: {
         progress: [
           {
             model_id: 'P1',
-            completed_at: '2024-01-20T14:30:00Z'
+            completed_at: '2024-01-20T14:30:00Z',
           },
           {
             model_id: 'CO3',
-            completed_at: '2024-01-18T09:15:00Z'
+            completed_at: '2024-01-18T09:15:00Z',
           },
           {
             model_id: 'DE2',
-            completed_at: '2024-01-16T16:45:00Z'
-          }
-        ]
-      }
-    }
+            completed_at: '2024-01-16T16:45:00Z',
+          },
+        ],
+      },
+    },
   },
 
   // Error Examples
@@ -251,26 +263,26 @@ export const API_EXAMPLES = {
       details: {
         fieldErrors: {
           email: ['Invalid email format'],
-          password: ['Password must be at least 8 characters']
-        }
-      }
+          password: ['Password must be at least 8 characters'],
+        },
+      },
     },
     authentication: {
       code: 'invalid_credentials',
       message: 'Invalid email or password',
-      details: null
+      details: null,
     },
     authorization: {
       code: 'authentication_required',
       message: 'Valid authentication token required',
-      details: null
+      details: null,
     },
     notFound: {
       code: 'not_found',
       message: 'Model P999 not found',
       details: {
-        code: 'P999'
-      }
+        code: 'P999',
+      },
     },
     rateLimit: {
       code: 'rate_limit_exceeded',
@@ -278,15 +290,15 @@ export const API_EXAMPLES = {
       details: {
         retryAfter: 60,
         limit: 100,
-        windowSeconds: 60
-      }
+        windowSeconds: 60,
+      },
     },
     serverError: {
       code: 'internal_error',
       message: 'Internal server error occurred',
-      details: null
-    }
-  }
+      details: null,
+    },
+  },
 };
 
 export const CURL_EXAMPLES = {
@@ -331,7 +343,7 @@ export const CURL_EXAMPLES = {
   -H "Content-Type: application/json" \\
   -d '{
     "modelId": "P1"
-  }'`
+  }'`,
 };
 
 export const JAVASCRIPT_EXAMPLES = {
@@ -436,7 +448,7 @@ async function apiRequest(url, options = {}) {
   }
 
   return response;
-}`
+}`,
 };
 
 export const RATE_LIMITING_INFO = {
@@ -446,26 +458,26 @@ export const RATE_LIMITING_INFO = {
       description: 'Applied to all API endpoints',
       window: '60 seconds',
       requests: 100,
-      scope: 'per IP address'
+      scope: 'per IP address',
     },
     authentication: {
       description: 'Applied to authentication endpoints (/v1/auth/*)',
       window: '60 seconds',
       requests: 10,
-      scope: 'per IP address'
-    }
+      scope: 'per IP address',
+    },
   },
   headers: {
     'X-RateLimit-Limit': 'Maximum number of requests allowed in the current window',
     'X-RateLimit-Remaining': 'Number of requests remaining in the current window',
     'X-RateLimit-Reset': 'Unix timestamp when the current window resets',
-    'Retry-After': 'Number of seconds to wait before retrying (included in 429 responses)'
+    'Retry-After': 'Number of seconds to wait before retrying (included in 429 responses)',
   },
   bestPractices: [
     'Implement exponential backoff when receiving 429 responses',
     'Cache API responses when possible to reduce the number of requests',
     'Monitor rate limit headers to avoid hitting limits',
     'Use appropriate User-Agent headers for better identification',
-    'Consider implementing request queuing in your application'
-  ]
+    'Consider implementing request queuing in your application',
+  ],
 };

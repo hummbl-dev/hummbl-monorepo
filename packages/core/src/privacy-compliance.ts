@@ -16,9 +16,9 @@ export enum DataClassification {
 }
 
 export enum RetentionPolicy {
-  SHORT = 'short',    // 7 days
-  MEDIUM = 'medium',  // 30 days
-  LONG = 'long',      // 90 days
+  SHORT = 'short', // 7 days
+  MEDIUM = 'medium', // 30 days
+  LONG = 'long', // 90 days
   EXTENDED = 'extended', // 365 days
 }
 
@@ -116,9 +116,13 @@ class PrivacyCompliantTracker {
       classification,
       retentionPolicy: retentionRule.retentionPeriod,
       retentionDays: retentionRule.retentionDays,
-      purgeDate: new Date(Date.now() + retentionRule.purgeAfterDays * 24 * 60 * 60 * 1000).toISOString(),
+      purgeDate: new Date(
+        Date.now() + retentionRule.purgeAfterDays * 24 * 60 * 60 * 1000
+      ).toISOString(),
       anonymizeDate: retentionRule.anonymizeAfterDays
-        ? new Date(Date.now() + retentionRule.anonymizeAfterDays * 24 * 60 * 60 * 1000).toISOString()
+        ? new Date(
+            Date.now() + retentionRule.anonymizeAfterDays * 24 * 60 * 60 * 1000
+          ).toISOString()
         : undefined,
       detectedPII,
       consentStatus: userId ? this.checkConsent(userId) : undefined,
@@ -381,7 +385,9 @@ class PrivacyCompliantTracker {
       const anonymizedData = JSON.parse(dataStr);
       Object.assign(data, anonymizedData);
     } catch (error) {
-      logger.error('Failed to anonymize PII', { error: error instanceof Error ? error.message : String(error) });
+      logger.error('Failed to anonymize PII', {
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }
 
@@ -391,18 +397,23 @@ class PrivacyCompliantTracker {
   }
 
   private checkConsent(userId: string): ConsentRecord {
-    return this.consentRecords.get(userId) || {
-      userId,
-      consentType: 'error_tracking',
-      granted: false,
-      timestamp: new Date().toISOString(),
-      ipAddress: 'unknown',
-      userAgent: 'unknown',
-      version: '1.0',
-    };
+    return (
+      this.consentRecords.get(userId) || {
+        userId,
+        consentType: 'error_tracking',
+        granted: false,
+        timestamp: new Date().toISOString(),
+        ipAddress: 'unknown',
+        userAgent: 'unknown',
+        version: '1.0',
+      }
+    );
   }
 
-  private createMinimalErrorData(_originalData: Record<string, unknown>, reason: string): SanitizedData {
+  private createMinimalErrorData(
+    _originalData: Record<string, unknown>,
+    reason: string
+  ): SanitizedData {
     return {
       data: {
         error: 'Error data unavailable',
@@ -420,9 +431,12 @@ class PrivacyCompliantTracker {
 
   private startRetentionEnforcement(): void {
     // Run retention enforcement daily
-    setInterval(() => {
-      this.enforceRetentionPolicies();
-    }, 24 * 60 * 60 * 1000);
+    setInterval(
+      () => {
+        this.enforceRetentionPolicies();
+      },
+      24 * 60 * 60 * 1000
+    );
 
     logger.info('Retention policy enforcement started');
   }
@@ -438,7 +452,7 @@ class PrivacyCompliantTracker {
     let hash = 0;
     for (let i = 0; i < userId.length; i++) {
       const char = userId.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash;
     }
     return Math.abs(hash).toString(36);
@@ -583,7 +597,13 @@ interface ComplianceReport {
 }
 
 type ConsentType = 'error_tracking' | 'analytics' | 'marketing';
-type DataSubjectRightType = 'access' | 'rectification' | 'erasure' | 'portability' | 'objection' | 'restriction';
+type DataSubjectRightType =
+  | 'access'
+  | 'rectification'
+  | 'erasure'
+  | 'portability'
+  | 'objection'
+  | 'restriction';
 
 // Global instance with default privacy-first configuration
 export const privacyCompliantTracker = new PrivacyCompliantTracker({

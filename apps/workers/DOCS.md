@@ -48,6 +48,7 @@ curl -X GET "https://api.hummbl.dev/v1/user/profile" \
 ```
 
 **Supported OAuth Providers:**
+
 - Google OAuth 2.0
 - GitHub OAuth 2.0
 
@@ -61,23 +62,25 @@ curl -X GET "https://api.hummbl.dev/v1/user/profile" \
 
 The API provides access to 120+ mental models organized by transformation types:
 
-| Type | Name | Description | Example Models |
-|------|------|-------------|----------------|
-| **P** | Perspective | Changing viewpoints and reframing | First Principles, Inversion |
-| **IN** | Input | Gathering and processing information | SWOT Analysis, Five Whys |
-| **CO** | Connection | Finding relationships and patterns | Network Effects, Systems Thinking |
-| **DE** | Decision | Making choices and judgments | Decision Trees, Expected Value |
-| **RE** | Reflection | Self-awareness and learning | Growth Mindset, Feedback Loops |
-| **SY** | System | Understanding complex systems | Leverage Points, Emergence |
+| Type   | Name        | Description                          | Example Models                    |
+| ------ | ----------- | ------------------------------------ | --------------------------------- |
+| **P**  | Perspective | Changing viewpoints and reframing    | First Principles, Inversion       |
+| **IN** | Input       | Gathering and processing information | SWOT Analysis, Five Whys          |
+| **CO** | Connection  | Finding relationships and patterns   | Network Effects, Systems Thinking |
+| **DE** | Decision    | Making choices and judgments         | Decision Trees, Expected Value    |
+| **RE** | Reflection  | Self-awareness and learning          | Growth Mindset, Feedback Loops    |
+| **SY** | System      | Understanding complex systems        | Leverage Points, Emergence        |
 
 ## 📚 API Endpoints
 
 ### Health & Info
+
 - `GET /` - API information
 - `GET /health` - Health check
 - `GET /v1/base120-info` - Base120 system overview
 
 ### Authentication
+
 - `POST /v1/auth/login` - Email/password login
 - `POST /v1/auth/register` - User registration
 - `POST /v1/auth/google` - Google OAuth login
@@ -87,16 +90,19 @@ The API provides access to 120+ mental models organized by transformation types:
 - `POST /v1/auth/logout` - Logout
 
 ### Mental Models
+
 - `GET /v1/models` - List models with filtering
 - `GET /v1/models/{code}` - Get specific model
 - `GET /v1/models/{code}/relationships` - Get model relationships
 - `POST /v1/models/recommend` - Get recommendations for a problem
 
 ### Transformations
+
 - `GET /v1/transformations` - List all transformation types
 - `GET /v1/transformations/{type}` - Get transformation with models
 
 ### User Management (Authentication Required)
+
 - `GET /v1/user/profile` - User profile and stats
 - `GET /v1/user/progress` - Completed models
 - `POST /v1/user/progress` - Mark model as completed
@@ -106,6 +112,7 @@ The API provides access to 120+ mental models organized by transformation types:
 - `DELETE /v1/user/favorites/{modelId}` - Remove from favorites
 
 ### Analytics
+
 - `GET /v1/analytics/stats` - Usage statistics
 - `GET /v1/analytics/health` - Analytics service health
 
@@ -127,19 +134,23 @@ pnpm docs:preview
 ### Adding New Endpoints
 
 1. **Define Schema** in `src/openapi/schemas.ts`:
+
 ```typescript
-export const NewFeatureSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string().describe('Feature name')
-}).openapi({
-  example: {
-    id: '123e4567-e89b-12d3-a456-426614174000',
-    name: 'Example Feature'
-  }
-});
+export const NewFeatureSchema = z
+  .object({
+    id: z.string().uuid(),
+    name: z.string().describe('Feature name'),
+  })
+  .openapi({
+    example: {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+      name: 'Example Feature',
+    },
+  });
 ```
 
 2. **Create Route Definition** in `src/openapi/routes.ts`:
+
 ```typescript
 export const getNewFeatureRoute = createRoute({
   method: 'get',
@@ -149,25 +160,26 @@ export const getNewFeatureRoute = createRoute({
   description: 'Retrieve a specific feature by ID',
   request: {
     params: z.object({
-      id: z.string().uuid()
-    })
+      id: z.string().uuid(),
+    }),
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: SuccessResponseSchema(NewFeatureSchema)
-        }
+          schema: SuccessResponseSchema(NewFeatureSchema),
+        },
       },
-      description: 'Feature details'
-    }
-  }
+      description: 'Feature details',
+    },
+  },
 });
 ```
 
 3. **Implement Handler** in your route file:
+
 ```typescript
-app.openapi(getNewFeatureRoute, async (c) => {
+app.openapi(getNewFeatureRoute, async c => {
   const { id } = c.req.valid('param');
   // Implementation here
   return c.json({ ok: true, value: feature });
@@ -175,6 +187,7 @@ app.openapi(getNewFeatureRoute, async (c) => {
 ```
 
 4. **Add Examples** in `src/openapi/examples.ts`:
+
 ```typescript
 export const FEATURE_EXAMPLES = {
   getFeature: {
@@ -182,16 +195,17 @@ export const FEATURE_EXAMPLES = {
       ok: true,
       value: {
         id: '123e4567-e89b-12d3-a456-426614174000',
-        name: 'Example Feature'
-      }
-    }
-  }
+        name: 'Example Feature',
+      },
+    },
+  },
 };
 ```
 
 ### Validation
 
 The validation script checks:
+
 - ✅ Schema consistency and examples
 - ✅ Route coverage (documented vs implemented)
 - ✅ Security requirements
@@ -208,18 +222,22 @@ const loginResponse = await fetch('https://api.hummbl.dev/v1/auth/login', {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     email: 'user@example.com',
-    password: 'password'
-  })
+    password: 'password',
+  }),
 });
 
-const { value: { token } } = await loginResponse.json();
+const {
+  value: { token },
+} = await loginResponse.json();
 
 // Fetch models
 const modelsResponse = await fetch('https://api.hummbl.dev/v1/models?transformation=P', {
-  headers: { 'Authorization': `Bearer ${token}` }
+  headers: { Authorization: `Bearer ${token}` },
 });
 
-const { value: { models } } = await modelsResponse.json();
+const {
+  value: { models },
+} = await modelsResponse.json();
 ```
 
 ### cURL
@@ -260,6 +278,7 @@ transformations = requests.get(
 ## 🛡️ Security
 
 ### Authentication Security
+
 - JWT tokens with HS256 signing
 - 24-hour access token expiration
 - 7-day refresh token expiration
@@ -267,12 +286,14 @@ transformations = requests.get(
 - CSRF protection on POST endpoints
 
 ### Input Validation
+
 - Comprehensive Zod schema validation
 - SQL injection prevention with parameterized queries
 - XSS protection with input sanitization
 - Rate limiting to prevent abuse
 
 ### OAuth Security
+
 - State parameter validation
 - Secure token exchange flows
 - Provider token verification
@@ -296,6 +317,7 @@ All errors follow a consistent format:
 ```
 
 **Common Error Codes:**
+
 - `invalid_request` - Request validation failed
 - `invalid_credentials` - Authentication failed
 - `authentication_required` - Valid token required
@@ -306,6 +328,7 @@ All errors follow a consistent format:
 ## 📊 Analytics & Monitoring
 
 The API tracks:
+
 - Request patterns and popular endpoints
 - Model access frequencies
 - Search query trends
@@ -344,6 +367,7 @@ The API uses URL versioning (`/v1/`). Breaking changes will be introduced in new
 ```
 
 The API is built with:
+
 - **Hono** - Fast web framework for Cloudflare Workers
 - **Zod** - Runtime type validation and schema definition
 - **@hono/zod-openapi** - OpenAPI integration for Hono

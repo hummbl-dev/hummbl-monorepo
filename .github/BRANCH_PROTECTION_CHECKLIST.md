@@ -5,12 +5,14 @@ This checklist ensures all branch protection rules are properly implemented and 
 ## Pre-Implementation Checklist
 
 ### Repository Prerequisites
+
 - [ ] Repository has a `main` branch as the primary branch
 - [ ] CODEOWNERS file exists at `/Users/others/Developer/hummbl/hummbl-monorepo/.github/CODEOWNERS`
 - [ ] All CI workflows are functional and passing
 - [ ] Team members have appropriate repository permissions
 
 ### Required Permissions
+
 - [ ] Administrator access to the repository settings
 - [ ] Write access to create and modify workflows
 - [ ] Team permissions configured for code owner reviews
@@ -18,6 +20,7 @@ This checklist ensures all branch protection rules are properly implemented and 
 ## Implementation Checklist
 
 ### 1. Status Checks Validation
+
 - [ ] CI workflow (`ci.yml`) is present and functional
 - [ ] CodeQL workflow (`codeql.yml`) is present and functional
 - [ ] All required status checks have run at least once on main branch:
@@ -29,9 +32,11 @@ This checklist ensures all branch protection rules are properly implemented and 
   - [ ] `CodeQL Security Scanning / Analyze`
 
 ### 2. Branch Protection Configuration
+
 Choose one implementation method:
 
 #### Method A: GitHub Web Interface
+
 - [ ] Navigate to repository Settings → Branches
 - [ ] Click "Add rule" for main branch
 - [ ] Configure required status checks (see status check names above)
@@ -48,17 +53,20 @@ Choose one implementation method:
 - [ ] Click "Create" to save
 
 #### Method B: GitHub CLI
+
 - [ ] Install GitHub CLI (`gh`)
 - [ ] Authenticate with `gh auth login`
 - [ ] Run the provided CLI command from setup guide
 - [ ] Verify configuration with `gh api repos/:owner/:repo/branches/main/protection`
 
 #### Method C: REST API
+
 - [ ] Obtain GitHub personal access token with repo permissions
 - [ ] Run the provided curl command from setup guide
 - [ ] Verify response indicates successful configuration
 
 ### 3. Validation Setup
+
 - [ ] Copy validation workflow to `/Users/others/Developer/hummbl/hummbl-monorepo/.github/workflows/validate-branch-protection.yml`
 - [ ] Commit and push the workflow file
 - [ ] Trigger the workflow manually to test initial validation
@@ -68,6 +76,7 @@ Choose one implementation method:
 ## Post-Implementation Verification
 
 ### Manual Verification Steps
+
 - [ ] Create a test branch from main
 - [ ] Make a small change and push to test branch
 - [ ] Create pull request to main branch
@@ -81,11 +90,13 @@ Choose one implementation method:
 - [ ] Test that administrators cannot bypass rules (if enabled)
 
 ### Automated Verification
+
 - [ ] Validation workflow runs successfully
 - [ ] Workflow reports all required protections are in place
 - [ ] No validation issues are reported in workflow summary
 
 ### Edge Case Testing
+
 - [ ] Test with non-code-owner reviews (should not satisfy requirement)
 - [ ] Test with failing CI checks (should block merge)
 - [ ] Test with out-of-date branches (should require update)
@@ -94,17 +105,20 @@ Choose one implementation method:
 ## Ongoing Maintenance
 
 ### Daily/Automated
+
 - [ ] Validation workflow monitors protection rules daily
 - [ ] Issues are created/updated for any configuration drift
 - [ ] Resolved issues are automatically closed
 
 ### Monthly Review
+
 - [ ] Review branch protection configuration for any needed updates
 - [ ] Verify CODEOWNERS file is current with team structure
 - [ ] Check that all CI workflows are still relevant and functional
 - [ ] Review any bypasses or exceptions granted
 
 ### Quarterly Audit
+
 - [ ] Full review of branch protection effectiveness
 - [ ] Update required status checks based on new/modified CI workflows
 - [ ] Review team permissions and code ownership assignments
@@ -113,24 +127,28 @@ Choose one implementation method:
 ## Troubleshooting Checklist
 
 ### Status Checks Not Appearing
+
 - [ ] Verify workflow files are correctly placed in `.github/workflows/`
 - [ ] Check that workflows have run successfully on main branch
 - [ ] Confirm job names in workflows match expected status check names
 - [ ] Verify repository has Actions enabled
 
 ### Code Owner Reviews Not Working
+
 - [ ] Verify CODEOWNERS file exists in correct location
 - [ ] Check CODEOWNERS file syntax and team references
 - [ ] Confirm referenced teams have repository access
 - [ ] Verify users are members of referenced teams
 
 ### Protection Rules Not Enforcing
+
 - [ ] Confirm "Include administrators" is enabled if testing with admin account
 - [ ] Verify sufficient repository permissions for rule enforcement
 - [ ] Check for any organizational policies that might override settings
 - [ ] Review recent GitHub platform changes or deprecations
 
 ### CI Workflow Issues
+
 - [ ] Verify all dependencies are properly cached
 - [ ] Check for any breaking changes in actions versions
 - [ ] Confirm pnpm and Node.js versions are current
@@ -139,6 +157,7 @@ Choose one implementation method:
 ## Team Communication
 
 ### Implementation Announcement Template
+
 ```
 🔒 **Branch Protection Rules Implemented**
 
@@ -161,6 +180,7 @@ We've implemented comprehensive branch protection rules for the main branch:
 ```
 
 ### Training Checklist for Team Members
+
 - [ ] Share branch protection setup guide with team
 - [ ] Demonstrate PR workflow with new protections
 - [ ] Explain code owner review requirements
@@ -170,10 +190,12 @@ We've implemented comprehensive branch protection rules for the main branch:
 ## Contact Information
 
 ### Repository Administrators
+
 - Primary: @hummbl-dev team
 - Backup: Repository owner
 
 ### Escalation Process
+
 1. Create issue using `security` and `branch-protection` labels
 2. Tag repository administrators
 3. For urgent production issues, contact on-call engineer

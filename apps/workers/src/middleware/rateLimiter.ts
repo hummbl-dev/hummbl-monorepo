@@ -68,9 +68,7 @@ export const rateLimiter = () => {
 
       // If no valid CF IP, use a more restrictive rate limit
       const isValidIP = ip !== 'unknown';
-      const maxRequests = isValidIP
-        ? config.maxRequests
-        : Math.floor(config.maxRequests / 2);
+      const maxRequests = isValidIP ? config.maxRequests : Math.floor(config.maxRequests / 2);
 
       const key = `global_rate_limit:${tier}:${ip}`;
       const now = Math.floor(Date.now() / 1000); // Current time in seconds
@@ -97,7 +95,7 @@ export const rateLimiter = () => {
           error: 'Too many requests, please try again later',
           retryAfter,
           limit: maxRequests,
-          tier
+          tier,
         });
       }
 
@@ -123,7 +121,7 @@ export const rateLimiter = () => {
         path: c.req.path,
         ip,
         tier,
-        component: 'rate-limiter'
+        component: 'rate-limiter',
       });
       // Allow the request to continue if there's an error with rate limiting
       return await next();
