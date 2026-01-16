@@ -5,7 +5,12 @@
  */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { trackError, addBreadcrumb, ErrorSeverity, ErrorCategory } from '@hummbl/core';
+import {
+  trackError,
+  addBreadcrumb,
+  ErrorSeverity,
+  ErrorCategory,
+} from '@hummbl/core';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -40,10 +45,15 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     const { level = 'component', onError } = this.props;
 
     // Add breadcrumb for the error context
-    addBreadcrumb('react-error', `Error boundary caught error: ${error.message}`, 'error', {
-      componentStack: errorInfo.componentStack,
-      level,
-    });
+    addBreadcrumb(
+      'react-error',
+      `Error boundary caught error: \${error.message}`,
+      'error',
+      {
+        componentStack: errorInfo.componentStack,
+        level,
+      },
+    );
 
     // Determine error severity based on level
     const severity = this.getSeverityFromLevel(level);
@@ -68,7 +78,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         url: window.location.href,
         userAgent: navigator.userAgent,
         timestamp: new Date().toISOString(),
-      }
+      },
     );
 
     this.setState({ errorId });
@@ -99,7 +109,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   private getComponentName(componentStack: string): string {
     // Extract component name from stack trace
-    const match = componentStack.match(/in (\w+)/);
+    const match = componentStack.match(/in (\\w+)/);
     return match ? match[1] : 'Unknown';
   }
 
@@ -107,19 +117,19 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     // Get or create session ID
     let sessionId = sessionStorage.getItem('hummbl-session-id');
     if (!sessionId) {
-            // Generate cryptographically secure random string
+      // Generate cryptographically secure random string
       const randomBytes = new Uint8Array(9);
       window.crypto.getRandomValues(randomBytes);
       const randomStr = Array.from(randomBytes)
         .map((b) => b.toString(36))
         .join('')
         .substr(0, 9);
-      sessionId = `session_${Date.now()}_${randomStr}`;
-    sessionStorage.setItem('hummbl-session-id', sessionId);
+      sessionId = `session_\${Date.now()}_\${randomStr}`;
+      sessionStorage.setItem('hummbl-session-id', sessionId);
       return sessionId;
+    }
+    return sessionId;
   }
-        return sessionId;
-      }
 
   private schedulePageReload(): void {
     if (this.retryTimeoutId) {
@@ -231,7 +241,6 @@ function DefaultErrorFallback({
         <h2 className={`mb-2 ${isPageLevel ? 'text-xl' : 'text-lg'} font-semibold text-gray-900`}>
           {isPageLevel ? 'Something went wrong' : 'Component Error'}
         </h2>
-
         <p className="mb-4 text-sm text-gray-600">
           {isPageLevel
             ? 'We encountered an unexpected error. Please try refreshing the page.'
@@ -256,7 +265,6 @@ function DefaultErrorFallback({
         >
           Try Again
         </button>
-
         {isPageLevel && (
           <button
             onClick={() => (window.location.href = '/')}
