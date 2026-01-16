@@ -3,3 +3,35 @@
 
 # Default owners for everything in the repo
 * @hummbl-dev
+
+# Backend/Infrastructure owners
+/apps/workers/ @hummbl-dev
+/apps/mcp-server/ @hummbl-dev
+
+# Frontend owners
+/apps/web/ @hummbl-dev
+/packages/ui/ @hummbl-dev
+
+# Core shared packages
+/packages/core/ @hummbl-dev
+/packages/eslint-config/ @hummbl-dev
+/packages/tsconfig/ @hummbl-dev
+
+# DevOps and CI/CD
+/.github/ @hummbl-dev
+/docs/ @hummbl-dev
+
+# Security and governance files
+/SECURITY.md @hummbl-dev
+/.github/agent-policy.yaml @hummbl-dev
+/schemas/ @hummbl-dev
+
+# Tests and validation
+/tests/ @hummbl-dev
+/monitoring/ @hummbl-dev
+
+# Configuration files
+package.json @hummbl-dev
+pnpm-*.yaml @hummbl-dev
+turbo.json @hummbl-dev
+tsconfig.json @hummbl-dev

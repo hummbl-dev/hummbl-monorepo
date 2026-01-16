@@ -6,7 +6,11 @@
 import { Hono } from 'hono';
 import { sign, verify } from 'hono/jwt';
 import type { Env } from '../env';
+import { createLogger, logError } from '@hummbl/core';
 import '../types.d.ts';
+
+// Create logger instance for auth routes
+const logger = createLogger('auth-routes');
 
 // Cloudflare Workers crypto polyfills
 declare const crypto: {
@@ -196,7 +200,7 @@ authRouter.use('*', async (c, next) => {
     // Continue to next middleware
     return await next();
   } catch (error) {
-    console.error('Rate limiting error:', error);
+    logError(error, { context: 'rate-limiting', timestamp: new Date().toISOString() });
     // Allow the request to continue if there's an error with rate limiting
     return await next();
   }
@@ -416,8 +420,8 @@ const generateTokens = async (c: { env: Env }, userId: string, email: string) =>
       { expirationTtl: REFRESH_TOKEN_EXPIRY }
     );
   } catch (error) {
-    console.error('Cache storage error for refresh token:', {
-      error: error instanceof Error ? error.message : String(error),
+    logError(error, {
+      context: 'refresh-token-cache-storage',
       userId: userId.substring(0, 8) + '...',
       timestamp: new Date().toISOString(),
     });
@@ -438,7 +442,7 @@ authRouter.post('/google', async c => {
     try {
       requestData = await c.req.json();
     } catch (error) {
-      console.error('JSON parsing error during Google auth:', error);
+      logError(error, { context: 'google-auth-json-parsing', timestamp: new Date().toISOString() });
       return c.json({ error: 'Invalid request format' }, 400);
     }
 
@@ -491,7 +495,7 @@ authRouter.post('/google', async c => {
       if (error instanceof Error && error.name === 'AbortError') {
         return c.json({ error: 'Request timeout' }, 408);
       }
-      console.error('Google API request failed:', error);
+      logError(error, { context: 'google-api-request', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to verify Google token' }, 400);
     } finally {
       clearTimeout(timeoutId);
@@ -563,7 +567,7 @@ authRouter.post('/google', async c => {
       refreshToken,
     });
   } catch (error) {
-    console.error('Google auth error:', error);
+    logError(error, { context: 'google-auth-general', timestamp: new Date().toISOString() });
     return c.json({ error: 'Authentication failed' }, 500);
   }
 });
@@ -575,7 +579,7 @@ authRouter.post('/github', async c => {
     try {
       requestData = await c.req.json();
     } catch (error) {
-      console.error('JSON parsing error during GitHub auth:', error);
+      logError(error, { context: 'github-auth-json-parsing', timestamp: new Date().toISOString() });
       return c.json({ error: 'Invalid request format' }, 400);
     }
 
@@ -633,7 +637,7 @@ authRouter.post('/github', async c => {
       if (error instanceof Error && error.name === 'AbortError') {
         return c.json({ error: 'Request timeout' }, 408);
       }
-      console.error('GitHub token request failed:', error);
+      logError(error, { context: 'github-token-request', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to authenticate with GitHub' }, 400);
     } finally {
       clearTimeout(tokenTimeoutId);
@@ -647,7 +651,7 @@ authRouter.post('/github', async c => {
     try {
       tokenData = await tokenResponse.json();
     } catch (error) {
-      console.error('GitHub token response parsing error:', error);
+      logError(error, { context: 'github-token-response-parsing', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to authenticate with GitHub' }, 400);
     }
 
@@ -700,7 +704,7 @@ authRouter.post('/github', async c => {
         signal: controller.signal,
       });
     } catch (error) {
-      console.error('GitHub API request failed:', error);
+      logError(error, { context: 'github-api-request', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to fetch user info from GitHub' }, 400);
     } finally {
       clearTimeout(timeoutId);
@@ -720,7 +724,7 @@ authRouter.post('/github', async c => {
     try {
       githubUser = await userResponse.json();
     } catch (error) {
-      console.error('GitHub user response parsing error:', error);
+      logError(error, { context: 'github-user-response-parsing', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to fetch user info from GitHub' }, 400);
     }
 
@@ -761,7 +765,7 @@ authRouter.post('/github', async c => {
         )
         .first<User>();
     } catch (error) {
-      console.error('Database error during GitHub user lookup:', error);
+      logError(error, { context: 'github-user-lookup-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Authentication failed' }, 500);
     }
 
@@ -769,7 +773,7 @@ authRouter.post('/github', async c => {
     if (!user) {
       const userId = generateUUID();
       if (!userId || typeof userId !== 'string' || userId.length !== 36) {
-        console.error('Invalid UUID generated for GitHub user');
+        logger.error('Invalid UUID generated for GitHub user', { context: 'github-uuid-generation', timestamp: new Date().toISOString() });
         return c.json({ error: 'Authentication failed' }, 500);
       }
 
@@ -806,7 +810,7 @@ authRouter.post('/github', async c => {
         const sanitizedError = String(error)
           .replace(/[\r\n\t]/g, ' ')
           .substring(0, 100);
-        console.error('Database error during GitHub user creation:', sanitizedError);
+        logger.error('Database error during GitHub user creation', { context: 'github-user-creation-db', sanitizedError, timestamp: new Date().toISOString() });
         return c.json({ error: 'Authentication failed' }, 500);
       }
 
@@ -829,7 +833,7 @@ authRouter.post('/github', async c => {
         user.id.length === 0 ||
         user.email.length === 0
       ) {
-        console.error('Invalid existing user data from database');
+        logger.error('Invalid existing user data from database', { context: 'github-user-data-validation', timestamp: new Date().toISOString() });
         return c.json({ error: 'Authentication failed' }, 500);
       }
     }
@@ -844,7 +848,7 @@ authRouter.post('/github', async c => {
       accessToken = tokens.accessToken;
       refreshToken = tokens.refreshToken;
     } catch (error) {
-      console.error('Token generation error during GitHub auth:', error);
+      logError(error, { context: 'github-token-generation', timestamp: new Date().toISOString() });
       return c.json({ error: 'Authentication failed' }, 500);
     }
 
@@ -854,7 +858,7 @@ authRouter.post('/github', async c => {
       refreshToken,
     });
   } catch (error) {
-    console.error('GitHub auth error:', error);
+    logError(error, { context: 'github-auth-general', timestamp: new Date().toISOString() });
     return c.json({ error: 'Authentication failed' }, 500);
   }
 });
@@ -866,7 +870,7 @@ authRouter.post('/register', async c => {
     try {
       requestData = await c.req.json();
     } catch (error) {
-      console.error('JSON parsing error during registration:', error);
+      logError(error, { context: 'registration-json-parsing', timestamp: new Date().toISOString() });
       return c.json({ error: 'Invalid request format' }, 400);
     }
 
@@ -992,7 +996,7 @@ authRouter.post('/register', async c => {
         .bind(sanitizedEmail)
         .first();
     } catch (error) {
-      console.error('Database error during user lookup:', error);
+      logError(error, { context: 'registration-user-lookup-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Registration failed' }, 500);
     }
 
@@ -1017,7 +1021,7 @@ authRouter.post('/register', async c => {
         throw new Error('Invalid password hash generated');
       }
     } catch (error) {
-      console.error('Password hashing error during registration:', error);
+      logError(error, { context: 'registration-password-hashing', timestamp: new Date().toISOString() });
       return c.json({ error: 'Registration failed' }, 500);
     }
 
@@ -1037,7 +1041,7 @@ authRouter.post('/register', async c => {
         throw new Error('Invalid UUID generated');
       }
     } catch (error) {
-      console.error('UUID generation error:', error);
+      logError(error, { context: 'registration-uuid-generation', timestamp: new Date().toISOString() });
       return c.json({ error: 'Registration failed' }, 500);
     }
 
@@ -1045,7 +1049,7 @@ authRouter.post('/register', async c => {
     verificationExpiry.setHours(verificationExpiry.getHours() + 24); // 24 hours from now
 
     if (isNaN(verificationExpiry.getTime()) || verificationExpiry <= new Date()) {
-      console.error('Invalid verification expiry date');
+      logger.error('Invalid verification expiry date', { context: 'registration-verification-expiry', timestamp: new Date().toISOString() });
       return c.json({ error: 'Registration failed' }, 500);
     }
 
@@ -1085,7 +1089,7 @@ authRouter.post('/register', async c => {
         throw new Error('Database insertion failed');
       }
     } catch (error: unknown) {
-      console.error('Database error during registration:', error);
+      logError(error, { context: 'registration-db-insertion', timestamp: new Date().toISOString() });
       return c.json(
         {
           error: 'Failed to create user account',
@@ -1112,15 +1116,15 @@ authRouter.post('/register', async c => {
         typeof c.env.JWT_SECRET !== 'string' ||
         c.env.JWT_SECRET.length < 32
       ) {
-        console.error('JWT secret configuration invalid');
+        logger.error('JWT secret configuration invalid', { context: 'registration-jwt-config', timestamp: new Date().toISOString() });
         return c.json({ error: 'Token generation failed' }, 500);
       }
-      jwtToken = await sign({ userId: user.id, email: user.email }, c.env.JWT_SECRET);
+      jwtToken = await sign({ userId: user.id, email: user.email }, c.env.JWT_SECRET, 'HS256');
       if (!jwtToken || typeof jwtToken !== 'string' || jwtToken.length < 10) {
         throw new Error('Token generation failed');
       }
     } catch (error) {
-      console.error('JWT token generation error during registration:', error);
+      logError(error, { context: 'registration-jwt-generation', timestamp: new Date().toISOString() });
       return c.json({ error: 'Token generation failed' }, 500);
     }
 
@@ -1128,7 +1132,7 @@ authRouter.post('/register', async c => {
     try {
       await sendVerificationEmail(c.env, sanitizedEmail, sanitizedName, verificationToken);
     } catch (error) {
-      console.error('Failed to send verification email:', error);
+      logError(error, { context: 'registration-email-sending', timestamp: new Date().toISOString() });
       // Don't fail registration if email sending fails
     }
 
@@ -1138,7 +1142,7 @@ authRouter.post('/register', async c => {
       message: 'Registration successful. Please check your email to verify your account.',
     });
   } catch (error) {
-    console.error('Registration error:', error);
+    logError(error, { context: 'registration-general', timestamp: new Date().toISOString() });
     return c.json({ error: 'Registration failed' }, 500);
   }
 });
@@ -1150,7 +1154,7 @@ authRouter.post('/login', async c => {
     try {
       requestData = await c.req.json();
     } catch (error) {
-      console.error('JSON parsing error during login:', error);
+      logError(error, { context: 'login-json-parsing', timestamp: new Date().toISOString() });
       return c.json({ error: 'Invalid request format' }, 400);
     }
 
@@ -1183,8 +1187,9 @@ authRouter.post('/login', async c => {
         .bind(sanitizedEmail, 'email')
         .first<User>();
     } catch (error) {
-      console.error('Database error during login:', {
-        error: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
+      logError(error, {
+        context: 'login-user-lookup-db',
+        errorMessage: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
         timestamp: new Date().toISOString(),
       });
       return c.json({ error: 'Login failed' }, 500);
@@ -1203,8 +1208,9 @@ authRouter.post('/login', async c => {
         return c.json({ error: 'Invalid credentials' }, 401);
       }
     } catch (error) {
-      console.error('Password hashing error during login:', {
-        error: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
+      logError(error, {
+        context: 'login-password-hashing',
+        errorMessage: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
         timestamp: new Date().toISOString(),
       });
       return c.json({ error: 'Login failed' }, 500);
@@ -1233,8 +1239,9 @@ authRouter.post('/login', async c => {
       accessToken = tokens.accessToken;
       refreshToken = tokens.refreshToken;
     } catch (error) {
-      console.error('Token generation error during login:', {
-        error: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
+      logError(error, {
+        context: 'login-token-generation',
+        errorMessage: error instanceof Error ? error.message.substring(0, 100) : 'Unknown error',
         timestamp: new Date().toISOString(),
       });
       return c.json({ error: 'Token generation failed' }, 500);
@@ -1256,7 +1263,7 @@ authRouter.post('/login', async c => {
       refreshToken,
     });
   } catch (error) {
-    console.error('Login error:', error);
+    logError(error, { context: 'login-general', timestamp: new Date().toISOString() });
     if (error instanceof Error && error.message.includes('JWT')) {
       return c.json({ error: 'Token generation failed' }, 500);
     }
@@ -1309,9 +1316,9 @@ authRouter.get('/verify', async c => {
       ) {
         throw new Error('Invalid JWT secret configuration');
       }
-      payload = await verify(token, c.env.JWT_SECRET);
+      payload = await verify(token, c.env.JWT_SECRET, 'HS256');
     } catch (error) {
-      console.error('JWT verification error:', error);
+      logError(error, { context: 'token-verification-jwt', timestamp: new Date().toISOString() });
       return c.json({ error: 'Invalid token' }, 401);
     }
 
@@ -1361,7 +1368,7 @@ authRouter.get('/verify', async c => {
         .bind(payload.sub)
         .first();
     } catch (error) {
-      console.error('Database error during token verification:', error);
+      logError(error, { context: 'token-verification-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Invalid token' }, 401);
     }
 
@@ -1396,7 +1403,7 @@ authRouter.get('/verify', async c => {
 
     return c.json({ user: responseUser });
   } catch (error) {
-    console.error('Token verification error:', error);
+    logError(error, { context: 'token-verification-general', timestamp: new Date().toISOString() });
     return c.json({ error: 'Invalid token' }, 401);
   }
 });
@@ -1408,7 +1415,7 @@ authRouter.post('/verify-email', async c => {
     try {
       requestData = await c.req.json();
     } catch (error) {
-      console.error('JSON parsing error during email verification:', error);
+      logError(error, { context: 'email-verification-json-parsing', timestamp: new Date().toISOString() });
       return c.json({ error: 'Invalid request format' }, 400);
     }
 
@@ -1446,7 +1453,7 @@ authRouter.post('/verify-email', async c => {
         .bind(token)
         .first();
     } catch (error) {
-      console.error('Database error during email verification lookup:', error);
+      logError(error, { context: 'email-verification-lookup-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Verification failed' }, 500);
     }
 
@@ -1484,13 +1491,13 @@ authRouter.post('/verify-email', async c => {
         throw new Error('No rows updated');
       }
     } catch (error) {
-      console.error('Database error during email verification:', error);
+      logError(error, { context: 'email-verification-db-update', timestamp: new Date().toISOString() });
       return c.json({ error: 'Verification failed' }, 500);
     }
 
     return c.json({ message: 'Email verified successfully' });
   } catch (error) {
-    console.error('Email verification error:', error);
+    logError(error, { context: 'email-verification-general', timestamp: new Date().toISOString() });
     return c.json({ error: 'Verification failed' }, 500);
   }
 });
@@ -1502,7 +1509,7 @@ authRouter.post('/refresh', async c => {
     try {
       requestData = await c.req.json();
     } catch (error) {
-      console.error('JSON parsing error during refresh:', error);
+      logError(error, { context: 'refresh-token-json-parsing', timestamp: new Date().toISOString() });
       return c.json({ error: 'Invalid request format' }, 400);
     }
 
@@ -1545,7 +1552,7 @@ authRouter.post('/refresh', async c => {
       tokenData = JSON.parse(tokenString);
       userId = tokenData.userId;
     } catch (error) {
-      console.error('Cache error during refresh token validation:', error);
+      logError(error, { context: 'refresh-token-cache-validation', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to refresh token' }, 500);
     }
 
@@ -1582,7 +1589,7 @@ authRouter.post('/refresh', async c => {
         .bind(userId)
         .first<User>();
     } catch (error) {
-      console.error('Database error during refresh token validation:', error);
+      logError(error, { context: 'refresh-token-db-validation', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to refresh token' }, 500);
     }
 
@@ -1591,7 +1598,7 @@ authRouter.post('/refresh', async c => {
       try {
         await c.env.CACHE.delete(`refresh_token:${refreshToken}`);
       } catch {
-        console.error('Cache cleanup error');
+        logger.error('Cache cleanup error during refresh token validation', { context: 'refresh-token-cache-cleanup', timestamp: new Date().toISOString() });
       }
       return c.json({ error: 'User not found' }, 404);
     }
@@ -1618,7 +1625,7 @@ authRouter.post('/refresh', async c => {
       newAccessToken = tokens.accessToken;
       newRefreshToken = tokens.refreshToken;
     } catch (error) {
-      console.error('Token generation error during refresh:', error);
+      logError(error, { context: 'refresh-token-generation', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to refresh token' }, 500);
     }
 
@@ -1626,7 +1633,7 @@ authRouter.post('/refresh', async c => {
     try {
       await c.env.CACHE.delete(`refresh_token:${refreshToken}`);
     } catch (error) {
-      console.error('Cache delete error during refresh:', error);
+      logError(error, { context: 'refresh-token-cache-delete', timestamp: new Date().toISOString() });
     }
 
     // Validate response data
@@ -1645,7 +1652,7 @@ authRouter.post('/refresh', async c => {
       user: responseUser,
     });
   } catch (error) {
-    console.error('Token refresh error:', error);
+    logError(error, { context: 'refresh-token-general', timestamp: new Date().toISOString() });
     return c.json({ error: 'Failed to refresh token' }, 500);
   }
 });
@@ -1657,7 +1664,7 @@ authRouter.post('/resend-verification', async c => {
     try {
       requestData = await c.req.json();
     } catch (error) {
-      console.error('JSON parsing error during resend verification:', error);
+      logError(error, { context: 'resend-verification-json-parsing', timestamp: new Date().toISOString() });
       return c.json({ error: 'Invalid request format' }, 400);
     }
 
@@ -1681,7 +1688,7 @@ authRouter.post('/resend-verification', async c => {
         .bind(sanitizedEmail, 'email')
         .first();
     } catch (error) {
-      console.error('Database error during resend verification lookup:', error);
+      logError(error, { context: 'resend-verification-lookup-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to resend verification' }, 500);
     }
 
@@ -1704,7 +1711,7 @@ authRouter.post('/resend-verification', async c => {
         .bind(newVerificationToken, verificationExpiry.toISOString(), user.id)
         .run();
     } catch (error) {
-      console.error('Database error during verification token update:', error);
+      logError(error, { context: 'resend-verification-token-update-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to resend verification' }, 500);
     }
 
@@ -1717,13 +1724,13 @@ authRouter.post('/resend-verification', async c => {
         newVerificationToken
       );
     } catch (error) {
-      console.error('Failed to send verification email:', error);
+      logError(error, { context: 'registration-email-sending', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to send verification email' }, 500);
     }
 
     return c.json({ message: 'Verification email sent successfully.' });
   } catch (error) {
-    console.error('Resend verification error:', error);
+    logError(error, { context: 'resend-verification-general', timestamp: new Date().toISOString() });
     return c.json({ error: 'Failed to resend verification' }, 500);
   }
 });
@@ -1745,13 +1752,13 @@ authRouter.post('/logout', async c => {
       try {
         await c.env.CACHE.delete(`refresh_token:${refreshToken}`);
       } catch (error) {
-        console.error('Cache delete error during logout:', error);
+        logError(error, { context: 'logout-cache-delete', timestamp: new Date().toISOString() });
       }
     }
 
     return c.json({ message: 'Logged out successfully' });
   } catch (error) {
-    console.error('Logout error:', error);
+    logError(error, { context: 'logout-general', timestamp: new Date().toISOString() });
     // Always return success for logout to prevent information disclosure
     return c.json({ message: 'Logged out successfully' });
   }
