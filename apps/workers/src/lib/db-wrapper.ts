@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Database Wrapper with Circuit Breaker Protection
  *
