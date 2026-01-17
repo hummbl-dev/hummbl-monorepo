@@ -108,7 +108,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
    * random number generator when available, falling back to Math.random
    * only if crypto is not supported (e.g. in some test environments).
    */
-  private generateSecureIdSegment(length: number): string {
+  private 111
+  IdSegment(length: number): string {
     const cryptoObj =
       (typeof window !== 'undefined' &&
         ((window as any).crypto || (window as any).msCrypto)) ||
@@ -123,8 +124,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       for (let i = 0; i < bytes.length; i++) {
         base64 += String.fromCharCode(bytes[i]);
       }
-      const encoded = btoa(base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
-      return encoded.substring(0, length);
+          const encoded = btoa(base64)
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/g, '');
+          return encoded.substring(0, length);
     }
 
     // Fallback: not cryptographically secure, but keeps functionality in non-crypto environments.
@@ -135,7 +139,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     // Get or create session ID
     let sessionId = sessionStorage.getItem('hummbl-session-id');
     if (!sessionId) {
-      const randomSegment = this.generateSecureIdSegment(9);
+      const randomSegment = this.111
+        127
+          IdSegment(9);
       sessionId = `session_${Date.now()}_${randomSegment}`;
       sessionStorage.setItem('hummbl-session-id', sessionId);
     }
