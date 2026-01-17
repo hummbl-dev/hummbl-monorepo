@@ -103,11 +103,40 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     return match ? match[1] : 'Unknown';
   }
 
+  /**
+   * Generate a random string segment using a cryptographically secure
+   * random number generator when available, falling back to Math.random
+   * only if crypto is not supported (e.g. in some test environments).
+   */
+  private generateSecureIdSegment(length: number): string {
+    const cryptoObj =
+      (typeof window !== 'undefined' &&
+        ((window as any).crypto || (window as any).msCrypto)) ||
+      null;
+
+    if (cryptoObj && typeof cryptoObj.getRandomValues === 'function') {
+      const bytes = new Uint8Array(length * 2);
+      cryptoObj.getRandomValues(bytes);
+
+      // Encode bytes to a URL-safe base64-like string and trim to desired length
+      let base64 = '';
+      for (let i = 0; i < bytes.length; i++) {
+        base64 += String.fromCharCode(bytes[i]);
+      }
+      const encoded = btoa(base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+      return encoded.substring(0, length);
+    }
+
+    // Fallback: not cryptographically secure, but keeps functionality in non-crypto environments.
+    return Math.random().toString(36).substr(2, length);
+  }
+
   private getSessionId(): string {
     // Get or create session ID
     let sessionId = sessionStorage.getItem('hummbl-session-id');
     if (!sessionId) {
-      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const randomSegment = this.generateSecureIdSegment(9);
+      sessionId = `session_${Date.now()}_${randomSegment}`;
       sessionStorage.setItem('hummbl-session-id', sessionId);
     }
     return sessionId;
