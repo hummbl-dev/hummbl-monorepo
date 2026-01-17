@@ -1,4 +1,8 @@
 import { Hono } from 'hono';
+import { createLogger, logError } from '@hummbl/core';
+
+// Create logger instance for analytics
+const logger = createLogger('analytics');
 
 const analytics = new Hono();
 
@@ -13,7 +17,11 @@ export function trackRequest(endpoint: string, userAgent?: string) {
   try {
     // Validate and sanitize inputs
     if (!endpoint || typeof endpoint !== 'string' || endpoint.length > 200) {
-      console.warn('Invalid endpoint for tracking:', endpoint);
+      logger.warn('Invalid endpoint for tracking', {
+        context: 'analytics-invalid-endpoint',
+        endpoint: endpoint?.substring(0, 100),
+        timestamp: new Date().toISOString(),
+      });
       return;
     }
 
@@ -34,7 +42,7 @@ export function trackRequest(endpoint: string, userAgent?: string) {
       stats.requests = stats.requests.slice(-1000);
     }
   } catch (error) {
-    console.error('Error tracking request:', error);
+    logError(error, { context: 'analytics-track-request', timestamp: new Date().toISOString() });
   }
 }
 
@@ -48,7 +56,11 @@ export function trackModelAccess(modelId: string) {
       modelId.length > 20 ||
       !/^[A-Z0-9]+$/.test(modelId)
     ) {
-      console.warn('Invalid model ID for tracking:', modelId);
+      logger.warn('Invalid model ID for tracking', {
+        context: 'analytics-invalid-model-id',
+        modelId: modelId?.substring(0, 50),
+        timestamp: new Date().toISOString(),
+      });
       return;
     }
 
@@ -68,7 +80,7 @@ export function trackModelAccess(modelId: string) {
       });
     }
   } catch (error) {
-    console.error('Error tracking model access:', error);
+    logError(error, { context: 'analytics-track-model', timestamp: new Date().toISOString() });
   }
 }
 
@@ -76,7 +88,11 @@ export function trackSearch(query: string) {
   try {
     // Validate and sanitize query
     if (!query || typeof query !== 'string' || query.length > 200) {
-      console.warn('Invalid search query for tracking:', query);
+      logger.warn('Invalid search query for tracking', {
+        context: 'analytics-invalid-search',
+        query: query?.substring(0, 100),
+        timestamp: new Date().toISOString(),
+      });
       return;
     }
 
@@ -106,7 +122,7 @@ export function trackSearch(query: string) {
       });
     }
   } catch (error) {
-    console.error('Error tracking search query:', error);
+    logError(error, { context: 'analytics-track-search', timestamp: new Date().toISOString() });
   }
 }
 
@@ -121,7 +137,10 @@ analytics.get('/stats', c => {
         r => r && typeof r.timestamp === 'number' && r.timestamp > last24h && r.timestamp <= now
       );
     } catch (error) {
-      console.error('Error filtering recent requests:', error);
+      logError(error, {
+        context: 'analytics-filter-requests',
+        timestamp: new Date().toISOString(),
+      });
       recentRequests = [];
     }
 
@@ -157,7 +176,7 @@ analytics.get('/stats', c => {
         .sort(([, a], [, b]) => b - a)
         .slice(0, 5);
     } catch (error) {
-      console.error('Error processing analytics data:', error);
+      logError(error, { context: 'analytics-process-data', timestamp: new Date().toISOString() });
       topModels = [];
       topQueries = [];
       topEndpoints = [];
@@ -185,7 +204,7 @@ analytics.get('/stats', c => {
 
     return c.json(sanitizedResponse);
   } catch (error) {
-    console.error('Analytics stats error:', error);
+    logError(error, { context: 'analytics-stats-general', timestamp: new Date().toISOString() });
     return c.json(
       {
         error: 'Failed to retrieve analytics',
@@ -221,7 +240,7 @@ analytics.get('/health', c => {
 
     return c.json(healthData);
   } catch (error) {
-    console.error('Health check error:', error);
+    logError(error, { context: 'analytics-health-check', timestamp: new Date().toISOString() });
     return c.json(
       {
         status: 'error',

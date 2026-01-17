@@ -1,7 +1,10 @@
-import { Result } from '@hummbl/core';
+import { Result, createLogger } from '@hummbl/core';
 import type { Env } from '../env';
 import type { ApiError } from './api';
 import { logCacheError } from './api';
+
+// Create logger instance for cache operations
+const logger = createLogger('cache');
 
 interface CacheEntry {
   value: string;
@@ -34,7 +37,7 @@ const getWorkersCache = async () => {
 const readMemoryCache = <T>(key: string): T | null => {
   const entry = memoryCache.get(key);
   // DEBUG: Log memory cache read
-  console.log('[MEMORY CACHE] read', {
+  logger.debug('Memory cache read', {
     key,
     has: !!entry,
     expiresAt: entry?.expiresAt,
@@ -47,7 +50,11 @@ const readMemoryCache = <T>(key: string): T | null => {
 
   if (entry.expiresAt < Date.now()) {
     memoryCache.delete(key);
-    console.log('[MEMORY CACHE] expired', { key });
+    logger.debug('Memory cache entry expired', {
+      context: 'cache-expiry',
+      key,
+      timestamp: new Date().toISOString(),
+    });
     return null;
   }
 
@@ -60,13 +67,21 @@ const readMemoryCache = <T>(key: string): T | null => {
         Object.prototype.hasOwnProperty.call(parsed, 'constructor'))
     ) {
       memoryCache.delete(key);
-      console.log('[MEMORY CACHE] prototype pollution detected', { key });
+      logger.warn('Prototype pollution detected in cache key', {
+        context: 'cache-security',
+        key,
+        timestamp: new Date().toISOString(),
+      });
       return null;
     }
     return parsed as T;
   } catch {
     memoryCache.delete(key);
-    console.log('[MEMORY CACHE] parse error', { key });
+    logger.error('Cache parse error', {
+      context: 'cache-parse-error',
+      key,
+      timestamp: new Date().toISOString(),
+    });
     return null;
   }
 };
@@ -78,7 +93,12 @@ const writeMemoryCache = (key: string, payload: string, ttlSeconds: number) => {
     expiresAt,
   });
   // DEBUG: Log memory cache write
-  console.log('[MEMORY CACHE] write', { key, expiresAt });
+  logger.debug('Memory cache write', {
+    context: 'cache-write',
+    key,
+    expiresAt,
+    timestamp: new Date().toISOString(),
+  });
 };
 
 export const getCachedResult = async <T>(

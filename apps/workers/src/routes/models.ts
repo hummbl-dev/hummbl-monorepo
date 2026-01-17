@@ -5,10 +5,22 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
 import type { Env } from '../env';
-import { ModelCodeSchema, ModelFilterSchema, Result, type TransformationType } from '@hummbl/core';
+import {
+  ModelCodeSchema,
+  ModelFilterSchema,
+  Result,
+  type TransformationType,
+  createLogger,
+  logError,
+} from '@hummbl/core';
 import { createApiError, respondWithResult } from '../lib/api';
 import { getCachedResult } from '../lib/cache';
 import type { ApiError } from '../lib/api';
+import { createProtectedDatabase, ProtectedDatabase } from '../lib/db-wrapper';
+import type { DbOperationContext } from '../lib/db-wrapper';
+
+// Create logger instance for models routes
+const logger = createLogger('models-routes');
 
 interface DbMentalModel {
   code: string;
@@ -71,6 +83,9 @@ const buildModelsQuery = (filters: { transformation?: TransformationType; search
 
 export const modelsRouter = new Hono<{ Bindings: Env }>();
 
+// Create protected database wrapper
+const getProtectedDb = (env: Env) => createProtectedDatabase(env.DB);
+
 // GET /v1/models - List all models with optional filters
 modelsRouter.get('/', async c => {
   const parsedFilters = ModelFilterSchema.safeParse(c.req.query());
@@ -107,7 +122,15 @@ modelsRouter.get('/', async c => {
     > => {
       const { query, params } = buildModelsQuery({ transformation, search });
       try {
-        const { results } = await c.env.DB.prepare(query)
+        const protectedDb = getProtectedDb(c.env);
+        const context: DbOperationContext = {
+          operation: 'read',
+          table: 'mental_models',
+          query: query,
+        };
+
+        const { results } = await protectedDb
+          .prepare(query, context)
           .bind(...params)
           .all<DbMentalModel>();
 
@@ -118,6 +141,24 @@ modelsRouter.get('/', async c => {
           search: search ?? null,
         });
       } catch (error) {
+        // Handle circuit breaker errors with fallback
+        if (ProtectedDatabase.isCircuitBreakerError(error)) {
+          logger.warn('Database circuit open, providing fallback response', {
+            context: 'models-circuit-breaker',
+            transformation,
+            search,
+            state: error.circuitState,
+            timestamp: new Date().toISOString(),
+          });
+
+          return Result.ok({
+            models: [], // Empty fallback
+            count: 0,
+            transformation: transformation ?? null,
+            search: search ?? null,
+          });
+        }
+
         return Result.err(
           createApiError('db_error', 'Failed to fetch models', 500, {
             cause: error instanceof Error ? error.message : String(error),
@@ -168,9 +209,18 @@ modelsRouter.get('/:code', async c => {
     cacheKey,
     async (): Promise<Result<{ model: DbMentalModel }, ApiError>> => {
       try {
-        const model = await c.env.DB.prepare(
-          'SELECT code, name, transformation, description, example, tags, difficulty, relatedModels, version, createdAt, updatedAt FROM mental_models WHERE code = ?'
-        )
+        const protectedDb = getProtectedDb(c.env);
+        const context: DbOperationContext = {
+          operation: 'read',
+          table: 'mental_models',
+          query: 'SELECT ... FROM mental_models WHERE code = ?',
+        };
+
+        const model = await protectedDb
+          .prepare(
+            'SELECT code, name, transformation, description, example, tags, difficulty, relatedModels, version, createdAt, updatedAt FROM mental_models WHERE code = ?',
+            context
+          )
           .bind(code)
           .first<DbMentalModel>();
 
@@ -180,6 +230,22 @@ modelsRouter.get('/:code', async c => {
 
         return Result.ok({ model: mapToApiModel(model) });
       } catch (error) {
+        // Handle circuit breaker errors
+        if (ProtectedDatabase.isCircuitBreakerError(error)) {
+          logger.warn('Circuit breaker active for model lookup', {
+            context: 'model-circuit-breaker',
+            state: error.circuitState,
+            code,
+            timestamp: new Date().toISOString(),
+          });
+          return Result.err(
+            createApiError('service_unavailable', 'Model data temporarily unavailable', 503, {
+              code,
+              circuitState: error.circuitState,
+            })
+          );
+        }
+
         return Result.err(
           createApiError('db_error', 'Failed to fetch model', 500, {
             cause: error instanceof Error ? error.message : String(error),
@@ -227,7 +293,14 @@ modelsRouter.get('/:code/relationships', async c => {
       Result<{ model: string; relationships: DbRelationship[]; count: number }, ApiError>
     > => {
       try {
-        const modelExists = await c.env.DB.prepare('SELECT code FROM mental_models WHERE code = ?')
+        const protectedDb = getProtectedDb(c.env);
+
+        // Check if model exists
+        const modelExists = await protectedDb
+          .prepare('SELECT code FROM mental_models WHERE code = ?', {
+            operation: 'read',
+            table: 'mental_models',
+          })
           .bind(code)
           .first();
 
@@ -235,14 +308,20 @@ modelsRouter.get('/:code/relationships', async c => {
           return Result.err(createApiError('not_found', `Model ${code} not found`, 404, { code }));
         }
 
-        const { results } = await c.env.DB.prepare(
-          `
+        // Get relationships
+        const { results } = await protectedDb
+          .prepare(
+            `
             SELECT id, source_code, target_code, relationship_type, confidence, evidence, created_at
             FROM model_relationships
             WHERE source_code = ? OR target_code = ?
             ORDER BY confidence DESC, created_at DESC
-          `
-        )
+          `,
+            {
+              operation: 'read',
+              table: 'model_relationships',
+            }
+          )
           .bind(code, code)
           .all<DbRelationship>();
 
@@ -252,6 +331,21 @@ modelsRouter.get('/:code/relationships', async c => {
           count: results.length,
         });
       } catch (error) {
+        // Handle circuit breaker errors with fallback
+        if (ProtectedDatabase.isCircuitBreakerError(error)) {
+          logger.warn('Circuit breaker active for relationships lookup', {
+            context: 'relationships-circuit-breaker',
+            state: error.circuitState,
+            code,
+            timestamp: new Date().toISOString(),
+          });
+          return Result.ok({
+            model: code,
+            relationships: [], // Empty fallback
+            count: 0,
+          });
+        }
+
         return Result.err(
           createApiError('db_error', 'Failed to fetch relationships', 500, {
             cause: error instanceof Error ? error.message : String(error),
@@ -283,7 +377,10 @@ modelsRouter.post('/recommend', async c => {
     try {
       body = await c.req.json();
     } catch (error) {
-      console.error('JSON parsing error in recommendations:', error);
+      logError(error, {
+        context: 'recommendations-json-parsing',
+        timestamp: new Date().toISOString(),
+      });
       return respondWithResult(
         c,
         Result.err(createApiError('invalid_request', 'Invalid JSON format', 400))
@@ -343,24 +440,33 @@ modelsRouter.post('/recommend', async c => {
     // Use parameterized query with escaped search terms
     const searchTerm = `%${keywords[0].substring(0, 30)}%`;
 
-    let results;
+    let results: any[] = [];
     try {
-      const dbResult = await c.env.DB.prepare(
-        `
+      const protectedDb = getProtectedDb(c.env);
+      const context: DbOperationContext = {
+        operation: 'read',
+        table: 'mental_models',
+        query: 'SELECT ... FROM mental_models WHERE ... LIMIT 10',
+      };
+
+      const dbResult = await protectedDb
+        .prepare(
+          `
           SELECT code, name, transformation, description
           FROM mental_models
           WHERE (LOWER(description) LIKE ? OR LOWER(name) LIKE ?)
           AND LENGTH(code) <= 10
-          ORDER BY 
-            CASE 
+          ORDER BY
+            CASE
               WHEN LOWER(name) LIKE ? THEN 1
               WHEN LOWER(description) LIKE ? THEN 2
               ELSE 3
             END,
             code
           LIMIT 10
-        `
-      )
+        `,
+          context
+        )
         .bind(searchTerm, searchTerm, searchTerm, searchTerm)
         .all<Pick<DbMentalModel, 'code' | 'name' | 'transformation' | 'description'>>();
 
@@ -370,15 +476,31 @@ modelsRouter.post('/recommend', async c => {
 
       results = dbResult.results;
     } catch (dbError) {
-      console.error('Database error in recommendations:', dbError);
-      return respondWithResult(
-        c,
-        Result.err(
-          createApiError('db_error', 'Failed to query recommendations', 500, {
-            cause: dbError instanceof Error ? dbError.message : String(dbError),
-          })
-        )
-      );
+      // Handle circuit breaker errors with fallback
+      if (ProtectedDatabase.isCircuitBreakerError(dbError)) {
+        logger.warn('Circuit breaker active for recommendations', {
+          context: 'recommendations-circuit-breaker',
+          state: dbError.circuitState,
+          problem: sanitizedProblem.substring(0, 50),
+          timestamp: new Date().toISOString(),
+        });
+
+        // Return empty recommendations as fallback
+        results = [];
+      } else {
+        logError(dbError, {
+          context: 'recommendations-db-error',
+          timestamp: new Date().toISOString(),
+        });
+        return respondWithResult(
+          c,
+          Result.err(
+            createApiError('db_error', 'Failed to query recommendations', 500, {
+              cause: dbError instanceof Error ? dbError.message : String(dbError),
+            })
+          )
+        );
+      }
     }
 
     // Sanitize response data
@@ -399,7 +521,7 @@ modelsRouter.post('/recommend', async c => {
       })
     );
   } catch (error) {
-    console.error('Recommendations error:', error);
+    logError(error, { context: 'recommendations-general', timestamp: new Date().toISOString() });
     if (error instanceof z.ZodError) {
       return respondWithResult(
         c,

@@ -18,6 +18,8 @@
     "auto-report": "node auto-report.js",
     "enhanced-report": "node enhanced-report.js",
     "benchmark": "node benchmark.js",
+    "bundle-size": "turbo bundle-size",
+    "bundle:analyze": "turbo build:analyze",
     "validate-models": "node validate-models.js",
     "test:e2e": "pnpm --filter @hummbl/tests test:e2e",
     "test:coverage": "pnpm --filter @hummbl/tests test:coverage",
@@ -41,5 +43,10 @@
   "packageManager": "pnpm@9.14.4",
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "overrides": {
+      "preact": "^10.28.2"
+    }
   }
 }

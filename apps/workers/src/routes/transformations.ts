@@ -13,6 +13,8 @@ import type { Env } from '../env';
 import { createApiError, respondWithResult } from '../lib/api';
 import { getCachedResult } from '../lib/cache';
 import type { ApiError } from '../lib/api';
+import { createProtectedDatabase, ProtectedDatabase } from '../lib/db-wrapper';
+import type { DbOperationContext } from '../lib/db-wrapper';
 
 interface DbMentalModel {
   code: string;
@@ -26,6 +28,9 @@ interface DbMentalModel {
 }
 
 export const transformationsRouter = new Hono<{ Bindings: Env }>();
+
+// Create protected database wrapper
+const getProtectedDb = (env: Env) => createProtectedDatabase(env.DB);
 
 // GET /v1/transformations - List all transformations
 transformationsRouter.get('/', async c => {
@@ -103,22 +108,31 @@ transformationsRouter.get('/:type', async c => {
       Result<typeof transformation & { models: DbMentalModel[]; modelCount: number }, ApiError>
     > => {
       try {
-        const { results } = await c.env.DB.prepare(
-          `
-            SELECT 
-              code, 
-              name, 
-              transformation, 
-              definition, 
-              whenToUse, 
+        const protectedDb = getProtectedDb(c.env);
+        const context: DbOperationContext = {
+          operation: 'read',
+          table: 'mental_models',
+          query: 'SELECT ... FROM mental_models WHERE transformation = ?',
+        };
+
+        const { results } = await protectedDb
+          .prepare(
+            `
+            SELECT
+              code,
+              name,
+              transformation,
+              definition,
+              whenToUse,
               COALESCE(example, '') as example,
               priority,
               COALESCE(systemPrompt, '') as system_prompt
             FROM mental_models
             WHERE transformation = ?
             ORDER BY code
-          `
-        )
+          `,
+            context
+          )
           .bind(type)
           .all<DbMentalModel>();
 
@@ -128,6 +142,20 @@ transformationsRouter.get('/:type', async c => {
           modelCount: results.length,
         });
       } catch (error) {
+        // Handle circuit breaker errors with fallback
+        if (ProtectedDatabase.isCircuitBreakerError(error)) {
+          console.warn(`[TRANSFORMATIONS] Circuit breaker active for transformation ${type}`, {
+            state: error.circuitState,
+            type,
+          });
+
+          return Result.ok({
+            ...transformation,
+            models: [], // Empty fallback
+            modelCount: 0,
+          });
+        }
+
         return Result.err(
           createApiError('db_error', 'Failed to fetch transformation models', 500, {
             cause: error instanceof Error ? error.message : String(error),

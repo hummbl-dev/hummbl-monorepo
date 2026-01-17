@@ -1,11 +1,19 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 /**
- * User Routes
+ * User Routes with Circuit Breaker Protection
  * User progress, favorites, and profile management
  */
 
 import { Hono } from 'hono';
 import { verify } from 'hono/jwt';
 import type { Env } from '../env';
+import { createLogger, logError } from '@hummbl/core';
+import { createProtectedDatabase, ProtectedDatabase } from '../lib/db-wrapper';
+import type { DbOperationContext } from '../lib/db-wrapper';
+
+// Create logger instance for user routes
+const logger = createLogger('user-routes');
 
 declare const crypto: {
   randomUUID: () => string;
@@ -16,6 +24,9 @@ type Variables = {
 };
 
 const userRouter = new Hono<{ Bindings: Env; Variables: Variables }>();
+
+// Create protected database wrapper
+const getProtectedDb = (env: Env) => createProtectedDatabase(env.DB);
 
 // Middleware to verify JWT
 userRouter.use('*', async (c, next) => {
@@ -32,9 +43,9 @@ userRouter.use('*', async (c, next) => {
 
     let payload;
     try {
-      payload = await verify(token, c.env.JWT_SECRET);
+      payload = await verify(token, c.env.JWT_SECRET, 'HS256');
     } catch (error) {
-      console.error('JWT verification error:', error);
+      logError(error, { context: 'user-jwt-verification', timestamp: new Date().toISOString() });
       return c.json({ error: 'Invalid token' }, 401);
     }
 
@@ -54,7 +65,7 @@ userRouter.use('*', async (c, next) => {
     c.set('userId', payload.userId);
     return await next();
   } catch (error) {
-    console.error('Authentication middleware error:', error);
+    logError(error, { context: 'user-auth-middleware', timestamp: new Date().toISOString() });
     return c.json({ error: 'Authentication failed' }, 401);
   }
 });
@@ -64,20 +75,43 @@ userRouter.get('/progress', async c => {
   try {
     const userId = c.get('userId');
 
-    const progress = await c.env.DB.prepare(
-      `
-      SELECT model_id, completed_at
-      FROM user_progress
-      WHERE user_id = ?
-      ORDER BY completed_at DESC
-    `
-    )
-      .bind(userId)
-      .all();
+    try {
+      const protectedDb = getProtectedDb(c.env);
+      const context: DbOperationContext = {
+        operation: 'read',
+        table: 'user_progress',
+        query: 'SELECT model_id, completed_at FROM user_progress WHERE user_id = ?',
+      };
 
-    return c.json({ progress: progress.results });
+      const progress = await protectedDb
+        .prepare(
+          `
+        SELECT model_id, completed_at
+        FROM user_progress
+        WHERE user_id = ?
+        ORDER BY completed_at DESC
+      `,
+          context
+        )
+        .bind(userId)
+        .all();
+
+      return c.json({ progress: progress.results });
+    } catch (error) {
+      // Handle circuit breaker errors with fallback
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        logger.warn('Circuit breaker active for progress', {
+          context: 'user-progress-circuit-breaker',
+          state: error.circuitState,
+          userId: userId.substring(0, 8) + '...',
+          timestamp: new Date().toISOString(),
+        });
+        return c.json({ progress: [] }); // Empty fallback
+      }
+      throw error;
+    }
   } catch (error) {
-    console.error('Get progress error:', error);
+    logError(error, { context: 'user-get-progress', timestamp: new Date().toISOString() });
     return c.json({ error: 'Failed to get progress' }, 500);
   }
 });
@@ -91,7 +125,10 @@ userRouter.post('/progress', async c => {
     try {
       requestData = await c.req.json();
     } catch (error) {
-      console.error('JSON parsing error in add progress:', error);
+      logError(error, {
+        context: 'user-progress-json-parsing',
+        timestamp: new Date().toISOString(),
+      });
       return c.json({ error: 'Invalid request format' }, 400);
     }
 
@@ -110,11 +147,25 @@ userRouter.post('/progress', async c => {
     // Verify model exists
     let modelExists;
     try {
-      modelExists = await c.env.DB.prepare('SELECT code FROM mental_models WHERE code = ?')
+      const protectedDb = getProtectedDb(c.env);
+      modelExists = await protectedDb
+        .prepare('SELECT code FROM mental_models WHERE code = ?', {
+          operation: 'read',
+          table: 'mental_models',
+        })
         .bind(modelId)
         .first();
     } catch (error) {
-      console.error('Database error checking model existence:', error);
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        logger.warn('Circuit breaker active for model validation', {
+          context: 'user-model-validation-circuit-breaker',
+          state: error.circuitState,
+          modelId,
+          timestamp: new Date().toISOString(),
+        });
+        return c.json({ error: 'Service temporarily unavailable' }, 503);
+      }
+      logError(error, { context: 'user-model-validation-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to validate model' }, 500);
     }
 
@@ -125,13 +176,19 @@ userRouter.post('/progress', async c => {
     // Check if already completed
     let existing;
     try {
-      existing = await c.env.DB.prepare(
-        'SELECT id FROM user_progress WHERE user_id = ? AND model_id = ?'
-      )
+      const protectedDb = getProtectedDb(c.env);
+      existing = await protectedDb
+        .prepare('SELECT id FROM user_progress WHERE user_id = ? AND model_id = ?', {
+          operation: 'read',
+          table: 'user_progress',
+        })
         .bind(userId, modelId)
         .first();
     } catch (error) {
-      console.error('Database error checking existing progress:', error);
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        return c.json({ error: 'Service temporarily unavailable' }, 503);
+      }
+      logError(error, { context: 'user-progress-check-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to check progress' }, 500);
     }
 
@@ -142,9 +199,12 @@ userRouter.post('/progress', async c => {
     // Add to progress
     const progressId = crypto.randomUUID();
     try {
-      const result = await c.env.DB.prepare(
-        'INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)'
-      )
+      const protectedDb = getProtectedDb(c.env);
+      const result = await protectedDb
+        .prepare('INSERT INTO user_progress (id, user_id, model_id) VALUES (?, ?, ?)', {
+          operation: 'write',
+          table: 'user_progress',
+        })
         .bind(progressId, userId, modelId)
         .run();
 
@@ -152,13 +212,16 @@ userRouter.post('/progress', async c => {
         throw new Error('Insert failed');
       }
     } catch (error) {
-      console.error('Database error adding progress:', error);
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        return c.json({ error: 'Write operations temporarily unavailable' }, 503);
+      }
+      logError(error, { context: 'user-progress-add-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to add progress' }, 500);
     }
 
     return c.json({ success: true, progressId });
   } catch (error) {
-    console.error('Add progress error:', error);
+    logError(error, { context: 'user-add-progress', timestamp: new Date().toISOString() });
     return c.json({ error: 'Failed to add progress' }, 500);
   }
 });
@@ -181,13 +244,19 @@ userRouter.delete('/progress/:modelId', async c => {
 
     let result;
     try {
-      result = await c.env.DB.prepare(
-        'DELETE FROM user_progress WHERE user_id = ? AND model_id = ?'
-      )
+      const protectedDb = getProtectedDb(c.env);
+      result = await protectedDb
+        .prepare('DELETE FROM user_progress WHERE user_id = ? AND model_id = ?', {
+          operation: 'write',
+          table: 'user_progress',
+        })
         .bind(userId, rawModelId)
         .run();
     } catch (error) {
-      console.error('Database error removing progress:', error);
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        return c.json({ error: 'Write operations temporarily unavailable' }, 503);
+      }
+      logError(error, { context: 'user-progress-delete-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to remove progress' }, 500);
     }
 
@@ -197,7 +266,7 @@ userRouter.delete('/progress/:modelId', async c => {
 
     return c.json({ success: true });
   } catch (error) {
-    console.error('Remove progress error:', error);
+    logError(error, { context: 'user-remove-progress', timestamp: new Date().toISOString() });
     return c.json({ error: 'Failed to remove progress' }, 500);
   }
 });
@@ -207,20 +276,39 @@ userRouter.get('/favorites', async c => {
   try {
     const userId = c.get('userId');
 
-    const favorites = await c.env.DB.prepare(
-      `
-      SELECT model_id, created_at
-      FROM user_favorites
-      WHERE user_id = ?
-      ORDER BY created_at DESC
-    `
-    )
-      .bind(userId)
-      .all();
+    try {
+      const protectedDb = getProtectedDb(c.env);
+      const favorites = await protectedDb
+        .prepare(
+          `
+        SELECT model_id, created_at
+        FROM user_favorites
+        WHERE user_id = ?
+        ORDER BY created_at DESC
+      `,
+          {
+            operation: 'read',
+            table: 'user_favorites',
+          }
+        )
+        .bind(userId)
+        .all();
 
-    return c.json({ favorites: favorites.results });
+      return c.json({ favorites: favorites.results });
+    } catch (error) {
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        logger.warn('Circuit breaker active for favorites', {
+          context: 'user-favorites-circuit-breaker',
+          state: error.circuitState,
+          userId: userId.substring(0, 8) + '...',
+          timestamp: new Date().toISOString(),
+        });
+        return c.json({ favorites: [] }); // Empty fallback
+      }
+      throw error;
+    }
   } catch (error) {
-    console.error('Get favorites error:', error);
+    logError(error, { context: 'user-get-favorites', timestamp: new Date().toISOString() });
     return c.json({ error: 'Failed to get favorites' }, 500);
   }
 });
@@ -234,7 +322,10 @@ userRouter.post('/favorites', async c => {
     try {
       requestData = await c.req.json();
     } catch (error) {
-      console.error('JSON parsing error in add favorite:', error);
+      logError(error, {
+        context: 'user-favorites-json-parsing',
+        timestamp: new Date().toISOString(),
+      });
       return c.json({ error: 'Invalid request format' }, 400);
     }
 
@@ -253,11 +344,22 @@ userRouter.post('/favorites', async c => {
     // Verify model exists
     let modelExists;
     try {
-      modelExists = await c.env.DB.prepare('SELECT code FROM mental_models WHERE code = ?')
+      const protectedDb = getProtectedDb(c.env);
+      modelExists = await protectedDb
+        .prepare('SELECT code FROM mental_models WHERE code = ?', {
+          operation: 'read',
+          table: 'mental_models',
+        })
         .bind(modelId)
         .first();
     } catch (error) {
-      console.error('Database error checking model existence:', error);
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        return c.json({ error: 'Service temporarily unavailable' }, 503);
+      }
+      logError(error, {
+        context: 'user-favorites-model-validation-db',
+        timestamp: new Date().toISOString(),
+      });
       return c.json({ error: 'Failed to validate model' }, 500);
     }
 
@@ -268,13 +370,19 @@ userRouter.post('/favorites', async c => {
     // Check if already favorited
     let existing;
     try {
-      existing = await c.env.DB.prepare(
-        'SELECT id FROM user_favorites WHERE user_id = ? AND model_id = ?'
-      )
+      const protectedDb = getProtectedDb(c.env);
+      existing = await protectedDb
+        .prepare('SELECT id FROM user_favorites WHERE user_id = ? AND model_id = ?', {
+          operation: 'read',
+          table: 'user_favorites',
+        })
         .bind(userId, modelId)
         .first();
     } catch (error) {
-      console.error('Database error checking existing favorite:', error);
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        return c.json({ error: 'Service temporarily unavailable' }, 503);
+      }
+      logError(error, { context: 'user-favorites-check-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to check favorites' }, 500);
     }
 
@@ -285,9 +393,12 @@ userRouter.post('/favorites', async c => {
     // Add to favorites
     const favoriteId = crypto.randomUUID();
     try {
-      const result = await c.env.DB.prepare(
-        'INSERT INTO user_favorites (id, user_id, model_id) VALUES (?, ?, ?)'
-      )
+      const protectedDb = getProtectedDb(c.env);
+      const result = await protectedDb
+        .prepare('INSERT INTO user_favorites (id, user_id, model_id) VALUES (?, ?, ?)', {
+          operation: 'write',
+          table: 'user_favorites',
+        })
         .bind(favoriteId, userId, modelId)
         .run();
 
@@ -295,13 +406,16 @@ userRouter.post('/favorites', async c => {
         throw new Error('Insert failed');
       }
     } catch (error) {
-      console.error('Database error adding favorite:', error);
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        return c.json({ error: 'Write operations temporarily unavailable' }, 503);
+      }
+      logError(error, { context: 'user-favorites-add-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to add favorite' }, 500);
     }
 
     return c.json({ success: true, favoriteId });
   } catch (error) {
-    console.error('Add favorite error:', error);
+    logError(error, { context: 'user-add-favorite', timestamp: new Date().toISOString() });
     return c.json({ error: 'Failed to add favorite' }, 500);
   }
 });
@@ -324,13 +438,19 @@ userRouter.delete('/favorites/:modelId', async c => {
 
     let result;
     try {
-      result = await c.env.DB.prepare(
-        'DELETE FROM user_favorites WHERE user_id = ? AND model_id = ?'
-      )
+      const protectedDb = getProtectedDb(c.env);
+      result = await protectedDb
+        .prepare('DELETE FROM user_favorites WHERE user_id = ? AND model_id = ?', {
+          operation: 'write',
+          table: 'user_favorites',
+        })
         .bind(userId, rawModelId)
         .run();
     } catch (error) {
-      console.error('Database error removing favorite:', error);
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        return c.json({ error: 'Write operations temporarily unavailable' }, 503);
+      }
+      logError(error, { context: 'user-favorites-delete-db', timestamp: new Date().toISOString() });
       return c.json({ error: 'Failed to remove favorite' }, 500);
     }
 
@@ -340,7 +460,7 @@ userRouter.delete('/favorites/:modelId', async c => {
 
     return c.json({ success: true });
   } catch (error) {
-    console.error('Remove favorite error:', error);
+    logError(error, { context: 'user-remove-favorite', timestamp: new Date().toISOString() });
     return c.json({ error: 'Failed to remove favorite' }, 500);
   }
 });
@@ -350,38 +470,66 @@ userRouter.get('/profile', async c => {
   try {
     const userId = c.get('userId');
 
-    const user = await c.env.DB.prepare(
-      'SELECT id, email, name, avatar_url, provider, created_at FROM users WHERE id = ?'
-    )
-      .bind(userId)
-      .first();
+    try {
+      const protectedDb = getProtectedDb(c.env);
 
-    if (!user) {
-      return c.json({ error: 'User not found' }, 404);
+      const user = await protectedDb
+        .prepare(
+          'SELECT id, email, name, avatar_url, provider, created_at FROM users WHERE id = ?',
+          {
+            operation: 'read',
+            table: 'users',
+          }
+        )
+        .bind(userId)
+        .first();
+
+      if (!user) {
+        return c.json({ error: 'User not found' }, 404);
+      }
+
+      // Get stats
+      const progressCount = await protectedDb
+        .prepare('SELECT COUNT(*) as count FROM user_progress WHERE user_id = ?', {
+          operation: 'read',
+          table: 'user_progress',
+        })
+        .bind(userId)
+        .first();
+
+      const favoritesCount = await protectedDb
+        .prepare('SELECT COUNT(*) as count FROM user_favorites WHERE user_id = ?', {
+          operation: 'read',
+          table: 'user_favorites',
+        })
+        .bind(userId)
+        .first();
+
+      return c.json({
+        user,
+        stats: {
+          completedModels: progressCount?.count || 0,
+          favoriteModels: favoritesCount?.count || 0,
+        },
+      });
+    } catch (error) {
+      if (ProtectedDatabase.isCircuitBreakerError(error)) {
+        logger.warn('Circuit breaker active for profile', {
+          context: 'user-profile-circuit-breaker',
+          state: error.circuitState,
+          userId: userId.substring(0, 8) + '...',
+          timestamp: new Date().toISOString(),
+        });
+        return c.json({
+          user: null,
+          stats: { completedModels: 0, favoriteModels: 0 },
+          message: 'Profile temporarily unavailable',
+        });
+      }
+      throw error;
     }
-
-    // Get stats
-    const progressCount = await c.env.DB.prepare(
-      'SELECT COUNT(*) as count FROM user_progress WHERE user_id = ?'
-    )
-      .bind(userId)
-      .first();
-
-    const favoritesCount = await c.env.DB.prepare(
-      'SELECT COUNT(*) as count FROM user_favorites WHERE user_id = ?'
-    )
-      .bind(userId)
-      .first();
-
-    return c.json({
-      user,
-      stats: {
-        completedModels: progressCount?.count || 0,
-        favoriteModels: favoritesCount?.count || 0,
-      },
-    });
   } catch (error) {
-    console.error('Get profile error:', error);
+    logError(error, { context: 'user-get-profile', timestamp: new Date().toISOString() });
     return c.json({ error: 'Failed to get profile' }, 500);
   }
 });

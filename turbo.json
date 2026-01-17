@@ -1,6 +1,14 @@
 {
   "tasks": {
     "build": { "dependsOn": ["^build"], "outputs": ["dist/**"] },
+    "build:analyze": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "dist/bundle-analysis.html"]
+    },
+    "bundle-size": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
     "test": {},
     "lint": {},
     "type-check": { "dependsOn": ["^build"] },
