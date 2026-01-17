@@ -244,10 +244,30 @@ class GlobalErrorHandler {
     };
   }
 
+  private generateSecureSessionId(): string {
+    const timestamp = Date.now();
+
+    if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+      // Generate 16 random bytes and encode them as a base-36 string
+      const bytes = new Uint8Array(16);
+      window.crypto.getRandomValues(bytes);
+      let randomPart = '';
+      for (let i = 0; i < bytes.length; i++) {
+        randomPart += bytes[i].toString(36);
+      }
+      randomPart = randomPart.slice(0, 9);
+      return `session_${timestamp}_${randomPart}`;
+    }
+
+    // Fallback: still provide a session ID even if crypto is unavailable
+    const fallbackRandom = Math.random().toString(36).substr(2, 9);
+    return `session_${timestamp}_${fallbackRandom}`;
+  }
+
   private initializeUserContext(): UserContext {
     let sessionId = sessionStorage.getItem('hummbl-session-id');
     if (!sessionId) {
-      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      sessionId = this.generateSecureSessionId();
       sessionStorage.setItem('hummbl-session-id', sessionId);
     }
 
