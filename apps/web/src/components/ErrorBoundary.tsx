@@ -105,9 +105,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   private generateSecureIdSegment(length: number): string {
     const cryptoObj =
-      (typeof window !== 'undefined' && window.crypto) ||
-      ((window as any).msCrypto) ||
-      null;
+      (typeof window !== 'undefined' && window.crypto) || (window as any).msCrypto || null;
 
     if (cryptoObj && typeof cryptoObj.getRandomValues === 'function') {
       const bytes = new Uint8Array(length * 2);
@@ -119,10 +117,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         base64 += String.fromCharCode(bytes[i]);
       }
 
-      const encoded = btoa(base64)
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/g, '');
+      const encoded = btoa(base64).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
       return encoded.substring(0, length);
     }
 
@@ -134,9 +129,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     // Get or create session ID
     let sessionId = sessionStorage.getItem('hummbl-session-id');
     if (!sessionId) {
-      
-      
-      sessionId = `session_${Date.now()}_${this.generateSecureIdSegment(9)}`;      sessionStorage.setItem('hummbl-session-id', sessionId);
+      sessionId = `session_${Date.now()}_${this.generateSecureIdSegment(9)}`;
+      sessionStorage.setItem('hummbl-session-id', sessionId);
     }
     return sessionId;
   }
