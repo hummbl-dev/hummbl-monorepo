@@ -1,0 +1,38 @@
+{
+  "timestamp": "2025-10-17T14:42:52.353Z",
+  "version": "1.0.0",
+  "narrative_count": 6,
+  "required_fields": [
+    "narrative_id",
+    "title",
+    "summary",
+    "confidence",
+    "provenance_hash",
+    "evidence_quality"
+  ],
+  "sample_narrative": {
+    "narrative_id": "NAR-HUMMBL-PERSPECTIVE",
+    "fields": [
+      "narrative_id",
+      "version",
+      "provenance_hash",
+      "evidence_quality",
+      "title",
+      "summary",
+      "category",
+      "tags",
+      "domain",
+      "linked_signals",
+      "citations",
+      "elicitation_methods",
+      "complexity",
+      "relationships",
+      "examples",
+      "related_frameworks",
+      "confidence",
+      "changelog"
+    ],
+    "signal_count": 2,
+    "relationship_count": 2
+  }
+}

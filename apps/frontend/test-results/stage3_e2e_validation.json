@@ -1,0 +1,341 @@
+{
+  "timestamp": "2025-10-17T16:58:33.920Z",
+  "mode": "integration",
+  "suites": [
+    {
+      "suite": "api_routes",
+      "test": "narratives_data",
+      "status": "PASS",
+      "details": "Narratives data source available",
+      "error": null
+    },
+    {
+      "suite": "api_routes",
+      "test": "network_data",
+      "status": "PASS",
+      "details": "Network graph data source available",
+      "error": null
+    },
+    {
+      "suite": "api_routes",
+      "test": "integrity_data",
+      "status": "PASS",
+      "details": "Integrity report data source available",
+      "error": null
+    },
+    {
+      "suite": "api_routes",
+      "test": "client_get",
+      "status": "PASS",
+      "details": "API client get method exists",
+      "error": null
+    },
+    {
+      "suite": "api_routes",
+      "test": "client_post",
+      "status": "WARN",
+      "details": "API client post method not found",
+      "error": null
+    },
+    {
+      "suite": "api_routes",
+      "test": "client_put",
+      "status": "WARN",
+      "details": "API client put method not found",
+      "error": null
+    },
+    {
+      "suite": "api_routes",
+      "test": "client_delete",
+      "status": "WARN",
+      "details": "API client delete method not found",
+      "error": null
+    },
+    {
+      "suite": "api_routes",
+      "test": "client_caching",
+      "status": "PASS",
+      "details": "API client caching implemented",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "field_narrative_id",
+      "status": "PASS",
+      "details": "Field narrative_id in TypeScript interface",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "field_title",
+      "status": "PASS",
+      "details": "Field title in TypeScript interface",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "field_summary",
+      "status": "PASS",
+      "details": "Field summary in TypeScript interface",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "field_confidence",
+      "status": "PASS",
+      "details": "Field confidence in TypeScript interface",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "field_provenance_hash",
+      "status": "PASS",
+      "details": "Field provenance_hash in TypeScript interface",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "field_evidence_quality",
+      "status": "PASS",
+      "details": "Field evidence_quality in TypeScript interface",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "node_id",
+      "status": "PASS",
+      "details": "Node field id contract valid",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "node_label",
+      "status": "PASS",
+      "details": "Node field label contract valid",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "node_confidence",
+      "status": "PASS",
+      "details": "Node field confidence contract valid",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "node_evidence_quality",
+      "status": "PASS",
+      "details": "Node field evidence_quality contract valid",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "edge_source",
+      "status": "PASS",
+      "details": "Edge field source contract valid",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "edge_target",
+      "status": "PASS",
+      "details": "Edge field target contract valid",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "edge_type",
+      "status": "PASS",
+      "details": "Edge field type contract valid",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "edge_weight",
+      "status": "PASS",
+      "details": "Edge field weight contract valid",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "hook_return_narratives",
+      "status": "PASS",
+      "details": "Hook returns narratives",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "hook_return_loading",
+      "status": "PASS",
+      "details": "Hook returns loading",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "hook_return_error",
+      "status": "PASS",
+      "details": "Hook returns error",
+      "error": null
+    },
+    {
+      "suite": "ui_api_contract",
+      "test": "hook_return_refetch",
+      "status": "PASS",
+      "details": "Hook returns refetch",
+      "error": null
+    },
+    {
+      "suite": "dom_events",
+      "test": "card_onclick",
+      "status": "PASS",
+      "details": "NarrativeCard has onClick handler",
+      "error": null
+    },
+    {
+      "suite": "dom_events",
+      "test": "card_props",
+      "status": "PASS",
+      "details": "NarrativeCard props interface defined",
+      "error": null
+    },
+    {
+      "suite": "dom_events",
+      "test": "list_hook",
+      "status": "PASS",
+      "details": "NarrativeList uses useNarratives hook",
+      "error": null
+    },
+    {
+      "suite": "dom_events",
+      "test": "list_error_handling",
+      "status": "PASS",
+      "details": "NarrativeList has error handling",
+      "error": null
+    },
+    {
+      "suite": "dom_events",
+      "test": "list_loading_state",
+      "status": "PASS",
+      "details": "NarrativeList has loading state",
+      "error": null
+    },
+    {
+      "suite": "dom_events",
+      "test": "app_exists",
+      "status": "PASS",
+      "details": "App.tsx exists for integration",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "script_build_visualization.js",
+      "status": "PASS",
+      "details": "Build script exists: build_visualization.js",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "executable_build_visualization.js",
+      "status": "PASS",
+      "details": "Script has shebang: build_visualization.js",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "script_build_qdm_matrix.js",
+      "status": "PASS",
+      "details": "Build script exists: build_qdm_matrix.js",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "executable_build_qdm_matrix.js",
+      "status": "PASS",
+      "details": "Script has shebang: build_qdm_matrix.js",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "script_build_ledger.js",
+      "status": "PASS",
+      "details": "Build script exists: build_ledger.js",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "executable_build_ledger.js",
+      "status": "PASS",
+      "details": "Script has shebang: build_ledger.js",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "script_build_sitrep.js",
+      "status": "PASS",
+      "details": "Build script exists: build_sitrep.js",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "executable_build_sitrep.js",
+      "status": "PASS",
+      "details": "Script has shebang: build_sitrep.js",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "orchestrator",
+      "status": "PASS",
+      "details": "Build orchestrator exists",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "orchestrator_exec",
+      "status": "WARN",
+      "details": "Orchestrator not executable (run: chmod +x)",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "ledger_provenance",
+      "status": "PASS",
+      "details": "Ledger uses provenance hashes",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "ledger_blockchain",
+      "status": "PASS",
+      "details": "Ledger has blockchain structure",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "ledger_write",
+      "status": "PASS",
+      "details": "Ledger writes output file",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "dist_dir",
+      "status": "WARN",
+      "details": "Build output directory not created yet (run build first)",
+      "error": null
+    },
+    {
+      "suite": "build_integration",
+      "test": "data_consistency",
+      "status": "PASS",
+      "details": "Data consistent: 6 narratives",
+      "error": null
+    }
+  ],
+  "summary": {
+    "total": 47,
+    "passed": 42,
+    "failed": 0,
+    "warnings": 5
+  }
+}
