@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-10-17T14:42:52.354Z",
+  "components": [
+    {
+      "name": "NarrativeCard",
+      "props": ["narrative", "onClick"],
+      "data_contract": "Narrative interface from types/narrative.ts"
+    },
+    {
+      "name": "NarrativeList",
+      "props": [],
+      "hooks": ["useNarratives"],
+      "data_contract": "NarrativesResponse from types/narrative.ts"
+    }
+  ]
+}

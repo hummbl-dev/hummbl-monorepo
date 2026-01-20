@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-10-17T14:42:52.353Z",
+  "node_count": 6,
+  "edge_count": 16,
+  "sample_node": {
+    "id": "NAR-HUMMBL-PERSPECTIVE",
+    "fields": [
+      "id",
+      "label",
+      "category",
+      "confidence",
+      "evidence_quality",
+      "provenance_hash",
+      "complexity",
+      "domain"
+    ]
+  },
+  "sample_edge": {
+    "fields": ["source", "target", "type", "description", "weight", "bidirectional"]
+  }
+}

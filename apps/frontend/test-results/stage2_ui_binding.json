@@ -1,0 +1,173 @@
+{
+  "timestamp": "2025-10-17T14:42:50.109Z",
+  "mode": "strict",
+  "suites": [
+    {
+      "suite": "typescript",
+      "test": "src/types/narrative.ts",
+      "status": "PASS",
+      "details": "File exists",
+      "error": null
+    },
+    {
+      "suite": "typescript",
+      "test": "src/types/network.ts",
+      "status": "PASS",
+      "details": "File exists",
+      "error": null
+    },
+    {
+      "suite": "typescript",
+      "test": "src/api/client.ts",
+      "status": "PASS",
+      "details": "File exists",
+      "error": null
+    },
+    {
+      "suite": "typescript",
+      "test": "src/hooks/useNarratives.ts",
+      "status": "PASS",
+      "details": "File exists",
+      "error": null
+    },
+    {
+      "suite": "typescript",
+      "test": "src/hooks/useNetwork.ts",
+      "status": "PASS",
+      "details": "File exists",
+      "error": null
+    },
+    {
+      "suite": "typescript",
+      "test": "tsc_check",
+      "status": "PASS",
+      "details": "TypeScript compilation successful",
+      "error": null
+    },
+    {
+      "suite": "components",
+      "test": "src/components/narratives/NarrativeCard.tsx",
+      "status": "PASS",
+      "details": "Component file exists",
+      "error": null
+    },
+    {
+      "suite": "components",
+      "test": "src/components/narratives/NarrativeList.tsx",
+      "status": "PASS",
+      "details": "Component file exists",
+      "error": null
+    },
+    {
+      "suite": "components",
+      "test": "NarrativeCard_render",
+      "status": "PASS",
+      "details": "Component structure validated",
+      "error": null
+    },
+    {
+      "suite": "components",
+      "test": "NarrativeList_render",
+      "status": "PASS",
+      "details": "Component structure validated",
+      "error": null
+    },
+    {
+      "suite": "data_binding",
+      "test": "narratives_file",
+      "status": "PASS",
+      "details": "Narratives file accessible",
+      "error": null
+    },
+    {
+      "suite": "data_binding",
+      "test": "narratives_structure",
+      "status": "PASS",
+      "details": "6 narratives loaded",
+      "error": null
+    },
+    {
+      "suite": "data_binding",
+      "test": "narrative_interface",
+      "status": "PASS",
+      "details": "Data matches TypeScript interface",
+      "error": null
+    },
+    {
+      "suite": "data_binding",
+      "test": "network_file",
+      "status": "PASS",
+      "details": "Network file accessible",
+      "error": null
+    },
+    {
+      "suite": "data_binding",
+      "test": "network_structure",
+      "status": "PASS",
+      "details": "6 nodes, 16 edges",
+      "error": null
+    },
+    {
+      "suite": "data_binding",
+      "test": "network_node_interface",
+      "status": "PASS",
+      "details": "Node data matches interface",
+      "error": null
+    },
+    {
+      "suite": "data_binding",
+      "test": "network_edge_interface",
+      "status": "PASS",
+      "details": "Edge data matches interface",
+      "error": null
+    },
+    {
+      "suite": "data_binding",
+      "test": "integrity_file",
+      "status": "PASS",
+      "details": "Integrity report accessible",
+      "error": null
+    },
+    {
+      "suite": "data_binding",
+      "test": "integrity_structure",
+      "status": "PASS",
+      "details": "Integrity report structure valid",
+      "error": null
+    },
+    {
+      "suite": "data_binding",
+      "test": "integrity_quality",
+      "status": "PASS",
+      "details": "Quality score: 1.0",
+      "error": null
+    },
+    {
+      "suite": "snapshots",
+      "test": "narrative_schema",
+      "status": "PASS",
+      "details": "Narrative schema snapshot created",
+      "error": null
+    },
+    {
+      "suite": "snapshots",
+      "test": "network_schema",
+      "status": "PASS",
+      "details": "Network schema snapshot created",
+      "error": null
+    },
+    {
+      "suite": "snapshots",
+      "test": "component_interfaces",
+      "status": "PASS",
+      "details": "Component interface snapshot created",
+      "error": null
+    }
+  ],
+  "summary": {
+    "total": 23,
+    "passed": 23,
+    "failed": 0,
+    "warnings": 0
+  }
+}
