@@ -9,7 +9,7 @@ interface ChatSettingsProps {
   onClose: () => void;
 }
 
-export function ChatSettings({ onUpdateSettings, onClose }: ChatSettingsProps) {
+export function ChatSettings({ onClose }: ChatSettingsProps) {
   return (
     <div className="chat-settings-overlay">
       <div className="chat-settings">

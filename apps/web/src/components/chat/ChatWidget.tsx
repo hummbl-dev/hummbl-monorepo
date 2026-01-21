@@ -1,7 +1,7 @@
 // Chat Widget component with streaming functionality
 // Migrated from hummbl-io with enhanced Base120 integration and TypeScript strict mode
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChatWindow } from './ChatWindow';
 import { ConversationHistory } from './ConversationHistory';
 import { ChatSettings } from './ChatSettings';
@@ -124,7 +124,7 @@ export function ChatWidget({
     if (!conversation) {
       conversation = createNewConversation();
       setCurrentConversation(conversation);
-      setConversations((prev: ChatConversation[]) => [...prev, conversation]);
+      setConversations(prev => [...prev, conversation]);
       chatStorage.saveCurrentConversationId(conversation.id);
     }
 
@@ -268,7 +268,6 @@ export function ChatWidget({
           conversation={currentConversation}
           onSendMessage={sendMessage}
           isLoading={isLoading}
-          error={error}
           onOpenSettings={() => setShowSettings(true)}
           onOpenHistory={() => setShowHistory(true)}
           streamingResponse={streamingResponse}

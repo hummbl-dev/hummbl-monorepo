@@ -1,7 +1,7 @@
 // Chat Input component for message sending
 // Migrated from hummbl-io with enhanced UX and TypeScript strict mode
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
