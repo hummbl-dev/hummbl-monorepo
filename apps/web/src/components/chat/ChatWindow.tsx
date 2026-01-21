@@ -1,7 +1,7 @@
 // Chat Window component for conversation display
 // Migrated from hummbl-io with enhanced UI and TypeScript strict mode
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import type { ChatConversation } from '@hummbl/core';
@@ -33,11 +33,19 @@ export function ChatWindow({
 }: ChatWindowProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [streamingTimestamp, setStreamingTimestamp] = useState<number>(0);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversation?.messages, streamingResponse]);
+
+  // Update streaming timestamp when streaming starts
+  useEffect(() => {
+    if (streamingResponse && streamingTimestamp === 0) {
+      setStreamingTimestamp(Date.now());
+    }
+  }, [streamingResponse, streamingTimestamp]);
 
   // Focus input when window opens
   useEffect(() => {
@@ -133,7 +141,7 @@ export function ChatWindow({
                     id: 'streaming',
                     role: 'assistant',
                     content: streamingResponse,
-                    timestamp: Date.now(),
+                    timestamp: streamingTimestampRef.current,
                     streaming: true,
                   }}
                 />
