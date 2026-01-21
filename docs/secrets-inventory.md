@@ -2,8 +2,8 @@
 
 | Name         | Purpose             | Scope        | Owner   | Last Rotated | Rotation Due |
 | ------------ | ------------------- | ------------ | ------- | ------------ | ------------ |
-| JWT_SECRET   | JWT signing         | prod+staging | @reuben | 2025-01-21   | 2025-04-21   |
-| MCP API Keys | Test authentication | test         | @reuben | 2025-01-21   | 2025-04-21   |
+| JWT_SECRET   | JWT signing         | prod+staging | @reuben | 2026-01-21   | 2026-04-21   |
+| MCP API Keys | Test authentication | test         | @reuben | 2026-01-21   | 2026-04-21   |
 
 ## CRITICAL ACTIONS COMPLETED
 
@@ -23,7 +23,7 @@
 
 - JWT_SECRET: 90 days
 - API keys: 90 days
-- Review: quarterly (next: 2025-04-21)
+- Review: quarterly (next: 2026-04-21)
 
 ## Security Status
 
@@ -32,4 +32,4 @@
 - ✅ Proper secret storage implemented
 - ✅ Documentation placeholders suppressed
 
-## Next Review: 2025-04-21
+## Next Review: 2026-04-21
