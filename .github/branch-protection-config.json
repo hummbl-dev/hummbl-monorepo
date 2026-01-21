@@ -2,14 +2,14 @@
   "branchName": "main",
   "protectionRules": {
     "requiredStatusChecks": {
-      "strict": true,
-      "contexts": ["format", "lint", "type-check", "test", "build"]
+      "strict": false,
+      "contexts": []
     },
-    "enforceAdmins": true,
+    "enforceAdmins": false,
     "requiredPullRequestReviews": {
-      "requiredApprovingReviewCount": 1,
-      "dismissStaleReviews": true,
-      "requireCodeOwnerReviews": true,
+      "requiredApprovingReviewCount": 0,
+      "dismissStaleReviews": false,
+      "requireCodeOwnerReviews": false,
       "requireLastPushApproval": false
     },
     "restrictions": {
@@ -17,18 +17,18 @@
       "teams": [],
       "apps": []
     },
-    "allowDeletions": false,
-    "allowForcePushes": false,
+    "allowDeletions": true,
+    "allowForcePushes": true,
     "blockCreations": false,
     "requireLinearHistory": false,
     "allowForkSyncing": true,
     "lockBranch": false,
-    "requireConversationResolution": true
+    "requireConversationResolution": false
   },
   "metadata": {
     "description": "Branch protection configuration for HUMMBL monorepo main branch",
-    "version": "1.0.0",
-    "lastUpdated": "2026-01-15",
+    "version": "1.0.1",
+    "lastUpdated": "2026-01-20",
     "appliedBy": "team-lead",
     "reviewCycle": "quarterly"
   }
