@@ -1,8 +1,7 @@
 // Conversation History component for chat management
 // Migrated from hummbl-io with enhanced UX and TypeScript strict mode
 
-import React from 'react';
-import type { ChatConversation } from '@hummbl/core/types/chat';
+import type { ChatConversation } from '@hummbl/core';
 
 interface ConversationHistoryProps {
   conversations: ChatConversation[];
@@ -12,13 +11,7 @@ interface ConversationHistoryProps {
   onClose: () => void;
 }
 
-export function ConversationHistory({
-  conversations,
-  currentConversationId,
-  onSelectConversation,
-  onDeleteConversation,
-  onClose,
-}: ConversationHistoryProps) {
+export function ConversationHistory({ onClose }: ConversationHistoryProps) {
   return (
     <div className="chat-history-overlay">
       <div className="chat-history">

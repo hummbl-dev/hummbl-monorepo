@@ -6,9 +6,7 @@ import { ChatWindow } from './ChatWindow';
 import { ConversationHistory } from './ConversationHistory';
 import { ChatSettings } from './ChatSettings';
 import { ChatError } from './ChatError';
-import { createStreamingService } from '@hummbl/core/services/streamingService';
-import { chatStorage } from '@hummbl/core/services/chatStorageService';
-import { contextBuilder } from '@hummbl/core/services/contextBuilder';
+import { createStreamingService, chatStorage, contextBuilder } from '@hummbl/core';
 import type {
   ChatConversation,
   ChatMessage,
@@ -16,7 +14,7 @@ import type {
   ChatSettings as ChatSettingsType,
   StreamCallbacks,
   Base120Model,
-} from '@hummbl/core/types/chat';
+} from '@hummbl/core';
 
 interface ChatWidgetProps {
   mentalModels?: Base120Model[];

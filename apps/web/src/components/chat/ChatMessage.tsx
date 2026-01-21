@@ -1,8 +1,7 @@
 // Chat Message component for individual message display
 // Migrated from hummbl-io with enhanced styling and TypeScript strict mode
 
-import React from 'react';
-import type { ChatMessage as ChatMessageType } from '@hummbl/core/types/chat';
+import type { ChatMessage as ChatMessageType } from '@hummbl/core';
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -37,7 +36,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
             </div>
           ) : (
             <div className="chat-message-text">
-              {message.content.split('\n').map((paragraph, index) => (
+              {message.content.split('\n').map((paragraph: string, index: number) => (
                 <p key={index}>{paragraph}</p>
               ))}
             </div>

@@ -1,8 +1,7 @@
 // Chat Settings component for configuration
 // Migrated from hummbl-io with enhanced UX and TypeScript strict mode
 
-import React from 'react';
-import type { ChatSettings } from '@hummbl/core/types/chat';
+import type { ChatSettings } from '@hummbl/core';
 
 interface ChatSettingsProps {
   settings: ChatSettings;
@@ -10,7 +9,7 @@ interface ChatSettingsProps {
   onClose: () => void;
 }
 
-export function ChatSettings({ settings, onUpdateSettings, onClose }: ChatSettingsProps) {
+export function ChatSettings({ onUpdateSettings, onClose }: ChatSettingsProps) {
   return (
     <div className="chat-settings-overlay">
       <div className="chat-settings">

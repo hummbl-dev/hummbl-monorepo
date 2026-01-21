@@ -1,8 +1,6 @@
 // Chat Error component for error display
 // Migrated from hummbl-io with enhanced UX and TypeScript strict mode
 
-import React from 'react';
-
 interface ChatErrorProps {
   error: string;
   onClear: () => void;

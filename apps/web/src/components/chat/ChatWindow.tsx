@@ -1,7 +1,7 @@
 // Chat Window component for conversation display
 // Migrated from hummbl-io with enhanced UI and TypeScript strict mode
 
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import type { ChatConversation } from '@hummbl/core';
