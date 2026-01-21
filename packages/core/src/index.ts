@@ -14,3 +14,10 @@ export * from './logger.js';
 export * from './error-tracking.js';
 export * from './specialized-tracking.js';
 export * from './privacy-compliance.js';
+
+// Chat system exports
+export * from './types/chat.js';
+export * from './types/models.js';
+export { chatStorage } from './services/chatStorageService.js';
+export { createStreamingService } from './services/streamingService.js';
+export { contextBuilder } from './services/contextBuilder.js';
