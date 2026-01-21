@@ -48,30 +48,32 @@ export function ChatWidget({
   // Initialize conversations and settings on mount
   useEffect(() => {
     const loadedConversations = chatStorage.loadConversations();
-    setConversations(loadedConversations);
-
     const currentId = chatStorage.loadCurrentConversationId();
-    if (currentId) {
-      const existing = loadedConversations.find((c: ChatConversation) => c.id === currentId);
-      if (existing) {
-        setCurrentConversation(existing);
-      }
-    }
-
     const loadedSettings = chatStorage.loadSettings();
-    setSettings(loadedSettings);
-    setHasApiKey(!!loadedSettings.apiKey || !!propApiKey);
-
-    // Initialize streaming service if API key is available
     const effectiveApiKey = loadedSettings.apiKey || propApiKey;
-    if (effectiveApiKey) {
-      streamingServiceRef.current = createStreamingService({
-        apiKey: effectiveApiKey,
-        model: loadedSettings.model,
-        temperature: loadedSettings.temperature,
-        maxTokens: loadedSettings.maxTokens,
-      });
-    }
+
+    setTimeout(() => {
+      setConversations(loadedConversations);
+      setSettings(loadedSettings);
+      setHasApiKey(!!loadedSettings.apiKey || !!propApiKey);
+
+      if (currentId) {
+        const existing = loadedConversations.find((c: ChatConversation) => c.id === currentId);
+        if (existing) {
+          setCurrentConversation(existing);
+        }
+      }
+
+      // Initialize streaming service if API key is available
+      if (effectiveApiKey) {
+        streamingServiceRef.current = createStreamingService({
+          apiKey: effectiveApiKey,
+          model: loadedSettings.model,
+          temperature: loadedSettings.temperature,
+          maxTokens: loadedSettings.maxTokens,
+        });
+      }
+    }, 0);
   }, [propApiKey]);
 
   // Update streaming service when settings change
@@ -84,7 +86,9 @@ export function ChatWidget({
         temperature: settings.temperature,
         maxTokens: settings.maxTokens,
       });
-      setHasApiKey(true);
+      setTimeout(() => {
+        setHasApiKey(true);
+      }, 0);
     } else if (effectiveApiKey && !streamingServiceRef.current) {
       streamingServiceRef.current = createStreamingService({
         apiKey: effectiveApiKey,
@@ -92,9 +96,13 @@ export function ChatWidget({
         temperature: settings.temperature,
         maxTokens: settings.maxTokens,
       });
-      setHasApiKey(true);
+      setTimeout(() => {
+        setHasApiKey(true);
+      }, 0);
     } else {
-      setHasApiKey(false);
+      setTimeout(() => {
+        setHasApiKey(false);
+      }, 0);
     }
   }, [settings, propApiKey]);
 
