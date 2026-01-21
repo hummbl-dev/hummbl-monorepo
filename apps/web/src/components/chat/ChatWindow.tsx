@@ -12,7 +12,6 @@ interface ChatWindowProps {
   conversation: ChatConversation | null;
   onSendMessage: (message: string) => void;
   isLoading: boolean;
-  error: string | null;
   onOpenSettings: () => void;
   onOpenHistory: () => void;
   streamingResponse?: string;
@@ -25,7 +24,6 @@ export function ChatWindow({
   conversation,
   onSendMessage,
   isLoading,
-  error,
   onOpenSettings,
   onOpenHistory,
   streamingResponse = '',
@@ -33,7 +31,7 @@ export function ChatWindow({
 }: ChatWindowProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [streamingTimestamp, setStreamingTimestamp] = useState<number>(0);
+  const [streamingTimestamp] = useState<number>(0);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -134,7 +132,7 @@ export function ChatWindow({
                     id: 'streaming',
                     role: 'assistant',
                     content: streamingResponse,
-                    timestamp: streamingTimestampRef.current,
+                    timestamp: streamingTimestamp,
                     streaming: true,
                   }}
                 />
