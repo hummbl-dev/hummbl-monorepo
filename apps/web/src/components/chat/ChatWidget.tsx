@@ -124,7 +124,7 @@ export function ChatWidget({
     if (!conversation) {
       conversation = createNewConversation();
       setCurrentConversation(conversation);
-      setConversations(prev => [...prev, conversation]);
+      setConversations((prev: ChatConversation[]) => [...prev, conversation!]);
       chatStorage.saveCurrentConversationId(conversation.id);
     }
 
