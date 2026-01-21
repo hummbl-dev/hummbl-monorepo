@@ -2,8 +2,8 @@
   "branchName": "main",
   "protectionRules": {
     "requiredStatusChecks": {
-      "strict": false,
-      "contexts": []
+      "strict": true,
+      "contexts": ["format", "lint", "type-check", "test", "build"]
     },
     "enforceAdmins": false,
     "requiredPullRequestReviews": {
