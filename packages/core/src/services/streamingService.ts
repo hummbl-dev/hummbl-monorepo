@@ -1,7 +1,7 @@
 // OpenAI Streaming API service for real-time responses
 // Migrated from hummbl-io with enhanced error handling and TypeScript strict mode
 
-import type { OpenAIMessage, StreamCallbacks } from '../types/chat';
+import type { OpenAIMessage, StreamCallbacks, OpenAIResponse } from '../types/chat';
 
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 const DEFAULT_MODEL = 'gpt-4o-mini';
@@ -156,7 +156,7 @@ export class OpenAIStreamingService {
         throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as OpenAIResponse;
       return data.choices?.[0]?.message?.content || '';
     } catch (error) {
       throw new Error(
