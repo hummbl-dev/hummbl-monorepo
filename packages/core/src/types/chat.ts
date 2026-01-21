@@ -103,8 +103,8 @@ export interface ChatService {
   sendMessageStream(
     message: string,
     conversationId: string,
-    context?: ChatContext,
-    callbacks: StreamCallbacks
+    callbacks: StreamCallbacks,
+    context?: ChatContext
   ): Promise<void>;
   createConversation(title?: string): ChatConversation;
   deleteConversation(id: string): void;
