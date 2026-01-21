@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { ChatWidget } from './chat/ChatWidget';
 
 interface NavItem {
   label: string;
@@ -179,6 +180,9 @@ export const AppShell: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Chat Widget */}
+      <ChatWidget />
     </div>
   );
 };
