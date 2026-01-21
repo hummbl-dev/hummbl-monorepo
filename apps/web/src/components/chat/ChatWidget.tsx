@@ -52,7 +52,7 @@ export function ChatWidget({
 
     const currentId = chatStorage.loadCurrentConversationId();
     if (currentId) {
-      const existing = loadedConversations.find(c => c.id === currentId);
+      const existing = loadedConversations.find((c: ChatConversation) => c.id === currentId);
       if (existing) {
         setCurrentConversation(existing);
       }
@@ -124,7 +124,7 @@ export function ChatWidget({
     if (!conversation) {
       conversation = createNewConversation();
       setCurrentConversation(conversation);
-      setConversations(prev => [...prev, conversation]);
+      setConversations((prev: ChatConversation[]) => [...prev, conversation]);
       chatStorage.saveCurrentConversationId(conversation.id);
     }
 
@@ -159,7 +159,7 @@ export function ChatWidget({
     const contextualPrompt = contextBuilder.buildContextualPrompt(chatContext);
 
     // Prepare messages for API
-    const apiMessages = updatedConversation.messages.map(msg => ({
+    const apiMessages = updatedConversation.messages.map((msg: ChatMessage) => ({
       role: msg.role,
       content: msg.content,
     }));
