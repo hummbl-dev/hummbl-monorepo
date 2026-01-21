@@ -40,13 +40,6 @@ export function ChatWindow({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversation?.messages, streamingResponse]);
 
-  // Update streaming timestamp when streaming starts
-  useEffect(() => {
-    if (streamingResponse && streamingTimestamp === 0) {
-      setStreamingTimestamp(Date.now());
-    }
-  }, [streamingResponse, streamingTimestamp]);
-
   // Focus input when window opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
