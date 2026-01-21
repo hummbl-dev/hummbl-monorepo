@@ -51,8 +51,8 @@ jobs:
 
           if [ "$PROTECTION_DATA" = "null" ]; then
             echo -e "${RED}❌ No branch protection rules found for main branch${NC}"
-            echo "::set-output name=status::failed"
-            echo "::set-output name=message::No branch protection rules configured"
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "message=No branch protection rules configured" >> $GITHUB_OUTPUT
             exit 1
           fi
 
@@ -162,8 +162,8 @@ jobs:
           # Set outputs
           if [ "$VALIDATION_FAILED" = "true" ]; then
             echo -e "${RED}🚨 Branch protection validation FAILED${NC}"
-            echo "::set-output name=status::failed"
-            echo "::set-output name=message::${ISSUES_FOUND}"
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "message=${ISSUES_FOUND}" >> $GITHUB_OUTPUT
 
             # Create summary
             cat >> $GITHUB_STEP_SUMMARY << EOF
@@ -187,8 +187,8 @@ jobs:
             exit 1
           else
             echo -e "${GREEN}🎉 All branch protection rules are correctly configured!${NC}"
-            echo "::set-output name=status::passed"
-            echo "::set-output name=message::All validations passed"
+            echo "status=passed" >> $GITHUB_OUTPUT
+            echo "message=All validations passed" >> $GITHUB_OUTPUT
 
             # Create success summary
             cat >> $GITHUB_STEP_SUMMARY << EOF
