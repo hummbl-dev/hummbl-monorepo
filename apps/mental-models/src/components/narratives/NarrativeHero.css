@@ -1,0 +1,207 @@
+/* ============================================
+   NARRATIVE HERO SECTION
+   ============================================ */
+
+.narrative-hero {
+  background: linear-gradient(to bottom, #ffffff 0%, #f9fafb 100%);
+  border-bottom: 1px solid var(--border-light);
+  padding: var(--space-12) var(--space-4);
+}
+
+.narrative-hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.narrative-hero-header {
+  text-align: center;
+  margin-bottom: var(--space-10);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.narrative-hero-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.narrative-hero-subtitle {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: var(--leading-relaxed);
+}
+
+/* Stats Section */
+.narrative-hero-stats {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+  flex-wrap: wrap;
+  animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+
+.narrative-stat-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  background: var(--white);
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  flex: 1;
+  min-width: 280px;
+  max-width: 360px;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top accent line */
+.narrative-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4299e1, #10b981);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.narrative-stat-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+}
+
+.narrative-stat-card:hover::before {
+  opacity: 1;
+}
+
+.narrative-stat-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: var(--radius-lg);
+  color: white;
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
+}
+
+.narrative-stat-content {
+  flex: 1;
+}
+
+.narrative-stat-number {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-extrabold);
+  color: #111827 !important;
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+.narrative-stat-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: #1f2937 !important;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  margin-bottom: var(--space-2);
+}
+
+.narrative-stat-description {
+  font-size: var(--text-sm);
+  color: #374151 !important;
+  line-height: var(--leading-relaxed);
+  font-weight: var(--font-medium);
+}
+
+.stat-divider {
+  width: 1px;
+  background: var(--border-light);
+  align-self: stretch;
+}
+
+/* Features */
+.narrative-hero-features {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-weight: var(--font-medium);
+}
+
+.feature svg {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+  .narrative-hero {
+    padding: var(--space-8) var(--space-3);
+  }
+
+  .narrative-hero-title {
+    font-size: var(--text-2xl);
+  }
+
+  .narrative-hero-subtitle {
+    font-size: var(--text-base);
+  }
+
+  .narrative-hero-stats {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .narrative-stat-card {
+    max-width: 100%;
+  }
+
+  .stat-divider {
+    display: none;
+  }
+
+  .narrative-hero-features {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .narrative-hero-stats {
+    gap: var(--space-4);
+  }
+
+  .narrative-stat-card {
+    min-width: 240px;
+  }
+
+  .stat-divider {
+    display: none;
+  }
+}

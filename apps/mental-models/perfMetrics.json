@@ -1,0 +1,114 @@
+{
+  "version": "1.0.0",
+  "description": "Lighthouse performance metrics tracking per commit",
+  "baseline": {
+    "commit": "b2cc31c",
+    "date": "2025-10-19T05:06:00Z",
+    "metrics": {
+      "performance": {
+        "score": 95,
+        "fcp": 1200,
+        "lcp": 1800,
+        "tti": 2300,
+        "cls": 0.02,
+        "tbt": 150,
+        "si": 1500
+      },
+      "accessibility": {
+        "score": 95,
+        "issues": []
+      },
+      "bestPractices": {
+        "score": 92
+      },
+      "seo": {
+        "score": 100
+      },
+      "pwa": {
+        "score": 0,
+        "installable": false
+      }
+    },
+    "bundle": {
+      "total": 185420,
+      "gzipped": 55410,
+      "css": 52990,
+      "cssGzipped": 9520
+    }
+  },
+  "targets": {
+    "performance": {
+      "score": 95,
+      "fcp": 1800,
+      "lcp": 2500,
+      "tti": 2500,
+      "cls": 0.05,
+      "tbt": 200,
+      "si": 2000
+    },
+    "accessibility": {
+      "score": 95,
+      "criticalIssues": 0
+    },
+    "bundle": {
+      "gzipped": 143360
+    }
+  },
+  "history": [
+    {
+      "commit": "b2cc31c",
+      "date": "2025-10-19T05:06:00Z",
+      "message": "feat(p4.3): User Engagement Features",
+      "metrics": {
+        "performance": {
+          "score": 95,
+          "fcp": 1200,
+          "lcp": 1800,
+          "tti": 2300,
+          "cls": 0.02
+        },
+        "accessibility": {
+          "score": 95
+        },
+        "bundle": {
+          "gzipped": 55410
+        }
+      },
+      "delta": {
+        "performance": 0,
+        "accessibility": 0,
+        "bundle": 0
+      },
+      "status": "✅ All targets met"
+    }
+  ],
+  "thresholds": {
+    "performance": {
+      "warning": -5,
+      "error": -10
+    },
+    "accessibility": {
+      "warning": -2,
+      "error": -5
+    },
+    "bundle": {
+      "warningPercent": 5,
+      "errorPercent": 10
+    }
+  },
+  "notes": [
+    "FCP (First Contentful Paint): Time to first text/image render",
+    "LCP (Largest Contentful Paint): Time to largest content render",
+    "TTI (Time to Interactive): Time until page is fully interactive",
+    "CLS (Cumulative Layout Shift): Visual stability metric",
+    "TBT (Total Blocking Time): Time main thread is blocked",
+    "SI (Speed Index): How quickly content is visually displayed",
+    "Bundle sizes in bytes, gzipped values are production size"
+  ],
+  "automation": {
+    "enabled": false,
+    "workflow": ".github/workflows/lighthouse-ci.yml",
+    "reportPath": "lighthouse-reports/",
+    "compareAgainstMain": true
+  }
+}

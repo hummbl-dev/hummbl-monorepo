@@ -1,0 +1,58 @@
+{
+  "blocks": [
+    {
+      "block_id": 1,
+      "narrative_id": "NAR-HUMMBL-PERSPECTIVE",
+      "provenance_hash": "sha256:a7f3c9e2d1b8f4a6e9c3d7b2f1a8e4c6d9b3f7a2e1c8d4b6f9a3e7c2d1b8f4a6",
+      "evidence_quality": "A",
+      "confidence": 0.92,
+      "timestamp": "2025-10-17T18:21:58.553Z",
+      "previous_hash": "0"
+    },
+    {
+      "block_id": 2,
+      "narrative_id": "NAR-HUMMBL-INVERSION",
+      "provenance_hash": "sha256:b8e4d0f3c2a9e5b7d0c4e8a3f2b9d6c1e8a4f7b3c0d9e6a2f8c5d1b7e4a9c3f0",
+      "evidence_quality": "A",
+      "confidence": 0.88,
+      "timestamp": "2025-10-17T18:21:58.554Z",
+      "previous_hash": "sha256:a7f3c9e2d1b8f4a6e9c3d7b2f1a8e4c6d9b3f7a2e1c8d4b6f9a3e7c2d1b8f4a6"
+    },
+    {
+      "block_id": 3,
+      "narrative_id": "NAR-HUMMBL-COMPOSITION",
+      "provenance_hash": "sha256:c9f5e1a4d3b0c6e8a2f7d9b4e1c8a5f3d0b7e4a9c6f2d8b5e1a7c4f0d9b3e6a2",
+      "evidence_quality": "A",
+      "confidence": 0.9,
+      "timestamp": "2025-10-17T18:21:58.554Z",
+      "previous_hash": "sha256:b8e4d0f3c2a9e5b7d0c4e8a3f2b9d6c1e8a4f7b3c0d9e6a2f8c5d1b7e4a9c3f0"
+    },
+    {
+      "block_id": 4,
+      "narrative_id": "NAR-HUMMBL-DECOMPOSITION",
+      "provenance_hash": "sha256:d0a6f2b5e8c1d7a4f9b3e6c2d8a5f1b7e4c9d6a3f0b8e5c2d9a6f3b0e7c4d1a8",
+      "evidence_quality": "A",
+      "confidence": 0.9,
+      "timestamp": "2025-10-17T18:21:58.554Z",
+      "previous_hash": "sha256:c9f5e1a4d3b0c6e8a2f7d9b4e1c8a5f3d0b7e4a9c6f2d8b5e1a7c4f0d9b3e6a2"
+    },
+    {
+      "block_id": 5,
+      "narrative_id": "NAR-HUMMBL-RECURSION",
+      "provenance_hash": "sha256:e1b7c3d9f6a2e8c5d1b4f7a0e9c6d3b8f5a2e7c4d0b9f6a3e1c8d5b2f9a6e3c0",
+      "evidence_quality": "B",
+      "confidence": 0.89,
+      "timestamp": "2025-10-17T18:21:58.554Z",
+      "previous_hash": "sha256:d0a6f2b5e8c1d7a4f9b3e6c2d8a5f1b7e4c9d6a3f0b8e5c2d9a6f3b0e7c4d1a8"
+    },
+    {
+      "block_id": 6,
+      "narrative_id": "NAR-HUMMBL-METASYSTEMS",
+      "provenance_hash": "sha256:f2c8d4a0e7b9f5c2d6a3e1b8f4c7d0a9e6b3f2c5d8a1e4b7f0c9d6a3e2b5f8c1",
+      "evidence_quality": "A",
+      "confidence": 0.91,
+      "timestamp": "2025-10-17T18:21:58.554Z",
+      "previous_hash": "sha256:e1b7c3d9f6a2e8c5d1b4f7a0e9c6d3b8f5a2e7c4d0b9f6a3e1c8d5b2f9a6e3c0"
+    }
+  ]
+}

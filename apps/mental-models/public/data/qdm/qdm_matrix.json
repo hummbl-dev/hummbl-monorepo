@@ -1,0 +1,23 @@
+{
+  "matrix": [
+    [0, 0.7360000000000001, 0.782, 0, 0, 0],
+    [0.836, 0, 0, 0, 0.748, 0],
+    [0, 0, 0, 0.855, 0.765, 0.81],
+    [0, 0, 0.855, 0, 0.765, 0.7200000000000001],
+    [0, 0.7298, 0.801, 0.801, 0, 0.7743],
+    [0.6825, 0, 0.8008000000000001, 0, 0.8008000000000001, 0]
+  ],
+  "labels": [
+    "NAR-HUMMBL-PERSPECTIVE",
+    "NAR-HUMMBL-INVERSION",
+    "NAR-HUMMBL-COMPOSITION",
+    "NAR-HUMMBL-DECOMPOSITION",
+    "NAR-HUMMBL-RECURSION",
+    "NAR-HUMMBL-METASYSTEMS"
+  ],
+  "dimensions": [6, 6],
+  "metadata": {
+    "generated_at": "2025-10-17T18:21:58.552Z",
+    "integrity_hash": "sha256:9a3e7c2d1b8f4a6e9c3d7b2f1a8e4c6d9b3f7a2e1c8d4b6f9a3e7c2d1b8f4a6"
+  }
+}

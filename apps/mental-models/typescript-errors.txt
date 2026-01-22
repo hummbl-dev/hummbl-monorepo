@@ -1,0 +1,51 @@
+scripts/generate-models.ts(281,4): error TS1005: ',' expected.
+scripts/generate-models.ts(282,1): error TS1005: ',' expected.
+scripts/generate-models.ts(282,5): error TS1005: ',' expected.
+scripts/generate-models.ts(282,13): error TS1005: ',' expected.
+scripts/generate-models.ts(282,20): error TS1146: Declaration expected.
+scripts/generate-models.ts(289,2): error TS1443: Module declaration names may only use ' or " quoted strings.
+scripts/generate-models.ts(290,17): error TS1005: ',' expected.
+scripts/generate-models.ts(290,26): error TS1005: ';' expected.
+scripts/generate-models.ts(290,32): error TS1128: Declaration or statement expected.
+scripts/generate-models.ts(290,34): error TS1434: Unexpected keyword or identifier.
+scripts/generate-models.ts(292,22): error TS1005: ',' expected.
+scripts/generate-models.ts(292,31): error TS1005: ',' expected.
+scripts/generate-models.ts(292,36): error TS1005: ',' expected.
+scripts/generate-models.ts(292,37): error TS1109: Expression expected.
+scripts/generate-models.ts(304,2): error TS1443: Module declaration names may only use ' or " quoted strings.
+scripts/generate-models.ts(305,22): error TS1005: ',' expected.
+scripts/generate-models.ts(305,31): error TS1005: ',' expected.
+scripts/generate-models.ts(305,36): error TS1005: ',' expected.
+scripts/generate-models.ts(333,2): error TS1443: Module declaration names may only use ' or " quoted strings.
+scripts/generate-models.ts(341,2): error TS1443: Module declaration names may only use ' or " quoted strings.
+scripts/generate-models.ts(342,1): error TS1434: Unexpected keyword or identifier.
+scripts/generate-models.ts(342,5): error TS1434: Unexpected keyword or identifier.
+scripts/generate-models.ts(342,10): error TS1434: Unexpected keyword or identifier.
+scripts/generate-models.ts(347,2): error TS1443: Module declaration names may only use ' or " quoted strings.
+scripts/generate-models.ts(348,1): error TS1434: Unexpected keyword or identifier.
+scripts/generate-models.ts(348,5): error TS1434: Unexpected keyword or identifier.
+scripts/generate-models.ts(355,1): error TS1109: Expression expected.
+scripts/validate-models.ts(197,105): error TS1005: ':' expected.
+src/models/index.ts(81,21): error TS1005: ',' expected.
+src/models/model-template.ts(53,5): error TS1136: Property assignment expected.
+src/models/model-template.ts(53,6): error TS1136: Property assignment expected.
+src/models/model-template.ts(53,21): error TS1005: ',' expected.
+src/models/model-template.ts(54,3): error TS1005: ',' expected.
+src/models/model-template.ts(54,4): error TS1128: Declaration or statement expected.
+src/models/model-template.ts(54,5): error TS1128: Declaration or statement expected.
+src/models/model-template.ts(55,11): error TS1005: ';' expected.
+src/models/model-template.ts(56,1): error TS1128: Declaration or statement expected.
+src/models/model-template.ts(56,2): error TS1128: Declaration or statement expected.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(560,39): error TS1005: ',' expected.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(560,50): error TS1005: ',' expected.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(560,54): error TS1005: ',' expected.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(560,68): error TS1005: ',' expected.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(560,77): error TS1127: Invalid character.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(560,79): error TS1002: Unterminated string literal.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(561,7): error TS1005: ':' expected.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(564,56): error TS1005: ',' expected.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(564,67): error TS1005: ',' expected.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(564,71): error TS1005: ',' expected.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(564,94): error TS1127: Invalid character.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(564,98): error TS1002: Unterminated string literal.
+src/models/p1/__tests__/FirstPrinciplesModel.test.ts(565,5): error TS1005: ',' expected.

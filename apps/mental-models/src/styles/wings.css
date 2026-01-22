@@ -1,0 +1,285 @@
+/* ============================================
+   HUMMBL Wing Integration System - Main Styles
+   Design Token System with Dark Mode Support
+   ============================================ */
+
+:root {
+  /* === Wing Colors === */
+  --wing-p-primary: #FFD700;
+  --wing-p-secondary: #FFA500;
+  --wing-in-primary: #4A90E2;
+  --wing-in-secondary: #2C5AA0;
+  --wing-co-primary: #50C878;
+  --wing-co-secondary: #2E8B57;
+  --wing-de-primary: #E74C3C;
+  --wing-de-secondary: #C0392B;
+  --wing-re-primary: #9B59B6;
+  --wing-re-secondary: #8E44AD;
+  --wing-sy-primary: #FFD700;
+  --wing-sy-secondary: #FF8C00;
+
+  /* === Sizes === */
+  --wing-size-small: 48px;
+  --wing-size-medium: 96px;
+  --wing-size-large: 144px;
+  --wing-size-xlarge: 192px;
+
+  /* === Spacing === */
+  --wing-spacing-xs: 4px;
+  --wing-spacing-sm: 8px;
+  --wing-spacing-md: 16px;
+  --wing-spacing-lg: 24px;
+  --wing-spacing-xl: 32px;
+
+  /* === Animation === */
+  --wing-transition-fast: 150ms;
+  --wing-transition-base: 300ms;
+  --wing-transition-slow: 500ms;
+  --wing-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* === Light Mode === */
+  --wing-bg: #ffffff;
+  --wing-text: #1a1a1a;
+  --wing-border: #e5e5e5;
+  --wing-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* === Dark Mode === */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --wing-bg: #1a1a1a;
+    --wing-text: #ffffff;
+    --wing-border: #333333;
+    --wing-shadow: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.wing-showcase-dark {
+  --wing-bg: #1a1a1a;
+  --wing-text: #ffffff;
+  --wing-border: #333333;
+  --wing-shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   Wing Container
+   ============================================ */
+
+.wing-container {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--wing-spacing-sm);
+  padding: var(--wing-spacing-md);
+  border-radius: 8px;
+  transition: transform var(--wing-transition-base) var(--wing-ease);
+  cursor: default;
+}
+
+.wing-container[role="button"] {
+  cursor: pointer;
+}
+
+.wing-container:focus-visible {
+  outline: 2px solid var(--wing-p-primary);
+  outline-offset: 2px;
+}
+
+.wing-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px var(--wing-shadow));
+}
+
+.wing-label {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--wing-text);
+  letter-spacing: 0.05em;
+}
+
+/* === Wing Sizes === */
+.wing-size-small { width: var(--wing-size-small); height: var(--wing-size-small); }
+.wing-size-medium { width: var(--wing-size-medium); height: var(--wing-size-medium); }
+.wing-size-large { width: var(--wing-size-large); height: var(--wing-size-large); }
+.wing-size-xlarge { width: var(--wing-size-xlarge); height: var(--wing-size-xlarge); }
+
+/* ============================================
+   Wing Grid
+   ============================================ */
+
+.wing-grid {
+  display: grid;
+  gap: var(--wing-spacing-lg);
+  width: 100%;
+  padding: var(--wing-spacing-lg);
+}
+
+.wing-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.wing-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.wing-grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+.wing-grid-cols-6 { grid-template-columns: repeat(6, 1fr); }
+
+@media (max-width: 768px) {
+  .wing-grid-cols-3,
+  .wing-grid-cols-4,
+  .wing-grid-cols-6 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .wing-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.wing-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--wing-spacing-sm);
+}
+
+.wing-grid-label {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--wing-text);
+  text-align: center;
+}
+
+/* ============================================
+   Wing Selector
+   ============================================ */
+
+.wing-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wing-spacing-md);
+  padding: var(--wing-spacing-lg);
+  justify-content: center;
+}
+
+.wing-selector-item {
+  position: relative;
+  padding: var(--wing-spacing-sm);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  transition: all var(--wing-transition-base) var(--wing-ease);
+}
+
+.wing-selector-item-selected {
+  border-color: var(--wing-p-primary);
+  background-color: rgba(255, 215, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+}
+
+.wing-selector-label {
+  margin-top: var(--wing-spacing-sm);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--wing-text);
+  text-align: center;
+}
+
+/* ============================================
+   Wing Animation
+   ============================================ */
+
+.wing-animation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--wing-spacing-lg);
+  padding: var(--wing-spacing-xl);
+}
+
+.wing-animation-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--wing-spacing-md);
+}
+
+.wing-animation-button {
+  padding: var(--wing-spacing-sm) var(--wing-spacing-md);
+  font-size: 1.5rem;
+  background-color: var(--wing-p-primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform var(--wing-transition-fast) var(--wing-ease);
+}
+
+.wing-animation-button:hover {
+  transform: scale(1.1);
+}
+
+.wing-animation-button:active {
+  transform: scale(0.95);
+}
+
+.wing-animation-indicator {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--wing-text);
+}
+
+/* ============================================
+   Wing Showcase
+   ============================================ */
+
+.wing-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wing-spacing-xl);
+  padding: var(--wing-spacing-xl);
+  background-color: var(--wing-bg);
+  border-radius: 16px;
+}
+
+.wing-showcase-header {
+  text-align: center;
+}
+
+.wing-showcase-title {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--wing-text);
+  margin: 0 0 var(--wing-spacing-sm) 0;
+}
+
+.wing-showcase-subtitle {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1.125rem;
+  color: var(--wing-text);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.wing-showcase-descriptions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wing-spacing-md);
+  padding: var(--wing-spacing-lg);
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+}
+
+.wing-showcase-dark .wing-showcase-descriptions {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.wing-showcase-description {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--wing-text);
+}

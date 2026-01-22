@@ -1,0 +1,90 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: HUMMBL Infrastructure v2 - Production Stack (us-east-1)
+
+Metadata:
+  Version: "2.0"
+  Owner: "ReubenBowlby"
+  ManagedBy: "HUMMBL OS"
+  Application: "HUMMBL"
+  Environment: "Production"
+  Region: "us-east-1"
+
+Parameters:
+  Environment:
+    Type: String
+    Default: Production
+    AllowedValues:
+      - Production
+      - Staging
+      - Development
+    Description: Deployment environment
+
+Resources:
+  HUMMBLVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Application
+          Value: HUMMBL
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: ReubenBowlby
+        - Key: ManagedBy
+          Value: HUMMBL OS
+        - Key: Region
+          Value: us-east-1
+
+  HUMMBLSubnetPublic:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref HUMMBLVPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: us-east-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: HUMMBL-Public-Subnet
+        - Key: Environment
+          Value: !Ref Environment
+
+  HUMMBLSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: HUMMBL Security Group
+      VpcId: !Ref HUMMBLVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Application
+          Value: HUMMBL
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Owner
+          Value: ReubenBowlby
+
+Outputs:
+  VPCId:
+    Description: HUMMBL VPC ID
+    Value: !Ref HUMMBLVPC
+  PublicSubnetId:
+    Description: HUMMBL Public Subnet ID
+    Value: !Ref HUMMBLSubnetPublic
+  SecurityGroupId:
+    Description: HUMMBL Security Group ID
+    Value: !Ref HUMMBLSecurityGroup

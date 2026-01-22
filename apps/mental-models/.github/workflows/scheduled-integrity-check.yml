@@ -1,0 +1,68 @@
+name: Scheduled Integrity Check
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Every 6 hours
+    - cron: '0 0 * * *' # Daily at midnight
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify production deployment
+        run: |
+          # Set production URL from secret or default
+          PRODUCTION_URL=${PRODUCTION_URL:-https://www.hummbl.io}
+
+          # Run verification against production
+          echo "Verifying production deployment at $PRODUCTION_URL"
+          node scripts/verify_production_integrity.mjs
+
+          # Generate compliance report
+          node scripts/generate_compliance_report.mjs > compliance-report.json
+
+          # Upload compliance report
+          echo "COMPLIANCE_REPORT=$(cat compliance-report.json | jq -c '.')" >> $GITHUB_OUTPUT
+        env:
+          PRODUCTION_URL: ${{ secrets.PRODUCTION_URL }}
+
+      - name: Upload compliance report
+        uses: actions/upload-artifact@v4
+        with:
+          name: compliance-report-${{ github.run_id }}
+          path: compliance-report.json
+
+      - name: Send Alert on Failure
+        if: failure()
+        continue-on-error: true
+        run: |
+          node scripts/alert_integrity_failure.mjs
+        env:
+          ALERT_WEBHOOK_URL: ${{ secrets.ALERT_WEBHOOK_URL }}
+
+      - name: Log check completion
+        if: always()
+        run: |
+          echo "✅ Scheduled integrity check completed at: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          echo "Check status: ${{ job.status }}"
+          echo "View full results in GitHub Actions logs"

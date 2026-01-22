@@ -1,0 +1,159 @@
+{
+  "pathways": [
+    {
+      "from": "NAR-HUMMBL-PERSPECTIVE",
+      "to": "NAR-HUMMBL-INVERSION",
+      "type": "informs",
+      "description": "Perspective shifts enable inversion reasoning",
+      "confidence": 0.92,
+      "pathway_strength": 0.7360000000000001
+    },
+    {
+      "from": "NAR-HUMMBL-PERSPECTIVE",
+      "to": "NAR-HUMMBL-COMPOSITION",
+      "type": "uses",
+      "description": "Frames are composed from semantic primitives",
+      "confidence": 0.92,
+      "pathway_strength": 0.782
+    },
+    {
+      "from": "NAR-HUMMBL-INVERSION",
+      "to": "NAR-HUMMBL-PERSPECTIVE",
+      "type": "inverse_of",
+      "description": "Inversion challenges established perspectives",
+      "confidence": 0.88,
+      "pathway_strength": 0.836
+    },
+    {
+      "from": "NAR-HUMMBL-INVERSION",
+      "to": "NAR-HUMMBL-RECURSION",
+      "type": "uses",
+      "description": "Recursive inversion for nested counterfactuals",
+      "confidence": 0.88,
+      "pathway_strength": 0.748
+    },
+    {
+      "from": "NAR-HUMMBL-COMPOSITION",
+      "to": "NAR-HUMMBL-DECOMPOSITION",
+      "type": "inverse_of",
+      "description": "Composition builds what decomposition breaks down",
+      "confidence": 0.9,
+      "pathway_strength": 0.855
+    },
+    {
+      "from": "NAR-HUMMBL-COMPOSITION",
+      "to": "NAR-HUMMBL-RECURSION",
+      "type": "uses",
+      "description": "Recursive composition for hierarchical structures",
+      "confidence": 0.9,
+      "pathway_strength": 0.765
+    },
+    {
+      "from": "NAR-HUMMBL-COMPOSITION",
+      "to": "NAR-HUMMBL-METASYSTEMS",
+      "type": "enables",
+      "description": "Composed models become meta-system components",
+      "confidence": 0.9,
+      "pathway_strength": 0.81
+    },
+    {
+      "from": "NAR-HUMMBL-DECOMPOSITION",
+      "to": "NAR-HUMMBL-COMPOSITION",
+      "type": "inverse_of",
+      "description": "Decomposition analyzes what composition builds",
+      "confidence": 0.9,
+      "pathway_strength": 0.855
+    },
+    {
+      "from": "NAR-HUMMBL-DECOMPOSITION",
+      "to": "NAR-HUMMBL-RECURSION",
+      "type": "uses",
+      "description": "Recursive decomposition for nested hierarchies",
+      "confidence": 0.9,
+      "pathway_strength": 0.765
+    },
+    {
+      "from": "NAR-HUMMBL-DECOMPOSITION",
+      "to": "NAR-HUMMBL-METASYSTEMS",
+      "type": "informs",
+      "description": "Decomposed models reveal system structure",
+      "confidence": 0.9,
+      "pathway_strength": 0.7200000000000001
+    },
+    {
+      "from": "NAR-HUMMBL-RECURSION",
+      "to": "NAR-HUMMBL-COMPOSITION",
+      "type": "enables",
+      "description": "Recursion enables infinite compositional possibilities",
+      "confidence": 0.89,
+      "pathway_strength": 0.801
+    },
+    {
+      "from": "NAR-HUMMBL-RECURSION",
+      "to": "NAR-HUMMBL-DECOMPOSITION",
+      "type": "enables",
+      "description": "Recursion enables hierarchical decomposition",
+      "confidence": 0.89,
+      "pathway_strength": 0.801
+    },
+    {
+      "from": "NAR-HUMMBL-RECURSION",
+      "to": "NAR-HUMMBL-INVERSION",
+      "type": "combines_with",
+      "description": "Recursive inversion for nested counterfactuals",
+      "confidence": 0.89,
+      "pathway_strength": 0.7298
+    },
+    {
+      "from": "NAR-HUMMBL-RECURSION",
+      "to": "NAR-HUMMBL-METASYSTEMS",
+      "type": "underlies",
+      "description": "Meta-systems require recursive self-reference",
+      "confidence": 0.89,
+      "pathway_strength": 0.7743
+    },
+    {
+      "from": "NAR-HUMMBL-METASYSTEMS",
+      "to": "NAR-HUMMBL-COMPOSITION",
+      "type": "integrates",
+      "description": "Meta-systems compose multiple system models",
+      "confidence": 0.91,
+      "pathway_strength": 0.8008000000000001
+    },
+    {
+      "from": "NAR-HUMMBL-METASYSTEMS",
+      "to": "NAR-HUMMBL-RECURSION",
+      "type": "integrates",
+      "description": "Meta-systems use recursive self-reference",
+      "confidence": 0.91,
+      "pathway_strength": 0.8008000000000001
+    },
+    {
+      "from": "NAR-HUMMBL-METASYSTEMS",
+      "to": "NAR-HUMMBL-PERSPECTIVE",
+      "type": "transcends",
+      "description": "Meta-systems view perspectives as system components",
+      "confidence": 0.91,
+      "pathway_strength": 0.6825
+    }
+  ],
+  "total_pathways": 17,
+  "strongest_pathway": {
+    "from": "NAR-HUMMBL-COMPOSITION",
+    "to": "NAR-HUMMBL-DECOMPOSITION",
+    "type": "inverse_of",
+    "description": "Composition builds what decomposition breaks down",
+    "confidence": 0.9,
+    "pathway_strength": 0.855
+  },
+  "pathway_types": [
+    "informs",
+    "uses",
+    "inverse_of",
+    "enables",
+    "combines_with",
+    "underlies",
+    "integrates",
+    "transcends"
+  ]
+}

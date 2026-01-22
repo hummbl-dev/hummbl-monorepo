@@ -1,0 +1,74 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2025-10-19T22:15:00Z",
+  "subsystems": {
+    "watcher": {
+      "status": "validated",
+      "tier": "P1",
+      "validated_at": "2025-10-19T21:57:00Z",
+      "metrics": {
+        "validation_time_ms": 2.1,
+        "latency_ms": 78,
+        "memory_rss_mb": 61.5
+      },
+      "documentation": "/docs/performance/watcher.md"
+    },
+    "auth": {
+      "status": "validated",
+      "tier": "P1",
+      "validated_at": "2025-10-19T22:15:00Z",
+      "metrics": {
+        "token_validation_latency_p95_ms": 18.2,
+        "session_persistence_rate": 100,
+        "rate_limiting_accuracy": 99.2,
+        "oauth_success_rate": 99.95,
+        "last_updated": "2025-10-19T22:15:00Z"
+      },
+      "documentation": "/docs/performance/auth.md"
+    },
+    "telemetry": {
+      "status": "pending",
+      "tier": "P1",
+      "validation_required": [
+        "event_collection",
+        "metrics_aggregation",
+        "alerting",
+        "retention_policies"
+      ]
+    },
+    "context": {
+      "status": "pending",
+      "tier": "P1",
+      "validation_required": ["context_persistence", "versioning", "migration", "validation"]
+    },
+    "cascade_router": {
+      "status": "pending",
+      "tier": "P1",
+      "validation_required": [
+        "request_routing",
+        "load_balancing",
+        "circuit_breaking",
+        "service_discovery"
+      ]
+    }
+  },
+  "validation_criteria": {
+    "P1": {
+      "description": "Mission-critical components with strict SLAs",
+      "requirements": [
+        "<100ms p99 latency",
+        "99.9% availability",
+        "Automated recovery",
+        "Comprehensive monitoring"
+      ]
+    },
+    "P2": {
+      "description": "Important components with standard SLAs",
+      "requirements": ["<250ms p99 latency", "99.5% availability", "Semi-automated recovery"]
+    },
+    "P3": {
+      "description": "Non-critical components",
+      "requirements": ["<500ms p99 latency", "99% availability", "Manual recovery acceptable"]
+    }
+  }
+}

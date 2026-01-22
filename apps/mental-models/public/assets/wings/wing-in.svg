@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="in-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2C5AA0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- IN Wing: Introspective, contained, centered -->
+  <path d="M 100 100 Q 70 90 60 80 Q 50 70 60 60 Q 70 50 80 60 Q 90 70 100 80 
+           Q 110 70 120 60 Q 130 50 140 60 Q 150 70 140 80 Q 130 90 100 100 Z" 
+        fill="url(#in-gradient)" 
+        opacity="0.9"/>
+  
+  <!-- Inner reflection circle -->
+  <circle cx="100" cy="70" r="15" fill="none" stroke="#4A90E2" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Center point -->
+  <circle cx="100" cy="70" r="4" fill="#4A90E2"/>
+</svg>

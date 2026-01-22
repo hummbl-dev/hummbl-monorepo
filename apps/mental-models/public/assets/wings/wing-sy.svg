@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="sy-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="sy-glow">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- SY Wing: Synthesis, complete, integrated -->
+  <path d="M 100 40 Q 150 60 160 100 Q 150 140 100 160 Q 50 140 40 100 Q 50 60 100 40 Z" 
+        fill="url(#sy-gradient)" 
+        opacity="0.95"/>
+  
+  <!-- Integration glow -->
+  <circle cx="100" cy="100" r="40" fill="url(#sy-glow)"/>
+  
+  <!-- Synthesis center -->
+  <circle cx="100" cy="100" r="10" fill="#FFD700"/>
+  
+  <!-- Integration lines -->
+  <line x1="100" y1="40" x2="100" y2="160" stroke="#FFA500" stroke-width="2" opacity="0.4"/>
+  <line x1="40" y1="100" x2="160" y2="100" stroke="#FFA500" stroke-width="2" opacity="0.4"/>
+  <line x1="60" y1="60" x2="140" y2="140" stroke="#FFA500" stroke-width="2" opacity="0.4"/>
+  <line x1="140" y1="60" x2="60" y2="140" stroke="#FFA500" stroke-width="2" opacity="0.4"/>
+</svg>
