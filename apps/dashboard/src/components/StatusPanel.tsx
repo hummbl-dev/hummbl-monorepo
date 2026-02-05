@@ -33,24 +33,17 @@ export const StatusPanel: React.FC = () => {
       {/* Temporal State Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-zinc-400">
-            Temporal State
-          </CardTitle>
+          <CardTitle className="text-sm font-medium text-zinc-400">Temporal State</CardTitle>
         </CardHeader>
         <CardContent>
-          <TemporalIndicator
-            state={state.temporal_state}
-            reason={state.temporal_reason}
-          />
+          <TemporalIndicator state={state.temporal_state} reason={state.temporal_reason} />
         </CardContent>
       </Card>
 
       {/* Profile Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-zinc-400">
-            Active Profile
-          </CardTitle>
+          <CardTitle className="text-sm font-medium text-zinc-400">Active Profile</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
@@ -75,9 +68,7 @@ export const StatusPanel: React.FC = () => {
       {/* Chain Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-zinc-400">
-            Audit Chain
-          </CardTitle>
+          <CardTitle className="text-sm font-medium text-zinc-400">Audit Chain</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
@@ -87,7 +78,10 @@ export const StatusPanel: React.FC = () => {
             </div>
             <div className="flex justify-between">
               <span className="text-zinc-500">Last Hash</span>
-              <span className="font-mono text-zinc-100 truncate max-w-32" title={chain?.lastEventHash}>
+              <span
+                className="font-mono text-zinc-100 truncate max-w-32"
+                title={chain?.lastEventHash}
+              >
                 {chain?.lastEventHash?.substring(0, 12)}...
               </span>
             </div>

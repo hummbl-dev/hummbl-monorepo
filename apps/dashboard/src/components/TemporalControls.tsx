@@ -69,7 +69,8 @@ export const TemporalControls: React.FC = () => {
       case 'freeze':
         return {
           title: 'Declare Code Freeze?',
-          description: 'This will block all mutation operations across the system. Only read operations will be allowed.',
+          description:
+            'This will block all mutation operations across the system. Only read operations will be allowed.',
           confirmLabel: 'Declare Freeze',
           variant: 'destructive' as const,
         };
@@ -83,7 +84,8 @@ export const TemporalControls: React.FC = () => {
       case 'incident':
         return {
           title: 'Declare Incident Mode?',
-          description: 'This will enable enhanced audit logging and require incident IDs for certain operations.',
+          description:
+            'This will enable enhanced audit logging and require incident IDs for certain operations.',
           confirmLabel: 'Declare Incident',
           variant: 'warning' as const,
         };
@@ -126,7 +128,7 @@ export const TemporalControls: React.FC = () => {
                     id="freeze-reason"
                     placeholder="e.g., End of quarter release"
                     value={freezeReason}
-                    onChange={(e) => setFreezeReason(e.target.value)}
+                    onChange={e => setFreezeReason(e.target.value)}
                     disabled={!canFreeze}
                   />
                 </div>
@@ -143,15 +145,11 @@ export const TemporalControls: React.FC = () => {
                   )}
                   Declare Freeze
                 </Button>
-                {!canFreeze && (
-                  <p className="text-xs text-zinc-500">Requires admin role</p>
-                )}
+                {!canFreeze && <p className="text-xs text-zinc-500">Requires admin role</p>}
               </>
             ) : (
               <>
-                <p className="text-sm text-zinc-400">
-                  System is frozen. Mutations are blocked.
-                </p>
+                <p className="text-sm text-zinc-400">System is frozen. Mutations are blocked.</p>
                 <Button
                   onClick={() => setDialogType('unfreeze')}
                   disabled={isLoading || !canFreeze}
@@ -189,7 +187,7 @@ export const TemporalControls: React.FC = () => {
                     id="incident-id"
                     placeholder="e.g., INC-001"
                     value={incidentId}
-                    onChange={(e) => setIncidentId(e.target.value)}
+                    onChange={e => setIncidentId(e.target.value)}
                     disabled={!canIncident}
                   />
                 </div>
@@ -199,7 +197,7 @@ export const TemporalControls: React.FC = () => {
                     id="incident-reason"
                     placeholder="e.g., Production outage"
                     value={incidentReason}
-                    onChange={(e) => setIncidentReason(e.target.value)}
+                    onChange={e => setIncidentReason(e.target.value)}
                     disabled={!canIncident}
                   />
                 </div>
@@ -216,9 +214,7 @@ export const TemporalControls: React.FC = () => {
                   )}
                   Declare Incident
                 </Button>
-                {!canIncident && (
-                  <p className="text-xs text-zinc-500">Requires operator role</p>
-                )}
+                {!canIncident && <p className="text-xs text-zinc-500">Requires operator role</p>}
               </>
             ) : (
               <>
@@ -231,7 +227,7 @@ export const TemporalControls: React.FC = () => {
                     id="resolve-reason"
                     placeholder="e.g., Issue fixed"
                     value={resolveReason}
-                    onChange={(e) => setResolveReason(e.target.value)}
+                    onChange={e => setResolveReason(e.target.value)}
                     disabled={!canIncident}
                   />
                 </div>

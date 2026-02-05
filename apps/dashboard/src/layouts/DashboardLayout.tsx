@@ -1,13 +1,7 @@
 import * as React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { cn } from '@hummbl/ui';
-import {
-  LayoutDashboard,
-  Clock,
-  FileText,
-  Shield,
-  CheckCircle,
-} from 'lucide-react';
+import { LayoutDashboard, Clock, FileText, Shield, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/components/AuthGuard';
 
 const navigation = [
@@ -26,14 +20,12 @@ export const DashboardLayout: React.FC = () => {
       {/* Sidebar */}
       <aside className="w-64 bg-zinc-900 border-r border-zinc-800 p-4 flex flex-col">
         <div className="mb-8">
-          <h1 className="text-xl font-semibold text-zinc-100">
-            Agent Dashboard
-          </h1>
+          <h1 className="text-xl font-semibold text-zinc-100">Agent Dashboard</h1>
           <p className="text-sm text-zinc-500">Governance Control</p>
         </div>
 
         <nav className="space-y-1 flex-1">
-          {navigation.map((item) => (
+          {navigation.map(item => (
             <NavLink
               key={item.name}
               to={item.href}

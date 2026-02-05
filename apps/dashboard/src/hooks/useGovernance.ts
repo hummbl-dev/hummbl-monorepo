@@ -148,7 +148,11 @@ export function useDeclareIncident() {
       const validatedId = validateIncidentId(incidentId);
       const validatedReason = validateReason(reason);
 
-      logDashboardAction('declareIncident', { incidentId: validatedId, reason: validatedReason }, auth);
+      logDashboardAction(
+        'declareIncident',
+        { incidentId: validatedId, reason: validatedReason },
+        auth
+      );
 
       return declareIncident(validatedId, validatedReason);
     },
@@ -213,7 +217,11 @@ export function useCheckGovernance() {
       const validatedAction = validateAction(request.action);
       const state = getGovernanceState();
 
-      logDashboardAction('checkGovernance', { action: validatedAction, command: request.command }, auth);
+      logDashboardAction(
+        'checkGovernance',
+        { action: validatedAction, command: request.command },
+        auth
+      );
 
       return checkGovernance({
         tenant_id: state.tenant_id,

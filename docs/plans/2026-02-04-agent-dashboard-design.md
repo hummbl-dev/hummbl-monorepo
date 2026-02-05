@@ -13,6 +13,7 @@ Instead of building a full Workers backend with KV storage, we leverage:
 3. **Thin React Dashboard** - UI that calls MCP tools via Claude Code
 
 This approach:
+
 - Reuses 100% of governance logic (no duplication)
 - Works with local file system (no KV migration needed)
 - Integrates with Claude Code's MCP infrastructure
@@ -59,17 +60,17 @@ This approach:
 
 The MCP server exposes these tools (mapping to CLI commands):
 
-| Tool | Description | Maps To |
-|------|-------------|---------|
-| `governance_status` | Get current governance state | `hummbl-gov status` |
-| `governance_check` | Check if action is allowed | `hummbl-gov check <action>` |
-| `governance_freeze` | Declare code freeze | `hummbl-gov freeze [reason]` |
-| `governance_unfreeze` | Lift code freeze | `hummbl-gov unfreeze [reason]` |
-| `governance_incident` | Declare incident | `hummbl-gov incident <id> [reason]` |
-| `governance_resolve` | Resolve incident | `hummbl-gov resolve [reason]` |
-| `governance_profile` | Get profile info | `hummbl-gov profile [name]` |
-| `governance_audit` | Get recent audit events | `hummbl-gov audit --tail N` |
-| `governance_chain` | Get chain state | `hummbl-gov chain` |
+| Tool                  | Description                  | Maps To                             |
+| --------------------- | ---------------------------- | ----------------------------------- |
+| `governance_status`   | Get current governance state | `hummbl-gov status`                 |
+| `governance_check`    | Check if action is allowed   | `hummbl-gov check <action>`         |
+| `governance_freeze`   | Declare code freeze          | `hummbl-gov freeze [reason]`        |
+| `governance_unfreeze` | Lift code freeze             | `hummbl-gov unfreeze [reason]`      |
+| `governance_incident` | Declare incident             | `hummbl-gov incident <id> [reason]` |
+| `governance_resolve`  | Resolve incident             | `hummbl-gov resolve [reason]`       |
+| `governance_profile`  | Get profile info             | `hummbl-gov profile [name]`         |
+| `governance_audit`    | Get recent audit events      | `hummbl-gov audit --tail N`         |
+| `governance_chain`    | Get chain state              | `hummbl-gov chain`                  |
 
 ## Implementation Plan
 
@@ -110,11 +111,13 @@ export const governanceTools = {
 Create new dashboard app OR repurpose `apps/web`:
 
 **Option A: New App** (Recommended)
+
 - Clean slate for ops-focused UI
 - Different nav structure than public web app
 - Can use stricter auth requirements
 
 **Option B: Add Route to Existing Web**
+
 - Faster to implement
 - Share components
 - Add `/ops` or `/governance` route
@@ -154,6 +157,7 @@ Create new dashboard app OR repurpose `apps/web`:
 **Option A: MCP Integration with Claude Code**
 
 Add to `.claude/settings.json`:
+
 ```json
 {
   "mcpServers": {
@@ -169,11 +173,12 @@ Add to `.claude/settings.json`:
 **Option B: REST API Wrapper**
 
 If dashboard needs to run standalone (without Claude Code):
+
 ```typescript
 // apps/workers/src/routes/governance.ts
-import { governanceTools } from "@hummbl/governance-mcp";
+import { governanceTools } from '@hummbl/governance-mcp';
 
-app.get("/api/governance/status", async (c) => {
+app.get('/api/governance/status', async c => {
   return c.json(await governanceTools.governance_status.handler());
 });
 ```
@@ -217,6 +222,7 @@ hummbl-monorepo/
 ## Dependencies
 
 **MCP Server:**
+
 ```json
 {
   "dependencies": {
@@ -227,6 +233,7 @@ hummbl-monorepo/
 ```
 
 **Dashboard:**
+
 ```json
 {
   "dependencies": {
@@ -241,24 +248,28 @@ hummbl-monorepo/
 ## Build Sequence
 
 1. **Link governance package**
+
    ```bash
    cd hummbl-monorepo
    pnpm add @hummbl/governance@link:../hummbl-agent/packages/governance
    ```
 
 2. **Build MCP server**
+
    ```bash
    cd apps/mcp-server
    pnpm build
    ```
 
 3. **Test MCP tools**
+
    ```bash
    # In Claude Code, after adding to settings
    # Call governance_status tool
    ```
 
 4. **Build dashboard**
+
    ```bash
    cd apps/dashboard
    pnpm dev
@@ -279,7 +290,7 @@ import {
   declareFreeze,
   liftFreeze,
   // ... other imports
-} from "@hummbl/governance";
+} from '@hummbl/governance';
 
 // Direct function calls - no shell execution needed
 export async function getStatus() {
@@ -312,5 +323,5 @@ This is the safest and most direct approach - no shell execution, no command inj
 
 ---
 
-*Design created: 2026-02-04*
-*Author: Claude Opus 4.5*
+_Design created: 2026-02-04_
+_Author: Claude Opus 4.5_

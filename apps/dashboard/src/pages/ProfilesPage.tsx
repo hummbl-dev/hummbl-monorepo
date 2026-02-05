@@ -112,11 +112,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ name, profile, isActive }) =>
             Data Classes
           </div>
           <div className="flex flex-wrap gap-2">
-            {profile.dataClass.map((cls) => (
-              <span
-                key={cls}
-                className="px-2 py-1 rounded bg-zinc-800 text-zinc-300 text-xs"
-              >
+            {profile.dataClass.map(cls => (
+              <span key={cls} className="px-2 py-1 rounded bg-zinc-800 text-zinc-300 text-xs">
                 {cls}
               </span>
             ))}
@@ -140,9 +137,7 @@ export const ProfilesPage: React.FC = () => {
   }
 
   if (!presets) {
-    return (
-      <div className="text-center py-12 text-zinc-500">Failed to load profiles</div>
-    );
+    return <div className="text-center py-12 text-zinc-500">Failed to load profiles</div>;
   }
 
   // Determine active profile by comparing with current state
@@ -151,8 +146,7 @@ export const ProfilesPage: React.FC = () => {
     if (!activeProfile) return null;
     return Object.entries(presets).find(
       ([_, profile]) =>
-        profile.audit === activeProfile.audit &&
-        profile.separation === activeProfile.separation
+        profile.audit === activeProfile.audit && profile.separation === activeProfile.separation
     )?.[0];
   };
 

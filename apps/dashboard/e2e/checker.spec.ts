@@ -23,7 +23,16 @@ test.describe('Action Checker', () => {
   });
 
   test('should display quick check buttons', async ({ page }) => {
-    const quickActions = ['Read', 'Commit', 'Push', 'Deploy', 'Delete', 'Schema', 'Approve', 'Execute'];
+    const quickActions = [
+      'Read',
+      'Commit',
+      'Push',
+      'Deploy',
+      'Delete',
+      'Schema',
+      'Approve',
+      'Execute',
+    ];
 
     for (const action of quickActions) {
       await expect(page.getByRole('button', { name: action })).toBeVisible();
@@ -101,7 +110,9 @@ test.describe('Action Checker', () => {
     await page.getByRole('button', { name: 'Push' }).click();
 
     // Should show multiple results
-    const resultItems = await page.locator('code:has-text("read"), code:has-text("commit"), code:has-text("push")').count();
+    const resultItems = await page
+      .locator('code:has-text("read"), code:has-text("commit"), code:has-text("push")')
+      .count();
     expect(resultItems).toBe(3);
   });
 

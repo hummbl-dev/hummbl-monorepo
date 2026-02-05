@@ -23,7 +23,12 @@ const QUICK_ACTIONS = [
   { action: 'push', label: 'Push', icon: Upload, description: 'Push to remote' },
   { action: 'deploy', label: 'Deploy', icon: Rocket, description: 'Deploy to environment' },
   { action: 'delete', label: 'Delete', icon: Trash2, description: 'Delete resources' },
-  { action: 'schema_change', label: 'Schema', icon: Database, description: 'Modify database schema' },
+  {
+    action: 'schema_change',
+    label: 'Schema',
+    icon: Database,
+    description: 'Modify database schema',
+  },
   { action: 'approve', label: 'Approve', icon: ThumbsUp, description: 'Approve pending action' },
   { action: 'execute', label: 'Execute', icon: Play, description: 'Execute command' },
 ];
@@ -46,7 +51,7 @@ export const CheckerPage: React.FC = () => {
   const handleCheck = async (action: string, command?: string) => {
     try {
       const result = await checkMutation.mutateAsync({ action, command });
-      setResults((prev) => [
+      setResults(prev => [
         {
           decision: result.decision,
           message: result.message,
@@ -56,7 +61,7 @@ export const CheckerPage: React.FC = () => {
         ...prev.slice(0, 9), // Keep last 10 results
       ]);
     } catch (error) {
-      setResults((prev) => [
+      setResults(prev => [
         {
           decision: 'deny',
           message: error instanceof Error ? error.message : 'Check failed',
@@ -106,16 +111,16 @@ export const CheckerPage: React.FC = () => {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold text-zinc-100">Action Checker</h2>
-        <p className="text-zinc-500">Test if actions are permitted under current governance state</p>
+        <p className="text-zinc-500">
+          Test if actions are permitted under current governance state
+        </p>
       </div>
 
       {/* Current State Context */}
       {state && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-zinc-400">
-              Current Context
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-zinc-400">Current Context</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-4">
@@ -125,8 +130,13 @@ export const CheckerPage: React.FC = () => {
                 className="flex-1"
               />
               <div className="text-sm text-zinc-400">
-                <p>Audit: <span className="text-zinc-200">{state.active_profile.audit}</span></p>
-                <p>Separation: <span className="text-zinc-200">{state.active_profile.separation}</span></p>
+                <p>
+                  Audit: <span className="text-zinc-200">{state.active_profile.audit}</span>
+                </p>
+                <p>
+                  Separation:{' '}
+                  <span className="text-zinc-200">{state.active_profile.separation}</span>
+                </p>
               </div>
             </div>
           </CardContent>
@@ -140,7 +150,7 @@ export const CheckerPage: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {QUICK_ACTIONS.map((item) => (
+            {QUICK_ACTIONS.map(item => (
               <Button
                 key={item.action}
                 variant="outline"
@@ -170,8 +180,8 @@ export const CheckerPage: React.FC = () => {
                 id="custom-action"
                 placeholder="e.g., deploy, execute, approve"
                 value={customAction}
-                onChange={(e) => setCustomAction(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleCustomCheck()}
+                onChange={e => setCustomAction(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleCustomCheck()}
               />
             </div>
             <div className="space-y-2">
@@ -180,12 +190,15 @@ export const CheckerPage: React.FC = () => {
                 id="custom-command"
                 placeholder="e.g., git push origin main"
                 value={customCommand}
-                onChange={(e) => setCustomCommand(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleCustomCheck()}
+                onChange={e => setCustomCommand(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleCustomCheck()}
               />
             </div>
           </div>
-          <Button onClick={handleCustomCheck} disabled={!customAction.trim() || checkMutation.isPending}>
+          <Button
+            onClick={handleCustomCheck}
+            disabled={!customAction.trim() || checkMutation.isPending}
+          >
             {checkMutation.isPending ? (
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
             ) : (

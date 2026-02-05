@@ -4,7 +4,9 @@ test.describe('Profiles Page', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/profiles');
     // Wait for loading to complete
-    await expect(page.getByRole('heading', { name: 'Governance Profiles' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('heading', { name: 'Governance Profiles' })).toBeVisible({
+      timeout: 10000,
+    });
   });
 
   test('should display profiles header', async ({ page }) => {
@@ -24,7 +26,15 @@ test.describe('Profiles Page', () => {
   });
 
   test('should display all 7 presets in matrix', async ({ page }) => {
-    const presets = ['flow', 'balanced', 'strict', 'enterprise', 'minimal', 'development', 'production'];
+    const presets = [
+      'flow',
+      'balanced',
+      'strict',
+      'enterprise',
+      'minimal',
+      'development',
+      'production',
+    ];
 
     for (const preset of presets) {
       // Look for the preset name as a capitalized cell in the table
@@ -74,7 +84,10 @@ test.describe('Profiles Page', () => {
 
     let foundCount = 0;
     for (const desc of descriptions) {
-      const isVisible = await page.getByText(desc).isVisible().catch(() => false);
+      const isVisible = await page
+        .getByText(desc)
+        .isVisible()
+        .catch(() => false);
       if (isVisible) foundCount++;
     }
     expect(foundCount).toBeGreaterThanOrEqual(1);

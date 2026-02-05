@@ -35,14 +35,14 @@ export const AuditPage: React.FC = () => {
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   const handlePageChange = (newPage: number) => {
-    setFilters((prev) => ({
+    setFilters(prev => ({
       ...prev,
       offset: (newPage - 1) * PAGE_SIZE,
     }));
   };
 
   const handleApplyFilters = () => {
-    setFilters((prev) => ({
+    setFilters(prev => ({
       ...prev,
       offset: 0,
       startDate: localStartDate || undefined,
@@ -70,8 +70,17 @@ export const AuditPage: React.FC = () => {
   };
 
   const handleExportCSV = () => {
-    const headers = ['Sequence', 'Timestamp', 'Action', 'Decision', 'Agent', 'Session', 'State', 'Reason'];
-    const rows = events.map((e) => [
+    const headers = [
+      'Sequence',
+      'Timestamp',
+      'Action',
+      'Decision',
+      'Agent',
+      'Session',
+      'State',
+      'Reason',
+    ];
+    const rows = events.map(e => [
       e.sequence,
       e.timestamp,
       e.action,
@@ -82,7 +91,7 @@ export const AuditPage: React.FC = () => {
       e.reason || '',
     ]);
 
-    const csv = [headers.join(','), ...rows.map((r) => r.map((c) => `"${c}"`).join(','))].join('\n');
+    const csv = [headers.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -148,7 +157,7 @@ export const AuditPage: React.FC = () => {
                   id="start-date"
                   type="date"
                   value={localStartDate}
-                  onChange={(e) => setLocalStartDate(e.target.value)}
+                  onChange={e => setLocalStartDate(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
@@ -157,7 +166,7 @@ export const AuditPage: React.FC = () => {
                   id="end-date"
                   type="date"
                   value={localEndDate}
-                  onChange={(e) => setLocalEndDate(e.target.value)}
+                  onChange={e => setLocalEndDate(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
@@ -166,11 +175,11 @@ export const AuditPage: React.FC = () => {
                   id="decision"
                   className="w-full h-10 px-3 rounded-md border border-zinc-700 bg-zinc-900 text-zinc-100"
                   value={filters.decision || ''}
-                  onChange={(e) =>
-                    setFilters((prev) => ({
+                  onChange={e =>
+                    setFilters(prev => ({
                       ...prev,
                       offset: 0,
-                      decision: e.target.value as AuditLogOptions['decision'] || undefined,
+                      decision: (e.target.value as AuditLogOptions['decision']) || undefined,
                     }))
                   }
                 >
@@ -186,8 +195,8 @@ export const AuditPage: React.FC = () => {
                   id="action"
                   className="w-full h-10 px-3 rounded-md border border-zinc-700 bg-zinc-900 text-zinc-100"
                   value={filters.action || ''}
-                  onChange={(e) =>
-                    setFilters((prev) => ({
+                  onChange={e =>
+                    setFilters(prev => ({
                       ...prev,
                       offset: 0,
                       action: e.target.value || undefined,
@@ -195,7 +204,7 @@ export const AuditPage: React.FC = () => {
                   }
                 >
                   <option value="">All</option>
-                  {availableActions?.map((action) => (
+                  {availableActions?.map(action => (
                     <option key={action} value={action}>
                       {action}
                     </option>
@@ -242,7 +251,7 @@ export const AuditPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {events.map((event) => (
+                  {events.map(event => (
                     <tr key={event.id} className="border-b border-zinc-800/50 hover:bg-zinc-800/30">
                       <td className="py-3 px-2 font-mono text-zinc-500">{event.sequence}</td>
                       <td className="py-3 px-2">

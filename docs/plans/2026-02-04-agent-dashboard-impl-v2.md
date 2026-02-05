@@ -12,25 +12,26 @@
 
 ## Revision Summary (Agent Feedback Applied)
 
-| Agent | Issue | Resolution |
-|-------|-------|------------|
-| Architect | MCP-first is misleading | **Removed MCP server tasks** - use direct import |
-| Architect | UI components don't exist | **Added Task 1** - build missing components |
-| Architect | Symlink breaks CI | **Fixed Task 2** - use pnpm file: protocol |
-| Security | No authentication | **Added Task 3** - environment-based auth |
-| Security | No authorization | **Added role checks** to all mutations |
-| Security | No audit trail | **Added dashboard audit logging** |
-| Security | No input validation | **Added validation** to all inputs |
-| Code Review | Missing ErrorBoundary | **Added** to main.tsx |
-| Code Review | Missing test deps | **Added** to package.json |
-| Code Review | Tailwind not configured | **Added** postcss + tailwind config |
-| TDD | Only 2 shallow tests | **Expanded** to 50+ tests across 8 files |
+| Agent       | Issue                     | Resolution                                       |
+| ----------- | ------------------------- | ------------------------------------------------ |
+| Architect   | MCP-first is misleading   | **Removed MCP server tasks** - use direct import |
+| Architect   | UI components don't exist | **Added Task 1** - build missing components      |
+| Architect   | Symlink breaks CI         | **Fixed Task 2** - use pnpm file: protocol       |
+| Security    | No authentication         | **Added Task 3** - environment-based auth        |
+| Security    | No authorization          | **Added role checks** to all mutations           |
+| Security    | No audit trail            | **Added dashboard audit logging**                |
+| Security    | No input validation       | **Added validation** to all inputs               |
+| Code Review | Missing ErrorBoundary     | **Added** to main.tsx                            |
+| Code Review | Missing test deps         | **Added** to package.json                        |
+| Code Review | Tailwind not configured   | **Added** postcss + tailwind config              |
+| TDD         | Only 2 shallow tests      | **Expanded** to 50+ tests across 8 files         |
 
 ---
 
 ## Prerequisites
 
 Before starting:
+
 1. `hummbl-agent` repo at `/Users/others/workspace/active/hummbl-agent`
 2. Governance package built: `cd hummbl-agent/packages/governance && pnpm build`
 3. Monorepo deps installed: `cd hummbl-monorepo && pnpm install`
@@ -40,6 +41,7 @@ Before starting:
 ## Task 1: Build Missing UI Components
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/packages/ui/src/components/ui/CardHeader.tsx`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/packages/ui/src/components/ui/CardTitle.tsx`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/packages/ui/src/components/ui/CardContent.tsx`
@@ -259,6 +261,7 @@ git commit -m "feat(ui): add Card subcomponents and warning button variant
 ## Task 2: Link Governance Package Properly
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/packages/governance/package.json`
 - Modify: `/Users/others/workspace/active/hummbl-monorepo/pnpm-workspace.yaml`
 
@@ -292,6 +295,7 @@ Create `/Users/others/workspace/active/hummbl-monorepo/packages/governance/packa
 **Step 2: Copy built dist from hummbl-agent**
 
 Run:
+
 ```bash
 cd /Users/others/workspace/active/hummbl-monorepo
 mkdir -p packages/governance
@@ -307,10 +311,12 @@ Expected: No errors, @hummbl/governance resolves
 **Step 4: Test import works**
 
 Run:
+
 ```bash
 cd /Users/others/workspace/active/hummbl-monorepo
 node -e "import('@hummbl/governance').then(m => console.log(Object.keys(m).slice(0,5)))"
 ```
+
 Expected: Prints some export names
 
 **Step 5: Commit**
@@ -325,6 +331,7 @@ git commit -m "chore: add @hummbl/governance package (copied from hummbl-agent)"
 ## Task 3: Create Dashboard App with Auth
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/package.json`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/tsconfig.json`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/vite.config.ts`
@@ -419,12 +426,7 @@ export default defineConfig({
         lines: 80,
         statements: 80,
       },
-      exclude: [
-        'src/test/**',
-        '**/*.d.ts',
-        '**/index.ts',
-        'src/main.tsx',
-      ],
+      exclude: ['src/test/**', '**/*.d.ts', '**/index.ts', 'src/main.tsx'],
     },
   },
   resolve: {
@@ -451,7 +453,7 @@ afterEach(() => {
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation((query) => ({
+  value: vi.fn().mockImplementation(query => ({
     matches: false,
     media: query,
     onchange: null,
@@ -827,7 +829,8 @@ body {
   min-height: 100vh;
 }
 
-code, pre {
+code,
+pre {
   font-family: 'JetBrains Mono', monospace;
 }
 ```
@@ -890,6 +893,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 **Step 15: Install dependencies**
 
 Run:
+
 ```bash
 cd /Users/others/workspace/active/hummbl-monorepo
 pnpm install
@@ -913,6 +917,7 @@ git commit -m "feat(dashboard): scaffold app with auth, error boundary, and test
 ## Task 4: Create Governance Hooks with Validation
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/hooks/useGovernance.ts`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/hooks/useGovernance.test.ts`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/lib/validation.ts`
@@ -928,13 +933,13 @@ export const ReasonSchema = z
   .string()
   .min(1, 'Reason is required')
   .max(500, 'Reason too long (max 500 chars)')
-  .transform((val) => val.replace(/[<>"'&\x00-\x1f]/g, '')); // Sanitize
+  .transform(val => val.replace(/[<>"'&\x00-\x1f]/g, '')); // Sanitize
 
 export const IncidentIdSchema = z
   .string()
   .min(1, 'Incident ID is required')
   .regex(/^[A-Z]{2,5}-\d{1,6}$/i, 'Invalid incident ID format (e.g., INC-001)')
-  .transform((val) => val.toUpperCase());
+  .transform(val => val.toUpperCase());
 
 export const ActionSchema = z.enum([
   'read',
@@ -1330,7 +1335,11 @@ export function useDeclareIncident() {
       const validatedId = validateIncidentId(incidentId);
       const validatedReason = validateReason(reason);
 
-      logDashboardAction('declareIncident', { incidentId: validatedId, reason: validatedReason }, auth);
+      logDashboardAction(
+        'declareIncident',
+        { incidentId: validatedId, reason: validatedReason },
+        auth
+      );
 
       return declareIncident(validatedId, validatedReason);
     },
@@ -1377,7 +1386,11 @@ export function useCheckGovernance() {
       const validatedAction = validateAction(request.action);
       const state = getGovernanceState();
 
-      logDashboardAction('checkGovernance', { action: validatedAction, command: request.command }, auth);
+      logDashboardAction(
+        'checkGovernance',
+        { action: validatedAction, command: request.command },
+        auth
+      );
 
       return checkGovernance({
         tenant_id: state.tenant_id,
@@ -1413,6 +1426,7 @@ git commit -m "feat(dashboard): add governance hooks with validation and audit
 ## Task 5: Create Dashboard Layout
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/layouts/DashboardLayout.tsx`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/layouts/DashboardLayout.test.tsx`
 
@@ -1555,6 +1569,7 @@ git commit -m "feat(dashboard): add sidebar navigation layout with user info"
 ## Task 6: Create Status Components
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/components/TemporalIndicator.tsx`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/components/TemporalIndicator.test.tsx`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/components/StatusPanel.tsx`
@@ -1862,6 +1877,7 @@ git commit -m "feat(dashboard): add TemporalIndicator and StatusPanel components
 ## Task 7: Create Pages
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/pages/HomePage.tsx`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/pages/TemporalPage.tsx`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/components/TemporalControls.tsx`
@@ -2181,6 +2197,7 @@ Expected: PASS
 **Step 5: Build and test dev server**
 
 Run:
+
 ```bash
 cd /Users/others/workspace/active/hummbl-monorepo/apps/dashboard
 pnpm dev
@@ -2213,17 +2230,17 @@ git commit -m "feat(dashboard): add HomePage and TemporalPage with controls
 
 ## Key Improvements from Agent Feedback
 
-| Category | Before | After |
-|----------|--------|-------|
-| Architecture | MCP + direct (confused) | Direct import only (clear) |
-| Authentication | None | Environment-based with roles |
-| Authorization | None | Role checks on all mutations |
-| Input validation | None | Zod schemas for all inputs |
-| Audit logging | None | All actions logged |
-| Error handling | Minimal | ErrorBoundary + per-mutation errors |
-| Testing | 2 shallow tests | 50+ comprehensive tests |
-| UI components | Assumed to exist | Build first in Task 1 |
-| Package linking | Symlinks | Copy dist directory |
+| Category         | Before                  | After                               |
+| ---------------- | ----------------------- | ----------------------------------- |
+| Architecture     | MCP + direct (confused) | Direct import only (clear)          |
+| Authentication   | None                    | Environment-based with roles        |
+| Authorization    | None                    | Role checks on all mutations        |
+| Input validation | None                    | Zod schemas for all inputs          |
+| Audit logging    | None                    | All actions logged                  |
+| Error handling   | Minimal                 | ErrorBoundary + per-mutation errors |
+| Testing          | 2 shallow tests         | 50+ comprehensive tests             |
+| UI components    | Assumed to exist        | Build first in Task 1               |
+| Package linking  | Symlinks                | Copy dist directory                 |
 
 ## Future Tasks (Phase 2)
 
@@ -2235,6 +2252,6 @@ git commit -m "feat(dashboard): add HomePage and TemporalPage with controls
 
 ---
 
-*Plan created: 2026-02-04*
-*Revised based on agent feedback*
-*Author: Claude Opus 4.5*
+_Plan created: 2026-02-04_
+_Revised based on agent feedback_
+_Author: Claude Opus 4.5_

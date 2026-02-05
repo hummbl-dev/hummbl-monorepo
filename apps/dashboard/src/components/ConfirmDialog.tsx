@@ -65,10 +65,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
       {/* Dialog */}
       <div className="relative bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl max-w-md w-full mx-4 animate-in fade-in zoom-in-95 duration-200">
@@ -83,7 +80,9 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
         <div className="p-6">
           {/* Icon */}
-          <div className={`mx-auto w-12 h-12 rounded-full ${bgColors[variant]} flex items-center justify-center mb-4`}>
+          <div
+            className={`mx-auto w-12 h-12 rounded-full ${bgColors[variant]} flex items-center justify-center mb-4`}
+          >
             <AlertTriangle className={`h-6 w-6 ${iconColors[variant]}`} />
           </div>
 
@@ -95,16 +94,17 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
           {/* Actions */}
           <div className="flex gap-3">
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={onClose}
-              disabled={loading}
-            >
+            <Button variant="outline" className="flex-1" onClick={onClose} disabled={loading}>
               {cancelLabel}
             </Button>
             <Button
-              variant={variant === 'destructive' ? 'destructive' : variant === 'warning' ? 'warning' : 'default'}
+              variant={
+                variant === 'destructive'
+                  ? 'destructive'
+                  : variant === 'warning'
+                    ? 'warning'
+                    : 'default'
+              }
               className="flex-1"
               onClick={onConfirm}
               disabled={loading}

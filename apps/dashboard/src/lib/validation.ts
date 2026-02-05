@@ -4,13 +4,13 @@ export const ReasonSchema = z
   .string()
   .min(1, 'Reason is required')
   .max(500, 'Reason too long (max 500 chars)')
-  .transform((val) => val.replace(/[<>"'&\x00-\x1f]/g, '')); // Sanitize
+  .transform(val => val.replace(/[<>"'&\x00-\x1f]/g, '')); // Sanitize
 
 export const IncidentIdSchema = z
   .string()
   .min(1, 'Incident ID is required')
   .regex(/^[A-Z]{2,5}-\d{1,6}$/i, 'Invalid incident ID format (e.g., INC-001)')
-  .transform((val) => val.toUpperCase());
+  .transform(val => val.toUpperCase());
 
 export const ActionSchema = z.enum([
   'read',

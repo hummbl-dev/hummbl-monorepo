@@ -58,9 +58,5 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, requiredRole = '
     );
   }
 
-  return (
-    <AuthContextValue.Provider value={auth}>
-      {children}
-    </AuthContextValue.Provider>
-  );
+  return <AuthContextValue.Provider value={auth}>{children}</AuthContextValue.Provider>;
 };

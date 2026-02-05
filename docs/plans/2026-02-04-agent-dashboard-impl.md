@@ -13,6 +13,7 @@
 ## Prerequisites
 
 Before starting, ensure:
+
 1. `hummbl-agent` repo is at `/Users/others/workspace/active/hummbl-agent`
 2. Governance package is built: `cd hummbl-agent/packages/governance && pnpm build`
 3. Monorepo dependencies installed: `cd hummbl-monorepo && pnpm install`
@@ -22,6 +23,7 @@ Before starting, ensure:
 ## Task 1: Link Governance Package
 
 **Files:**
+
 - Modify: `/Users/others/workspace/active/hummbl-monorepo/package.json`
 - Modify: `/Users/others/workspace/active/hummbl-monorepo/pnpm-workspace.yaml`
 
@@ -32,6 +34,7 @@ In root `package.json`, no changes needed - pnpm workspace handles it.
 **Step 2: Create symlink for governance package**
 
 Run:
+
 ```bash
 cd /Users/others/workspace/active/hummbl-monorepo
 mkdir -p packages/governance
@@ -61,6 +64,7 @@ git commit -m "chore: link @hummbl/governance package from hummbl-agent"
 ## Task 2: Add Governance Tools to MCP Server
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/mcp-server/src/governance-tools.ts`
 - Modify: `/Users/others/workspace/active/hummbl-monorepo/apps/mcp-server/src/index.ts`
 - Modify: `/Users/others/workspace/active/hummbl-monorepo/apps/mcp-server/package.json`
@@ -131,7 +135,8 @@ import {
 export const governanceTools = {
   governance_status: {
     name: 'governance_status',
-    description: 'Get current governance state including temporal state, active profile, and tenant info',
+    description:
+      'Get current governance state including temporal state, active profile, and tenant info',
     inputSchema: {
       type: 'object',
       properties: {},
@@ -288,7 +293,7 @@ export const governanceTools = {
 };
 
 // Export tool list for MCP registration
-export const governanceToolList = Object.values(governanceTools).map((tool) => ({
+export const governanceToolList = Object.values(governanceTools).map(tool => ({
   name: tool.name,
   description: tool.description,
   inputSchema: tool.inputSchema,
@@ -296,7 +301,7 @@ export const governanceToolList = Object.values(governanceTools).map((tool) => (
 
 // Export handler map
 export const governanceHandlers = Object.fromEntries(
-  Object.values(governanceTools).map((tool) => [tool.name, tool.handler])
+  Object.values(governanceTools).map(tool => [tool.name, tool.handler])
 );
 ```
 
@@ -317,6 +322,7 @@ git commit -m "feat(mcp): add governance tools to MCP server"
 ## Task 3: Register Governance Tools in MCP Server
 
 **Files:**
+
 - Modify: `/Users/others/workspace/active/hummbl-monorepo/apps/mcp-server/src/index.ts`
 
 **Step 1: Import governance tools**
@@ -367,6 +373,7 @@ if (request.params.name.startsWith('governance_')) {
 **Step 4: Build and test MCP server**
 
 Run:
+
 ```bash
 cd /Users/others/workspace/active/hummbl-monorepo/apps/mcp-server
 pnpm build
@@ -386,6 +393,7 @@ git commit -m "feat(mcp): register governance tools in MCP server"
 ## Task 4: Create Dashboard App Scaffold
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/package.json`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/tsconfig.json`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/vite.config.ts`
@@ -566,6 +574,7 @@ body {
 **Step 7: Install dependencies**
 
 Run:
+
 ```bash
 cd /Users/others/workspace/active/hummbl-monorepo
 pnpm install
@@ -585,6 +594,7 @@ git commit -m "feat(dashboard): scaffold dashboard app with React 19 + Vite"
 ## Task 5: Create Dashboard Layout
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/layouts/DashboardLayout.tsx`
 
 **Step 1: Create DashboardLayout component**
@@ -664,6 +674,7 @@ git commit -m "feat(dashboard): add sidebar navigation layout"
 ## Task 6: Create Governance Hook
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/hooks/useGovernance.ts`
 
 **Step 1: Write failing test**
@@ -821,7 +832,9 @@ export function useResolveIncident() {
 // Check governance mutation (not cached - always fresh)
 export function useCheckGovernance() {
   return useMutation({
-    mutationFn: (request: Omit<GovernanceCheckRequest, 'tenant_id' | 'agent_id' | 'session_id'>) => {
+    mutationFn: (
+      request: Omit<GovernanceCheckRequest, 'tenant_id' | 'agent_id' | 'session_id'>
+    ) => {
       const state = getGovernanceState();
       return checkGovernance({
         tenant_id: state.tenant_id,
@@ -851,6 +864,7 @@ git commit -m "feat(dashboard): add governance React Query hooks"
 ## Task 7: Create Home Page with Status Panel
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/pages/HomePage.tsx`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/components/StatusPanel.tsx`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/components/TemporalIndicator.tsx`
@@ -1028,6 +1042,7 @@ export function HomePage() {
 **Step 4: Build and run dev server**
 
 Run:
+
 ```bash
 cd /Users/others/workspace/active/hummbl-monorepo/apps/dashboard
 pnpm dev
@@ -1047,6 +1062,7 @@ git commit -m "feat(dashboard): add home page with status panel"
 ## Task 8: Create Temporal Controls Page
 
 **Files:**
+
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/pages/TemporalPage.tsx`
 - Create: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/components/TemporalControls.tsx`
 - Modify: `/Users/others/workspace/active/hummbl-monorepo/apps/dashboard/src/main.tsx`
@@ -1351,5 +1367,5 @@ git commit -m "feat(dashboard): add temporal state controls page"
 
 ---
 
-*Plan created: 2026-02-04*
-*Author: Claude Opus 4.5*
+_Plan created: 2026-02-04_
+_Author: Claude Opus 4.5_

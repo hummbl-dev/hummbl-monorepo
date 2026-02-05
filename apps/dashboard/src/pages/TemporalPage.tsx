@@ -41,19 +41,37 @@ export const TemporalPage: React.FC = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-zinc-500">Blocks Mutations</span>
-                <span className={summary.effects.blocks_mutations ? 'text-rose-400 font-semibold' : 'text-zinc-100'}>
+                <span
+                  className={
+                    summary.effects.blocks_mutations
+                      ? 'text-rose-400 font-semibold'
+                      : 'text-zinc-100'
+                  }
+                >
                   {summary.effects.blocks_mutations ? 'YES' : 'No'}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-500">Enhanced Audit</span>
-                <span className={summary.effects.enhanced_audit ? 'text-amber-400 font-semibold' : 'text-zinc-100'}>
+                <span
+                  className={
+                    summary.effects.enhanced_audit
+                      ? 'text-amber-400 font-semibold'
+                      : 'text-zinc-100'
+                  }
+                >
                   {summary.effects.enhanced_audit ? 'YES' : 'No'}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-zinc-500">Requires Incident ID</span>
-                <span className={summary.effects.requires_incident_id ? 'text-orange-400 font-semibold' : 'text-zinc-100'}>
+                <span
+                  className={
+                    summary.effects.requires_incident_id
+                      ? 'text-orange-400 font-semibold'
+                      : 'text-zinc-100'
+                  }
+                >
                   {summary.effects.requires_incident_id ? 'YES' : 'No'}
                 </span>
               </div>

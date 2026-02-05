@@ -222,10 +222,18 @@ export function loadPresets(): Record<string, GovernanceProfile> {
     flow: { audit: 'basic', separation: 'none', dataClass: ['internal'] },
     balanced: { audit: 'full', separation: 'propose_only', dataClass: ['internal'] },
     strict: { audit: 'signed', separation: 'full_split', dataClass: ['internal', 'confidential'] },
-    enterprise: { audit: 'signed', separation: 'full_split', dataClass: ['internal', 'confidential', 'restricted'] },
+    enterprise: {
+      audit: 'signed',
+      separation: 'full_split',
+      dataClass: ['internal', 'confidential', 'restricted'],
+    },
     minimal: { audit: 'none', separation: 'none', dataClass: ['public'] },
     development: { audit: 'basic', separation: 'none', dataClass: ['internal'] },
-    production: { audit: 'full', separation: 'review_required', dataClass: ['internal', 'confidential'] },
+    production: {
+      audit: 'full',
+      separation: 'review_required',
+      dataClass: ['internal', 'confidential'],
+    },
   };
 }
 
@@ -247,7 +255,10 @@ export function liftFreeze(reason: string): { success: boolean; new_state: strin
   return { success: true, new_state: 'normal' };
 }
 
-export function declareIncident(incidentId: string, reason: string): { success: boolean; new_state: string } {
+export function declareIncident(
+  incidentId: string,
+  reason: string
+): { success: boolean; new_state: string } {
   const state = loadState();
   state.temporal_state = 'incident';
   state.temporal_reason = `[${incidentId}] ${reason}`;
@@ -306,21 +317,24 @@ export function checkGovernance(request: GovernanceCheckRequest): CheckResult {
 }
 
 // Audit log retrieval
-export function getAuditLog(options: AuditLogOptions = {}): { events: AuditEvent[]; total: number } {
+export function getAuditLog(options: AuditLogOptions = {}): {
+  events: AuditEvent[];
+  total: number;
+} {
   let events = loadEvents();
 
   // Apply filters
   if (options.startDate) {
-    events = events.filter((e) => e.timestamp >= options.startDate!);
+    events = events.filter(e => e.timestamp >= options.startDate!);
   }
   if (options.endDate) {
-    events = events.filter((e) => e.timestamp <= options.endDate!);
+    events = events.filter(e => e.timestamp <= options.endDate!);
   }
   if (options.decision) {
-    events = events.filter((e) => e.decision === options.decision);
+    events = events.filter(e => e.decision === options.decision);
   }
   if (options.action) {
-    events = events.filter((e) => e.action === options.action);
+    events = events.filter(e => e.action === options.action);
   }
 
   const total = events.length;
@@ -339,7 +353,7 @@ export function getAuditLog(options: AuditLogOptions = {}): { events: AuditEvent
 // Get unique actions for filter dropdown
 export function getAuditActions(): string[] {
   const events = loadEvents();
-  const actions = new Set(events.map((e) => e.action));
+  const actions = new Set(events.map(e => e.action));
   return Array.from(actions).sort();
 }
 
