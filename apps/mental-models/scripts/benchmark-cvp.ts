@@ -5,9 +5,25 @@ import { join } from 'path';
 import { randomBytes } from 'crypto';
 
 // Generate cryptographically secure random integer in range [0, max)
+// Uses rejection sampling to avoid modulo bias
 function secureRandomInt(max: number): number {
-  const bytes = randomBytes(4);
-  const value = bytes.readUInt32BE(0);
+  if (max <= 0) {
+    throw new Error('max must be a positive integer');
+  }
+  if (max === 1) {
+    return 0;
+  }
+
+  // Calculate the largest multiple of max that fits in uint32 range
+  // This is the threshold above which we reject values to avoid bias
+  const maxUint32 = 0xffffffff;
+  const limit = maxUint32 - (maxUint32 % max);
+
+  let value: number;
+  do {
+    value = randomBytes(4).readUInt32BE(0);
+  } while (value >= limit);
+
   return value % max;
 }
 
