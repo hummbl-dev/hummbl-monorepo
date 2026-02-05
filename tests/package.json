@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@hummbl/core": "workspace:*",
-    "@modelcontextprotocol/sdk": "^1.25.2"
+    "@modelcontextprotocol/sdk": "^1.26.0"
   },
   "devDependencies": {
     "vitest": "^4.0.16",
