@@ -216,7 +216,8 @@ export const createErrorUtilizationModel = (config = {}): ErrorUtilizationModel 
 
     // Calculate metrics
     const totalErrors = errors.size;
-    const uniqueErrorTypes = new Set(Array.from(errors.values()).map((e) => String(e.pattern))).size;
+    const uniqueErrorTypes = new Set(Array.from(errors.values()).map((e) => String(e.pattern)))
+      .size;
     const improvementsGenerated = improvements.size;
 
     const avgImpact =
