@@ -1,0 +1,153 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+package-lock.json
+yarn.lock
+
+# Build output
+dist/
+build/
+coverage/
+.cache/
+.next/
+out/
+.serverless/
+
+# Lambda deployment packages
+lambda/package/
+lambda/function.zip
+lambda/*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+!.env.staging
+
+# Editor directories and files
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+*.sublime-workspace
+*.sublime-project
+
+# Testing
+/coverage
+/cypress/videos/
+/cypress/screenshots/
+/test-results/
+
+# Local development
+.temp/
+.tmp/
+.temp*
+.tmp*
+.vercel/
+.serverless/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# AWS Lambda
+lambda/package/
+lambda/venv/
+*.zip
+
+# Compiled TypeScript output (generated files)
+*.js
+*.js.map
+!public/**/*.js
+!dist/**/*.js
+!server/**/*.js
+!scripts/*.sh
+!node_modules/**/*.js
+
+# TypeScript declarations (generated)
+*.d.ts
+*.d.ts.map
+!node_modules/**/*.d.ts
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Misc
+*.bak
+*.swp
+*~
+.project
+.vercel
+.netlify
+.cache
+.parcel-cache
+.parcel-*
+.vercel_build_output
+.vercel_output/
+.vercel_build_output/
+.vercel_deployment
+.vercel_project
+.vercel_state
+.vercel_*
+.settings/
+.tmproj
+*.esproj
+*.sublime-*
+Thumbs.db.vitest-cache

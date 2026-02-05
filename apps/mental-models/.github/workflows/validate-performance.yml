@@ -1,0 +1,71 @@
+name: Validate Performance Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-performance:
+    name: Test Performance Workflow
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'pnpm'
+
+      - name: Run validation script
+        id: validation
+        run: |
+          node scripts/validate-performance.js
+
+          # Check for threshold violations
+          if grep -q "Validation Time > 100ms" logs/watcher-summary.log || \
+             grep -q "Latency > 120ms" logs/watcher-summary.log || \
+             grep -q "RSS > 80MB" logs/watcher-summary.log; then
+            echo "::error::Performance thresholds exceeded"
+            exit 1
+          fi
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-logs
+          path: |
+            logs/watcher-*.log
+
+      - name: Update documentation
+        if: success()
+        run: |
+          # Update the performance documentation
+          sed -i 's/^## Status:.*/## Status: ✅ P1-Validated/' docs/performance/watcher.md
+
+          # Commit the updated documentation
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add docs/performance/watcher.md
+          git commit -m "docs: mark watcher as P1-validated" || echo "No changes to commit"
+
+          # Push the changes (commented out for safety)
+          # git push
+
+          echo "Documentation updated: Watcher marked as P1-Validated"
+
+      - name: Show success message
+        if: success()
+        run: |
+          echo "✅ Performance validation completed successfully"
+          echo "📊 Check the 'performance-logs' artifact for detailed results"
+          echo "📝 Documentation has been updated to reflect P1 validation status"
+
+      - name: Show failure message
+        if: failure()
+        run: |
+          echo "❌ Performance validation failed"
+          echo "🔍 Check the logs for threshold violations"
+          exit 1

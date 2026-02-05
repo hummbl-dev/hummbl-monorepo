@@ -1,0 +1,855 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-10-15",
+  "totalModels": 120,
+  "transformations": {
+    "P": "Perspective / Identity",
+    "IN": "Inversion",
+    "CO": "Composition",
+    "DE": "Decomposition",
+    "RE": "Recursion",
+    "SY": "Meta-Systems"
+  },
+  "models": [
+    {
+      "code": "P1",
+      "name": "First Principles Framing",
+      "definition": "Reduce complex problems to foundational truths that cannot be further simplified",
+      "example": "When redesigning pricing strategy, start with unit costs and desired margin rather than competitor benchmarks.",
+      "transformation": "P"
+    },
+    {
+      "code": "P2",
+      "name": "Stakeholder Mapping",
+      "definition": "Identify all parties with interest, influence, or impact in a system or decision",
+      "example": "Before launching a gait analysis service, map clinicians, patients, payers, and facility administrators with their respective goals.",
+      "transformation": "P"
+    },
+    {
+      "code": "P3",
+      "name": "Identity Stack",
+      "definition": "Recognize that individuals operate from multiple nested identities simultaneously",
+      "example": "A team lead switches between personal values, role responsibilities, team culture, and company mission when making decisions.",
+      "transformation": "P"
+    },
+    {
+      "code": "P4",
+      "name": "Lens Shifting",
+      "definition": "Deliberately adopt different interpretive frameworks to reveal hidden aspects of a situation",
+      "example": "Analyze declining engagement through operational efficiency, user motivation, and data quality lenses sequentially.",
+      "transformation": "P"
+    },
+    {
+      "code": "P5",
+      "name": "Empathy Mapping",
+      "definition": "Systematically capture what stakeholders see, think, feel, and do in their context",
+      "example": "Draft onboarding materials after mapping what new members observe, worry about, experience emotionally, and attempt initially.",
+      "transformation": "P"
+    },
+    {
+      "code": "P6",
+      "name": "Point-of-View Anchoring",
+      "definition": "Establish and maintain a consistent reference frame before analysis begins",
+      "example": "Evaluate all feature requests from the anchor of member lifetime value rather than switching between cost, effort, and novelty.",
+      "transformation": "P"
+    },
+    {
+      "code": "P7",
+      "name": "Perspective Switching",
+      "definition": "Rotate through multiple viewpoints to identify invariants and blind spots",
+      "example": "Review policy changes from staff operations, member experience, legal compliance, and financial impact perspectives before finalizing.",
+      "transformation": "P"
+    },
+    {
+      "code": "P8",
+      "name": "Narrative Framing",
+      "definition": "Structure information as causal stories with conflict, choice, and consequence",
+      "example": "Present roadmap as member journey obstacles, strategic decisions made, and expected outcomes rather than feature lists.",
+      "transformation": "P"
+    },
+    {
+      "code": "P9",
+      "name": "Cultural Lens Shifting",
+      "definition": "Adjust communication and interpretation for different cultural contexts and norms",
+      "example": "Adapt health messaging between medical professional, fitness enthusiast, and general wellness audiences with appropriate metaphors and emphasis.",
+      "transformation": "P"
+    },
+    {
+      "code": "P10",
+      "name": "Context Windowing",
+      "definition": "Define explicit boundaries in time, space, and scope for analysis or action",
+      "example": "Limit quarterly revenue review to eastern region only, excluding ongoing pilots and international operations.",
+      "transformation": "P"
+    },
+    {
+      "code": "P11",
+      "name": "Role Perspective-Taking",
+      "definition": "Temporarily inhabit specific roles to understand constraints and priorities",
+      "example": "When designing admin tools, spend sessions thinking as customer service rep, billing specialist, and compliance officer.",
+      "transformation": "P"
+    },
+    {
+      "code": "P12",
+      "name": "Temporal Framing",
+      "definition": "Organize understanding across past causes, present states, and future implications",
+      "example": "Structure strategic review around historical decisions that led here, current positioning, and trajectory toward goals.",
+      "transformation": "P"
+    },
+    {
+      "code": "P13",
+      "name": "Spatial Framing",
+      "definition": "Scale perspective from local details to global patterns and back",
+      "example": "Analyze checkout abandonment at individual click level, page flow, entire funnel, and cross-site industry patterns.",
+      "transformation": "P"
+    },
+    {
+      "code": "P14",
+      "name": "Reference Class Framing",
+      "definition": "Select comparable situations to inform judgment and avoid uniqueness bias",
+      "example": "Forecast new market entry by studying three similar companies in adjacent markets rather than assuming unprecedented circumstances.",
+      "transformation": "P"
+    },
+    {
+      "code": "P15",
+      "name": "Assumption Surfacing",
+      "definition": "Explicitly identify and document beliefs underlying plans or models",
+      "example": "Before launching subscription tier, list assumptions about conversion rates, retention, support costs, and competitive response.",
+      "transformation": "P"
+    },
+    {
+      "code": "P16",
+      "name": "Identity-Context Reciprocity",
+      "definition": "Recognize how identities shape interpretations and contexts reinforce identities",
+      "example": "Acknowledge that company culture influences how leaders frame problems, which then reinforces that same culture.",
+      "transformation": "P"
+    },
+    {
+      "code": "P17",
+      "name": "Frame Control & Reframing",
+      "definition": "Consciously select or reshape interpretive frames to enable new solutions",
+      "example": "Transform budget deficit into investment prioritization opportunity to shift team from cuts to strategic allocation.",
+      "transformation": "P"
+    },
+    {
+      "code": "P18",
+      "name": "Boundary Object Selection",
+      "definition": "Choose representations that bridge multiple perspectives while remaining meaningful to each",
+      "example": "Use customer journey maps as boundary objects between design, engineering, marketing, and support teams.",
+      "transformation": "P"
+    },
+    {
+      "code": "P19",
+      "name": "Sensemaking Canvases",
+      "definition": "Deploy structured templates to systematically capture and organize observations",
+      "example": "Use business model canvas to map value proposition, customer segments, channels, and cost structure during market analysis.",
+      "transformation": "P"
+    },
+    {
+      "code": "P20",
+      "name": "Worldview Articulation",
+      "definition": "Make explicit the fundamental beliefs and values that drive interpretation and action",
+      "example": "Document team's shared worldview about user agency, data ethics, and platform responsibility before designing recommendation systems.",
+      "transformation": "P"
+    },
+    {
+      "code": "IN1",
+      "name": "Subtractive Thinking",
+      "definition": "Improve systems by removing elements rather than adding complexity",
+      "example": "Strip features from product until value proposition breaks, then restore only the last removed feature.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN2",
+      "name": "Premortem Analysis",
+      "definition": "Assume failure has occurred and work backward to identify causes",
+      "example": "Six months before launch, gather team to explain why the product failed spectacularly, capturing risks that optimism obscures.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN3",
+      "name": "Problem Reversal",
+      "definition": "Solve the inverse of the stated problem to reveal insights",
+      "example": "Ask how would we guarantee maximum customer churn to identify anti-retention patterns currently present.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN4",
+      "name": "Contra-Logic",
+      "definition": "Argue the opposite position to stress-test assumptions and expose weak reasoning",
+      "example": "Defend users prefer offline interaction thoroughly to validate digital-first strategy against strongest counterargument.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN5",
+      "name": "Negative Space Framing",
+      "definition": "Study what is absent rather than what is present",
+      "example": "Identify which customer segments never convert and investigate why, rather than only analyzing successful conversions.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN6",
+      "name": "Inverse/Proof by Contradiction",
+      "definition": "Assume a claim is false, derive logical impossibility, thus proving the claim true",
+      "example": "Test capacity model by assuming queue never grows and demonstrating mathematical contradiction under realistic load.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN7",
+      "name": "Boundary Testing",
+      "definition": "Explore extreme conditions to find system limits and breaking points",
+      "example": "Test pricing sensitivity at $0 and 10× current price to understand elasticity range and psychological anchors.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN8",
+      "name": "Contrapositive Reasoning",
+      "definition": "Use logical equivalence that if A then B equals if not B then not A",
+      "example": "If no referral spike follows campaign, then campaign was not viral, revealing misclassification of effort.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN9",
+      "name": "Backward Induction",
+      "definition": "Begin with desired end state and work backward to determine necessary steps",
+      "example": "Start from passing certification audit and work backward through documentation, controls, and process changes needed.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN10",
+      "name": "Red Teaming",
+      "definition": "Organize adversarial review to find vulnerabilities through simulated attack",
+      "example": "Conduct security tabletop where designated team attempts to break authentication flow using realistic attack vectors.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN11",
+      "name": "Devil's Advocate Protocol",
+      "definition": "Assign explicit role to argue against group consensus or preferred option",
+      "example": "Designate team member to comprehensively challenge acquisition strategy, forcing examination of unspoken assumptions.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN12",
+      "name": "Failure First Design",
+      "definition": "Begin planning by identifying all possible failure modes and designing to prevent them",
+      "example": "Architect data pipeline by first listing every way it could lose, corrupt, or duplicate data, then adding safeguards.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN13",
+      "name": "Opportunity Cost Focus",
+      "definition": "Evaluate options by what must be forgone rather than what is gained",
+      "example": "Frame hiring decision as we can't pursue mobile app if we staff this platform expansion to clarify tradeoffs.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN14",
+      "name": "Second-Order Effects (Inverted)",
+      "definition": "Trace negative downstream consequences rather than immediate benefits",
+      "example": "Before adding gamification, consider how it might reduce intrinsic motivation, create perverse incentives, or exclude accessibility needs.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN15",
+      "name": "Constraint Reversal",
+      "definition": "Temporarily remove assumed constraints to explore alternative solution space",
+      "example": "Design workshop where team plans with unlimited budget to identify features cut only due to resource limits, not strategic fit.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN16",
+      "name": "Inverse Optimization",
+      "definition": "Maximize worst outcomes to understand system vulnerabilities",
+      "example": "Optimize schedule to maximize context switching and interruptions to identify how current practices harm productivity.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN17",
+      "name": "Counterfactual Negation",
+      "definition": "Imagine outcomes if key decision had been reversed",
+      "example": "Evaluate what if we had not acquired that company to assess merger's actual contribution versus assumed value.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN18",
+      "name": "Kill-Criteria & Stop Rules",
+      "definition": "Define conditions that trigger project termination before launch",
+      "example": "Establish if beta retention falls below 40% after two iterations, we kill this feature to prevent sunk cost fallacy.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN19",
+      "name": "Harm Minimization (Via Negativa)",
+      "definition": "Improve by removing harmful elements rather than adding beneficial ones",
+      "example": "Audit codebase to identify and delete unused dependencies, reducing attack surface and maintenance burden.",
+      "transformation": "IN"
+    },
+    {
+      "code": "IN20",
+      "name": "Antigoals & Anti-Patterns Catalog",
+      "definition": "Document failure modes to avoid rather than success patterns to emulate",
+      "example": "Maintain team wiki of ways we've broken production with root causes to prevent recurrence.",
+      "transformation": "IN"
+    },
+    {
+      "code": "CO1",
+      "name": "Synergy Principle",
+      "definition": "Design combinations where integrated value exceeds sum of parts",
+      "example": "Bundle gait analysis with metabolic testing to increase average revenue per user beyond either service alone.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO2",
+      "name": "Chunking",
+      "definition": "Group related elements into meaningful units to reduce cognitive load",
+      "example": "Organize employee handbook as five macro sections rather than fifty flat chapters, easing navigation and comprehension.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO3",
+      "name": "Functional Composition",
+      "definition": "Chain pure operations where output of one becomes input of next",
+      "example": "Compose ETL pipeline as extract | transform | load where each stage has clean interfaces and defined outputs.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO4",
+      "name": "Interdisciplinary Synthesis",
+      "definition": "Merge insights from distinct fields to generate novel solutions",
+      "example": "Combine biomechanics expertise with UX design principles to create injury prevention app with actionable movement cues.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO5",
+      "name": "Emergence",
+      "definition": "Recognize higher-order behavior arising from component interactions beyond individual properties",
+      "example": "Observe referral flywheel forming organically when individual incentives, network effects, and product value align unexpectedly.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO6",
+      "name": "Gestalt Integration",
+      "definition": "Perceive and leverage whole patterns rather than isolated components",
+      "example": "Design brand identity where logo, color palette, typography, and voice form coherent unified impression.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO7",
+      "name": "Network Effects",
+      "definition": "Exploit increasing value as user base or connections grow",
+      "example": "Structure community features so member directory, skill-sharing, and local groups become more valuable with each new participant.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO8",
+      "name": "Layered Abstraction",
+      "definition": "Separate concerns into hierarchical levels with clear interfaces between them",
+      "example": "Architect system with presentation, business logic, and data layers isolated for independent modification and testing.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO9",
+      "name": "Interface Contracts",
+      "definition": "Define explicit agreements about data structures and behavior between components",
+      "example": "Specify JSON schemas for partner API to ensure data exchange remains stable across independent evolution.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO10",
+      "name": "Pipeline Orchestration",
+      "definition": "Coordinate sequential stages with explicit handoffs and error handling",
+      "example": "Design nightly batch process as ingest → validate → clean → transform → train → report with retry logic.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO11",
+      "name": "Pattern Composition (Tiling)",
+      "definition": "Combine repeating elements to construct complex structures efficiently",
+      "example": "Build design system from atomic components (buttons, inputs) that compose into molecules (forms) and organisms (checkout flows).",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO12",
+      "name": "Modular Interoperability",
+      "definition": "Ensure independent components work together through standardized connections",
+      "example": "Design analytics modules to accept common event schema, enabling mix-and-match reporting without custom integration.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO13",
+      "name": "Cross-Domain Analogy",
+      "definition": "Transfer solution patterns from one domain to solve problems in another",
+      "example": "Apply manufacturing's just-in-time inventory principles to content creation workflow, producing articles closer to publication needs.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO14",
+      "name": "Platformization",
+      "definition": "Extract common capabilities into reusable infrastructure serving multiple use cases",
+      "example": "Convert custom authentication into platform service supporting web app, mobile app, and partner integrations.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO15",
+      "name": "Combinatorial Design",
+      "definition": "Systematically explore option combinations to find optimal configurations",
+      "example": "Test A/B/C pricing × 3 billing periods × 2 feature sets to identify best-converting offer structure.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO16",
+      "name": "System Integration Testing",
+      "definition": "Verify assembled components work correctly together, not just in isolation",
+      "example": "Test complete user journey from signup through payment through first value delivery in production-like environment.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO17",
+      "name": "Orchestration vs Choreography",
+      "definition": "Choose between centralized coordination or distributed peer-to-peer interaction",
+      "example": "Implement order fulfillment as choreography where services react to events rather than central orchestrator managing all steps.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO18",
+      "name": "Knowledge Graphing",
+      "definition": "Represent information as interconnected entities and relationships rather than isolated documents",
+      "example": "Build internal wiki as graph where concepts, people, projects, and decisions link, enabling discovery through relationships.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO19",
+      "name": "Multi-Modal Integration",
+      "definition": "Synthesize information from different sensory or data modalities",
+      "example": "Combine quantitative metrics, qualitative feedback, behavioral logs, and market signals into unified health assessment.",
+      "transformation": "CO"
+    },
+    {
+      "code": "CO20",
+      "name": "Holistic Integration",
+      "definition": "Unify disparate elements into coherent, seamless whole where boundaries dissolve",
+      "example": "Merge onboarding, product education, customer support, and community into continuous integrated member experience.",
+      "transformation": "CO"
+    },
+    {
+      "code": "DE1",
+      "name": "Root Cause Analysis (5 Whys)",
+      "definition": "Iteratively ask why problems occur until fundamental cause emerges",
+      "example": "Throughput declined because rework increased because validation was skipped because deadline pressure exceeded process discipline.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE2",
+      "name": "Factorization",
+      "definition": "Separate multiplicative components to understand relative contribution of each factor",
+      "example": "Express revenue as demand × capacity × conversion to isolate whether growth requires more leads, slots, or optimization.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE3",
+      "name": "Modularization",
+      "definition": "Partition system into self-contained units with minimal interdependencies",
+      "example": "Restructure monolithic program into independent tracks (strength, mobility, nutrition) each manageable separately.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE4",
+      "name": "Layered Breakdown",
+      "definition": "Decompose from system to subsystem to component progressively",
+      "example": "Map service delivery as platform → core services → API endpoints → database queries for targeted troubleshooting.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE5",
+      "name": "Dimensional Reduction",
+      "definition": "Focus on most informative variables while discarding noise or redundancy",
+      "example": "Condense dashboard from 47 metrics to 8 key indicators that capture essential health of business.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE6",
+      "name": "Taxonomy/Classification",
+      "definition": "Organize entities into hierarchical categories based on shared properties",
+      "example": "Classify support tickets into technical, billing, education, feature request for routing and pattern analysis.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE7",
+      "name": "Pareto Decomposition (80/20)",
+      "definition": "Identify vital few drivers producing most impact versus trivial many",
+      "example": "Discover 3 SKUs generating 75% of revenue, enabling focused inventory and marketing optimization.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE8",
+      "name": "Work Breakdown Structure",
+      "definition": "Hierarchically divide project into deliverable-oriented components with clear ownership",
+      "example": "Decompose product launch into marketing, engineering, operations, legal branches, each with sub-tasks and owners.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE9",
+      "name": "Signal Separation",
+      "definition": "Distinguish meaningful patterns from random variation or confounding factors",
+      "example": "Isolate seasonal trends from promotion effects from organic growth in sales data using time series decomposition.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE10",
+      "name": "Abstraction Laddering",
+      "definition": "Move up and down conceptual hierarchy to find appropriate solution level",
+      "example": "Reframe increase trial signups as reduce friction (up) or simplify form fields (down) depending on insight needs.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE11",
+      "name": "Scope Delimitation",
+      "definition": "Define precise boundaries of what is included versus excluded from consideration",
+      "example": "Limit analysis to domestic market, active users, past six months, excluding pilots and enterprise contracts.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE12",
+      "name": "Constraint Isolation",
+      "definition": "Identify specific limiting factor preventing performance improvement",
+      "example": "Determine throughput bounded by database connections, not server CPU, focusing optimization efforts appropriately.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE13",
+      "name": "Failure Mode Analysis (FMEA)",
+      "definition": "Enumerate potential failure points with severity, likelihood, and detectability ratings",
+      "example": "List payment processor outage, inventory stock-out, delivery delay with criticality scores to prioritize safeguards.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE14",
+      "name": "Variable Control & Isolation",
+      "definition": "Hold factors constant to measure single variable's causal impact",
+      "example": "Test new algorithm by fixing traffic source, user cohort, and time period while varying only recommendation engine.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE15",
+      "name": "Decision Tree Expansion",
+      "definition": "Map choices and their consequences as branching paths",
+      "example": "Structure pricing strategy as acquire customer → discount tier decision → retention outcome tree to evaluate paths.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE16",
+      "name": "Hypothesis Disaggregation",
+      "definition": "Break compound claim into testable sub-hypotheses",
+      "example": "Split new design will increase engagement into separate tests of comprehension, navigation, and feature adoption.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE17",
+      "name": "Orthogonalization",
+      "definition": "Ensure factors vary independently without correlation or interdependence",
+      "example": "Design A/B test with independent variations in headline, image, and call-to-action for clean attribution.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE18",
+      "name": "Scenario Decomposition",
+      "definition": "Partition future possibilities into discrete, mutually exclusive scenarios",
+      "example": "Plan for high-growth, steady-state, and contraction scenarios separately with distinct strategic responses.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE19",
+      "name": "Critical Path Unwinding",
+      "definition": "Trace longest sequence of dependent tasks determining minimum project duration",
+      "example": "Identify legal review → security audit → compliance certification chain as immovable timeline constraint.",
+      "transformation": "DE"
+    },
+    {
+      "code": "DE20",
+      "name": "Partition-and-Conquer",
+      "definition": "Divide problem into independent subproblems solvable separately then combined",
+      "example": "Split database migration into schema conversion, data transfer, and application cutover as parallel workstreams.",
+      "transformation": "DE"
+    },
+    {
+      "code": "RE1",
+      "name": "Recursive Improvement (Kaizen)",
+      "definition": "Continuously refine process through small, frequent enhancements",
+      "example": "Hold weekly retrospective to identify one process friction point and implement fix, compounding improvements.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE2",
+      "name": "Feedback Loops",
+      "definition": "Create mechanisms where system outputs influence future inputs",
+      "example": "Implement churn alerts that trigger retention outreach, which reduces future churn, strengthening the feedback cycle.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE3",
+      "name": "Meta-Learning (Learn-to-Learn)",
+      "definition": "Improve the process of learning itself, not just domain knowledge",
+      "example": "After each training program, evaluate what made learning effective and refine training methodology accordingly.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE4",
+      "name": "Nested Narratives",
+      "definition": "Structure information as stories within stories for depth and memorability",
+      "example": "Present case study (story) containing tactical choices (nested stories) each illustrating broader principles (framing story).",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE5",
+      "name": "Fractal Reasoning",
+      "definition": "Recognize self-similar patterns repeating across different scales",
+      "example": "Observe daily stand-up, weekly review, quarterly planning exhibiting same rhythm of sync, reflect, adjust pattern.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE6",
+      "name": "Recursive Framing",
+      "definition": "Apply mental models to the process of selecting mental models",
+      "example": "Use decision tree (DE15) to choose between decision tree and scenario planning for strategic decisions.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE7",
+      "name": "Self-Referential Logic",
+      "definition": "Create systems that monitor, measure, or modify themselves",
+      "example": "Build telemetry infrastructure that tracks its own reliability, automatically adjusting monitoring thresholds based on learned patterns.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE8",
+      "name": "Bootstrapping",
+      "definition": "Build capability using currently available resources, then use that to build more",
+      "example": "Start with manual process, automate most painful step, use time saved to automate next step.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE9",
+      "name": "Iterative Prototyping",
+      "definition": "Cycle rapidly through build-test-learn loops with increasing fidelity",
+      "example": "Ship two-week gait assessment pilot, gather feedback, refine protocol, expand to four weeks, repeat.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE10",
+      "name": "Compounding Cycles",
+      "definition": "Design systems where gains reinforce future gains exponentially",
+      "example": "Grow content library → improve SEO → drive more traffic → generate more content ideas → expand library.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE11",
+      "name": "Calibration Loops",
+      "definition": "Repeatedly check predictions against outcomes to improve forecasting accuracy",
+      "example": "Compare estimated task durations to actual completion times monthly, adjusting future estimates based on error patterns.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE12",
+      "name": "Bayesian Updating in Practice",
+      "definition": "Continuously revise beliefs as new evidence arrives, weighting by reliability",
+      "example": "Update conversion rate estimates after each campaign, incorporating both prior experience and latest results.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE13",
+      "name": "Gradient Descent Heuristic",
+      "definition": "Iteratively adjust toward improvement, even without perfect knowledge of optimal direction",
+      "example": "Experiment with pricing in small increments, moving toward revenue-maximizing point through successive tests.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE14",
+      "name": "Spiral Learning",
+      "definition": "Revisit concepts at increasing depth, building on previous understanding",
+      "example": "Teach strategy fundamentals in onboarding, revisit with case studies quarterly, culminate in strategic planning facilitation.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE15",
+      "name": "Convergence-Divergence Cycling",
+      "definition": "Alternate between expanding possibilities and narrowing to decisions",
+      "example": "Brainstorm features broadly (diverge), evaluate feasibility (converge), explore top three deeply (diverge), select one (converge).",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE16",
+      "name": "Retrospective→Prospective Loop",
+      "definition": "Use systematic reflection on past to inform future planning",
+      "example": "Conduct project post-mortem, extract learnings, incorporate into next project's kickoff planning.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE17",
+      "name": "Versioning & Diff",
+      "definition": "Track changes over time and compare versions to understand evolution",
+      "example": "Version control documents, policies, and models to identify what changed, why, and with what effect.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE18",
+      "name": "Anti-Catastrophic Forgetting",
+      "definition": "Preserve critical knowledge while adapting to new information",
+      "example": "When retraining recommendation model, maintain performance on established use cases while improving on new patterns.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE19",
+      "name": "Auto-Refactor",
+      "definition": "Systematically improve system structure without changing external behavior",
+      "example": "Schedule regular code refactoring sprints to reduce technical debt, improving maintainability for future development.",
+      "transformation": "RE"
+    },
+    {
+      "code": "RE20",
+      "name": "Recursive Governance (Guardrails that Learn)",
+      "definition": "Establish rules that adapt based on their own effectiveness",
+      "example": "Implement content moderation policies that adjust thresholds based on false positive and false negative rates.",
+      "transformation": "RE"
+    },
+    {
+      "code": "SY1",
+      "name": "Leverage Points",
+      "definition": "Identify intervention points where small changes produce disproportionate effects",
+      "example": "Shift default option from opt-in to opt-out for newsletter, dramatically increasing engagement with minimal effort.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY2",
+      "name": "System Boundaries",
+      "definition": "Define what is inside versus outside system scope for analysis or design",
+      "example": "Clarify whether data governance includes partner systems or stops at API boundary to determine responsibility.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY3",
+      "name": "Stocks & Flows",
+      "definition": "Distinguish accumulations from rates of change affecting them",
+      "example": "Track active member stock with new join flow and churn flow to understand growth dynamics and intervention points.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY4",
+      "name": "Requisite Variety",
+      "definition": "Match control system's complexity to system being controlled",
+      "example": "Develop triage playbooks categorized by incident type, severity, and context rather than one-size-fits-all response.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY5",
+      "name": "Systems Archetypes",
+      "definition": "Recognize recurring dynamic patterns across different domains",
+      "example": "Identify shifting the burden pattern where quick fixes undermine fundamental solutions, perpetuating problems.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY6",
+      "name": "Feedback Structure Mapping",
+      "definition": "Diagram causal loops showing how variables influence each other",
+      "example": "Map how quality improves retention, which increases resources, which enables quality investment, creating reinforcing loop.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY7",
+      "name": "Path Dependence",
+      "definition": "Acknowledge how early decisions constrain future options through accumulated consequences",
+      "example": "Recognize initial technology choices now lock in vendor ecosystem, affecting all subsequent architecture decisions.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY8",
+      "name": "Homeostasis/Dynamic Equilibrium",
+      "definition": "Understand self-regulating mechanisms maintaining stable states despite disturbances",
+      "example": "Design recovery rules that automatically scale infrastructure during traffic spikes, then scale back down.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY9",
+      "name": "Phase Transitions & Tipping Points",
+      "definition": "Identify thresholds where gradual changes produce sudden qualitative shifts",
+      "example": "Recognize 40% referral rate as tipping point triggering organic growth that sustains without paid acquisition.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY10",
+      "name": "Causal Loop Diagrams",
+      "definition": "Visualize circular cause-effect relationships with reinforcing and balancing dynamics",
+      "example": "Diagram wait time → satisfaction → reviews → demand → wait time loop before adding capacity.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY11",
+      "name": "Governance Patterns",
+      "definition": "Design decision rights, accountability structures, and coordination mechanisms",
+      "example": "Establish RACI matrix defining who is Responsible, Accountable, Consulted, Informed for cross-functional initiatives.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY12",
+      "name": "Protocol/Interface Standards",
+      "definition": "Specify rules for interaction enabling coordination without central control",
+      "example": "Define REST API standards allowing independent team services to communicate without coordination overhead.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY13",
+      "name": "Incentive Architecture",
+      "definition": "Design reward and penalty structures aligning individual actions with system goals",
+      "example": "Structure sales compensation to reward customer lifetime value, not just deal size, reducing churn from poor fit.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY14",
+      "name": "Risk & Resilience Engineering",
+      "definition": "Build systems that fail gracefully and recover automatically",
+      "example": "Implement circuit breakers that isolate failing services, preventing cascading failures across dependent systems.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY15",
+      "name": "Multi-Scale Alignment",
+      "definition": "Ensure strategy, operations, and execution cohere across organizational levels",
+      "example": "Verify individual OKRs roll up to team goals, which support division strategy, which serves company mission.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY16",
+      "name": "Ecosystem Strategy",
+      "definition": "Position organization within network of partners, competitors, and stakeholders",
+      "example": "Develop platform that attracts third-party integrations, creating ecosystem value beyond internal capabilities.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY17",
+      "name": "Policy Feedbacks",
+      "definition": "Anticipate how rules shape behavior, which creates conditions affecting future rules",
+      "example": "Predict expense policy tightening will drive shadow spending workarounds, undermining both compliance and efficiency.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY18",
+      "name": "Measurement & Telemetry",
+      "definition": "Instrument systems to capture state, changes, and anomalies for informed response",
+      "example": "Deploy monitoring that tracks error rates, latency, throughput, and resource utilization across service mesh.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY19",
+      "name": "Meta-Model Selection",
+      "definition": "Choose appropriate framework or tool for specific problem characteristics",
+      "example": "Select between financial modeling, simulation, and scenario planning based on uncertainty type and decision stakes.",
+      "transformation": "SY"
+    },
+    {
+      "code": "SY20",
+      "name": "Systems-of-Systems Coordination",
+      "definition": "Manage interactions between independent systems with emergent behaviors",
+      "example": "Coordinate across supply chain, inventory, logistics, and fulfillment systems each with own optimization but requiring global coherence.",
+      "transformation": "SY"
+    }
+  ]
+}

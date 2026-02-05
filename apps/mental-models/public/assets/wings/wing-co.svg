@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="co-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#50C878;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E8B57;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- CO Wing: Connected, bridging, networked -->
+  <path d="M 100 100 L 140 80 Q 160 70 160 90 Q 160 110 140 120 L 100 100 
+           L 60 120 Q 40 110 40 90 Q 40 70 60 80 L 100 100 Z" 
+        fill="url(#co-gradient)" 
+        opacity="0.9"/>
+  
+  <!-- Connection nodes -->
+  <circle cx="100" cy="100" r="6" fill="#50C878"/>
+  <circle cx="60" cy="80" r="4" fill="#50C878" opacity="0.7"/>
+  <circle cx="140" cy="80" r="4" fill="#50C878" opacity="0.7"/>
+  
+  <!-- Connection lines -->
+  <line x1="100" y1="100" x2="60" y2="80" stroke="#50C878" stroke-width="2" opacity="0.4"/>
+  <line x1="100" y1="100" x2="140" y2="80" stroke="#50C878" stroke-width="2" opacity="0.4"/>
+</svg>

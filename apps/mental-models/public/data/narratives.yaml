@@ -1,0 +1,539 @@
+# narratives.yaml
+metadata:
+  version: '1.0.0'
+  last_updated: '2025-10-17'
+  schema_version: '1.0'
+  description: 'Core cognitive narratives for the Hummbl framework'
+  author: 'Hummbl Research Team'
+
+validation:
+  confidence_range: [0.0, 1.0]
+  signal_weight_range: [0.0, 1.0]
+  required_fields:
+    ['narrative_id', 'title', 'summary', 'confidence', 'provenance_hash', 'evidence_quality']
+  id_pattern: '^NAR-HUMMBL-[A-Z]+$'
+  evidence_quality_grades: ['A', 'B', 'C']
+
+narratives:
+  - narrative_id: NAR-HUMMBL-PERSPECTIVE
+    version: '1.0.0'
+    provenance_hash: 'sha256:a7f3c9e2d1b8f4a6e9c3d7b2f1a8e4c6d9b3f7a2e1c8d4b6f9a3e7c2d1b8f4a6'
+    evidence_quality: 'A'
+    title: 'Perspective / Identity'
+    summary: 'Frame Semantics and construction grammar support framing and perspective elicitation.'
+    category: 'perspective'
+    tags: ['cognitive', 'linguistic', 'frame-semantics', 'identity']
+    domain: ['linguistics', 'cognitive-science', 'semiotics']
+
+    linked_signals:
+      - signal_id: 'SIG-FRAME-SHIFT'
+        signal_type: 'linguistic'
+        weight: 0.88
+        context: 'frame-based reasoning and perspective shifts'
+      - signal_id: 'SIG-PRONOUN-USE'
+        signal_type: 'linguistic'
+        weight: 0.82
+        context: 'identity markers in discourse'
+
+    citations:
+      - author: 'Fillmore, C.J.'
+        year: 1976
+        title: 'Frame Semantics and the nature of language'
+        source: 'Annals of the New York Academy of Sciences'
+      - author: 'Fillmore, C.J.'
+        year: 1982
+        title: 'Frame Semantics'
+        source: 'Linguistics in the Morning Calm'
+      - author: 'Boas, H.C.'
+        year: 2021
+        title: 'Construction Grammar & Frame Semantics'
+        source: 'Draft manuscript'
+
+    elicitation_methods:
+      - method: 'frame interviews'
+        duration: '20-30 minutes'
+        difficulty: 'medium'
+      - method: 'semantic priming'
+        duration: '15-20 minutes'
+        difficulty: 'low'
+      - method: 'eye-tracking'
+        duration: '30-45 minutes'
+        difficulty: 'high'
+
+    complexity:
+      cognitive_load: 'medium'
+      time_to_elicit: '20-30 minutes'
+      expertise_required: 'intermediate'
+
+    relationships:
+      - type: 'informs'
+        target: 'NAR-HUMMBL-INVERSION'
+        description: 'Perspective shifts enable inversion reasoning'
+      - type: 'uses'
+        target: 'NAR-HUMMBL-COMPOSITION'
+        description: 'Frames are composed from semantic primitives'
+
+    examples:
+      - scenario: 'Political discourse analysis'
+        application: 'Identifying framing strategies in campaign speeches'
+        outcome: 'Detect perspective shifts and identity positioning'
+      - scenario: 'Brand positioning'
+        application: 'Understanding how companies frame their value proposition'
+        outcome: 'Map brand identity across different contexts'
+
+    related_frameworks:
+      - 'Cognitive Linguistics (Lakoff & Johnson)'
+      - 'Conceptual Metaphor Theory'
+      - 'Construction Grammar (Goldberg)'
+
+    confidence: 0.92
+
+    changelog:
+      - version: '1.0.0'
+        date: '2025-10-17'
+        changes: 'Initial structured version with full metadata'
+
+  - narrative_id: NAR-HUMMBL-INVERSION
+    version: '1.0.0'
+    provenance_hash: 'sha256:b8e4d0f3c2a9e5b7d0c4e8a3f2b9d6c1e8a4f7b3c0d9e6a2f8c5d1b7e4a9c3f0'
+    evidence_quality: 'A'
+    title: 'Inversion'
+    summary: 'Classical inversion and recursion-inversion links support adversarial and counterfactual analysis.'
+    category: 'transformation'
+    tags: ['logic', 'adversarial', 'counterfactual', 'opposition']
+    domain: ['logic', 'cognitive-science', 'argumentation']
+
+    linked_signals:
+      - signal_id: 'SIG-NEGATION'
+        signal_type: 'logical'
+        weight: 0.91
+        context: 'logical negation and opposition'
+      - signal_id: 'SIG-COUNTERFACTUAL'
+        signal_type: 'linguistic'
+        weight: 0.85
+        context: 'counterfactual reasoning markers'
+      - signal_id: 'SIG-ADVERSARIAL'
+        signal_type: 'argumentative'
+        weight: 0.83
+        context: 'adversarial stance detection'
+
+    citations:
+      - author: 'Aristotle'
+        year: '~350 BCE'
+        title: 'Square of Opposition'
+        source: 'De Interpretatione'
+      - author: 'Hauser, M.D., Chomsky, N., & Fitch, W.T.'
+        year: 2002
+        title: 'The faculty of language: What is it, who has it, and how did it evolve?'
+        source: 'Science, 298(5598)'
+      - author: 'Coolidge, F.L. & Overmann, K.A.'
+        year: 2012
+        title: 'Numerosity, recursion, and the emergence of a numeral system'
+        source: 'Current Anthropology'
+
+    elicitation_methods:
+      - method: 'logical inversion tasks'
+        duration: '15-25 minutes'
+        difficulty: 'medium'
+      - method: 'argument transformation'
+        duration: '20-30 minutes'
+        difficulty: 'high'
+      - method: 'counterfactual scenario generation'
+        duration: '25-35 minutes'
+        difficulty: 'high'
+
+    complexity:
+      cognitive_load: 'high'
+      time_to_elicit: '20-30 minutes'
+      expertise_required: 'advanced'
+
+    relationships:
+      - type: 'inverse_of'
+        target: 'NAR-HUMMBL-PERSPECTIVE'
+        description: 'Inversion challenges established perspectives'
+      - type: 'uses'
+        target: 'NAR-HUMMBL-RECURSION'
+        description: 'Recursive inversion for nested counterfactuals'
+
+    examples:
+      - scenario: 'Red team security analysis'
+        application: 'Inverting defensive assumptions to find vulnerabilities'
+        outcome: 'Identify attack vectors through adversarial thinking'
+      - scenario: 'Strategic planning'
+        application: 'Counterfactual scenario modeling'
+        outcome: 'Explore alternative futures and contingencies'
+      - scenario: 'Debate preparation'
+        application: 'Generating counter-arguments'
+        outcome: 'Anticipate and prepare for opposing positions'
+
+    related_frameworks:
+      - 'Modal Logic'
+      - 'Counterfactual Reasoning (Lewis)'
+      - 'Adversarial Machine Learning'
+
+    confidence: 0.88
+
+    changelog:
+      - version: '1.0.0'
+        date: '2025-10-17'
+        changes: 'Initial structured version with full metadata'
+
+  - narrative_id: NAR-HUMMBL-COMPOSITION
+    version: '1.0.0'
+    provenance_hash: 'sha256:c9f5e1a4d3b0c6e8a2f7d9b4e1c8a5f3d0b7e4a9c6f2d8b5e1a7c4f0d9b3e6a2'
+    evidence_quality: 'A'
+    title: 'Composition'
+    summary: 'Compositionality principles underpin building complex mental models from primitives.'
+    category: 'construction'
+    tags: ['compositionality', 'mental-models', 'synthesis', 'building']
+    domain: ['cognitive-science', 'linguistics', 'philosophy']
+
+    linked_signals:
+      - signal_id: 'SIG-CONJUNCTION'
+        signal_type: 'linguistic'
+        weight: 0.87
+        context: 'combining elements with conjunctions'
+      - signal_id: 'SIG-EMBEDDING'
+        signal_type: 'syntactic'
+        weight: 0.89
+        context: 'embedded clauses and nested structures'
+      - signal_id: 'SIG-MODIFIERS'
+        signal_type: 'linguistic'
+        weight: 0.84
+        context: 'compositional modification patterns'
+
+    citations:
+      - author: 'Frege, G.'
+        year: 1892
+        title: 'On Sense and Reference'
+        source: 'Zeitschrift für Philosophie und philosophische Kritik'
+      - author: 'Johnson-Laird, P.N.'
+        year: 1983
+        title: 'Mental Models: Towards a Cognitive Science of Language, Inference, and Consciousness'
+        source: 'Harvard University Press'
+      - author: 'Partee, B.H.'
+        year: 1984
+        title: 'Compositionality'
+        source: 'Varieties of Formal Semantics'
+
+    elicitation_methods:
+      - method: 'compositional puzzles'
+        duration: '15-20 minutes'
+        difficulty: 'medium'
+      - method: 'sentence construction tasks'
+        duration: '10-15 minutes'
+        difficulty: 'low'
+      - method: 'graph model building'
+        duration: '25-35 minutes'
+        difficulty: 'medium'
+
+    complexity:
+      cognitive_load: 'medium'
+      time_to_elicit: '15-25 minutes'
+      expertise_required: 'intermediate'
+
+    relationships:
+      - type: 'inverse_of'
+        target: 'NAR-HUMMBL-DECOMPOSITION'
+        description: 'Composition builds what decomposition breaks down'
+      - type: 'uses'
+        target: 'NAR-HUMMBL-RECURSION'
+        description: 'Recursive composition for hierarchical structures'
+      - type: 'enables'
+        target: 'NAR-HUMMBL-METASYSTEMS'
+        description: 'Composed models become meta-system components'
+
+    examples:
+      - scenario: 'Software architecture design'
+        application: 'Composing microservices into larger systems'
+        outcome: 'Build scalable, modular architectures'
+      - scenario: 'Narrative construction'
+        application: 'Building complex stories from plot primitives'
+        outcome: 'Create coherent multi-threaded narratives'
+      - scenario: 'Product design'
+        application: 'Combining features into integrated solutions'
+        outcome: 'Design holistic user experiences'
+
+    related_frameworks:
+      - 'Compositional Semantics (Montague)'
+      - 'Mental Models Theory (Johnson-Laird)'
+      - 'Conceptual Blending (Fauconnier & Turner)'
+
+    confidence: 0.90
+
+    changelog:
+      - version: '1.0.0'
+        date: '2025-10-17'
+        changes: 'Initial structured version with full metadata'
+
+  - narrative_id: NAR-HUMMBL-DECOMPOSITION
+    version: '1.0.0'
+    provenance_hash: 'sha256:d0a6f2b5e8c1d7a4f9b3e6c2d8a5f1b7e4c9d6a3f0b8e5c2d9a6f3b0e7c4d1a8'
+    evidence_quality: 'A'
+    title: 'Decomposition'
+    summary: 'Hierarchical task analysis and human problem solving support task breakdown and protocol analysis.'
+    category: 'analysis'
+    tags: ['decomposition', 'task-analysis', 'problem-solving', 'hierarchy']
+    domain: ['cognitive-science', 'human-factors', 'systems-engineering']
+
+    linked_signals:
+      - signal_id: 'SIG-SUBTASK'
+        signal_type: 'structural'
+        weight: 0.90
+        context: 'hierarchical task breakdown markers'
+      - signal_id: 'SIG-SEQUENCE'
+        signal_type: 'temporal'
+        weight: 0.86
+        context: 'sequential ordering of components'
+      - signal_id: 'SIG-DEPENDENCY'
+        signal_type: 'relational'
+        weight: 0.88
+        context: 'dependency relationships between parts'
+
+    citations:
+      - author: 'Stanton, N.A., Salmon, P.M., Rafferty, L.A., Walker, G.H., Baber, C., & Jenkins, D.P.'
+        year: 2013
+        title: 'Human Factors Methods: A Practical Guide for Engineering and Design'
+        source: 'Ashgate Publishing'
+      - author: 'Newell, A. & Simon, H.A.'
+        year: 1972
+        title: 'Human Problem Solving'
+        source: 'Prentice-Hall'
+      - author: 'Annett, J.'
+        year: 2003
+        title: 'Hierarchical Task Analysis'
+        source: 'Handbook of Cognitive Task Design'
+
+    elicitation_methods:
+      - method: 'task breakdown interviews'
+        duration: '30-45 minutes'
+        difficulty: 'medium'
+      - method: 'protocol analysis'
+        duration: '45-60 minutes'
+        difficulty: 'high'
+      - method: 'think-aloud sessions'
+        duration: '20-30 minutes'
+        difficulty: 'medium'
+
+    complexity:
+      cognitive_load: 'medium'
+      time_to_elicit: '30-45 minutes'
+      expertise_required: 'intermediate'
+
+    relationships:
+      - type: 'inverse_of'
+        target: 'NAR-HUMMBL-COMPOSITION'
+        description: 'Decomposition analyzes what composition builds'
+      - type: 'uses'
+        target: 'NAR-HUMMBL-RECURSION'
+        description: 'Recursive decomposition for nested hierarchies'
+      - type: 'informs'
+        target: 'NAR-HUMMBL-METASYSTEMS'
+        description: 'Decomposed models reveal system structure'
+
+    examples:
+      - scenario: 'Software debugging'
+        application: 'Breaking down complex bugs into root causes'
+        outcome: 'Isolate and fix specific failure points'
+      - scenario: 'Process optimization'
+        application: 'Decomposing workflows to identify bottlenecks'
+        outcome: 'Streamline operations and reduce waste'
+      - scenario: 'Learning complex skills'
+        application: 'Breaking down expert performance into learnable steps'
+        outcome: 'Create effective training programs'
+
+    related_frameworks:
+      - 'Hierarchical Task Analysis (Annett)'
+      - 'GOMS Model (Card, Moran & Newell)'
+      - 'Problem Space Theory (Newell & Simon)'
+
+    confidence: 0.90
+
+    changelog:
+      - version: '1.0.0'
+        date: '2025-10-17'
+        changes: 'Initial structured version with full metadata'
+
+  - narrative_id: NAR-HUMMBL-RECURSION
+    version: '1.0.0'
+    provenance_hash: 'sha256:e1b7c3d9f6a2e8c5d1b4f7a0e9c6d3b8f5a2e7c4d0b9f6a3e1c8d5b2f9a6e3c0'
+    evidence_quality: 'B'
+    title: 'Recursion'
+    summary: 'Recursion core theories support nested structure generation and recursive reasoning.'
+    category: 'structure'
+    tags: ['recursion', 'nesting', 'self-reference', 'iteration']
+    domain: ['linguistics', 'computer-science', 'cognitive-science']
+
+    linked_signals:
+      - signal_id: 'SIG-NESTING'
+        signal_type: 'structural'
+        weight: 0.92
+        context: 'nested syntactic structures'
+      - signal_id: 'SIG-SELF-REFERENCE'
+        signal_type: 'semantic'
+        weight: 0.87
+        context: 'self-referential expressions'
+      - signal_id: 'SIG-ITERATION'
+        signal_type: 'procedural'
+        weight: 0.85
+        context: 'iterative and recursive patterns'
+
+    citations:
+      - author: 'Hauser, M.D., Chomsky, N., & Fitch, W.T.'
+        year: 2002
+        title: 'The faculty of language: What is it, who has it, and how did it evolve?'
+        source: 'Science, 298(5598)'
+      - author: 'Fitch, W.T.'
+        year: 2010
+        title: "Three meanings of 'recursion': key distinctions for biolinguistics"
+        source: 'The Evolution of Human Language'
+      - author: 'Corballis, M.C.'
+        year: 2011
+        title: 'The Recursive Mind: The Origins of Human Language, Thought, and Civilization'
+        source: 'Princeton University Press'
+
+    elicitation_methods:
+      - method: 'nested sentence generation'
+        duration: '15-20 minutes'
+        difficulty: 'medium'
+      - method: 'recursive pattern completion'
+        duration: '20-25 minutes'
+        difficulty: 'high'
+      - method: 'fractal reasoning tasks'
+        duration: '25-30 minutes'
+        difficulty: 'high'
+
+    complexity:
+      cognitive_load: 'high'
+      time_to_elicit: '20-30 minutes'
+      expertise_required: 'advanced'
+
+    relationships:
+      - type: 'enables'
+        target: 'NAR-HUMMBL-COMPOSITION'
+        description: 'Recursion enables infinite compositional possibilities'
+      - type: 'enables'
+        target: 'NAR-HUMMBL-DECOMPOSITION'
+        description: 'Recursion enables hierarchical decomposition'
+      - type: 'combines_with'
+        target: 'NAR-HUMMBL-INVERSION'
+        description: 'Recursive inversion for nested counterfactuals'
+      - type: 'underlies'
+        target: 'NAR-HUMMBL-METASYSTEMS'
+        description: 'Meta-systems require recursive self-reference'
+
+    examples:
+      - scenario: 'Natural language processing'
+        application: 'Parsing nested syntactic structures'
+        outcome: 'Understand complex sentence meanings'
+      - scenario: 'Algorithm design'
+        application: 'Implementing recursive solutions'
+        outcome: 'Solve problems with self-similar structure'
+      - scenario: 'Organizational analysis'
+        application: 'Modeling nested team hierarchies'
+        outcome: 'Understand multi-level organizational dynamics'
+
+    related_frameworks:
+      - 'Generative Grammar (Chomsky)'
+      - 'Recursive Function Theory'
+      - 'Fractal Geometry (Mandelbrot)'
+
+    confidence: 0.89
+
+    changelog:
+      - version: '1.0.0'
+        date: '2025-10-17'
+        changes: 'Initial structured version with full metadata'
+
+  - narrative_id: NAR-HUMMBL-METASYSTEMS
+    version: '1.0.0'
+    provenance_hash: 'sha256:f2c8d4a0e7b9f5c2d6a3e1b8f4c7d0a9e6b3f2c5d8a1e4b7f0c9d6a3e2b5f8c1'
+    evidence_quality: 'A'
+    title: 'Meta-Systems'
+    summary: 'General systems theory and second-order cybernetics support meta-model mapping and system-level reasoning.'
+    category: 'meta-cognition'
+    tags: ['meta-systems', 'systems-theory', 'cybernetics', 'meta-cognition']
+    domain: ['systems-theory', 'cybernetics', 'cognitive-science']
+
+    linked_signals:
+      - signal_id: 'SIG-META-REFERENCE'
+        signal_type: 'semantic'
+        weight: 0.90
+        context: 'references to models or systems themselves'
+      - signal_id: 'SIG-ABSTRACTION'
+        signal_type: 'conceptual'
+        weight: 0.88
+        context: 'abstraction and generalization markers'
+      - signal_id: 'SIG-FEEDBACK'
+        signal_type: 'systemic'
+        weight: 0.86
+        context: 'feedback loops and circular causality'
+
+    citations:
+      - author: 'von Bertalanffy, L.'
+        year: 1968
+        title: 'General System Theory: Foundations, Development, Applications'
+        source: 'George Braziller'
+      - author: 'von Foerster, H.'
+        year: 1979
+        title: 'Cybernetics of Cybernetics'
+        source: 'Communication and Control in Society'
+      - author: 'Johnson-Laird, P.N.'
+        year: 2006
+        title: 'How We Reason'
+        source: 'Oxford University Press'
+      - author: 'Bateson, G.'
+        year: 1972
+        title: 'Steps to an Ecology of Mind'
+        source: 'Chandler Publishing'
+
+    elicitation_methods:
+      - method: 'meta-model reasoning tasks'
+        duration: '30-40 minutes'
+        difficulty: 'high'
+      - method: 'model-of-model mapping'
+        duration: '35-45 minutes'
+        difficulty: 'high'
+      - method: 'systems dynamics interviews'
+        duration: '40-50 minutes'
+        difficulty: 'high'
+
+    complexity:
+      cognitive_load: 'very high'
+      time_to_elicit: '35-45 minutes'
+      expertise_required: 'expert'
+
+    relationships:
+      - type: 'integrates'
+        target: 'NAR-HUMMBL-COMPOSITION'
+        description: 'Meta-systems compose multiple system models'
+      - type: 'integrates'
+        target: 'NAR-HUMMBL-RECURSION'
+        description: 'Meta-systems use recursive self-reference'
+      - type: 'transcends'
+        target: 'NAR-HUMMBL-PERSPECTIVE'
+        description: 'Meta-systems view perspectives as system components'
+
+    examples:
+      - scenario: 'Enterprise architecture'
+        application: 'Modeling systems of systems'
+        outcome: 'Design coherent multi-system landscapes'
+      - scenario: 'AI alignment research'
+        application: 'Meta-reasoning about AI decision-making'
+        outcome: 'Ensure AI systems reason about their own reasoning'
+      - scenario: 'Organizational learning'
+        application: 'Building learning organizations that reflect on processes'
+        outcome: 'Create adaptive, self-improving organizations'
+
+    related_frameworks:
+      - 'General Systems Theory (von Bertalanffy)'
+      - 'Second-Order Cybernetics (von Foerster)'
+      - 'Autopoiesis (Maturana & Varela)'
+      - 'Systems Thinking (Senge)'
+
+    confidence: 0.91
+
+    changelog:
+      - version: '1.0.0'
+        date: '2025-10-17'
+        changes: 'Initial structured version with full metadata'

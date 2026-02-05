@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HUMMBL Transform Network - D3.js</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background: #0a0a0a;
+      }
+      #graph {
+        width: 100vw;
+        height: 100vh;
+      }
+      .node {
+        cursor: pointer;
+      }
+      .node circle {
+        stroke: #fff;
+        stroke-width: 2px;
+      }
+      .link {
+        stroke: #999;
+        stroke-opacity: 0.6;
+      }
+      .link.bidirectional {
+        stroke-dasharray: 5, 5;
+      }
+      .label {
+        fill: #fff;
+        font-size: 12px;
+        pointer-events: none;
+      }
+      #legend {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 8px;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="graph"></div>
+    <div id="legend">
+      <h3>HUMMBL Transform Network</h3>
+      <p>Nodes: 6 | Edges: 16</p>
+      <p>Density: 0.5</p>
+    </div>
+    <script>
+      const data = {
+        metadata: {
+          generated_at: '2025-10-17T09:54:41-04:00',
+          source: 'narratives.yaml',
+          version: '1.0.0',
+          description: 'Auto-generated adjacency file for HUMMBL Transform Network visualization',
+          total_narratives: 6,
+          total_edges: 15,
+        },
+        nodes: [
+          {
+            id: 'NAR-HUMMBL-PERSPECTIVE',
+            label: 'Perspective / Identity',
+            category: 'perspective',
+            confidence: 0.92,
+            evidence_quality: 'A',
+            provenance_hash:
+              'sha256:a7f3c9e2d1b8f4a6e9c3d7b2f1a8e4c6d9b3f7a2e1c8d4b6f9a3e7c2d1b8f4a6',
+            complexity: 'medium',
+            domain: ['linguistics', 'cognitive-science', 'semiotics'],
+          },
+          {
+            id: 'NAR-HUMMBL-INVERSION',
+            label: 'Inversion',
+            category: 'transformation',
+            confidence: 0.88,
+            evidence_quality: 'A',
+            provenance_hash:
+              'sha256:b8e4d0f3c2a9e5b7d0c4e8a3f2b9d6c1e8a4f7b3c0d9e6a2f8c5d1b7e4a9c3f0',
+            complexity: 'high',
+            domain: ['logic', 'cognitive-science', 'argumentation'],
+          },
+          {
+            id: 'NAR-HUMMBL-COMPOSITION',
+            label: 'Composition',
+            category: 'construction',
+            confidence: 0.9,
+            evidence_quality: 'A',
+            provenance_hash:
+              'sha256:c9f5e1a4d3b0c6e8a2f7d9b4e1c8a5f3d0b7e4a9c6f2d8b5e1a7c4f0d9b3e6a2',
+            complexity: 'medium',
+            domain: ['cognitive-science', 'linguistics', 'philosophy'],
+          },
+          {
+            id: 'NAR-HUMMBL-DECOMPOSITION',
+            label: 'Decomposition',
+            category: 'analysis',
+            confidence: 0.9,
+            evidence_quality: 'A',
+            provenance_hash:
+              'sha256:d0a6f2b5e8c1d7a4f9b3e6c2d8a5f1b7e4c9d6a3f0b8e5c2d9a6f3b0e7c4d1a8',
+            complexity: 'medium',
+            domain: ['cognitive-science', 'human-factors', 'systems-engineering'],
+          },
+          {
+            id: 'NAR-HUMMBL-RECURSION',
+            label: 'Recursion',
+            category: 'structure',
+            confidence: 0.89,
+            evidence_quality: 'B',
+            provenance_hash:
+              'sha256:e1b7c3d9f6a2e8c5d1b4f7a0e9c6d3b8f5a2e7c4d0b9f6a3e1c8d5b2f9a6e3c0',
+            complexity: 'high',
+            domain: ['linguistics', 'computer-science', 'cognitive-science'],
+          },
+          {
+            id: 'NAR-HUMMBL-METASYSTEMS',
+            label: 'Meta-Systems',
+            category: 'meta-cognition',
+            confidence: 0.91,
+            evidence_quality: 'A',
+            provenance_hash:
+              'sha256:f2c8d4a0e7b9f5c2d6a3e1b8f4c7d0a9e6b3f2c5d8a1e4b7f0c9d6a3e2b5f8c1',
+            complexity: 'very high',
+            domain: ['systems-theory', 'cybernetics', 'cognitive-science'],
+          },
+        ],
+        edges: [
+          {
+            source: 'NAR-HUMMBL-PERSPECTIVE',
+            target: 'NAR-HUMMBL-INVERSION',
+            type: 'informs',
+            description: 'Perspective shifts enable inversion reasoning',
+            weight: 0.85,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-PERSPECTIVE',
+            target: 'NAR-HUMMBL-COMPOSITION',
+            type: 'uses',
+            description: 'Frames are composed from semantic primitives',
+            weight: 0.8,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-INVERSION',
+            target: 'NAR-HUMMBL-PERSPECTIVE',
+            type: 'inverse_of',
+            description: 'Inversion challenges established perspectives',
+            weight: 0.9,
+            bidirectional: true,
+          },
+          {
+            source: 'NAR-HUMMBL-INVERSION',
+            target: 'NAR-HUMMBL-RECURSION',
+            type: 'uses',
+            description: 'Recursive inversion for nested counterfactuals',
+            weight: 0.82,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-COMPOSITION',
+            target: 'NAR-HUMMBL-DECOMPOSITION',
+            type: 'inverse_of',
+            description: 'Composition builds what decomposition breaks down',
+            weight: 0.95,
+            bidirectional: true,
+          },
+          {
+            source: 'NAR-HUMMBL-COMPOSITION',
+            target: 'NAR-HUMMBL-RECURSION',
+            type: 'uses',
+            description: 'Recursive composition for hierarchical structures',
+            weight: 0.88,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-COMPOSITION',
+            target: 'NAR-HUMMBL-METASYSTEMS',
+            type: 'enables',
+            description: 'Composed models become meta-system components',
+            weight: 0.83,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-DECOMPOSITION',
+            target: 'NAR-HUMMBL-RECURSION',
+            type: 'uses',
+            description: 'Recursive decomposition for nested hierarchies',
+            weight: 0.87,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-DECOMPOSITION',
+            target: 'NAR-HUMMBL-METASYSTEMS',
+            type: 'informs',
+            description: 'Decomposed models reveal system structure',
+            weight: 0.81,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-RECURSION',
+            target: 'NAR-HUMMBL-COMPOSITION',
+            type: 'enables',
+            description: 'Recursion enables infinite compositional possibilities',
+            weight: 0.92,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-RECURSION',
+            target: 'NAR-HUMMBL-DECOMPOSITION',
+            type: 'enables',
+            description: 'Recursion enables hierarchical decomposition',
+            weight: 0.91,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-RECURSION',
+            target: 'NAR-HUMMBL-INVERSION',
+            type: 'combines_with',
+            description: 'Recursive inversion for nested counterfactuals',
+            weight: 0.84,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-RECURSION',
+            target: 'NAR-HUMMBL-METASYSTEMS',
+            type: 'underlies',
+            description: 'Meta-systems require recursive self-reference',
+            weight: 0.89,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-METASYSTEMS',
+            target: 'NAR-HUMMBL-COMPOSITION',
+            type: 'integrates',
+            description: 'Meta-systems compose multiple system models',
+            weight: 0.86,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-METASYSTEMS',
+            target: 'NAR-HUMMBL-RECURSION',
+            type: 'integrates',
+            description: 'Meta-systems use recursive self-reference',
+            weight: 0.88,
+            bidirectional: false,
+          },
+          {
+            source: 'NAR-HUMMBL-METASYSTEMS',
+            target: 'NAR-HUMMBL-PERSPECTIVE',
+            type: 'transcends',
+            description: 'Meta-systems view perspectives as system components',
+            weight: 0.79,
+            bidirectional: false,
+          },
+        ],
+        network_statistics: {
+          density: 0.5,
+          avg_degree: 5,
+          central_nodes: [
+            {
+              id: 'NAR-HUMMBL-RECURSION',
+              in_degree: 4,
+              out_degree: 4,
+              betweenness_centrality: 'high',
+            },
+            {
+              id: 'NAR-HUMMBL-COMPOSITION',
+              in_degree: 3,
+              out_degree: 3,
+              betweenness_centrality: 'high',
+            },
+            {
+              id: 'NAR-HUMMBL-METASYSTEMS',
+              in_degree: 3,
+              out_degree: 3,
+              betweenness_centrality: 'medium',
+            },
+          ],
+          relationship_types: {
+            inverse_of: 2,
+            uses: 4,
+            enables: 3,
+            informs: 2,
+            integrates: 2,
+            combines_with: 1,
+            underlies: 1,
+            transcends: 1,
+          },
+        },
+        visualization_hints: {
+          layout: 'force-directed',
+          node_size_by: 'confidence',
+          node_color_by: 'category',
+          edge_width_by: 'weight',
+          highlight_bidirectional: true,
+          category_colors: {
+            perspective: '#3B82F6',
+            transformation: '#EF4444',
+            construction: '#10B981',
+            analysis: '#F59E0B',
+            structure: '#8B5CF6',
+            'meta-cognition': '#EC4899',
+          },
+          evidence_quality_opacity: {
+            A: 1,
+            B: 0.8,
+            C: 0.6,
+          },
+        },
+      };
+
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      const svg = d3.select('#graph').append('svg').attr('width', width).attr('height', height);
+
+      const simulation = d3
+        .forceSimulation(data.nodes)
+        .force(
+          'link',
+          d3
+            .forceLink(data.edges)
+            .id((d) => d.id)
+            .distance(150)
+        )
+        .force('charge', d3.forceManyBody().strength(-500))
+        .force('center', d3.forceCenter(width / 2, height / 2));
+
+      const colorScale = d3
+        .scaleOrdinal()
+        .domain(Object.keys(data.visualization_hints.category_colors))
+        .range(Object.values(data.visualization_hints.category_colors));
+
+      const link = svg
+        .append('g')
+        .selectAll('line')
+        .data(data.edges)
+        .enter()
+        .append('line')
+        .attr('class', (d) => 'link' + (d.bidirectional ? ' bidirectional' : ''))
+        .attr('stroke-width', (d) => d.weight * 3);
+
+      const node = svg
+        .append('g')
+        .selectAll('g')
+        .data(data.nodes)
+        .enter()
+        .append('g')
+        .attr('class', 'node')
+        .call(d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended));
+
+      node
+        .append('circle')
+        .attr('r', (d) => 10 + d.confidence * 20)
+        .attr('fill', (d) => colorScale(d.category))
+        .attr(
+          'opacity',
+          (d) => data.visualization_hints.evidence_quality_opacity[d.evidence_quality]
+        );
+
+      node
+        .append('text')
+        .attr('class', 'label')
+        .attr('dx', 15)
+        .attr('dy', 4)
+        .text((d) => d.label);
+
+      simulation.on('tick', () => {
+        link
+          .attr('x1', (d) => d.source.x)
+          .attr('y1', (d) => d.source.y)
+          .attr('x2', (d) => d.target.x)
+          .attr('y2', (d) => d.target.y);
+
+        node.attr('transform', (d) => `translate(${d.x},${d.y})`);
+      });
+
+      function dragstarted(event) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+      }
+
+      function dragged(event) {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+      }
+
+      function dragended(event) {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+      }
+    </script>
+  </body>
+</html>

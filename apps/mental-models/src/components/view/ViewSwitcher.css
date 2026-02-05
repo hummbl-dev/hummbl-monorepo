@@ -1,0 +1,123 @@
+.segmented-control {
+  display: inline-flex;
+  gap: 0.5rem;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  border: 1px solid #e5e7eb;
+  margin: 1rem 0;
+}
+
+.segment {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 0.375rem;
+  min-width: 120px;
+  white-space: nowrap;
+}
+
+.segment:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+.segment:hover:not(.active) {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.segment.active {
+  background-color: white;
+  color: #4b5563;
+  box-shadow:
+    0 1px 2px 0 rgb(0 0 0 / 0.05),
+    0 1px 2px 0 rgb(0 0 0 / 0.05);
+  font-weight: 600;
+}
+
+.segment-badge {
+  margin-left: 0.5rem;
+  background-color: #e5e7eb;
+  color: #4b5563;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.segment.active .segment-badge {
+  background-color: #6366f1;
+  color: white;
+}
+
+.segment-divider {
+  width: 1px;
+  background-color: #e5e7eb;
+  margin: 0.25rem 0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .segmented-control {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .segment {
+    color: #9ca3af;
+  }
+
+  .segment:hover:not(.active) {
+    background-color: #4b5563;
+    color: #e5e7eb;
+  }
+
+  .segment.active {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+
+  .segment-badge {
+    background-color: #4b5563;
+    color: #e5e7eb;
+  }
+
+  .segment.active .segment-badge {
+    background-color: #818cf8;
+  }
+
+  .segment-divider {
+    background-color: #4b5563;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .segmented-control {
+    width: 100%;
+    display: flex;
+  }
+
+  .segment {
+    flex: 1;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .segment-badge {
+    margin-left: 0.25rem;
+    padding: 0.125rem 0.375rem;
+  }
+}

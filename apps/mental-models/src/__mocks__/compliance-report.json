@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "generated_at": "2023-01-01T00:00:00Z",
+    "next_check": "2023-01-01T06:00:00Z",
+    "environment": "test",
+    "commit_sha": "test-sha",
+    "run_id": "test-run"
+  },
+  "summary": {
+    "total_checks": 0,
+    "passed": 0,
+    "failed": 0,
+    "success_rate": 1.0
+  },
+  "checks": []
+}

@@ -1,0 +1,8 @@
+{
+  "build_timestamp": "2025-10-17T18:21:58.504Z",
+  "source_file": "narrative_links.json",
+  "total_nodes": 6,
+  "total_edges": 16,
+  "visualizations": ["network.html", "cytoscape.html", "network.svg"],
+  "build_time_ms": 5
+}
