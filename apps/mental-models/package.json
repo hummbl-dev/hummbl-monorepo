@@ -83,7 +83,7 @@
     "axe-core": "^4.9.1",
     "chokidar": "^5.0.0",
     "chrome-launcher": "^1.1.1",
-    "commander": "^14.0.2",
+    "commander": "^14.0.3",
     "csv-stringify": "^6.6.0",
     "eslint": "^9.39.1",
     "globals": "^16.5.0",
