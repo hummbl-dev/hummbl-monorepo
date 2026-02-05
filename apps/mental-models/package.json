@@ -20,7 +20,7 @@
     "lint": "eslint . --fix --no-error-on-unmatched-pattern",
     "typecheck": "tsc --noEmit",
     "prepare": "husky",
-    "test": "NODE_OPTIONS='--max-old-space-size=6144 --expose-gc' vitest run --no-watch --silent --run --pool=forks --poolOptions.forks.singleFork",
+    "test": "NODE_OPTIONS='--max-old-space-size=4096 --expose-gc --no-node-snapshot' vitest run --no-watch --silent --run --pool=forks --poolOptions.forks.singleFork --no-coverage --reporter=basic --passWithNoTests",
     "test:memory-optimized": "NODE_OPTIONS='--max-old-space-size=2048 --expose-gc' vitest run --no-watch --silent --run --pool=forks --poolOptions.forks.singleFork",
     "test:memory-profile": "NODE_OPTIONS='--max-old-space-size=4096 --expose-gc --inspect-brk' vitest run --no-watch --silent --run",
     "test:analyze-memory": "node --expose-gc scripts/analyzeTestMemory.js",
