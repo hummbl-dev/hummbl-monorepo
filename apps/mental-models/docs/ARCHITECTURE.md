@@ -37,14 +37,15 @@ HUMMBL is a **Base120 mental model framework** delivered as a static React appli
 ## Core Domain Model
 
 ### Base120 Structure
+
 ```typescript
 type TransformationCode = 'P' | 'IN' | 'CO' | 'DE' | 'RE' | 'SY';
 
 interface Model {
-  code: string;              // "P1", "IN3", "SY17"
-  name: string;              // "First Principles Thinking"
+  code: string; // "P1", "IN3", "SY17"
+  name: string; // "First Principles Thinking"
   transformation: TransformationCode;
-  tier: 1 | 2 | 3 | 4;      // Complexity tier
+  tier: 1 | 2 | 3 | 4; // Complexity tier
   category: {
     primary: string;
     secondary: string;
@@ -59,14 +60,15 @@ interface Model {
 
 interface Transformation {
   code: TransformationCode;
-  name: string;              // "Perspective", "Inversion", etc.
+  name: string; // "Perspective", "Inversion", etc.
   description: string;
-  models: Model[];           // 20 models per transformation
-  narrative: string;         // Long-form explanation
+  models: Model[]; // 20 models per transformation
+  narrative: string; // Long-form explanation
 }
 ```
 
 ### Relationships
+
 - **1 HUMMBL Framework** → **6 Transformations** → **120 Models**
 - Each model belongs to exactly one transformation
 - Each model has 1 primary + N secondary categories
@@ -75,6 +77,7 @@ interface Transformation {
 ## Technology Stack
 
 ### Frontend (Current)
+
 - **Framework**: React 18.2.0
 - **Build Tool**: Vite 5.0.0
 - **Language**: TypeScript 5.3.0 (strict mode)
@@ -83,6 +86,7 @@ interface Transformation {
 - **Routing**: React Router (to be added)
 
 ### Infrastructure
+
 - **Hosting**: Vercel (edge CDN)
 - **Domain**: hummbl.io
 - **Deployment**: GitHub Actions → Vercel
@@ -90,6 +94,7 @@ interface Transformation {
 - **Version Control**: GitHub (hummbl-dev organization)
 
 ### Future Stack (API Layer)
+
 - **Runtime**: Node.js or Cloudflare Workers
 - **Framework**: Express or Hono
 - **Database**: PostgreSQL or D1 (for model metadata)
@@ -137,6 +142,7 @@ hummbl-io/
 ## Data Flow Patterns
 
 ### Model Rendering Flow
+
 ```
 User visits /models/P1
     ↓
@@ -154,6 +160,7 @@ User sees P1 model page
 ```
 
 ### Search Flow (Future)
+
 ```
 User types "first principles"
     ↓
@@ -174,6 +181,7 @@ UI displays sorted list
 ## Design Patterns
 
 ### Component Composition
+
 ```typescript
 // ✅ Correct: Composable, reusable
 <ModelCard model={p1}>
@@ -189,6 +197,7 @@ UI displays sorted list
 ```
 
 ### Feature Organization
+
 ```
 features/models/
 ├── components/          # Model-specific UI
@@ -199,6 +208,7 @@ features/models/
 ```
 
 ### Data Loading Strategies
+
 - **Static Data**: JSON files in `/public/models/`
 - **Build-Time**: Generate pages from model ledger
 - **Future API**: Lazy-load on demand, cache aggressively
@@ -206,12 +216,14 @@ features/models/
 ## Scalability Considerations
 
 ### Performance Targets
+
 - **120 Models**: Static site handles this easily
 - **1,000 Users**: Vercel edge CDN (no backend needed)
 - **10,000 Users**: Add API caching, CDN optimization
 - **100,000 Users**: Dedicated API infrastructure, rate limiting
 
 ### Code Splitting
+
 ```typescript
 // Lazy load heavy features
 const FlashcardApp = lazy(() => import('./features/learning/FlashcardApp'));
@@ -219,6 +231,7 @@ const TransformationNarrative = lazy(() => import('./features/transformations/Na
 ```
 
 ### Bundle Optimization
+
 - Tree-shake unused code
 - Use dynamic imports for routes
 - Compress assets (images → WebP, SVG)
@@ -227,12 +240,14 @@ const TransformationNarrative = lazy(() => import('./features/transformations/Na
 ## Security Model
 
 ### Current (Static Site)
+
 - No authentication required
 - All content public
 - No user data stored
 - HTTPS by default (Vercel)
 
 ### Future (API)
+
 - **API Keys**: For programmatic access
 - **Rate Limiting**: Prevent abuse
 - **CORS**: Whitelist allowed origins
@@ -241,12 +256,14 @@ const TransformationNarrative = lazy(() => import('./features/transformations/Na
 ## Monitoring & Observability
 
 ### Current State
+
 - **Logs**: Vercel function logs
 - **Analytics**: None (to be added)
 - **Error Tracking**: None (Sentry recommended)
 - **Performance**: None (Web Vitals recommended)
 
 ### Recommended Stack
+
 ```
 Production Monitoring
 ├── Sentry           # Error tracking, performance
@@ -258,16 +275,19 @@ Production Monitoring
 ## Testing Strategy (When Implemented)
 
 ### Unit Tests (Vitest)
+
 - Model data parsing
 - Utility functions
 - Transformation logic
 
 ### Component Tests (Testing Library)
+
 - ModelCard renders correctly
 - TransformationBadge shows right color
 - Search filtering works
 
 ### E2E Tests (Playwright)
+
 - User can browse all 120 models
 - Flashcard system tracks progress
 - Navigation works across pages
@@ -297,18 +317,21 @@ Live at hummbl.io
 ## Extension Points
 
 ### Adding New Features
+
 1. Create feature directory: `src/features/new-feature/`
 2. Add components, hooks, utils
 3. Export public API: `features/new-feature/index.ts`
 4. Import in parent component
 
 ### Adding New Models
+
 1. Update model ledger CSV
 2. Generate JSON files (automation script)
 3. Create model page (manual or generated)
 4. Add to navigation/search
 
 ### Integrating with External Systems
+
 ```typescript
 // Future: AI Assistant Integration
 import { searchModels } from '@hummbl/api-client';
@@ -316,13 +339,14 @@ import { searchModels } from '@hummbl/api-client';
 const results = await searchModels({
   query: 'decision making',
   transformation: 'P',
-  limit: 5
+  limit: 5,
 });
 ```
 
 ## Known Limitations
 
 ### Current
+
 - ❌ No server-side rendering (static only)
 - ❌ No API (all data client-side)
 - ❌ No test coverage
@@ -330,6 +354,7 @@ const results = await searchModels({
 - ❌ No search functionality
 
 ### Planned Improvements
+
 - ✅ Add API layer (Phase 0 in progress)
 - ✅ Implement testing suite (ready to start)
 - ✅ Add wickedness scorer (designed)

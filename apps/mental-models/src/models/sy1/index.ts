@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 
 /**
  * SY1: Base Synthesis Model
- * 
+ *
  * This model provides foundational synthesis capabilities for combining
  * multiple mental models into cohesive solutions.
  */
@@ -18,7 +18,7 @@ export interface SY1Config {
 }
 
 export interface SynthesisInput {
-  models: any[];  // Array of model outputs to synthesize
+  models: any[]; // Array of model outputs to synthesize
   context?: Record<string, any>;
   options?: {
     depth?: number;
@@ -50,14 +50,10 @@ const DEFAULT_CONFIG: Required<SY1Config> = {
 };
 
 export const createSynthesisModel = (config: SY1Config = {}) => {
-  const {
-    id,
-    name,
-    version,
-    eventEmitter,
-    telemetryEnabled,
-    logger,
-  } = { ...DEFAULT_CONFIG, ...config };
+  const { id, name, version, eventEmitter, telemetryEnabled, logger } = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
 
   /**
    * Synthesize multiple model outputs into a cohesive result
@@ -65,7 +61,7 @@ export const createSynthesisModel = (config: SY1Config = {}) => {
   const synthesize = async (input: SynthesisInput): Promise<SynthesisOutput> => {
     const startTime = Date.now();
     const requestId = uuidv4();
-    
+
     try {
       // Basic validation
       if (!input.models || !Array.isArray(input.models) || input.models.length === 0) {
@@ -90,10 +86,12 @@ export const createSynthesisModel = (config: SY1Config = {}) => {
           modelVersion: version,
           timestamp: new Date().toISOString(),
           executionTimeMs: Date.now() - startTime,
-          telemetry: telemetryEnabled ? {
-            modelCount: input.models.length,
-            contextKeys: input.context ? Object.keys(input.context) : [],
-          } : undefined,
+          telemetry: telemetryEnabled
+            ? {
+                modelCount: input.models.length,
+                contextKeys: input.context ? Object.keys(input.context) : [],
+              }
+            : undefined,
         },
       };
 
@@ -106,8 +104,9 @@ export const createSynthesisModel = (config: SY1Config = {}) => {
 
       return result;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error during synthesis';
-      
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error during synthesis';
+
       // Emit error event
       eventEmitter.emit('synthesisError', {
         requestId,

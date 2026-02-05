@@ -6,12 +6,10 @@ import path from 'path';
 export default defineConfig(({ mode }) => {
   // Load env variables based on the current mode
   const env = loadEnv(mode, process.cwd(), '');
-  
+
   const isProduction = mode === 'production';
-  const sentryPlugin: PluginOption | false = isProduction && 
-    env.VITE_SENTRY_ORG && 
-    env.VITE_SENTRY_PROJECT && 
-    env.VITE_SENTRY_AUTH_TOKEN
+  const sentryPlugin: PluginOption | false =
+    isProduction && env.VITE_SENTRY_ORG && env.VITE_SENTRY_PROJECT && env.VITE_SENTRY_AUTH_TOKEN
       ? sentryVitePlugin({
           org: env.VITE_SENTRY_ORG,
           project: env.VITE_SENTRY_PROJECT,
@@ -26,7 +24,7 @@ export default defineConfig(({ mode }) => {
           },
           sourcemaps: {
             include: [
-              { 
+              {
                 paths: ['dist'],
                 urlPrefix: '~/',
                 ignore: ['node_modules'],
@@ -37,10 +35,7 @@ export default defineConfig(({ mode }) => {
       : false;
 
   return {
-    plugins: [
-      react(),
-      sentryPlugin,
-    ].filter(Boolean),
+    plugins: [react(), sentryPlugin].filter(Boolean),
     build: {
       sourcemap: true, // Source map generation must be turned on for Sentry
     },

@@ -9,7 +9,7 @@ export const DE1_CONSTANTS = {
   MODEL_NAME: 'Functional Partitioning Model',
   MODEL_DESCRIPTION: 'Divides complex systems into functional components with clear boundaries',
   VERSION: '1.0.0',
-  
+
   // Default configuration
   DEFAULT_CONFIG: {
     defaultStrategyId: 'strategy-default',
@@ -19,7 +19,7 @@ export const DE1_CONSTANTS = {
     enableCaching: true,
     cacheTTL: 5 * 60 * 1000, // 5 minutes
   },
-  
+
   // Default partitioning strategies
   DEFAULT_STRATEGIES: [
     {
@@ -28,7 +28,7 @@ export const DE1_CONSTANTS = {
       description: 'Balanced partitioning based on cohesion and coupling',
       criteria: ['cohesion', 'coupling', 'complexity'],
       weights: { cohesion: 0.4, coupling: 0.4, complexity: 0.2 },
-      isDefault: true
+      isDefault: true,
     },
     {
       id: 'strategy-microservices',
@@ -36,7 +36,7 @@ export const DE1_CONSTANTS = {
       description: 'Partitioning optimized for microservices architecture',
       criteria: ['bounded-context', 'business-capability', 'data-ownership'],
       weights: { 'bounded-context': 0.5, 'business-capability': 0.3, 'data-ownership': 0.2 },
-      isDefault: false
+      isDefault: false,
     },
     {
       id: 'strategy-monolith',
@@ -44,21 +44,39 @@ export const DE1_CONSTANTS = {
       description: 'Partitioning optimized for modular monoliths',
       criteria: ['functional-cohesion', 'team-structure', 'deployment-unit'],
       weights: { 'functional-cohesion': 0.6, 'team-structure': 0.2, 'deployment-unit': 0.2 },
-      isDefault: false
-    }
+      isDefault: false,
+    },
   ] as Omit<PartitioningStrategy, 'id'>[],
-  
+
   // Default component types
   COMPONENT_TYPES: [
-    'service', 'module', 'microservice', 'library', 'api-gateway', 
-    'database', 'queue', 'event-bus', 'cache', 'frontend', 'backend'
+    'service',
+    'module',
+    'microservice',
+    'library',
+    'api-gateway',
+    'database',
+    'queue',
+    'event-bus',
+    'cache',
+    'frontend',
+    'backend',
   ],
-  
+
   // Default interface types
   INTERFACE_TYPES: [
-    'REST', 'GraphQL', 'gRPC', 'WebSocket', 'Event', 'Queue', 'Stream', 'RPC', 'CLI', 'File'
+    'REST',
+    'GraphQL',
+    'gRPC',
+    'WebSocket',
+    'Event',
+    'Queue',
+    'Stream',
+    'RPC',
+    'CLI',
+    'File',
   ],
-  
+
   // Default component template
   DEFAULT_COMPONENT: {
     name: '',
@@ -75,10 +93,10 @@ export const DE1_CONSTANTS = {
       createdBy: 'system',
       lastUpdatedBy: 'system',
       version: '1.0.0',
-      tags: []
-    }
+      tags: [],
+    },
   } as Omit<FunctionalComponent, 'id'>,
-  
+
   // Default interface template
   DEFAULT_INTERFACE: {
     name: '',
@@ -86,9 +104,9 @@ export const DE1_CONSTANTS = {
     description: '',
     specification: {},
     required: true,
-    version: '1.0.0'
+    version: '1.0.0',
   } as Omit<ComponentInterface, 'id'>,
-  
+
   // Error messages
   ERRORS: {
     COMPONENT_NOT_FOUND: 'Component not found',
@@ -97,9 +115,9 @@ export const DE1_CONSTANTS = {
     CIRCULAR_DEPENDENCY: 'Circular dependency detected',
     MAX_COMPONENTS_EXCEEDED: 'Maximum number of components exceeded',
     INVALID_PARTITIONING: 'Invalid partitioning parameters',
-    VALIDATION_FAILED: 'Validation failed'
+    VALIDATION_FAILED: 'Validation failed',
   },
-  
+
   // Event names
   EVENTS: {
     COMPONENT_ADDED: 'componentAdded',
@@ -107,9 +125,9 @@ export const DE1_CONSTANTS = {
     COMPONENT_REMOVED: 'componentRemoved',
     BEFORE_PARTITION: 'beforePartition',
     AFTER_PARTITION: 'afterPartition',
-    REFACTORING_SUGGESTED: 'refactoringSuggested'
+    REFACTORING_SUGGESTED: 'refactoringSuggested',
   },
-  
+
   // Default validation rules
   VALIDATION_RULES: [
     {
@@ -121,45 +139,45 @@ export const DE1_CONSTANTS = {
             code: 'missing-name',
             message: 'Component must have a name',
             path: 'name',
-            severity: 'error'
+            severity: 'error',
           });
         }
-        
+
         if (!component.type) {
           errors.push({
             code: 'missing-type',
             message: 'Component must have a type',
             path: 'type',
-            severity: 'error'
+            severity: 'error',
           });
         }
-        
+
         return errors;
-      }
+      },
     },
     {
       id: 'naming-convention',
       validate: (component: any) => {
         const errors = [];
-        
+
         // Check component name follows kebab-case
         if (component.name && !/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(component.name)) {
           errors.push({
             code: 'invalid-name-format',
             message: 'Component name should be in kebab-case (e.g., user-service)',
             path: 'name',
-            severity: 'warning'
+            severity: 'warning',
           });
         }
-        
+
         return errors;
-      }
+      },
     },
     {
       id: 'circular-dependency',
       validate: (component: any, model: any) => {
         const errors: any[] = [];
-        
+
         // This is a simplified check - actual implementation would traverse the dependency graph
         if (component.dependencies) {
           const dependencyIds = component.dependencies.map((d: any) => d.targetId);
@@ -168,16 +186,16 @@ export const DE1_CONSTANTS = {
               code: 'self-dependency',
               message: 'Component cannot depend on itself',
               path: 'dependencies',
-              severity: 'error'
+              severity: 'error',
             });
           }
         }
-        
+
         return errors;
-      }
-    }
+      },
+    },
   ],
-  
+
   // Default refactoring patterns
   REFACTORING_PATTERNS: [
     {
@@ -187,22 +205,18 @@ export const DE1_CONSTANTS = {
       conditions: [
         'component.complexity > 0.7',
         'component.cohesion < 0.5',
-        'component.coupling < 0.3'
+        'component.coupling < 0.3',
       ],
       action: 'extract',
-      priority: 1
+      priority: 1,
     },
     {
       id: 'merge-services',
       name: 'Merge Services',
       description: 'Merge highly coupled services into a single service',
-      conditions: [
-        'coupling > 0.8',
-        'communicationFrequency > 100',
-        'similarity > 0.7'
-      ],
+      conditions: ['coupling > 0.8', 'communicationFrequency > 100', 'similarity > 0.7'],
       action: 'merge',
-      priority: 2
+      priority: 2,
     },
     {
       id: 'split-module',
@@ -211,12 +225,12 @@ export const DE1_CONSTANTS = {
       conditions: [
         'component.linesOfCode > 1000',
         'component.cohesion < 0.4',
-        'component.responsibilities.length > 3'
+        'component.responsibilities.length > 3',
       ],
       action: 'split',
-      priority: 3
-    }
-  ]
+      priority: 3,
+    },
+  ],
 };
 
 /**
@@ -240,18 +254,18 @@ export const EXAMPLE_COMPONENTS: Omit<FunctionalComponent, 'id'>[] = [
           paths: {
             '/users': {
               get: { summary: 'List users' },
-              post: { summary: 'Create user' }
+              post: { summary: 'Create user' },
             },
             '/users/{id}': {
               get: { summary: 'Get user by ID' },
               put: { summary: 'Update user' },
-              delete: { summary: 'Delete user' }
-            }
-          }
+              delete: { summary: 'Delete user' },
+            },
+          },
         },
         required: true,
-        version: '1.0.0'
-      }
+        version: '1.0.0',
+      },
     ],
     outputs: [
       {
@@ -264,12 +278,12 @@ export const EXAMPLE_COMPONENTS: Omit<FunctionalComponent, 'id'>[] = [
           properties: {
             eventType: { type: 'string', enum: ['user.created', 'user.updated', 'user.deleted'] },
             userId: { type: 'string' },
-            timestamp: { type: 'string', format: 'date-time' }
-          }
+            timestamp: { type: 'string', format: 'date-time' },
+          },
         },
         required: true,
-        version: '1.0.0'
-      }
+        version: '1.0.0',
+      },
     ],
     dependencies: [
       {
@@ -278,8 +292,8 @@ export const EXAMPLE_COMPONENTS: Omit<FunctionalComponent, 'id'>[] = [
         description: 'Calls auth service for token validation',
         strength: 'strong',
         direction: 'outbound',
-        meta: { protocol: 'HTTP' }
-      }
+        meta: { protocol: 'HTTP' },
+      },
     ],
     meta: {
       createdAt: new Date(),
@@ -287,8 +301,8 @@ export const EXAMPLE_COMPONENTS: Omit<FunctionalComponent, 'id'>[] = [
       createdBy: 'system',
       lastUpdatedBy: 'system',
       version: '1.0.0',
-      tags: ['authentication', 'user-management']
-    }
+      tags: ['authentication', 'user-management'],
+    },
   },
   {
     name: 'auth-service',
@@ -307,12 +321,12 @@ export const EXAMPLE_COMPONENTS: Omit<FunctionalComponent, 'id'>[] = [
           paths: {
             '/auth/login': { post: { summary: 'Authenticate user' } },
             '/auth/validate': { post: { summary: 'Validate token' } },
-            '/auth/refresh': { post: { summary: 'Refresh token' } }
-          }
+            '/auth/refresh': { post: { summary: 'Refresh token' } },
+          },
         },
         required: true,
-        version: '1.0.0'
-      }
+        version: '1.0.0',
+      },
     ],
     outputs: [],
     dependencies: [],
@@ -322,9 +336,9 @@ export const EXAMPLE_COMPONENTS: Omit<FunctionalComponent, 'id'>[] = [
       createdBy: 'system',
       lastUpdatedBy: 'system',
       version: '1.0.0',
-      tags: ['authentication', 'authorization', 'security']
-    }
-  }
+      tags: ['authentication', 'authorization', 'security'],
+    },
+  },
 ];
 
 /**
@@ -332,5 +346,5 @@ export const EXAMPLE_COMPONENTS: Omit<FunctionalComponent, 'id'>[] = [
  */
 export default {
   ...DE1_CONSTANTS,
-  EXAMPLE_COMPONENTS
+  EXAMPLE_COMPONENTS,
 };

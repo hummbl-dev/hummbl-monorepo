@@ -27,30 +27,35 @@ interface ProjectContext {
 // Test suite for context verification
 describe('AI Assistant Context Verification', () => {
   let context: ProjectContext;
-  
+
   beforeAll(async () => {
     // Load the actual project context from documentation
-    const architectureDoc = await readFile(path.join(process.cwd(), 'docs/ARCHITECTURE.md'), 'utf-8');
-    const packageJson = JSON.parse(await readFile(path.join(process.cwd(), 'package.json'), 'utf-8'));
-    
+    const architectureDoc = await readFile(
+      path.join(process.cwd(), 'docs/ARCHITECTURE.md'),
+      'utf-8'
+    );
+    const packageJson = JSON.parse(
+      await readFile(path.join(process.cwd(), 'package.json'), 'utf-8')
+    );
+
     context = {
       buildTools: {
         vite: packageJson.devDependencies.vite || '5.0.0',
-        react: packageJson.dependencies.react || '18.2.0'
+        react: packageJson.dependencies.react || '18.2.0',
       },
       architecture: {
         framework: 'vite',
         typescript: {
           strict: true,
           noImplicitAny: true,
-          useFC: true
-        }
+          useFC: true,
+        },
       },
       documentation: {
         architecture: architectureDoc,
         patterns: 'docs/PATTERNS.md',
-        addNewModel: 'docs/add-new-model.md'
-      }
+        addNewModel: 'docs/add-new-model.md',
+      },
     };
   });
 
@@ -65,12 +70,16 @@ describe('AI Assistant Context Verification', () => {
 
   it('should correctly handle analytics package recommendation', () => {
     // Test 2: Analytics package recommendation
-    const question = 'Should I use @vercel/speed-insights/next or @vercel/analytics for this project?';
-    const response = context.architecture.framework === 'vite' 
-      ? '@vercel/analytics because HUMMBL is Vite + React, not Next.js (per ARCHITECTURE.md)'
-      : 'Incorrect framework detected';
-    
-    expect(response).toBe('@vercel/analytics because HUMMBL is Vite + React, not Next.js (per ARCHITECTURE.md)');
+    const question =
+      'Should I use @vercel/speed-insights/next or @vercel/analytics for this project?';
+    const response =
+      context.architecture.framework === 'vite'
+        ? '@vercel/analytics because HUMMBL is Vite + React, not Next.js (per ARCHITECTURE.md)'
+        : 'Incorrect framework detected';
+
+    expect(response).toBe(
+      '@vercel/analytics because HUMMBL is Vite + React, not Next.js (per ARCHITECTURE.md)'
+    );
   });
 
   it('should follow TypeScript conventions', () => {
@@ -78,13 +87,13 @@ describe('AI Assistant Context Verification', () => {
     const conventions = {
       strictMode: context.architecture.typescript.strict,
       noImplicitAny: context.architecture.typescript.noImplicitAny,
-      useFC: context.architecture.typescript.useFC
+      useFC: context.architecture.typescript.useFC,
     };
 
     expect(conventions).toEqual({
       strictMode: true,
       noImplicitAny: true,
-      useFC: true
+      useFC: true,
     });
   });
 
@@ -92,8 +101,11 @@ describe('AI Assistant Context Verification', () => {
     // Test 4: Workflow knowledge - skipped as the documentation file might not exist yet
     // This test can be enabled once the documentation is in place
     const docPath = path.join(process.cwd(), context.documentation.addNewModel);
-    const docExists = await fs.access(docPath).then(() => true).catch(() => false);
-    
+    const docExists = await fs
+      .access(docPath)
+      .then(() => true)
+      .catch(() => false);
+
     if (docExists) {
       const addNewModelDoc = await readFile(docPath, 'utf-8');
       expect(addNewModelDoc).toBeDefined();

@@ -241,10 +241,11 @@ function getColorForIntensity(
         b: 255,
       };
 
-    case 'rainbow':
+    case 'rainbow': {
       // Full rainbow spectrum
       const hue = clamped * 360;
       return hslToRgb(hue, 100, 50);
+    }
 
     default:
       return { r: 255, g: 0, b: 0 };

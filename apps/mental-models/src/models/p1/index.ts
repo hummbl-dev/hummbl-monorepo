@@ -19,7 +19,7 @@ export const createFirstPrinciplesModel = (): FirstPrinciplesModel => ({
       // Simple tokenization - can be enhanced with NLP
       return problem
         .split(/[\s,.?!]+/)
-        .filter(word => word.length > 2) // Remove short words
+        .filter((word) => word.length > 2) // Remove short words
         .filter((value, index, self) => self.indexOf(value) === index); // Remove duplicates
     },
 
@@ -32,7 +32,7 @@ export const createFirstPrinciplesModel = (): FirstPrinciplesModel => ({
       return [
         'Assumption about user needs',
         'Assumption about current solutions',
-        'Assumption about constraints'
+        'Assumption about constraints',
       ];
     },
 
@@ -45,7 +45,7 @@ export const createFirstPrinciplesModel = (): FirstPrinciplesModel => ({
       return [
         'Fundamental constraint: ' + problem.split(' ')[0] + ' must be addressed',
         'Core requirement: ' + problem.split(' ').slice(1).join(' '),
-        'Basic principle: Every solution must satisfy core requirements'
+        'Basic principle: Every solution must satisfy core requirements',
       ];
     },
 
@@ -53,12 +53,14 @@ export const createFirstPrinciplesModel = (): FirstPrinciplesModel => ({
       if (!truths || truths.length === 0) {
         return 'No fundamental truths provided for solution building';
       }
-      
+
       // Simple solution generation based on truths
-      return `Solution derived from ${truths.length} fundamental truths:\n` +
-        truths.map((truth, i) => `  ${i + 1}. ${truth}`).join('\n');
-    }
-  }
+      return (
+        `Solution derived from ${truths.length} fundamental truths:\n` +
+        truths.map((truth, i) => `  ${i + 1}. ${truth}`).join('\n')
+      );
+    },
+  },
 });
 
 /**
@@ -72,13 +74,13 @@ export const applyFirstPrinciples = (problem: string): FirstPrinciplesAnalysis =
   const assumptions = model.methods.identifyAssumptions(problem);
   const fundamentalTruths = model.methods.extractFundamentalTruths(problem);
   const solution = model.methods.rebuildSolution(fundamentalTruths);
-  
+
   return {
     problem,
     decomposed,
     assumptions,
     fundamentalTruths,
-    solution
+    solution,
   };
 };
 
@@ -86,5 +88,5 @@ export const applyFirstPrinciples = (problem: string): FirstPrinciplesAnalysis =
 export default {
   createFirstPrinciplesModel,
   applyFirstPrinciples,
-  constants: P1_CONSTANTS
+  constants: P1_CONSTANTS,
 };

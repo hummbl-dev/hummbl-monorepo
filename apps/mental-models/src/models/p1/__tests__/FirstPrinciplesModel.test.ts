@@ -7,8 +7,8 @@ vi.mock('events', () => ({
   EventEmitter: vi.fn().mockImplementation(() => ({
     on: vi.fn(),
     emit: vi.fn(),
-    removeListener: vi.fn()
-  }))
+    removeListener: vi.fn(),
+  })),
 }));
 
 describe('FirstPrinciplesModel', () => {
@@ -34,7 +34,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should return properly structured output', async () => {
       const result = await model.analyze({
-        problem: 'How can I improve customer retention?'
+        problem: 'How can I improve customer retention?',
       });
 
       // Verify all required properties exist
@@ -52,16 +52,16 @@ describe('FirstPrinciplesModel', () => {
           qualityMetrics: {
             alignmentScore: expect.any(Number),
             traceFidelity: expect.any(Number),
-            entropyDelta: expect.any(Number)
-          }
-        }
+            entropyDelta: expect.any(Number),
+          },
+        },
       });
-      
+
       // Verify numeric bounds
       expect(result.wickednessScore).toBeGreaterThanOrEqual(0);
       expect(result.wickednessScore).toBeLessThanOrEqual(1);
       expect(result.metadata.executionTimeMs).toBeGreaterThan(0);
-      
+
       // Verify quality metrics bounds
       const metrics = result.metadata.qualityMetrics;
       expect(metrics.alignmentScore).toBeGreaterThanOrEqual(0);
@@ -131,7 +131,7 @@ describe('FirstPrinciplesModel', () => {
     it('should accept valid problem with optional context', async () => {
       const result = await model.analyze({
         problem: 'How can I reduce costs?',
-        context: { urgency: 'high' }
+        context: { urgency: 'high' },
       });
       expect(result.problem).toBe('How can I reduce costs?');
     });
@@ -144,13 +144,13 @@ describe('FirstPrinciplesModel', () => {
   describe('Problem Decomposition', () => {
     it('should handle problems with constraints', async () => {
       const result = await model.analyze({
-        problem: 'We need to reduce costs by 20% without affecting customer satisfaction.'
+        problem: 'We need to reduce costs by 20% without affecting customer satisfaction.',
       });
 
       // Just check that we have some decomposed elements
       expect(Array.isArray(result.decomposed)).toBe(true);
       expect(result.decomposed.length).toBeGreaterThan(0);
-      
+
       // Check that all elements are non-empty strings
       result.decomposed.forEach((item: string) => {
         expect(typeof item).toBe('string');
@@ -160,13 +160,13 @@ describe('FirstPrinciplesModel', () => {
 
     it('should handle problems with objectives', async () => {
       const result = await model.analyze({
-        problem: 'Our goal is to increase user engagement and retention.'
+        problem: 'Our goal is to increase user engagement and retention.',
       });
 
       // Just check that we have some decomposed elements
       expect(Array.isArray(result.decomposed)).toBe(true);
       expect(result.decomposed.length).toBeGreaterThan(0);
-      
+
       // Check that all elements are non-empty strings
       result.decomposed.forEach((item: string) => {
         expect(typeof item).toBe('string');
@@ -176,13 +176,13 @@ describe('FirstPrinciplesModel', () => {
 
     it('should handle problems with metrics and timeframes', async () => {
       const result = await model.analyze({
-        problem: 'How can we reduce churn by 15% within 6 months for 10,000 customers?'
+        problem: 'How can we reduce churn by 15% within 6 months for 10,000 customers?',
       });
 
       // Just check that we have some decomposed elements
       expect(Array.isArray(result.decomposed)).toBe(true);
       expect(result.decomposed.length).toBeGreaterThan(0);
-      
+
       // Check that all elements are non-empty strings
       result.decomposed.forEach((item: string) => {
         expect(typeof item).toBe('string');
@@ -192,13 +192,14 @@ describe('FirstPrinciplesModel', () => {
 
     it('should return decomposed elements for the problem', async () => {
       const result = await model.analyze({
-        problem: 'The system needs to handle 1000 concurrent users with less than 2 seconds response time.'
+        problem:
+          'The system needs to handle 1000 concurrent users with less than 2 seconds response time.',
       });
 
       // Just check that we have some decomposed elements
       expect(Array.isArray(result.decomposed)).toBe(true);
       expect(result.decomposed.length).toBeGreaterThan(0);
-      
+
       // Check that all elements are strings
       result.decomposed.forEach((item: string) => {
         expect(typeof item).toBe('string');
@@ -208,7 +209,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should handle problems with no clear patterns', async () => {
       const result = await model.analyze({
-        problem: 'The situation is complex.'
+        problem: 'The situation is complex.',
       });
 
       expect(result.decomposed.length).toBeGreaterThan(0);
@@ -223,13 +224,13 @@ describe('FirstPrinciplesModel', () => {
   describe('Assumption Identification', () => {
     it('should identify assumptions', async () => {
       const result = await model.analyze({
-        problem: 'Assuming we have enough server capacity, how can we improve response times?'
+        problem: 'Assuming we have enough server capacity, how can we improve response times?',
       });
 
       // Check that we have some assumptions
       expect(Array.isArray(result.assumptions)).toBe(true);
       expect(result.assumptions.length).toBeGreaterThan(0);
-      
+
       // Check that all assumptions are non-empty strings
       result.assumptions.forEach((assumption: string) => {
         expect(typeof assumption).toBe('string');
@@ -239,7 +240,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should infer assumptions from constraints', async () => {
       const result = await model.analyze({
-        problem: 'We must launch within 3 months with a limited budget.'
+        problem: 'We must launch within 3 months with a limited budget.',
       });
 
       expect(result.assumptions.length).toBeGreaterThan(0);
@@ -247,13 +248,13 @@ describe('FirstPrinciplesModel', () => {
 
     it('should identify assumptions for various problem types', async () => {
       const result = await model.analyze({
-        problem: 'How can we improve customer satisfaction scores?'
+        problem: 'How can we improve customer satisfaction scores?',
       });
 
       // Check that we have some assumptions
       expect(Array.isArray(result.assumptions)).toBe(true);
       expect(result.assumptions.length).toBeGreaterThan(0);
-      
+
       // Check that all assumptions are non-empty strings
       result.assumptions.forEach((assumption: string) => {
         expect(typeof assumption).toBe('string');
@@ -263,7 +264,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should provide baseline assumptions for simple problems', async () => {
       const result = await model.analyze({
-        problem: 'What is the best approach?'
+        problem: 'What is the best approach?',
       });
 
       expect(result.assumptions.length).toBeGreaterThan(0);
@@ -277,13 +278,13 @@ describe('FirstPrinciplesModel', () => {
   describe('Fundamental Truth Extraction', () => {
     it('should extract fundamental truths for problems with numbers', async () => {
       const result = await model.analyze({
-        problem: 'Increase revenue by 25% while maintaining 80% margins.'
+        problem: 'Increase revenue by 25% while maintaining 80% margins.',
       });
 
       // Check that we have some fundamental truths
       expect(Array.isArray(result.fundamentalTruths)).toBe(true);
       expect(result.fundamentalTruths.length).toBeGreaterThan(0);
-      
+
       // Check that all truths are non-empty strings
       result.fundamentalTruths.forEach((truth: string) => {
         expect(typeof truth).toBe('string');
@@ -293,13 +294,13 @@ describe('FirstPrinciplesModel', () => {
 
     it('should extract fundamental truths for time-based problems', async () => {
       const result = await model.analyze({
-        problem: 'Launch product within 6 months.'
+        problem: 'Launch product within 6 months.',
       });
 
       // Check that we have some fundamental truths
       expect(Array.isArray(result.fundamentalTruths)).toBe(true);
       expect(result.fundamentalTruths.length).toBeGreaterThan(0);
-      
+
       // Check that all truths are non-empty strings
       result.fundamentalTruths.forEach((truth: string) => {
         expect(typeof truth).toBe('string');
@@ -309,13 +310,13 @@ describe('FirstPrinciplesModel', () => {
 
     it('should extract fundamental truths for customer-related problems', async () => {
       const result = await model.analyze({
-        problem: 'How to increase customer conversion rates?'
+        problem: 'How to increase customer conversion rates?',
       });
 
       // Check that we have some fundamental truths
       expect(Array.isArray(result.fundamentalTruths)).toBe(true);
       expect(result.fundamentalTruths.length).toBeGreaterThan(0);
-      
+
       // Check that all truths are non-empty strings
       result.fundamentalTruths.forEach((truth: string) => {
         expect(typeof truth).toBe('string');
@@ -325,13 +326,13 @@ describe('FirstPrinciplesModel', () => {
 
     it('should extract fundamental truths for constraint-related problems', async () => {
       const result = await model.analyze({
-        problem: 'We must stay within budget constraints while achieving goals.'
+        problem: 'We must stay within budget constraints while achieving goals.',
       });
 
       // Check that we have some fundamental truths
       expect(Array.isArray(result.fundamentalTruths)).toBe(true);
       expect(result.fundamentalTruths.length).toBeGreaterThan(0);
-      
+
       // Check that all truths are non-empty strings
       result.fundamentalTruths.forEach((truth: string) => {
         expect(typeof truth).toBe('string');
@@ -341,7 +342,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should always extract baseline universal truths', async () => {
       const result = await model.analyze({
-        problem: 'Generic problem statement.'
+        problem: 'Generic problem statement.',
       });
 
       // Just check that we have some fundamental truths
@@ -357,7 +358,7 @@ describe('FirstPrinciplesModel', () => {
   describe('Solution Generation', () => {
     it('should generate structured solution', async () => {
       const result = await model.analyze({
-        problem: 'How can we reduce costs while maintaining quality?'
+        problem: 'How can we reduce costs while maintaining quality?',
       });
 
       expect(typeof result.solution).toBe('string');
@@ -366,7 +367,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should include all fundamental truths in solution', async () => {
       const result = await model.analyze({
-        problem: 'Improve team productivity.'
+        problem: 'Improve team productivity.',
       });
 
       // Verify solution is a string and not empty
@@ -377,7 +378,7 @@ describe('FirstPrinciplesModel', () => {
     it('should incorporate context when provided', async () => {
       const result = await model.analyze({
         problem: 'Launch new feature.',
-        context: { urgency: 'high', budget: 'limited' }
+        context: { urgency: 'high', budget: 'limited' },
       });
 
       // Just verify solution exists and is a string
@@ -387,7 +388,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should provide actionable recommendations', async () => {
       const result = await model.analyze({
-        problem: 'Increase market share.'
+        problem: 'Increase market share.',
       });
 
       // Just verify solution exists and is a string
@@ -403,7 +404,7 @@ describe('FirstPrinciplesModel', () => {
   describe('Wickedness Assessment', () => {
     it('should identify low wickedness for technical problems', async () => {
       const result = await model.analyze({
-        problem: 'Optimize database query performance to reduce latency.'
+        problem: 'Optimize database query performance to reduce latency.',
       });
 
       expect(result.wickednessScore).toBeLessThan(1);
@@ -412,7 +413,8 @@ describe('FirstPrinciplesModel', () => {
 
     it('should identify high wickedness for stakeholder conflict', async () => {
       const result = await model.analyze({
-        problem: 'Balance economic growth with environmental sustainability given conflicting stakeholder interests and uncertain outcomes.'
+        problem:
+          'Balance economic growth with environmental sustainability given conflicting stakeholder interests and uncertain outcomes.',
       });
 
       expect(result.wickednessScore).toBeGreaterThan(0);
@@ -421,7 +423,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should identify medium wickedness for business problems', async () => {
       const result = await model.analyze({
-        problem: 'Should we expand to international markets or focus on domestic growth?'
+        problem: 'Should we expand to international markets or focus on domestic growth?',
       });
 
       expect(result.wickednessScore).toBeGreaterThanOrEqual(0);
@@ -430,7 +432,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should flag value judgments as wicked', async () => {
       const result = await model.analyze({
-        problem: 'What is the right approach to handling ethical concerns in AI development?'
+        problem: 'What is the right approach to handling ethical concerns in AI development?',
       });
 
       expect(result.wickednessScore).toBeGreaterThanOrEqual(0);
@@ -445,28 +447,28 @@ describe('FirstPrinciplesModel', () => {
   describe('Quality Metrics', () => {
     it('should include quality metrics in metadata', async () => {
       const result = await model.analyze({
-        problem: 'Standard business problem.'
+        problem: 'Standard business problem.',
       });
 
       // Check that quality metrics exist and have the expected structure
       expect(result.metadata).toBeDefined();
       expect(result.metadata.qualityMetrics).toBeDefined();
-      
+
       // Check for required quality metrics
       const metrics = result.metadata.qualityMetrics!;
-      
+
       // Check alignment score if it exists
       if (metrics.alignmentScore !== undefined) {
         expect(metrics.alignmentScore).toBeGreaterThanOrEqual(0);
         expect(metrics.alignmentScore).toBeLessThanOrEqual(1);
       }
-      
+
       // Check trace fidelity if it exists
       if (metrics.traceFidelity !== undefined) {
         expect(metrics.traceFidelity).toBeGreaterThanOrEqual(0);
         expect(metrics.traceFidelity).toBeLessThanOrEqual(1);
       }
-      
+
       // Check entropy delta if it exists (can be negative)
       if (metrics.entropyDelta !== undefined) {
         expect(metrics.entropyDelta).toBeLessThanOrEqual(1);
@@ -475,7 +477,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should calculate wickedness score within bounds', async () => {
       const result = await model.analyze({
-        problem: 'Standard business problem.'
+        problem: 'Standard business problem.',
       });
 
       // Wickedness score should always be defined and between 0 and 1
@@ -486,20 +488,21 @@ describe('FirstPrinciplesModel', () => {
 
     it('should handle different problem complexities', async () => {
       const simpleResult = await model.analyze({
-        problem: 'Calculate optimal inventory levels.'
+        problem: 'Calculate optimal inventory levels.',
       });
 
       const complexResult = await model.analyze({
-        problem: 'Resolve conflicting stakeholder interests in organizational restructuring with uncertain market conditions.'
+        problem:
+          'Resolve conflicting stakeholder interests in organizational restructuring with uncertain market conditions.',
       });
 
       // Verify both results have valid wickedness scores
       expect(simpleResult.wickednessScore).toBeGreaterThanOrEqual(0);
       expect(simpleResult.wickednessScore).toBeLessThanOrEqual(1);
-      
+
       expect(complexResult.wickednessScore).toBeGreaterThanOrEqual(0);
       expect(complexResult.wickednessScore).toBeLessThanOrEqual(1);
-      
+
       // Don't assume the relationship between problem complexity and score
       // Just verify both results have the required structure
       expect(simpleResult.metadata).toBeDefined();
@@ -508,7 +511,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should calculate alignment score within bounds', async () => {
       const result = await model.analyze({
-        problem: 'Improve customer retention through better onboarding.'
+        problem: 'Improve customer retention through better onboarding.',
       });
 
       expect(result.metadata.qualityMetrics?.alignmentScore).toBeGreaterThanOrEqual(0);
@@ -517,7 +520,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should calculate trace fidelity within bounds', async () => {
       const result = await model.analyze({
-        problem: 'Complex multi-faceted business problem with many constraints.'
+        problem: 'Complex multi-faceted business problem with many constraints.',
       });
 
       expect(result.metadata.qualityMetrics?.traceFidelity).toBeGreaterThanOrEqual(0);
@@ -526,7 +529,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should calculate entropy delta within bounds', async () => {
       const result = await model.analyze({
-        problem: 'Long problem statement with lots of details and specifications.'
+        problem: 'Long problem statement with lots of details and specifications.',
       });
 
       // Allow negative entropy delta as it can be negative
@@ -536,7 +539,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should calculate confidence score within bounds', async () => {
       const result = await model.analyze({
-        problem: 'Standard business problem.'
+        problem: 'Standard business problem.',
       });
 
       expect(result.wickednessScore).toBeGreaterThanOrEqual(0);
@@ -545,11 +548,12 @@ describe('FirstPrinciplesModel', () => {
 
     it('should show lower confidence for wicked problems', async () => {
       const simpleResult = await model.analyze({
-        problem: 'Calculate optimal inventory levels.'
+        problem: 'Calculate optimal inventory levels.',
       });
 
       const wickedResult = await model.analyze({
-        problem: 'Resolve conflicting stakeholder interests in organizational restructuring with uncertain market conditions.'
+        problem:
+          'Resolve conflicting stakeholder interests in organizational restructuring with uncertain market conditions.',
       });
 
       // Just verify both results have valid wickedness scores
@@ -565,23 +569,23 @@ describe('FirstPrinciplesModel', () => {
   describe('Metadata', () => {
     it('should include required metadata fields', async () => {
       const result = await model.analyze({
-        problem: 'Test problem for metadata verification.'
+        problem: 'Test problem for metadata verification.',
       });
 
       // Verify required metadata fields exist
       expect(result.metadata).toBeDefined();
-      
+
       // Check for model version (should be a string)
       expect(result.metadata.modelVersion).toBeDefined();
       expect(typeof result.metadata.modelVersion).toBe('string');
-      
+
       // Check for timestamp (should be a string or number)
       expect(result.metadata.timestamp).toBeDefined();
       expect(
-        typeof result.metadata.timestamp === 'string' || 
-        typeof result.metadata.timestamp === 'number'
+        typeof result.metadata.timestamp === 'string' ||
+          typeof result.metadata.timestamp === 'number'
       ).toBe(true);
-      
+
       // Check for execution time (should be a number > 0)
       expect(result.metadata.executionTimeMs).toBeDefined();
       expect(typeof result.metadata.executionTimeMs).toBe('number');
@@ -590,7 +594,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should have valid model version format', async () => {
       const result = await model.analyze({
-        problem: 'Test problem for version check.'
+        problem: 'Test problem for version check.',
       });
 
       // Version should be in semver format (e.g., 1.0.0)
@@ -600,7 +604,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should include execution time', async () => {
       const result = await model.analyze({
-        problem: 'Test problem.'
+        problem: 'Test problem.',
       });
 
       expect(typeof result.metadata.executionTimeMs).toBe('number');
@@ -609,7 +613,7 @@ describe('FirstPrinciplesModel', () => {
 
     it('should include ISO timestamp', async () => {
       const result = await model.analyze({
-        problem: 'Test problem.'
+        problem: 'Test problem.',
       });
 
       expect(result.metadata.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T/);
@@ -623,7 +627,8 @@ describe('FirstPrinciplesModel', () => {
   describe('Integration Tests - Real-World Scenarios', () => {
     it('should handle business optimization problem', async () => {
       const result = await model.analyze({
-        problem: 'How can I reduce customer churn by 20% within 6 months while maintaining profitability?'
+        problem:
+          'How can I reduce customer churn by 20% within 6 months while maintaining profitability?',
       });
 
       expect(result.decomposed.length).toBeGreaterThan(0);
@@ -635,7 +640,8 @@ describe('FirstPrinciplesModel', () => {
 
     it('should handle technical problem', async () => {
       const result = await model.analyze({
-        problem: 'Reduce API response time from 500ms to under 100ms without increasing infrastructure costs.'
+        problem:
+          'Reduce API response time from 500ms to under 100ms without increasing infrastructure costs.',
       });
 
       expect(result.decomposed.length).toBeGreaterThan(0);
@@ -649,8 +655,8 @@ describe('FirstPrinciplesModel', () => {
         context: {
           urgency: 'high',
           budget: 'limited',
-          risk_tolerance: 'low'
-        }
+          risk_tolerance: 'low',
+        },
       });
 
       expect(typeof result.solution).toBe('string');
@@ -659,7 +665,8 @@ describe('FirstPrinciplesModel', () => {
 
     it('should handle wicked organizational problem', async () => {
       const result = await model.analyze({
-        problem: 'How should we restructure our organization to balance innovation with stability while managing diverse stakeholder expectations?'
+        problem:
+          'How should we restructure our organization to balance innovation with stability while managing diverse stakeholder expectations?',
       });
 
       expect(result.wickednessScore).toBeGreaterThan(0.5);
@@ -679,13 +686,13 @@ describe('FirstPrinciplesModel', () => {
       }
 
       let eventFired = false;
-      
+
       model.on('analysis:start', () => {
         eventFired = true;
       });
 
       await model.analyze({
-        problem: 'Test problem.'
+        problem: 'Test problem.',
       });
 
       expect(eventFired).toBe(true);
@@ -698,13 +705,13 @@ describe('FirstPrinciplesModel', () => {
       }
 
       let eventFired = false;
-      
+
       model.on('analysis:complete', () => {
         eventFired = true;
       });
 
       await model.analyze({
-        problem: 'Test problem.'
+        problem: 'Test problem.',
       });
 
       expect(eventFired).toBe(true);
@@ -717,7 +724,7 @@ describe('FirstPrinciplesModel', () => {
       }
 
       let errorEventFired = false;
-      
+
       model.on('analysis:error', () => {
         errorEventFired = true;
       });
@@ -740,7 +747,7 @@ describe('FirstPrinciplesModel', () => {
       const listener = () => {};
       model.on('test-event', listener);
       model.removeListener('test-event', listener);
-      
+
       // Test passes if no errors are thrown
       expect(true).toBe(true);
     });
@@ -753,7 +760,7 @@ describe('FirstPrinciplesModel', () => {
   describe('Edge Cases', () => {
     it('should handle single-word problem', async () => {
       const result = await model.analyze({
-        problem: 'Optimize database performance for better user experience.'
+        problem: 'Optimize database performance for better user experience.',
       });
 
       expect(result.decomposed.length).toBeGreaterThan(0);
@@ -762,16 +769,16 @@ describe('FirstPrinciplesModel', () => {
 
     it('should handle problem with special characters', async () => {
       const result = await model.analyze({
-        problem: 'How can we improve $revenue by 50%+ within Q1/Q2?'
+        problem: 'How can we improve $revenue by 50%+ within Q1/Q2?',
       });
 
       expect(result.decomposed.length).toBeGreaterThan(0);
     });
 
     it('should handle problem with unicode characters', async () => {
-      const problemText = 'Comment améliorer l\'engagement des utilisateurs? 如何提高用户参与度？';
+      const problemText = "Comment améliorer l'engagement des utilisateurs? 如何提高用户参与度？";
       const result = await model.analyze({
-        problem: problemText
+        problem: problemText,
       });
 
       expect(result).toBeDefined();
@@ -781,7 +788,7 @@ describe('FirstPrinciplesModel', () => {
     it('should handle very long but valid problem', async () => {
       const longProblem = 'How can we '.repeat(100) + 'solve this problem?';
       const result = await model.analyze({
-        problem: longProblem.slice(0, 10000) // Within limit
+        problem: longProblem.slice(0, 10000), // Within limit
       });
 
       expect(result.decomposed.length).toBeGreaterThan(0);

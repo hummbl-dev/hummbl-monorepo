@@ -68,7 +68,7 @@ function modifyContextFile(modIndex: number) {
 
   // Simple modification - in a real test, you'd want to properly parse and modify the TypeScript file
   const modifiedContent = content.replace(
-    new RegExp(`(${mod.field}:\s*)(\S+)`, 'm'),
+    new RegExp(`(${mod.field}:\\s*)(\\S+)`, 'm'),
     `$1${JSON.stringify(mod.value)}`
   );
 

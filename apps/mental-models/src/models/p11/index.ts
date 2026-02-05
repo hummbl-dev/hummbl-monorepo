@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 
 /**
  * P11: [Brief Description]
- * 
+ *
  * [Detailed description of the model's purpose and functionality]
  */
 
@@ -47,14 +47,10 @@ const DEFAULT_CONFIG: Required<P11Config> = {
 };
 
 export const createP11Model = (config: Partial<P11Config> = {}) => {
-  const {
-    id,
-    name,
-    version,
-    eventEmitter,
-    telemetryEnabled,
-    logger,
-  } = { ...DEFAULT_CONFIG, ...config };
+  const { id, name, version, eventEmitter, telemetryEnabled, logger } = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
 
   /**
    * Analyze input using the P11 model
@@ -62,7 +58,7 @@ export const createP11Model = (config: Partial<P11Config> = {}) => {
   const analyze = async (input: P11Input): Promise<P11Output> => {
     const startTime = Date.now();
     const requestId = uuidv4();
-    
+
     try {
       // TODO: Implement P11 analysis logic
       const result: P11Output = {
@@ -73,9 +69,11 @@ export const createP11Model = (config: Partial<P11Config> = {}) => {
           modelVersion: version,
           timestamp: new Date().toISOString(),
           executionTimeMs: Date.now() - startTime,
-          telemetry: telemetryEnabled ? {
-            // Add telemetry data here
-          } : undefined,
+          telemetry: telemetryEnabled
+            ? {
+                // Add telemetry data here
+              }
+            : undefined,
         },
       };
 
@@ -89,7 +87,7 @@ export const createP11Model = (config: Partial<P11Config> = {}) => {
       return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error during analysis';
-      
+
       // Emit error event
       eventEmitter.emit('analysisError', {
         requestId,

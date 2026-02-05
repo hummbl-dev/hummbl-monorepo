@@ -11,7 +11,7 @@ export const RE2_CONSTANTS = {
   MODEL_NAME: 'Recursive Problem Decomposition',
   TRANSFORMATION: 'Recursion',
   VERSION: '1.0.0',
-  
+
   // Default configuration values
   DEFAULTS: {
     MAX_DEPTH: 10,
@@ -19,7 +19,7 @@ export const RE2_CONSTANTS = {
     MAX_SUBPROBLEMS: 1000,
     TIMEOUT_MS: 30000, // 30 seconds
   },
-  
+
   // Error messages
   ERRORS: {
     MAX_DEPTH_EXCEEDED: 'Maximum recursion depth exceeded',
@@ -32,7 +32,7 @@ export const RE2_CONSTANTS = {
     INVALID_COMBINER: 'combine must be a function',
     NO_SOLUTION: 'No solution was generated',
   },
-  
+
   // Events
   EVENTS: {
     STARTED: 'started',
@@ -57,7 +57,7 @@ export function createSubproblem<T, R>(
   id: string = `sub-${uuidv4()}`
 ): Subproblem<T, R> {
   const now = new Date();
-  
+
   return {
     id,
     data,
@@ -86,9 +86,9 @@ export function createProblemDecomposition<T, R>(
 ): ProblemDecomposition<T, R> {
   const now = new Date();
   const id = config.id || `decomp-${uuidv4()}`;
-  
+
   const rootSubproblem = createSubproblem<T, R>(problem, null, 0, `${id}-root`);
-  
+
   return {
     id,
     rootProblem: problem,
@@ -121,16 +121,16 @@ export function updateSubproblem<T, R>(
 ): ProblemDecomposition<T, R> {
   const subproblem = decomposition.subproblems.get(subproblemId);
   if (!subproblem) return decomposition;
-  
+
   const updatedSubproblem = { ...subproblem, ...updates };
-  
+
   // Update the subproblem in the map
   const subproblems = new Map(decomposition.subproblems);
   subproblems.set(subproblemId, updatedSubproblem);
-  
+
   // Update statistics
   const stats = { ...decomposition.stats };
-  
+
   if (updates.status === 'solved') {
     stats.solvedSubproblems = (decomposition.stats.solvedSubproblems || 0) + 1;
     stats.pendingSubproblems = Math.max(0, (decomposition.stats.pendingSubproblems || 1) - 1);
@@ -138,7 +138,7 @@ export function updateSubproblem<T, R>(
     stats.failedSubproblems = (decomposition.stats.failedSubproblems || 0) + 1;
     stats.pendingSubproblems = Math.max(0, (decomposition.stats.pendingSubproblems || 1) - 1);
   }
-  
+
   return {
     ...decomposition,
     subproblems,
@@ -155,7 +155,7 @@ export function addSubproblem<T, R>(
 ): ProblemDecomposition<T, R> {
   const subproblems = new Map(decomposition.subproblems);
   subproblems.set(subproblem.id, subproblem);
-  
+
   return {
     ...decomposition,
     subproblems,
@@ -175,22 +175,22 @@ export function checkLimits<T, R>(
   decomposition: ProblemDecomposition<T, R>
 ): { exceeded: boolean; reason?: string } {
   const { config, stats } = decomposition;
-  
+
   if (stats.maxDepth > (config.maxDepth || RE2_CONSTANTS.DEFAULTS.MAX_DEPTH)) {
     return { exceeded: true, reason: RE2_CONSTANTS.ERRORS.MAX_DEPTH_EXCEEDED };
   }
-  
+
   if (stats.totalSubproblems > (config.maxSubproblems || RE2_CONSTANTS.DEFAULTS.MAX_SUBPROBLEMS)) {
     return { exceeded: true, reason: RE2_CONSTANTS.ERRORS.MAX_SUBPROBLEMS_EXCEEDED };
   }
-  
+
   if (config.timeoutMs && stats.startTime) {
     const elapsed = Date.now() - stats.startTime.getTime();
     if (elapsed > config.timeoutMs) {
       return { exceeded: true, reason: RE2_CONSTANTS.ERRORS.TIMEOUT };
     }
   }
-  
+
   return { exceeded: false };
 }
 
@@ -201,8 +201,9 @@ export function getChildSubproblems<T, R>(
   decomposition: ProblemDecomposition<T, R>,
   parentId: string
 ): Subproblem<T, R>[] {
-  return Array.from(decomposition.subproblems.values())
-    .filter(subproblem => subproblem.parentId === parentId);
+  return Array.from(decomposition.subproblems.values()).filter(
+    (subproblem) => subproblem.parentId === parentId
+  );
 }
 
 /**
@@ -217,15 +218,15 @@ export async function getSubproblemSolution<T, R>(
   if (!subproblem) {
     throw new Error(`Subproblem ${subproblemId} not found`);
   }
-  
+
   // If the subproblem already has a solution, return it
   if (subproblem.status === 'solved' && subproblem.solution !== undefined) {
     return subproblem.solution;
   }
-  
+
   // Otherwise, get solutions to all child subproblems and combine them
   const children = getChildSubproblems(decomposition, subproblemId);
-  
+
   // Get solutions to all child subproblems in parallel
   const childSolutions = await Promise.all(
     children.map(async (child) => {
@@ -233,7 +234,7 @@ export async function getSubproblemSolution<T, R>(
       return { subproblem: child.data, solution };
     })
   );
-  
+
   // Combine the solutions
   return combine(subproblem.data, childSolutions);
 }

@@ -14,11 +14,16 @@ export const AdminDashboard: React.FC = () => {
     recentChanges: 0,
   });
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  const getAllVersions = (): ContentVersion[] => {
+    try {
+      const stored = localStorage.getItem('hummbl_content_versions');
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  };
 
-  const loadData = () => {
+  useEffect(() => {
     // Load all versions
     const allVersions = getAllVersions();
     setVersions(allVersions);
@@ -39,17 +44,7 @@ export const AdminDashboard: React.FC = () => {
       contentItems: uniqueContent.size,
       recentChanges,
     });
-  };
-
-  const getAllVersions = (): ContentVersion[] => {
-    try {
-      const stored = localStorage.getItem('hummbl_content_versions');
-      return stored ? JSON.parse(stored) : [];
-    } catch (error) {
-      console.error('Failed to load versions:', error);
-      return [];
-    }
-  };
+  }, []);
 
   const downloadChangeLog = () => {
     const blob = new Blob([changeLog], { type: 'text/markdown' });

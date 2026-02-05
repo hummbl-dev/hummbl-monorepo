@@ -1,6 +1,6 @@
 /**
  * SY19 Constants
- * 
+ *
  * This file contains constants used by the SY19 model.
  */
 
@@ -12,7 +12,7 @@ export const DEFAULT_OPTIONS = {
   maxDepth: 3,
   includeExamples: true,
   includeReasoning: true,
-  confidenceThreshold: 0.7
+  confidenceThreshold: 0.7,
 };
 
 /** Model metadata */
@@ -23,7 +23,7 @@ export const MODEL_METADATA = {
   version: '1.0.0',
   author: 'HUMMBL',
   createdAt: '2025-10-23',
-  updatedAt: '2025-10-23'
+  updatedAt: '2025-10-23',
 };
 
 /** Default model types that work well with this synthesizer */
@@ -35,18 +35,18 @@ export const COMPATIBLE_MODEL_TYPES = [
   'reconstruction',
   'synthesis',
   'analysis',
-  'prediction'
+  'prediction',
 ];
 
 /** Error messages */
 export const ERRORS = {
   INVALID_INPUT: 'Input must be an object',
   NO_MODELS: 'At least one model output is required for synthesis',
-  SYNTHESIS_FAILED: 'Failed to synthesize models'
+  SYNTHESIS_FAILED: 'Failed to synthesize models',
 };
 
 /** Event names */
 export const EVENTS = {
   SYNTHESIS_COMPLETE: 'synthesisComplete',
-  SYNTHESIS_ERROR: 'synthesisError'
+  SYNTHESIS_ERROR: 'synthesisError',
 };

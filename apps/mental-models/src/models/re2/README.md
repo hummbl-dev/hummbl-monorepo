@@ -5,7 +5,7 @@
 **Model Code:** RE2  
 **Model Name:** Feedback Scaling  
 **Transformation:** Recursion  
-**Tier:** 1  
+**Tier:** 1
 
 ## Description
 
@@ -41,11 +41,11 @@ const scaler = createFeedbackScaler({
   levels: [
     { id: 'syntax', weight: 0.3 },
     { id: 'semantics', weight: 0.5 },
-    { id: 'pragmatics', weight: 0.2 }
+    { id: 'pragmatics', weight: 0.2 },
   ],
   aggregationMethod: 'weighted',
   learningRate: 0.1,
-  maxIterations: 100
+  maxIterations: 100,
 });
 
 // Process feedback from different levels
@@ -53,7 +53,7 @@ scaler.addFeedback({
   level: 'syntax',
   score: 0.8,
   message: 'Minor syntax issues found',
-  metadata: { line: 42, column: 15 }
+  metadata: { line: 42, column: 15 },
 });
 
 // Get aggregated feedback
@@ -69,6 +69,7 @@ console.log('Key insights:', analysis.insights);
 Creates a new feedback scaling instance.
 
 **Parameters:**
+
 - `config`: Configuration object
   - `levels`: Array of level definitions with id and weight
   - `aggregationMethod`: Method for combining feedback ('weighted', 'average', 'min', 'max')
@@ -96,8 +97,8 @@ const codeReviewScaler = createFeedbackScaler({
   levels: [
     { id: 'style', weight: 0.2 },
     { id: 'correctness', weight: 0.5 },
-    { id: 'performance', weight: 0.3 }
-  ]
+    { id: 'performance', weight: 0.3 },
+  ],
 });
 
 // Add feedback from different reviewers
@@ -106,30 +107,32 @@ codeReviewScaler.addFeedback([
     level: 'style',
     score: 0.9,
     message: 'Consistent indentation and naming',
-    source: 'reviewer1'
+    source: 'reviewer1',
   },
   {
     level: 'correctness',
     score: 0.7,
     message: 'Edge case not handled in calculateTotal()',
     source: 'reviewer2',
-    metadata: { file: 'cart.js', function: 'calculateTotal' }
+    metadata: { file: 'cart.js', function: 'calculateTotal' },
   },
   {
     level: 'performance',
     score: 0.6,
     message: 'Potential N+1 query issue',
     source: 'reviewer3',
-    metadata: { file: 'products.js', line: 127 }
-  }
+    metadata: { file: 'products.js', line: 127 },
+  },
 ]);
 
 // Get analysis
 const review = codeReviewScaler.analyze();
 
 console.log('Overall code quality:', review.overallScore);
-console.log('Areas needing attention:', 
-  review.insights.filter(i => i.priority === 'high').map(i => i.message));
+console.log(
+  'Areas needing attention:',
+  review.insights.filter((i) => i.priority === 'high').map((i) => i.message)
+);
 ```
 
 ## Development

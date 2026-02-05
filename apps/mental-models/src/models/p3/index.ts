@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 
 /**
  * P3: [Brief Description]
- * 
+ *
  * [Detailed description of the model's purpose and functionality]
  */
 
@@ -47,14 +47,10 @@ const DEFAULT_CONFIG: Required<P3Config> = {
 };
 
 export const createP3Model = (config: Partial<P3Config> = {}) => {
-  const {
-    id,
-    name,
-    version,
-    eventEmitter,
-    telemetryEnabled,
-    logger,
-  } = { ...DEFAULT_CONFIG, ...config };
+  const { id, name, version, eventEmitter, telemetryEnabled, logger } = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
 
   /**
    * Analyze input using the P3 model
@@ -62,17 +58,17 @@ export const createP3Model = (config: Partial<P3Config> = {}) => {
   const analyze = async (input: P3Input): Promise<P3Output> => {
     const startTime = Date.now();
     const requestId = uuidv4();
-    
+
     try {
       // Input validation
       if (!input || typeof input !== 'object') {
         throw new Error('Input must be an object');
       }
-      
+
       if (!input.input) {
         throw new Error('Input must contain an "input" property');
       }
-      
+
       // TODO: Implement P3 analysis logic
       const result: P3Output = {
         id: requestId,
@@ -82,9 +78,11 @@ export const createP3Model = (config: Partial<P3Config> = {}) => {
           modelVersion: version,
           timestamp: new Date().toISOString(),
           executionTimeMs: Date.now() - startTime,
-          telemetry: telemetryEnabled ? {
-            // Add telemetry data here
-          } : undefined,
+          telemetry: telemetryEnabled
+            ? {
+                // Add telemetry data here
+              }
+            : undefined,
         },
       };
 
@@ -98,7 +96,7 @@ export const createP3Model = (config: Partial<P3Config> = {}) => {
       return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error during analysis';
-      
+
       // Emit error event
       eventEmitter.emit('analysisError', {
         requestId,

@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 
 /**
  * P6: [Brief Description]
- * 
+ *
  * [Detailed description of the model's purpose and functionality]
  */
 
@@ -47,14 +47,10 @@ const DEFAULT_CONFIG: Required<P6Config> = {
 };
 
 export const createP6Model = (config: Partial<P6Config> = {}) => {
-  const {
-    id,
-    name,
-    version,
-    eventEmitter,
-    telemetryEnabled,
-    logger,
-  } = { ...DEFAULT_CONFIG, ...config };
+  const { id, name, version, eventEmitter, telemetryEnabled, logger } = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
 
   /**
    * Analyze input using the P6 model
@@ -62,7 +58,7 @@ export const createP6Model = (config: Partial<P6Config> = {}) => {
   const analyze = async (input: P6Input): Promise<P6Output> => {
     const startTime = Date.now();
     const requestId = uuidv4();
-    
+
     try {
       // TODO: Implement P6 analysis logic
       const result: P6Output = {
@@ -73,9 +69,11 @@ export const createP6Model = (config: Partial<P6Config> = {}) => {
           modelVersion: version,
           timestamp: new Date().toISOString(),
           executionTimeMs: Date.now() - startTime,
-          telemetry: telemetryEnabled ? {
-            // Add telemetry data here
-          } : undefined,
+          telemetry: telemetryEnabled
+            ? {
+                // Add telemetry data here
+              }
+            : undefined,
         },
       };
 
@@ -89,7 +87,7 @@ export const createP6Model = (config: Partial<P6Config> = {}) => {
       return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error during analysis';
-      
+
       // Emit error event
       eventEmitter.emit('analysisError', {
         requestId,

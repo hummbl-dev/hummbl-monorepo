@@ -5,7 +5,7 @@
 **Model Code:** IN2  
 **Model Name:** Assumption Inversion  
 **Transformation:** Inversion  
-**Tier:** 2  
+**Tier:** 2
 
 ## Description
 
@@ -62,9 +62,11 @@ console.log('Inversion results:', inversion);
 Creates a new instance of the Assumption Inversion model.
 
 **Parameters:**
+
 - `config` (Optional): Configuration object for the model
 
 **Returns:** A model instance with the following methods:
+
 - `analyzeAssumptions(params)`: Analyzes a set of assumptions
 - `invertAssumption(params)`: Inverts a single assumption for analysis
 - `generateCounterExamples(assumption)`: Generates counter-examples to challenge an assumption
@@ -127,6 +129,7 @@ interface InversionResult {
 **Inversion:** "Users want fewer, simpler features in our application."
 
 **Potential Insights:**
+
 - Some users may be overwhelmed by feature bloat
 - There might be an opportunity to create a 'lite' version
 - Core functionality might be getting lost among less-used features
@@ -138,6 +141,7 @@ interface InversionResult {
 **Inversion:** "Our main competitor will shift focus to the SMB market."
 
 **Potential Implications:**
+
 - Need to strengthen SMB value proposition
 - May need to adjust pricing or packaging
 - Could indicate an opportunity in the enterprise space
@@ -151,6 +155,7 @@ interface InversionResult {
 ## Changelog
 
 ### 1.0.0
+
 - Initial release
 
 ## License

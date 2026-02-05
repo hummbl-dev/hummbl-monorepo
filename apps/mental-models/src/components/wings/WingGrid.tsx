@@ -33,11 +33,7 @@ export const WingGrid: React.FC<WingGridProps> = ({
             animate={animate}
             onClick={onWingClick ? () => onWingClick(transformation) : undefined}
           />
-          {showLabels && (
-            <div className="wing-grid-label">
-              {transformation}
-            </div>
-          )}
+          {showLabels && <div className="wing-grid-label">{transformation}</div>}
         </div>
       ))}
     </div>

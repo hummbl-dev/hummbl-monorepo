@@ -9,7 +9,7 @@ export const CO2_CONSTANTS = {
   MODEL_NAME: 'Conceptual Fusion Model',
   MODEL_DESCRIPTION: 'Enables merging of multiple conceptual models into a unified representation',
   VERSION: '1.0.0',
-  
+
   // Default configuration
   DEFAULT_CONFIG: {
     defaultSimilarityThreshold: 0.7,
@@ -19,7 +19,7 @@ export const CO2_CONSTANTS = {
     enableCaching: true,
     cacheTTL: 5 * 60 * 1000, // 5 minutes
   },
-  
+
   // Default transformation rules
   DEFAULT_RULES: [
     {
@@ -61,7 +61,7 @@ export const CO2_CONSTANTS = {
         }
       `,
       isActive: true,
-      tags: ['property', 'merge', 'automatic']
+      tags: ['property', 'merge', 'automatic'],
     },
     {
       id: 'rule-resolve-naming-conflicts',
@@ -103,19 +103,19 @@ export const CO2_CONSTANTS = {
         }
       `,
       isActive: true,
-      tags: ['naming', 'conflict-resolution', 'semi-automatic']
-    }
+      tags: ['naming', 'conflict-resolution', 'semi-automatic'],
+    },
   ] as Omit<TransformationRule, 'id' | 'meta'>[],
-  
+
   // Similarity weights for different concept fields
   SIMILARITY_WEIGHTS: {
     name: 0.4,
     description: 0.3,
     properties: 0.5,
     relationships: 0.3,
-    tags: 0.2
+    tags: 0.2,
   },
-  
+
   // Default concept template
   DEFAULT_CONCEPT: {
     id: '',
@@ -129,13 +129,13 @@ export const CO2_CONSTANTS = {
       updatedAt: new Date(),
       createdBy: 'system',
       lastUpdatedBy: 'system',
-      version: '1.0.0'
+      version: '1.0.0',
     },
     tags: [],
     confidence: 1.0,
-    isActive: true
+    isActive: true,
   } as Omit<Concept, 'id'>,
-  
+
   // Error messages
   ERRORS: {
     CONCEPT_NOT_FOUND: 'Concept not found',
@@ -143,9 +143,9 @@ export const CO2_CONSTANTS = {
     FUSION_FAILED: 'Failed to fuse concepts',
     RULE_VALIDATION_FAILED: 'Rule validation failed',
     CONFLICT_DETECTED: 'Conflict detected during fusion',
-    MAX_CONCEPTS_EXCEEDED: 'Maximum number of concepts to fuse exceeded'
+    MAX_CONCEPTS_EXCEEDED: 'Maximum number of concepts to fuse exceeded',
   },
-  
+
   // Event names
   EVENTS: {
     BEFORE_FUSION: 'beforeFusion',
@@ -153,9 +153,9 @@ export const CO2_CONSTANTS = {
     CONFLICT_DETECTED: 'conflictDetected',
     CONCEPT_ADDED: 'conceptAdded',
     CONCEPT_UPDATED: 'conceptUpdated',
-    CONCEPT_REMOVED: 'conceptRemoved'
+    CONCEPT_REMOVED: 'conceptRemoved',
   },
-  
+
   // Default validation rules
   VALIDATION_RULES: [
     {
@@ -167,27 +167,27 @@ export const CO2_CONSTANTS = {
             code: 'missing-name',
             message: 'Concept must have a name',
             path: 'name',
-            severity: 'error'
+            severity: 'error',
           });
         }
-        
+
         if (!concept.sourceModels || concept.sourceModels.length === 0) {
           errors.push({
             code: 'missing-source',
             message: 'Concept must have at least one source model',
             path: 'sourceModels',
-            severity: 'error'
+            severity: 'error',
           });
         }
-        
+
         return errors;
-      }
+      },
     },
     {
       id: 'property-validation',
       validate: (concept: Concept) => {
         const errors = [];
-        
+
         // Check property names
         for (const propName in concept.properties) {
           if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(propName)) {
@@ -195,25 +195,25 @@ export const CO2_CONSTANTS = {
               code: 'invalid-property-name',
               message: `Property name '${propName}' is invalid. Must start with a letter or underscore and contain only alphanumeric characters and underscores.`,
               path: `properties.${propName}`,
-              severity: 'error'
+              severity: 'error',
             });
           }
-          
+
           const prop = concept.properties[propName];
           if (prop.confidence < 0 || prop.confidence > 1) {
             errors.push({
               code: 'invalid-confidence',
               message: `Confidence for property '${propName}' must be between 0 and 1`,
               path: `properties.${propName}.confidence`,
-              severity: 'error'
+              severity: 'error',
             });
           }
         }
-        
+
         return errors;
-      }
-    }
-  ]
+      },
+    },
+  ],
 };
 
 /**
@@ -228,37 +228,37 @@ export const EXAMPLE_CONCEPTS: Omit<Concept, 'id'>[] = [
       name: {
         value: 'string',
         confidence: 0.95,
-        sources: ['CRM', 'Billing']
+        sources: ['CRM', 'Billing'],
       },
       email: {
         value: 'string',
         confidence: 0.9,
-        sources: ['CRM']
+        sources: ['CRM'],
       },
       billingAddress: {
         value: 'Address',
         confidence: 0.85,
-        sources: ['Billing']
-      }
+        sources: ['Billing'],
+      },
     },
     relationships: [
       {
         targetId: 'Order',
         type: 'hasMany',
         strength: 0.9,
-        bidirectional: true
-      }
+        bidirectional: true,
+      },
     ],
     meta: {
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system',
       lastUpdatedBy: 'system',
-      version: '1.0.0'
+      version: '1.0.0',
     },
     tags: ['core', 'business'],
     confidence: 0.9,
-    isActive: true
+    isActive: true,
   },
   {
     name: 'Client',
@@ -268,26 +268,26 @@ export const EXAMPLE_CONCEPTS: Omit<Concept, 'id'>[] = [
       fullName: {
         value: 'string',
         confidence: 0.92,
-        sources: ['Sales']
+        sources: ['Sales'],
       },
       contactEmail: {
         value: 'string',
         confidence: 0.88,
-        sources: ['Sales']
+        sources: ['Sales'],
       },
       company: {
         value: 'string',
         confidence: 0.8,
-        sources: ['Sales']
-      }
+        sources: ['Sales'],
+      },
     },
     relationships: [
       {
         targetId: 'Order',
         type: 'places',
         strength: 0.85,
-        bidirectional: false
-      }
+        bidirectional: false,
+      },
     ],
     meta: {
       createdAt: new Date(),
@@ -295,12 +295,12 @@ export const EXAMPLE_CONCEPTS: Omit<Concept, 'id'>[] = [
       createdBy: 'system',
       lastUpdatedBy: 'system',
       version: '1.0.0',
-      aliases: ['Customer']
+      aliases: ['Customer'],
     },
     tags: ['sales', 'external'],
     confidence: 0.85,
-    isActive: true
-  }
+    isActive: true,
+  },
 ];
 
 /**
@@ -308,5 +308,5 @@ export const EXAMPLE_CONCEPTS: Omit<Concept, 'id'>[] = [
  */
 export default {
   ...CO2_CONSTANTS,
-  EXAMPLE_CONCEPTS
+  EXAMPLE_CONCEPTS,
 };

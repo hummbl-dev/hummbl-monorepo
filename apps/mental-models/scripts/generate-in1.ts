@@ -15,33 +15,32 @@ const IN1_DEFINITION = {
     'Prevents mistakes by inversion',
     'Focuses on avoiding failure',
     'Considers worst-case scenarios',
-    'Highlights potential pitfalls'
+    'Highlights potential pitfalls',
   ],
   relatedModels: ['P1', 'ST1', 'ST2'],
   example: {
     problem: 'How to be happy?',
     traditionalApproach: 'Pursue happiness directly',
-    modelApproach: 'Identify what makes you unhappy and eliminate those things'
+    modelApproach: 'Identify what makes you unhappy and eliminate those things',
   },
   options: {
     maxDepth: 3,
     includeExamples: true,
-    includeRiskAnalysis: true
-  }
+    includeRiskAnalysis: true,
+  },
 };
 
 async function main() {
   try {
     console.log('🚀 Generating IN1 (Inversion) model...');
-    
+
     const templatePath = join(__dirname, 'templates/model-template.ejs');
     const outputDir = join(process.cwd(), 'src/models/in1');
-    
+
     await generateModel(templatePath, outputDir, IN1_DEFINITION);
-    
+
     console.log('✅ IN1 model generated successfully!');
     console.log('📁 Output directory:', outputDir);
-    
   } catch (error) {
     console.error('❌ Error generating IN1 model:', error);
     process.exit(1);

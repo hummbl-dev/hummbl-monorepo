@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 
 /**
  * P9: [Brief Description]
- * 
+ *
  * [Detailed description of the model's purpose and functionality]
  */
 
@@ -47,14 +47,10 @@ const DEFAULT_CONFIG: Required<P9Config> = {
 };
 
 export const createP9Model = (config: Partial<P9Config> = {}) => {
-  const {
-    id,
-    name,
-    version,
-    eventEmitter,
-    telemetryEnabled,
-    logger,
-  } = { ...DEFAULT_CONFIG, ...config };
+  const { id, name, version, eventEmitter, telemetryEnabled, logger } = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
 
   /**
    * Analyze input using the P9 model
@@ -62,7 +58,7 @@ export const createP9Model = (config: Partial<P9Config> = {}) => {
   const analyze = async (input: P9Input): Promise<P9Output> => {
     const startTime = Date.now();
     const requestId = uuidv4();
-    
+
     try {
       // TODO: Implement P9 analysis logic
       const result: P9Output = {
@@ -73,9 +69,11 @@ export const createP9Model = (config: Partial<P9Config> = {}) => {
           modelVersion: version,
           timestamp: new Date().toISOString(),
           executionTimeMs: Date.now() - startTime,
-          telemetry: telemetryEnabled ? {
-            // Add telemetry data here
-          } : undefined,
+          telemetry: telemetryEnabled
+            ? {
+                // Add telemetry data here
+              }
+            : undefined,
         },
       };
 
@@ -89,7 +87,7 @@ export const createP9Model = (config: Partial<P9Config> = {}) => {
       return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error during analysis';
-      
+
       // Emit error event
       eventEmitter.emit('analysisError', {
         requestId,

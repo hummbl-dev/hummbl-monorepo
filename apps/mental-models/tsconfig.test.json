@@ -10,9 +10,5 @@
     "src/**/*.test.tsx",
     "vitest.setup.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "**/*.stories.ts",
-    "**/*.stories.tsx"
-  ]
+  "exclude": ["node_modules", "**/*.stories.ts", "**/*.stories.tsx"]
 }

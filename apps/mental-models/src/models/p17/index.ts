@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 
 /**
  * P17: [Brief Description]
- * 
+ *
  * [Detailed description of the model's purpose and functionality]
  */
 
@@ -47,14 +47,10 @@ const DEFAULT_CONFIG: Required<P17Config> = {
 };
 
 export const createP17Model = (config: Partial<P17Config> = {}) => {
-  const {
-    id,
-    name,
-    version,
-    eventEmitter,
-    telemetryEnabled,
-    logger,
-  } = { ...DEFAULT_CONFIG, ...config };
+  const { id, name, version, eventEmitter, telemetryEnabled, logger } = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
 
   /**
    * Analyze input using the P17 model
@@ -62,7 +58,7 @@ export const createP17Model = (config: Partial<P17Config> = {}) => {
   const analyze = async (input: P17Input): Promise<P17Output> => {
     const startTime = Date.now();
     const requestId = uuidv4();
-    
+
     try {
       // TODO: Implement P17 analysis logic
       const result: P17Output = {
@@ -73,9 +69,11 @@ export const createP17Model = (config: Partial<P17Config> = {}) => {
           modelVersion: version,
           timestamp: new Date().toISOString(),
           executionTimeMs: Date.now() - startTime,
-          telemetry: telemetryEnabled ? {
-            // Add telemetry data here
-          } : undefined,
+          telemetry: telemetryEnabled
+            ? {
+                // Add telemetry data here
+              }
+            : undefined,
         },
       };
 
@@ -89,7 +87,7 @@ export const createP17Model = (config: Partial<P17Config> = {}) => {
       return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error during analysis';
-      
+
       // Emit error event
       eventEmitter.emit('analysisError', {
         requestId,

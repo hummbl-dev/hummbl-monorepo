@@ -1,7 +1,7 @@
 // AI Model Proxy Routes
 // Secure proxy for OpenAI, Anthropic, and other AI providers
 
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 import fetch from 'node-fetch';
 import { logger } from '../utils/logger';
 import { optionalAuth, AuthenticatedRequest } from '../middleware/authGuard';
@@ -84,7 +84,6 @@ router.post('/', optionalAuth, async (req: AuthenticatedRequest, res: Response) 
       messageCount: messages.length,
     });
 
-    let response;
     let apiUrl: string;
     let headers: Record<string, string>;
 
@@ -161,7 +160,7 @@ router.post('/', optionalAuth, async (req: AuthenticatedRequest, res: Response) 
     }
 
     // Make request to AI provider
-    response = await fetch(apiUrl, {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(requestBody),

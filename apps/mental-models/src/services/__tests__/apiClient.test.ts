@@ -10,7 +10,7 @@ global.fetch = vi.fn();
 const createMockResponse = (status: number, data: any, headers: Record<string, string> = {}) => {
   const responseHeaders = new Headers({
     'Content-Type': 'application/json',
-    ...headers
+    ...headers,
   });
 
   return {
@@ -58,7 +58,7 @@ describe('ApiClient', () => {
     it('makes successful POST request', async () => {
       const requestData = { name: 'Test' };
       const responseData = { id: '1' };
-      
+
       (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
         createMockResponse(201, responseData)
       );
@@ -97,7 +97,7 @@ describe('ApiClient', () => {
 
     it('retries on network error', async () => {
       const responseData = { data: 'success' };
-      
+
       (global.fetch as ReturnType<typeof vi.fn>)
         .mockRejectedValueOnce(new Error('Failed to fetch'))
         .mockResolvedValueOnce(createMockResponse(200, responseData));
@@ -118,9 +118,7 @@ describe('ApiClient', () => {
 
       apiClient.addRequestInterceptor(interceptor);
 
-      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
-        createMockResponse(200, {})
-      );
+      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce(createMockResponse(200, {}));
 
       await apiClient.get('/test');
 

@@ -10,7 +10,7 @@ export const RE1_CONSTANTS = {
   MODEL_NAME: 'Iterative Refinement',
   TRANSFORMATION: 'Recursion',
   VERSION: '1.0.0',
-  
+
   // Default configuration values
   DEFAULTS: {
     MAX_ITERATIONS: 10,
@@ -18,7 +18,7 @@ export const RE1_CONSTANTS = {
     PATIENCE: 3, // Stop if no improvement for 3 iterations
     METRICS_TO_TRACK: ['score', 'accuracy', 'loss'],
   },
-  
+
   // Error messages
   ERRORS: {
     MAX_ITERATIONS_EXCEEDED: 'Maximum number of iterations reached',
@@ -27,7 +27,7 @@ export const RE1_CONSTANTS = {
     INVALID_REFINER: 'Refiner must be a function',
     INVALID_SOLUTION: 'Initial solution is required',
   },
-  
+
   // Events
   EVENTS: {
     ITERATION_START: 'iteration:start',
@@ -46,7 +46,7 @@ export function createRefinementState<T>(
   customDefaults: Partial<RefinementState<T>> = {}
 ): RefinementState<T> {
   const now = new Date();
-  
+
   const defaultState: RefinementState<T> = {
     id: `refinement-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`,
     iteration: 0,
@@ -65,21 +65,21 @@ export function createRefinementState<T>(
     },
     status: 'running',
   };
-  
+
   return { ...defaultState, ...customDefaults };
 }
 
 /**
  * Default shouldContinue function that checks for convergence based on improvement
  */
-export const defaultShouldContinue: <T>(
-  state: RefinementState<T>
-) => Promise<boolean> = async (state) => {
+export const defaultShouldContinue: <T>(state: RefinementState<T>) => Promise<boolean> = async (
+  state
+) => {
   // Check max iterations
   if (state.iteration >= state.config.maxIterations) {
     return false;
   }
-  
+
   // Check for no improvement in last N iterations
   if (state.config.patience && state.metrics.lastImprovementIteration !== undefined) {
     const iterationsSinceImprovement = state.iteration - state.metrics.lastImprovementIteration;
@@ -87,26 +87,28 @@ export const defaultShouldContinue: <T>(
       return false;
     }
   }
-  
+
   // Check if we have enough history to evaluate improvement
   if (state.history.length >= 2) {
     const current = state.history[state.history.length - 1];
     const previous = state.history[state.history.length - 2];
-    
+
     // Calculate improvement for each tracked metric
-    const improvements = state.config.metricsToTrack.map(metric => {
+    const improvements = state.config.metricsToTrack.map((metric) => {
       if (current.metrics?.[metric] !== undefined && previous.metrics?.[metric] !== undefined) {
-        return (current.metrics[metric] - previous.metrics[metric]) / Math.abs(previous.metrics[metric]);
+        return (
+          (current.metrics[metric] - previous.metrics[metric]) / Math.abs(previous.metrics[metric])
+        );
       }
       return 0;
     });
-    
+
     // If no improvement in any metric, check if we should stop
-    if (improvements.every(imp => Math.abs(imp) < state.config.minImprovement)) {
+    if (improvements.every((imp) => Math.abs(imp) < state.config.minImprovement)) {
       return false;
     }
   }
-  
+
   return true;
 };
 
@@ -153,21 +155,21 @@ export function updateRefinementState<T>(
 export function hasConverged<T>(state: RefinementState<T>): boolean {
   // Not enough history to determine convergence
   if (state.history.length < 2) return false;
-  
+
   const current = state.history[state.history.length - 1];
   const previous = state.history[state.history.length - 2];
-  
+
   // Check if all tracked metrics have converged (improvement < minImprovement)
-  return state.config.metricsToTrack.every(metric => {
+  return state.config.metricsToTrack.every((metric) => {
     if (current.metrics?.[metric] === undefined || previous.metrics?.[metric] === undefined) {
       return true; // Skip metrics that aren't present
     }
-    
+
     const improvement = Math.abs(
-      (current.metrics[metric] - previous.metrics[metric]) / 
-      Math.max(1e-10, Math.abs(previous.metrics[metric]))
+      (current.metrics[metric] - previous.metrics[metric]) /
+        Math.max(1e-10, Math.abs(previous.metrics[metric]))
     );
-    
+
     return improvement < state.config.minImprovement;
   });
 }

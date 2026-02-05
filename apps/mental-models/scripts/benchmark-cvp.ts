@@ -2,23 +2,31 @@ import { validateContext } from '../cascade/context/validation/cvp';
 import { performance } from 'perf_hooks';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+import { randomBytes } from 'crypto';
+
+// Generate cryptographically secure random integer in range [0, max)
+function secureRandomInt(max: number): number {
+  const bytes = randomBytes(4);
+  const value = bytes.readUInt32BE(0);
+  return value % max;
+}
 
 // Generate a random HUMMBL packet
 function generateHummblPacket(id: number): any {
   const now = Date.now();
   return {
     id: `test-${id}`,
-    timestamp: now - Math.floor(Math.random() * 1000 * 60 * 60 * 24), // Random timestamp within last 24h
+    timestamp: now - secureRandomInt(1000 * 60 * 60 * 24), // Random timestamp within last 24h
     context: {
-      userId: `user-${Math.floor(Math.random() * 1000)}`,
-      sessionId: `session-${Math.floor(Math.random() * 10000)}`,
+      userId: `user-${secureRandomInt(1000)}`,
+      sessionId: `session-${secureRandomInt(10000)}`,
       environment: 'benchmark',
       version: '1.0.0',
     },
     payload: {
       type: 'test',
       data: `Test data for packet ${id}`,
-      value: Math.random() * 1000,
+      value: secureRandomInt(1000),
     },
   };
 }

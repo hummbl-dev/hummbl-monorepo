@@ -15,7 +15,7 @@ async function run() {
   }
 
   const scriptPath = resolve(__dirname, script);
-  
+
   // Use tsx to run TypeScript files directly
   const proc = spawn('npx', ['tsx', scriptPath], {
     stdio: 'inherit',

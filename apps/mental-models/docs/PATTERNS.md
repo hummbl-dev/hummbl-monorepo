@@ -3,6 +3,7 @@
 This document catalogs proven patterns used throughout the HUMMBL codebase. When building new features, reference these patterns for consistency.
 
 ## Table of Contents
+
 1. [Model Data Handling](#model-data-handling)
 2. [Transformation Logic](#transformation-logic)
 3. [Component Patterns](#component-patterns)
@@ -50,16 +51,16 @@ const loadModelSafe = async (code: string): Promise<Model> => {
 const parseModelCode = (code: string) => {
   const match = code.match(/^(P|IN|CO|DE|RE|SY)(\d+)$/);
   if (!match) throw new Error(`Invalid model code: ${code}`);
-  
+
   return {
     transformation: match[1] as TransformationCode,
     number: parseInt(match[2], 10),
-    code: code
+    code: code,
   };
 };
 
 // Usage
-const { transformation, number } = parseModelCode('P1'); 
+const { transformation, number } = parseModelCode('P1');
 // => { transformation: 'P', number: 1, code: 'P1' }
 ```
 
@@ -67,13 +68,16 @@ const { transformation, number } = parseModelCode('P1');
 
 ```typescript
 // Pattern: Filter models by criteria
-const filterModels = (models: Model[], criteria: {
-  transformation?: TransformationCode;
-  tier?: number;
-  category?: string;
-  searchTerm?: string;
-}) => {
-  return models.filter(model => {
+const filterModels = (
+  models: Model[],
+  criteria: {
+    transformation?: TransformationCode;
+    tier?: number;
+    category?: string;
+    searchTerm?: string;
+  }
+) => {
+  return models.filter((model) => {
     if (criteria.transformation && model.transformation !== criteria.transformation) {
       return false;
     }
@@ -92,20 +96,14 @@ const filterModels = (models: Model[], criteria: {
 
 // Helper functions
 const modelHasCategory = (model: Model, category: string) => {
-  return [
-    model.category.primary,
-    model.category.secondary,
-    model.category.tertiary
-  ].includes(category);
+  return [model.category.primary, model.category.secondary, model.category.tertiary].includes(
+    category
+  );
 };
 
 const modelMatchesSearch = (model: Model, term: string) => {
-  const searchable = [
-    model.name,
-    model.definition,
-    model.code
-  ].join(' ').toLowerCase();
-  
+  const searchable = [model.name, model.definition, model.code].join(' ').toLowerCase();
+
   return searchable.includes(term.toLowerCase());
 };
 ```
@@ -122,18 +120,18 @@ export const TRANSFORMATIONS = {
   P: {
     code: 'P' as const,
     name: 'Perspective',
-    color: '#3B82F6',      // Blue
+    color: '#3B82F6', // Blue
     description: 'Shift viewpoint and identity',
     icon: '👁️',
-    modelRange: [1, 20]
+    modelRange: [1, 20],
   },
   IN: {
     code: 'IN' as const,
     name: 'Inversion',
-    color: '#8B5CF6',      // Purple
+    color: '#8B5CF6', // Purple
     description: 'Flip problem on its head',
     icon: '🔄',
-    modelRange: [1, 20]
+    modelRange: [1, 20],
   },
   // ... other transformations
 } as const;
@@ -160,14 +158,14 @@ const PROVEN_CHAINS: TransformationChain[] = [
     name: 'Systems Design',
     steps: ['P', 'DE', 'CO'],
     useCase: 'Breaking down complex systems',
-    example: 'Designing microservice architecture'
+    example: 'Designing microservice architecture',
   },
   {
     name: 'Problem Reframing',
     steps: ['IN', 'P', 'SY'],
     useCase: 'Finding non-obvious solutions',
-    example: 'Solving wicked problems'
-  }
+    example: 'Solving wicked problems',
+  },
 ];
 
 // Execute transformation chain
@@ -192,15 +190,15 @@ interface ModelCardProps {
   onClick?: () => void;
 }
 
-export const ModelCard: FC<ModelCardProps> = ({ 
-  model, 
+export const ModelCard: FC<ModelCardProps> = ({
+  model,
   variant = 'compact',
-  onClick 
+  onClick
 }) => {
   const transformation = getTransformation(model.transformation);
-  
+
   return (
-    <div 
+    <div
       className={`model-card model-card--${variant}`}
       onClick={onClick}
       style={{ borderColor: transformation.color }}
@@ -209,15 +207,15 @@ export const ModelCard: FC<ModelCardProps> = ({
         <span className="model-card__code">{model.code}</span>
         <TransformationBadge code={model.transformation} />
       </div>
-      
+
       <h3 className="model-card__name">{model.name}</h3>
-      
+
       {variant === 'detailed' && (
         <p className="model-card__definition">
           {model.definition}
         </p>
       )}
-      
+
       <div className="model-card__footer">
         <TierBadge tier={model.tier} />
         <CategoryTag category={model.category.primary} />
@@ -236,16 +234,16 @@ interface TransformationBadgeProps {
   showName?: boolean;
 }
 
-export const TransformationBadge: FC<TransformationBadgeProps> = ({ 
-  code, 
-  showName = false 
+export const TransformationBadge: FC<TransformationBadgeProps> = ({
+  code,
+  showName = false
 }) => {
   const transformation = getTransformation(code);
-  
+
   return (
-    <span 
+    <span
       className="transformation-badge"
-      style={{ 
+      style={{
         backgroundColor: transformation.color,
         color: '#fff'
       }}
@@ -276,14 +274,14 @@ const useModelData = (code: string) => {
   const [model, setModel] = useState<Model | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  
+
   useEffect(() => {
     loadModel(code)
       .then(setModel)
       .catch(setError)
       .finally(() => setLoading(false));
   }, [code]);
-  
+
   return { model, loading, error };
 };
 ```
@@ -296,10 +294,7 @@ const useModelData = (code: string) => {
 
 ```typescript
 // Pattern: Model code generation and validation
-export const generateModelCode = (
-  transformation: TransformationCode, 
-  number: number
-): string => {
+export const generateModelCode = (transformation: TransformationCode, number: number): string => {
   if (number < 1 || number > 20) {
     throw new Error(`Model number must be 1-20, got ${number}`);
   }
@@ -313,13 +308,13 @@ export const isValidModelCode = (code: string): boolean => {
 export const getAllModelCodes = (): string[] => {
   const transformations: TransformationCode[] = ['P', 'IN', 'CO', 'DE', 'RE', 'SY'];
   const codes: string[] = [];
-  
+
   for (const t of transformations) {
     for (let n = 1; n <= 20; n++) {
       codes.push(generateModelCode(t, n));
     }
   }
-  
+
   return codes; // Returns all 120 codes
 };
 ```
@@ -330,7 +325,7 @@ export const getAllModelCodes = (): string[] => {
 // Pattern: Format model data for display
 export const formatModelName = (name: string): string => {
   // Capitalize each word
-  return name.replace(/\b\w/g, char => char.toUpperCase());
+  return name.replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
 export const formatModelDefinition = (definition: string, maxLength: number = 150): string => {
@@ -350,42 +345,42 @@ export const formatTransformationName = (code: TransformationCode): string => {
 export const fuzzyMatch = (text: string, query: string): boolean => {
   const textLower = text.toLowerCase();
   const queryLower = query.toLowerCase();
-  
+
   let queryIndex = 0;
   for (let i = 0; i < textLower.length && queryIndex < queryLower.length; i++) {
     if (textLower[i] === queryLower[queryIndex]) {
       queryIndex++;
     }
   }
-  
+
   return queryIndex === queryLower.length;
 };
 
 // Pattern: Search ranking
 export const rankSearchResults = (models: Model[], query: string): Model[] => {
   return models
-    .map(model => ({
+    .map((model) => ({
       model,
-      score: calculateSearchScore(model, query)
+      score: calculateSearchScore(model, query),
     }))
     .sort((a, b) => b.score - a.score)
-    .map(result => result.model);
+    .map((result) => result.model);
 };
 
 const calculateSearchScore = (model: Model, query: string): number => {
   let score = 0;
   const queryLower = query.toLowerCase();
-  
+
   // Exact match in code or name gets highest score
   if (model.code.toLowerCase() === queryLower) score += 100;
   if (model.name.toLowerCase().includes(queryLower)) score += 50;
-  
+
   // Match in definition
   if (model.definition.toLowerCase().includes(queryLower)) score += 25;
-  
+
   // Match in categories
   if (modelHasCategory(model, queryLower)) score += 10;
-  
+
   return score;
 };
 ```
@@ -428,7 +423,7 @@ export interface Model {
 export interface Example {
   title: string;
   description: string;
-  domain: string;        // "Business", "Engineering", "Science"
+  domain: string; // "Business", "Engineering", "Science"
   transformationApplied: TransformationCode[];
 }
 
@@ -453,7 +448,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 // Pattern: Discriminated union for variants
-type CardVariant = 
+type CardVariant =
   | { variant: 'compact'; showDetails?: never }
   | { variant: 'detailed'; showDetails: boolean };
 
@@ -553,17 +548,15 @@ const safeLoadModel = async (code: string): Promise<Result<Model, Error>> => {
     const model = await loadModel(code);
     return { ok: true, value: model };
   } catch (error) {
-    return { 
-      ok: false, 
-      error: error instanceof Error ? error : new Error('Unknown error')
+    return {
+      ok: false,
+      error: error instanceof Error ? error : new Error('Unknown error'),
     };
   }
 };
 
 // Pattern: Result type for error handling
-type Result<T, E> = 
-  | { ok: true; value: T }
-  | { ok: false; error: E };
+type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
 
 // Usage
 const result = await safeLoadModel('P1');
@@ -579,6 +572,7 @@ if (result.ok) {
 ## Anti-Patterns to Avoid
 
 ### ❌ Don't: Mutate state directly
+
 ```typescript
 // BAD
 model.name = 'New Name';
@@ -586,10 +580,11 @@ setModels([...models]);
 
 // GOOD
 const updatedModel = { ...model, name: 'New Name' };
-setModels(models.map(m => m.code === model.code ? updatedModel : m));
+setModels(models.map((m) => (m.code === model.code ? updatedModel : m)));
 ```
 
 ### ❌ Don't: Use generic catch blocks
+
 ```typescript
 // BAD
 try {
@@ -614,6 +609,7 @@ try {
 ```
 
 ### ❌ Don't: Create tight coupling
+
 ```typescript
 // BAD - Direct dependency on specific implementation
 import { P1Model } from './P1';

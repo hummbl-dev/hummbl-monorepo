@@ -31,14 +31,14 @@ export const WingAnimation: React.FC<WingAnimationProps> = ({
     const timer = setInterval(() => {
       setCurrentIndex((prev) => {
         const nextIndex = (prev + 1) % sequence.length;
-        
+
         if (nextIndex === 0 && !loop) {
           setIsPlaying(false);
           if (onSequenceComplete) {
             onSequenceComplete();
           }
         }
-        
+
         return nextIndex;
       });
     }, interval);
@@ -50,11 +50,7 @@ export const WingAnimation: React.FC<WingAnimationProps> = ({
 
   return (
     <div className={`wing-animation ${className}`}>
-      <Wing
-        transformation={currentTransformation}
-        size={size}
-        animate="pulse"
-      />
+      <Wing transformation={currentTransformation} size={size} animate="pulse" />
       <div className="wing-animation-controls">
         <button
           onClick={() => setIsPlaying(!isPlaying)}

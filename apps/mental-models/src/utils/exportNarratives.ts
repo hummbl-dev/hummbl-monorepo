@@ -97,11 +97,16 @@ export function exportToMarkdown(
       lines.push(
         '## Citations',
         '',
-        ...n.citations.map((c: { author: string; year: number | string; title: string; source: string }, idx: number) => {
-          // Handle both string and number years
-          const year = typeof c.year === 'number' ? c.year : c.year.toString();
-          return `${idx + 1}. ${c.author} (${year}). *${c.title}*. ${c.source}`;
-        }),
+        ...n.citations.map(
+          (
+            c: { author: string; year: number | string; title: string; source: string },
+            idx: number
+          ) => {
+            // Handle both string and number years
+            const year = typeof c.year === 'number' ? c.year : c.year.toString();
+            return `${idx + 1}. ${c.author} (${year}). *${c.title}*. ${c.source}`;
+          }
+        ),
         ''
       );
     }

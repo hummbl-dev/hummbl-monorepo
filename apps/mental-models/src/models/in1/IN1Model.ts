@@ -23,9 +23,12 @@ export function invertQuestion(question: string): string {
 }
 
 // Helper to generate failure modes
-export function generateFailureModes(inverseProblem: string, context: Record<string, any> = {}): string[] {
+export function generateFailureModes(
+  inverseProblem: string,
+  context: Record<string, any> = {}
+): string[] {
   // This is a simplified implementation - in a real app, this would use an LLM
-  let failures = [
+  const failures = [
     'Lack of clear goals',
     'Poor communication',
     'Insufficient resources',
@@ -33,7 +36,7 @@ export function generateFailureModes(inverseProblem: string, context: Record<str
     'Poor planning',
     'Lack of accountability',
     'Resistance to change',
-    'Overcomplicating solutions'
+    'Overcomplicating solutions',
   ];
 
   // Add context-specific failures
@@ -52,7 +55,7 @@ export function generateFailureModes(inverseProblem: string, context: Record<str
 
 // Helper to convert failure modes to avoidance strategies
 export function generateAvoidanceStrategies(failureModes: string[]): string[] {
-  return failureModes.map(failure => {
+  return failureModes.map((failure) => {
     if (failure.startsWith('Lack of ')) {
       return `Ensure ${failure.substring(8).toLowerCase()}`;
     }
@@ -72,7 +75,7 @@ export function generateInsights(failureModes: string[]): string[] {
     `Avoiding failure is often more important than pursuing success`,
     `The most critical risks to manage: ${failureModes.slice(0, 2).join(' and ')}`,
     `Regularly review and update your risk assessment`,
-    `Create systems to detect early warning signs`
+    `Create systems to detect early warning signs`,
   ];
 }
 
@@ -87,7 +90,7 @@ const DEFAULT_CONFIG: Required<IN1Config> = {
 
 export class IN1Model {
   private config: Required<IN1Config>;
-  
+
   constructor(config: Partial<IN1Config> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
   }
@@ -100,19 +103,19 @@ export class IN1Model {
     try {
       // 1. Invert the problem
       const inverseProblem = invertQuestion(input.problem);
-      
+
       // 2. Generate failure modes
       const failureModes = generateFailureModes(inverseProblem, input.context);
-      
+
       // 3. Convert to avoidance strategies
       const avoidanceStrategies = generateAvoidanceStrategies(failureModes);
-      
+
       // 4. Generate insights
       const insights = generateInsights(failureModes);
-      
+
       // 5. Calculate confidence (simplified)
-      const confidence = Math.min(0.9, 0.7 + (Math.min(failureModes.length, 5) * 0.04));
-      
+      const confidence = Math.min(0.9, 0.7 + Math.min(failureModes.length, 5) * 0.04);
+
       const result: IN1Output = {
         id: uuidv4(),
         problem: input.problem,
@@ -124,14 +127,14 @@ export class IN1Model {
           telemetry: {
             model: 'IN1',
             version: this.config.version || '1.0.0',
-            timestamp: new Date().toISOString()
-          }
+            timestamp: new Date().toISOString(),
+          },
         },
         inverseProblem,
         failureModes,
         avoidanceStrategies,
         insights,
-        confidence
+        confidence,
       };
 
       // Emit analysis complete event
@@ -139,24 +142,24 @@ export class IN1Model {
         eventEmitter.emit('analysisComplete', {
           requestId,
           result,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       }
 
       return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      
+
       // Emit error event
       if (eventEmitter) {
         const errorEvent = {
           requestId,
           error: errorMessage,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         };
         eventEmitter.emit('analysisError', errorEvent);
       }
-      
+
       // Re-throw the error
       if (error instanceof Error) {
         throw error;

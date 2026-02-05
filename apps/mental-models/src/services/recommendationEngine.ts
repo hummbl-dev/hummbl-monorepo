@@ -163,7 +163,7 @@ export class RecommendationEngine {
         return this.getCollaborativeRecommendations(corpus, limit);
 
       case 'hybrid':
-      default:
+      default: {
         const semantic = await this.getSemanticRecommendations(corpus, Math.floor(limit * 0.6));
         const collaborative = await this.getCollaborativeRecommendations(
           corpus,
@@ -182,6 +182,7 @@ export class RecommendationEngine {
         }
 
         return merged.slice(0, limit);
+      }
     }
   }
 

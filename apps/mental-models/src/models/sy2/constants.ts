@@ -6,7 +6,7 @@ export const SY2_CONSTANTS = {
   MODEL_NAME: 'Universal Schema Mapping',
   TRANSFORMATION: 'Synthesis',
   VERSION: '1.0.0',
-  
+
   // Default configuration
   DEFAULTS: {
     VALIDATE: true,
@@ -16,7 +16,7 @@ export const SY2_CONSTANTS = {
     MAX_DEPTH: 10,
     MAX_ITERATIONS: 1000,
   },
-  
+
   // Common field types
   FIELD_TYPES: [
     'string',
@@ -28,19 +28,19 @@ export const SY2_CONSTANTS = {
     'object',
     'array',
     'null',
-    'any'
+    'any',
   ] as const,
-  
+
   // Common formats
   FORMATS: {
     EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    URL: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/,
+    URL: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)?\/?$/,
     PHONE: /^\+?[\d\s-()]{10,}$/,
     ZIP_CODE: /^\d{5}(-\d{4})?$/,
     DATE_ISO: /^\d{4}-\d{2}-\d{2}$/,
     DATETIME_ISO: /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?$/,
   },
-  
+
   // Common transformations
   TRANSFORMATIONS: {
     toLowerCase: (value: any) => String(value).toLowerCase(),
@@ -58,7 +58,7 @@ export const SY2_CONSTANTS = {
     toJSON: (value: any) => JSON.stringify(value),
     fromJSON: (value: string) => JSON.parse(value),
   },
-  
+
   // Error messages
   ERRORS: {
     INVALID_SCHEMA: 'Invalid schema provided',
@@ -69,7 +69,7 @@ export const SY2_CONSTANTS = {
     MAX_DEPTH_EXCEEDED: 'Maximum nesting depth exceeded',
     MAX_ITERATIONS_EXCEEDED: 'Maximum iterations exceeded',
   },
-  
+
   // Default schema mapping options
   DEFAULT_OPTIONS: {
     validate: true,
@@ -84,7 +84,7 @@ export const SY2_CONSTANTS = {
  */
 export function createSchemaMapping(overrides: Partial<SchemaMapping> = {}): SchemaMapping {
   const now = new Date();
-  
+
   return {
     id: `map-${Date.now()}`,
     source: {
@@ -126,7 +126,7 @@ export function createSchemaMappingResult(
   meta: Partial<SchemaMappingResult['meta']> = {}
 ) {
   const now = new Date();
-  
+
   return {
     data,
     stats: {

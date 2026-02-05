@@ -18,10 +18,11 @@ src/models/
 ## File Templates
 
 ### types.ts
+
 ```typescript
 /**
  * {MODEL_CODE}: {MODEL_NAME}
- * 
+ *
  * {Brief description of the model and its purpose}
  */
 
@@ -46,16 +47,17 @@ export interface {ModelName}Model {
   name: string;
   version: string;
   config: {ModelName}Config;
-  
+
   // Core methods
   process(input: any): Promise<{ModelName}Result>;
-  
+
   // Additional methods as needed
   validate?(input: any): boolean;
 }
 ```
 
 ### constants.ts
+
 ```typescript
 import { {ModelName}Config } from './types';
 
@@ -63,19 +65,19 @@ export const {MODEL_CODE}_CONSTANTS = {
   MODEL_CODE: '{MODEL_CODE}',
   MODEL_NAME: '{MODEL_NAME}',
   VERSION: '1.0.0',
-  
+
   DEFAULTS: {
     // Default configuration values
     option1: 'default',
     option2: 100,
   },
-  
+
   // Constants used by the model
   THRESHOLDS: {
     MIN_CONFIDENCE: 0.7,
     MAX_RETRIES: 3,
   },
-  
+
   // Error messages
   ERRORS: {
     INVALID_INPUT: 'Invalid input provided',
@@ -85,6 +87,7 @@ export const {MODEL_CODE}_CONSTANTS = {
 ```
 
 ### index.ts
+
 ```typescript
 import { v4 as uuidv4 } from 'uuid';
 import { {MODEL_CODE}_CONSTANTS } from './constants';
@@ -102,13 +105,13 @@ export function create{ModelName}Model(config: Partial<{ModelName}Config> = {}):
       ...{MODEL_CODE}_CONSTANTS.DEFAULTS,
       ...config,
     },
-    
+
     async process(input: any): Promise<{ModelName}Result> {
       const startTime = Date.now();
-      
+
       try {
         // Implementation here
-        
+
         return {
           success: true,
           data: { /* processed data */ },
@@ -129,13 +132,13 @@ export function create{ModelName}Model(config: Partial<{ModelName}Config> = {}):
         };
       }
     },
-    
+
     validate(input: any): boolean {
       // Implementation
       return true;
     },
   };
-  
+
   return model;
 }
 
@@ -144,16 +147,17 @@ export * from './constants';
 ```
 
 ### Test File (`__tests__/{model_code}.test.ts`)
+
 ```typescript
 import { create{ModelName}Model } from '..';
 
 describe('{MODEL_CODE}: {MODEL_NAME}', () => {
   let model: ReturnType<typeof create{ModelName}Model>;
-  
+
   beforeEach(() => {
     model = create{ModelName}Model();
   });
-  
+
   describe('Initialization', () => {
     it('should create a model with default config', () => {
       expect(model).toBeDefined();
@@ -162,20 +166,20 @@ describe('{MODEL_CODE}: {MODEL_NAME}', () => {
       expect(model.version).toBe('1.0.0');
     });
   });
-  
+
   describe('process()', () => {
     it('should process valid input', async () => {
       const result = await model.process({ /* test input */ });
       expect(result.success).toBe(true);
       expect(result.metrics.confidence).toBeGreaterThan(0);
     });
-    
+
     it('should handle invalid input', async () => {
       const result = await model.process(null);
       expect(result.success).toBe(false);
     });
   });
-  
+
   describe('validate()', () => {
     it('should validate input structure', () => {
       expect(model.validate({ /* valid input */ })).toBe(true);

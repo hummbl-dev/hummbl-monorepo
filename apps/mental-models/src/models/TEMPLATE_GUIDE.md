@@ -46,12 +46,14 @@ Modify the `ModelInputSchema` to validate your model's specific input requiremen
 ## Example: Creating the IN1 (Inversion) Model
 
 1. Copy the template:
+
    ```bash
    mkdir -p src/models/in1
    cp src/models/model-template.ts src/models/in1/InversionModel.ts
    ```
 
 2. Update placeholders in `InversionModel.ts`:
+
    ```typescript
    const MODEL_CONSTANTS = {
      MODEL_CODE: 'IN1',
@@ -62,20 +64,21 @@ Modify the `ModelInputSchema` to validate your model's specific input requiremen
    ```
 
 3. Implement the core logic:
+
    ```typescript
    private async executeAnalysis(input: ModelInput): Promise<Omit<ModelOutput, 'metadata'>> {
      // 1. Identify the desired outcome
      const outcome = await this.identifyOutcome(input.problem);
-     
+
      // 2. Invert the outcome
      const inverted = await this.invertOutcome(outcome);
-     
+
      // 3. Analyze the inverted outcome
      const analysis = await this.analyzeInvertedOutcome(inverted);
-     
+
      // 4. Derive insights
      const insights = await this.deriveInsights(analysis);
-     
+
      return {
        id: uuidv4(),
        problem: input.problem,
@@ -91,27 +94,28 @@ Modify the `ModelInputSchema` to validate your model's specific input requiremen
 ## Testing Your Model
 
 1. Create a test file:
+
    ```typescript
    // src/models/__tests__/YourModel.test.ts
    import { createModel } from '../your-model/YourModel';
-   
+
    describe('YourModel', () => {
      let model: Model;
-     
+
      beforeEach(() => {
        model = createModel({
          // Test configuration
        });
      });
-     
+
      it('should process basic input', async () => {
        const result = await model.analyze({
          problem: 'How can I be more productive?',
          options: {
            // Model-specific options
-         }
+         },
        });
-       
+
        expect(result.solution).toBeDefined();
        expect(result.metadata.telemetry).toBeDefined();
      });

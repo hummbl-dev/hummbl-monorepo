@@ -37,20 +37,20 @@ export async function runCleanup(): Promise<void> {
 export function resetTestingState(): void {
   // Clear all mocks using Vitest's vi
   vi.clearAllMocks();
-  
+
   // Clear all timers
   vi.useRealTimers();
   vi.clearAllTimers();
-  
+
   // Clear any intervals or timeouts that might be hanging around
   const maxSafeInteger = Number.MAX_SAFE_INTEGER || 2147483647;
   let lastId = Number(setTimeout(() => {}, 0));
-  
+
   // Clear timeouts in chunks to avoid blocking the event loop
   while (lastId > 0) {
     clearTimeout(lastId);
     clearInterval(lastId);
-    
+
     // Prevent infinite loops with a reasonable limit
     if (lastId > maxSafeInteger - 1000) {
       console.warn('Reached maximum timeout ID, stopping cleanup');
@@ -58,7 +58,7 @@ export function resetTestingState(): void {
     }
     lastId--;
   }
-  
+
   // Clear any immediate timeouts
   if (typeof global !== 'undefined' && 'clearImmediate' in global) {
     const globalAny = global as any;
@@ -105,14 +105,14 @@ export function setupTestEnvironment() {
     await runCleanup();
     forceGarbageCollection();
   });
-  
+
   // Additional cleanup after all tests
   afterAll(async () => {
     // Add any global cleanup here
     await runCleanup();
     forceGarbageCollection();
   });
-  
+
   return {
     cleanup,
     runCleanup,

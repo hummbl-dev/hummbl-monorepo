@@ -77,13 +77,22 @@ export class AnalyticsEngine {
   }
 
   /**
+   * Generate cryptographically secure random hex string
+   */
+  private generateSecureId(): string {
+    const array = new Uint8Array(16);
+    crypto.getRandomValues(array);
+    return Array.from(array, (b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  /**
    * Get or create session ID
    */
   private getOrCreateSessionId(): string {
     let sessionId = sessionStorage.getItem(SESSION_KEY);
 
     if (!sessionId) {
-      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      sessionId = `session_${Date.now()}_${this.generateSecureId()}`;
       sessionStorage.setItem(SESSION_KEY, sessionId);
     }
 
@@ -116,7 +125,7 @@ export class AnalyticsEngine {
     }
 
     const event: AnalyticsEvent = {
-      id: `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `event_${Date.now()}_${this.generateSecureId()}`,
       type,
       category,
       action,

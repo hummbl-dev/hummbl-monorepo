@@ -1,6 +1,7 @@
 # RE05: Reconstruction Model
 
 ## Overview
+
 This model implements the Reconstruction mental model by reassembling components into a coherent system with improved structure and relationships.
 
 ## Installation
@@ -16,7 +17,7 @@ import { createRE05Model } from '@hummbl/models/re05';
 
 // Create an instance of the model
 const model = createRE05Model({
-  telemetryEnabled: true
+  telemetryEnabled: true,
 });
 
 // Reconstruct a system from components
@@ -24,14 +25,14 @@ const result = await model.reconstruct({
   systemId: 'example-system',
   name: 'Example System',
   components: [
-    { 
+    {
       id: 'auth-service',
       type: 'service',
-      properties: { 
+      properties: {
         name: 'Authentication Service',
         language: 'TypeScript',
-        repository: 'https://github.com/example/auth-service'
-      }
+        repository: 'https://github.com/example/auth-service',
+      },
     },
     {
       id: 'user-db',
@@ -39,9 +40,9 @@ const result = await model.reconstruct({
       properties: {
         name: 'User Database',
         type: 'PostgreSQL',
-        version: '13.0'
-      }
-    }
+        version: '13.0',
+      },
+    },
   ],
   relationships: [
     {
@@ -51,19 +52,19 @@ const result = await model.reconstruct({
       type: 'uses',
       properties: {
         description: 'Stores and retrieves user authentication data',
-        authentication: 'credentials'
-      }
-    }
+        authentication: 'credentials',
+      },
+    },
   ],
   strategy: 'optimize',
   context: {
     environment: 'production',
-    team: 'identity'
+    team: 'identity',
   },
   metadata: {
     source: 'user-request',
-    priority: 'high'
-  }
+    priority: 'high',
+  },
 });
 
 console.log('Reconstructed System:', result.system);
@@ -77,6 +78,7 @@ console.log('Metrics:', result.metrics);
 Creates a new instance of the RE05 model.
 
 **Parameters:**
+
 - `config` (Optional): Configuration object
   - `name` (string): Name of the model instance (default: 'RE05')
   - `version` (string): Version of the model (default: '1.0.0')
@@ -86,6 +88,7 @@ Creates a new instance of the RE05 model.
 
 **Returns:**
 An object with the following properties:
+
 - `id` (string): The model ID
 - `name` (string): The model name
 - `version` (string): The model version
@@ -96,6 +99,7 @@ An object with the following properties:
 Reconstructs a system from its components and relationships.
 
 **Parameters:**
+
 - `input` (object): The input to reconstruct
   - `systemId` (string, optional): Unique identifier for the system
   - `name` (string, optional): Name of the system
@@ -113,17 +117,21 @@ A Promise that resolves to a reconstruction result object.
 The model emits the following events:
 
 ### reconstructionComplete
+
 Emitted when reconstruction is successfully completed.
 
 **Event Data:**
+
 - `requestId` (string): Unique ID for the request
 - `result` (object): The reconstruction result
 - `timestamp` (string): ISO timestamp of when the event was emitted
 
 ### reconstructionError
+
 Emitted when an error occurs during reconstruction.
 
 **Event Data:**
+
 - `requestId` (string): Unique ID for the request
 - `error` (string): Error message
 - `timestamp` (string): ISO timestamp of when the error occurred

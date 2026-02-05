@@ -1,15 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { 
-  Stakeholder, 
-  StakeholderMap, 
-  StakeholderAnalysis, 
-  StakeholderModel
-} from './types';
-import { 
-  P2_CONSTANTS, 
-  EXAMPLE_STAKEHOLDERS, 
+import type { Stakeholder, StakeholderMap, StakeholderAnalysis, StakeholderModel } from './types';
+import {
+  P2_CONSTANTS,
+  EXAMPLE_STAKEHOLDERS,
   EXAMPLE_SCENARIO,
-  STAKEHOLDER_TYPE_COLORS
+  STAKEHOLDER_TYPE_COLORS,
 } from './constants';
 
 /**
@@ -18,7 +13,7 @@ import {
 const createStakeholder = (params: Omit<Stakeholder, 'id'>): Stakeholder => ({
   id: uuidv4(),
   ...params,
-  relationships: params.relationships || []
+  relationships: params.relationships || [],
 });
 
 /**
@@ -30,7 +25,7 @@ const createStakeholderMap = (name: string, description: string = ''): Stakehold
   description,
   stakeholders: [],
   createdAt: new Date(),
-  updatedAt: new Date()
+  updatedAt: new Date(),
 });
 
 /**
@@ -41,10 +36,10 @@ const analyzeStakeholders = (stakeholders: Stakeholder[]): StakeholderAnalysis =
   const keepSatisfied: Stakeholder[] = [];
   const keepInformed: Stakeholder[] = [];
   const minimalEffort: Stakeholder[] = [];
-  
+
   const { INFLUENCE_THRESHOLD, INTEREST_THRESHOLD } = P2_CONSTANTS;
 
-  stakeholders.forEach(stakeholder => {
+  stakeholders.forEach((stakeholder) => {
     if (stakeholder.influence >= INFLUENCE_THRESHOLD) {
       if (stakeholder.interest >= INTEREST_THRESHOLD) {
         keyStakeholders.push(stakeholder);
@@ -59,8 +54,8 @@ const analyzeStakeholders = (stakeholders: Stakeholder[]): StakeholderAnalysis =
   });
 
   // Sort by influence * interest (descending)
-  const sortByImportance = (a: Stakeholder, b: Stakeholder) => 
-    (b.influence * b.interest) - (a.influence * a.interest);
+  const sortByImportance = (a: Stakeholder, b: Stakeholder) =>
+    b.influence * b.interest - a.influence * a.interest;
 
   keyStakeholders.sort(sortByImportance);
   keepSatisfied.sort(sortByImportance);
@@ -72,7 +67,7 @@ const analyzeStakeholders = (stakeholders: Stakeholder[]): StakeholderAnalysis =
     keepSatisfied,
     keepInformed,
     minimalEffort,
-    networkMap: generateNetworkMap(stakeholders)
+    networkMap: generateNetworkMap(stakeholders),
   };
 };
 
@@ -80,25 +75,25 @@ const analyzeStakeholders = (stakeholders: Stakeholder[]): StakeholderAnalysis =
  * Generates a network map for visualization
  */
 const generateNetworkMap = (stakeholders: Stakeholder[]): StakeholderAnalysis['networkMap'] => {
-  const nodes = stakeholders.map(stakeholder => ({
+  const nodes = stakeholders.map((stakeholder) => ({
     id: stakeholder.id,
     label: stakeholder.name,
     type: stakeholder.type,
     color: STAKEHOLDER_TYPE_COLORS[stakeholder.type],
     influence: stakeholder.influence,
-    interest: stakeholder.interest
+    interest: stakeholder.interest,
   }));
 
-  const edges: Array<{from: string; to: string; label: string; strength: number}> = [];
-  
+  const edges: Array<{ from: string; to: string; label: string; strength: number }> = [];
+
   // Create relationships between stakeholders
-  stakeholders.forEach(stakeholder => {
-    stakeholder.relationships?.forEach(rel => {
+  stakeholders.forEach((stakeholder) => {
+    stakeholder.relationships?.forEach((rel) => {
       edges.push({
         from: stakeholder.id,
         to: rel.stakeholderId,
         label: rel.relationshipType.replace('_', ' '),
-        strength: rel.strength
+        strength: rel.strength,
       });
     });
   });
@@ -109,9 +104,12 @@ const generateNetworkMap = (stakeholders: Stakeholder[]): StakeholderAnalysis['n
 /**
  * Finds stakeholders with influence above a threshold
  */
-const findInfluencers = (stakeholders: Stakeholder[], minInfluence: number = P2_CONSTANTS.INFLUENCE_THRESHOLD): Stakeholder[] => {
+const findInfluencers = (
+  stakeholders: Stakeholder[],
+  minInfluence: number = P2_CONSTANTS.INFLUENCE_THRESHOLD
+): Stakeholder[] => {
   return stakeholders
-    .filter(s => s.influence >= minInfluence)
+    .filter((s) => s.influence >= minInfluence)
     .sort((a, b) => b.influence - a.influence);
 };
 
@@ -121,8 +119,8 @@ const findInfluencers = (stakeholders: Stakeholder[], minInfluence: number = P2_
 const findKeyStakeholders = (stakeholders: Stakeholder[]): Stakeholder[] => {
   const { INFLUENCE_THRESHOLD, INTEREST_THRESHOLD } = P2_CONSTANTS;
   return stakeholders
-    .filter(s => s.influence >= INFLUENCE_THRESHOLD && s.interest >= INTEREST_THRESHOLD)
-    .sort((a, b) => (b.influence * b.interest) - (a.influence * a.interest));
+    .filter((s) => s.influence >= INFLUENCE_THRESHOLD && s.interest >= INTEREST_THRESHOLD)
+    .sort((a, b) => b.influence * b.interest - a.influence * a.interest);
 };
 
 /**
@@ -131,18 +129,19 @@ const findKeyStakeholders = (stakeholders: Stakeholder[]): Stakeholder[] => {
 export const createStakeholderModel = (): StakeholderModel => {
   // Create example stakeholders with IDs
   const exampleStakeholders = EXAMPLE_STAKEHOLDERS.map(createStakeholder);
-  
+
   return {
     id: P2_CONSTANTS.MODEL_CODE.toLowerCase(),
     name: P2_CONSTANTS.MODEL_NAME,
-    description: 'Identify all parties with interest, influence, or impact in a system or decision.',
+    description:
+      'Identify all parties with interest, influence, or impact in a system or decision.',
     transformation: P2_CONSTANTS.TRANSFORMATION,
     tier: P2_CONSTANTS.TIER,
     keyCharacteristics: [...P2_CONSTANTS.KEY_CHARACTERISTICS],
     relatedModels: [...P2_CONSTANTS.RELATED_MODELS],
     example: {
       scenario: EXAMPLE_SCENARIO,
-      stakeholders: exampleStakeholders
+      stakeholders: exampleStakeholders,
     },
     methods: {
       createStakeholder,
@@ -150,8 +149,8 @@ export const createStakeholderModel = (): StakeholderModel => {
       analyzeStakeholders,
       generateNetworkMap,
       findInfluencers,
-      findKeyStakeholders
-    }
+      findKeyStakeholders,
+    },
   };
 };
 
@@ -169,16 +168,12 @@ export default {
   createStakeholder,
   constants: P2_CONSTANTS,
   types: {
-    STAKEHOLDER_TYPE_COLORS
-  }
+    STAKEHOLDER_TYPE_COLORS,
+  },
 };
 
 // Export the main model and functions
-export { 
-  createStakeholderModel,
-  analyzeStakeholderMap,
-  createStakeholder 
-};
+export { createStakeholderModel, analyzeStakeholderMap, createStakeholder };
 
 // Export types
 export type {
@@ -187,7 +182,7 @@ export type {
   StakeholderAnalysis,
   StakeholderModel,
   StakeholderType,
-  StakeholderRelationship
+  StakeholderRelationship,
 } from './types';
 
 // Export constants
@@ -197,5 +192,5 @@ export {
   EXAMPLE_SCENARIO,
   STAKEHOLDER_TYPE_COLORS,
   INFLUENCE_LEVELS,
-  INTEREST_LEVELS
+  INTEREST_LEVELS,
 } from './constants';

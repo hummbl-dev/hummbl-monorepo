@@ -83,7 +83,7 @@ const result = await in1.analyze({
   context: {
     industry: 'software',
     teamSize: 8,
-    deadline: '2023-12-31'
+    deadline: '2023-12-31',
   },
   options: {
     maxDepth: 3,
@@ -91,8 +91,8 @@ const result = await in1.analyze({
   },
   metadata: {
     requestId: 'req_123',
-    userId: 'user_456'
-  }
+    userId: 'user_456',
+  },
 });
 ```
 
@@ -187,12 +187,12 @@ const result = await in1.analyze({
   context: {
     industry: 'e-commerce',
     teamSize: 15,
-    market: 'Southeast Asia'
+    market: 'Southeast Asia',
   },
   options: {
     maxDepth: 4,
-    includeExamples: true
-  }
+    includeExamples: true,
+  },
 });
 ```
 
@@ -204,12 +204,12 @@ const result = await in1.analyze({
   context: {
     projectType: 'mobile-app',
     teamSize: 8,
-    timeline: '6 months'
+    timeline: '6 months',
   },
   options: {
     maxDepth: 3,
-    includeExamples: true
-  }
+    includeExamples: true,
+  },
 });
 ```
 
@@ -256,12 +256,12 @@ Configuration options for the IN1 model:
 
 ```typescript
 interface IN1Config {
-  id?: string;           // Model identifier
-  name?: string;         // Display name
-  version?: string;      // Version string
-  eventEmitter?: EventEmitter;  // Custom event emitter
-  telemetryEnabled?: boolean;   // Enable/disable telemetry
-  logger?: Logger;       // Custom logger implementation
+  id?: string; // Model identifier
+  name?: string; // Display name
+  version?: string; // Version string
+  eventEmitter?: EventEmitter; // Custom event emitter
+  telemetryEnabled?: boolean; // Enable/disable telemetry
+  logger?: Logger; // Custom logger implementation
 }
 ```
 
@@ -271,18 +271,20 @@ Input parameters for the analyze method:
 
 ```typescript
 interface IN1Input {
-  problem: string;       // Problem statement to analyze
-  context?: {            // Optional context
+  problem: string; // Problem statement to analyze
+  context?: {
+    // Optional context
     industry?: string;
     teamSize?: number;
     deadline?: string;
-    [key: string]: any;  // Additional context fields
+    [key: string]: any; // Additional context fields
   };
-  options?: {            // Analysis options
-    maxDepth?: number;   // Maximum depth of analysis
-    includeExamples?: boolean;  // Include example failure modes
+  options?: {
+    // Analysis options
+    maxDepth?: number; // Maximum depth of analysis
+    includeExamples?: boolean; // Include example failure modes
   };
-  metadata?: Record<string, any>;  // Additional metadata
+  metadata?: Record<string, any>; // Additional metadata
 }
 ```
 
@@ -292,15 +294,16 @@ Structure of the analysis results:
 
 ```typescript
 interface IN1Output {
-  id: string;                     // Analysis ID
-  problem: string;               // Original problem
-  solution: string;              // Generated solution
-  inverseProblem: string;        // Inverted problem statement
-  failureModes: string[];        // Identified failure modes
+  id: string; // Analysis ID
+  problem: string; // Original problem
+  solution: string; // Generated solution
+  inverseProblem: string; // Inverted problem statement
+  failureModes: string[]; // Identified failure modes
   avoidanceStrategies: string[]; // Generated strategies
-  insights: string[];            // Key insights
-  confidence: number;            // Confidence score (0-1)
-  metadata: {                    // Analysis metadata
+  insights: string[]; // Key insights
+  confidence: number; // Confidence score (0-1)
+  metadata: {
+    // Analysis metadata
     modelVersion: string;
     timestamp: string;
     executionTimeMs: number;
@@ -312,6 +315,7 @@ interface IN1Output {
 ## Changelog
 
 ### v1.0.0 (Current)
+
 - Initial release of the IN1 Inversion Thinking Model
 - Core functionality for inversion-based problem analysis
 - Support for custom event handling and telemetry

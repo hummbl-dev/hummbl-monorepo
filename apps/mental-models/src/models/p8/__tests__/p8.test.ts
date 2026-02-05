@@ -5,12 +5,12 @@ import { EventEmitter } from 'events';
 describe('P8', () => {
   let model;
   let mockEventEmit;
-  
+
   beforeEach(() => {
     const eventEmitter = new EventEmitter();
     mockEventEmit = vi.fn();
     eventEmitter.emit = mockEventEmit;
-    
+
     model = createP8Model({
       eventEmitter,
       telemetryEnabled: true,
@@ -19,7 +19,7 @@ describe('P8', () => {
 
   it('should create a model with default config', () => {
     const defaultModel = createP8Model();
-    
+
     expect(defaultModel).toBeDefined();
     expect(defaultModel.id).toBe('p8');
     expect(defaultModel.name).toBe('P8 Model');
@@ -33,7 +33,7 @@ describe('P8', () => {
     };
 
     const result = await model.analyze(input);
-    
+
     expect(result).toBeDefined();
     expect(result.id).toBeDefined();
     expect(result.analysis).toBeDefined();
@@ -44,7 +44,7 @@ describe('P8', () => {
   it('should include telemetry when enabled', async () => {
     const input = { input: 'test' };
     const result = await model.analyze(input);
-    
+
     expect(result.metadata.telemetry).toBeDefined();
   });
 
@@ -56,15 +56,15 @@ describe('P8', () => {
   it('should emit error events on failure', async () => {
     const testEmitter = new EventEmitter();
     const errorSpy = vi.fn();
-    
+
     testEmitter.on('analysisError', errorSpy);
-    
+
     const failingModel = createP8Model({
       eventEmitter: testEmitter,
     });
-    
+
     await expect(failingModel.analyze({})).rejects.toThrow();
-    
+
     expect(errorSpy).toHaveBeenCalledTimes(1);
     const eventData = errorSpy.mock.calls[0][0];
     expect(eventData).toHaveProperty('error');

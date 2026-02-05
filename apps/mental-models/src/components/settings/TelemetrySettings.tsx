@@ -18,7 +18,16 @@ export const TelemetrySettings: React.FC = () => {
 
   useEffect(() => {
     setIsAdmin(hasRole('admin'));
-    loadEvents();
+
+    // Load recent events from localStorage or session
+    const stored = sessionStorage.getItem('recent_telemetry_events');
+    if (stored) {
+      try {
+        setEvents(JSON.parse(stored));
+      } catch {
+        // Ignore parsing errors
+      }
+    }
 
     // Listen for new events in development
     if (import.meta.env.DEV) {
@@ -36,18 +45,6 @@ export const TelemetrySettings: React.FC = () => {
       };
     }
   }, []);
-
-  const loadEvents = () => {
-    // Load recent events from localStorage or session
-    const stored = sessionStorage.getItem('recent_telemetry_events');
-    if (stored) {
-      try {
-        setEvents(JSON.parse(stored));
-      } catch (error) {
-        console.error('Failed to load telemetry events:', error);
-      }
-    }
-  };
 
   const toggleTelemetry = () => {
     const newState = !enabled;

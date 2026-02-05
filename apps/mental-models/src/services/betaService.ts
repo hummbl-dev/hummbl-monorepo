@@ -7,30 +7,42 @@ export interface BetaSubmissionResponse {
 }
 
 export class BetaService {
-  private static readonly API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.hummbl.dev';
+  private static readonly API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL || 'https://api.hummbl.dev';
   private static readonly BETA_ENDPOINT = '/beta/applications';
 
-  static async submitApplication(application: BetaApplicationForm): Promise<BetaSubmissionResponse> {
+  static async submitApplication(
+    application: BetaApplicationForm
+  ): Promise<BetaSubmissionResponse> {
     try {
       // Validate required fields
       const requiredFields = [
-        'firstName', 'lastName', 'email', 'currentRole', 'industry',
-        'painPoints', 'discoverySource', 'expectedOutcomes', 'location'
+        'firstName',
+        'lastName',
+        'email',
+        'currentRole',
+        'industry',
+        'painPoints',
+        'discoverySource',
+        'expectedOutcomes',
+        'location',
       ];
 
-      const missingFields = requiredFields.filter(field => !application[field as keyof BetaApplicationForm]);
+      const missingFields = requiredFields.filter(
+        (field) => !application[field as keyof BetaApplicationForm]
+      );
 
       if (missingFields.length > 0) {
         return {
           success: false,
-          message: `Missing required fields: ${missingFields.join(', ')}`
+          message: `Missing required fields: ${missingFields.join(', ')}`,
         };
       }
 
       if (!application.agreeToTerms) {
         return {
           success: false,
-          message: 'You must agree to the terms and conditions'
+          message: 'You must agree to the terms and conditions',
         };
       }
 
@@ -39,39 +51,40 @@ export class BetaService {
       console.log('Submitting beta application:', application);
 
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Generate a mock application ID
       const applicationId = `beta_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       return {
         success: true,
-        message: 'Beta application submitted successfully! We\'ll review it within 24-48 hours.',
-        applicationId
+        message: "Beta application submitted successfully! We'll review it within 24-48 hours.",
+        applicationId,
       };
-
     } catch (error) {
       console.error('Beta application submission error:', error);
       return {
         success: false,
-        message: 'Failed to submit application. Please try again later.'
+        message: 'Failed to submit application. Please try again later.',
       };
     }
   }
 
-  static async getApplicationStatus(applicationId: string): Promise<{ status: string; message?: string }> {
+  static async getApplicationStatus(
+    applicationId: string
+  ): Promise<{ status: string; message?: string }> {
     try {
       // In a real implementation, this would check the application status
       // For now, return a mock status
       return {
         status: 'pending',
-        message: 'Your application is being reviewed. We\'ll notify you within 24-48 hours.'
+        message: "Your application is being reviewed. We'll notify you within 24-48 hours.",
       };
     } catch (error) {
       console.error('Error checking application status:', error);
       return {
         status: 'error',
-        message: 'Unable to check application status. Please contact support.'
+        message: 'Unable to check application status. Please contact support.',
       };
     }
   }

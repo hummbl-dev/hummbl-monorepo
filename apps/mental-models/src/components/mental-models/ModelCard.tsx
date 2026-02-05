@@ -32,7 +32,10 @@ const ModelCard = ({ model, onSelect }: ModelCardProps) => {
       <div className="model-footer">
         <div className="model-meta">
           {model.sources && model.sources.length > 0 && (
-            <span className="model-sources" title={model.sources.map((s: { name: string }) => s.name).join(', ')}>
+            <span
+              className="model-sources"
+              title={model.sources.map((s: { name: string }) => s.name).join(', ')}
+            >
               {model.sources.length} {model.sources.length === 1 ? 'source' : 'sources'}
             </span>
           )}

@@ -1,6 +1,7 @@
 # CO1: Syntactic Binding Model
 
 ## Overview
+
 The Syntactic Binding model (CO1) provides a compositional grammar for model interlinkage, enabling the definition and management of relationships between different components in a system. This model is part of the HUMMBL framework's Composition transformation category.
 
 ## Key Features
@@ -52,7 +53,10 @@ console.log(`Binding applied: ${isApplied}`);
 ```typescript
 // List available patterns
 const patterns = model.listPatterns();
-console.log('Available patterns:', patterns.map(p => p.name));
+console.log(
+  'Available patterns:',
+  patterns.map((p) => p.name)
+);
 
 // Get a specific pattern
 const pipelinePattern = model.getPattern('pipeline');
@@ -66,7 +70,7 @@ if (pipelinePattern) {
       { componentId: 'database-writer', role: 'sink' },
     ],
   });
-  
+
   await model.applyBinding(pipelineBinding);
 }
 ```
@@ -95,6 +99,7 @@ if (!validation.isValid) {
 Creates a new instance of the Syntactic Binding model.
 
 **Parameters:**
+
 - `config` (optional): Configuration object
   - `maxBindingsPerComponent`: Maximum number of bindings per component (default: 10)
   - `defaultPriority`: Default priority for bindings (default: 5)
@@ -110,6 +115,7 @@ Creates a new instance of the Syntactic Binding model.
 Creates a new binding.
 
 **Parameters:**
+
 - `params`: Binding parameters
   - `type`: Binding type (e.g., 'SEQUENTIAL', 'PUB_SUB')
   - `components`: Array of component references
@@ -126,6 +132,7 @@ Creates a new binding.
 Validates a binding.
 
 **Parameters:**
+
 - `params`: Validation parameters
   - `binding`: The binding to validate
   - `includeSuggestions`: Include improvement suggestions (default: false)
@@ -139,6 +146,7 @@ Validates a binding.
 Applies a binding to the system.
 
 **Parameters:**
+
 - `binding`: The binding to apply
 
 **Returns:** `true` if the binding was applied successfully, `false` otherwise
@@ -148,6 +156,7 @@ Applies a binding to the system.
 Removes a binding by ID.
 
 **Parameters:**
+
 - `bindingId`: ID of the binding to remove
 
 **Returns:** `true` if the binding was removed, `false` otherwise
@@ -157,6 +166,7 @@ Removes a binding by ID.
 Registers a new binding pattern.
 
 **Parameters:**
+
 - `pattern`: The pattern to register
 
 **Returns:** The registered pattern with generated ID
@@ -166,6 +176,7 @@ Registers a new binding pattern.
 Gets a pattern by ID.
 
 **Parameters:**
+
 - `patternId`: ID of the pattern to retrieve
 
 **Returns:** The pattern, or `null` if not found
@@ -175,6 +186,7 @@ Gets a pattern by ID.
 Lists all registered patterns, optionally filtered by tags.
 
 **Parameters:**
+
 - `options` (optional): Filter options
   - `tags`: Array of tags to filter by
 
@@ -185,6 +197,7 @@ Lists all registered patterns, optionally filtered by tags.
 Gets a binding by ID.
 
 **Parameters:**
+
 - `bindingId`: ID of the binding to retrieve
 
 **Returns:** The binding, or `null` if not found
@@ -194,6 +207,7 @@ Gets a binding by ID.
 Lists all bindings, optionally filtered.
 
 **Parameters:**
+
 - `options` (optional): Filter options
   - `type`: Filter by binding type
   - `tags`: Filter by tags
@@ -206,6 +220,7 @@ Lists all bindings, optionally filtered.
 Suggests possible bindings for the given components.
 
 **Parameters:**
+
 - `components`: Array of component references
 
 **Returns:** Array of suggested bindings
@@ -215,6 +230,7 @@ Suggests possible bindings for the given components.
 Optimizes a set of bindings by merging or simplifying them.
 
 **Parameters:**
+
 - `bindings`: Array of bindings to optimize
 
 **Returns:** Array of optimized bindings

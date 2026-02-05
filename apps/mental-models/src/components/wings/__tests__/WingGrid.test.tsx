@@ -4,7 +4,7 @@ import { Transformation } from '../Wing';
 
 describe('WingGrid', () => {
   const transformations: Transformation[] = ['P', 'IN', 'CO', 'DE', 'RE', 'SY'];
-  
+
   it('renders all provided wing transformations', () => {
     render(<WingGrid transformations={transformations} />);
     const wings = screen.getAllByRole('img', { hidden: true });
@@ -13,9 +13,7 @@ describe('WingGrid', () => {
 
   it('applies custom grid template columns', () => {
     const columns = 3;
-    const { container } = render(
-      <WingGrid transformations={transformations} columns={columns} />
-    );
+    const { container } = render(<WingGrid transformations={transformations} columns={columns} />);
     const grid = container.firstChild;
     expect(grid).toHaveStyle(`grid-template-columns: repeat(${columns}, 1fr)`);
   });
@@ -23,7 +21,7 @@ describe('WingGrid', () => {
   it('applies animation class when animate is true', () => {
     render(<WingGrid transformations={transformations} animate="hover" />);
     const wings = screen.getAllByRole('img', { hidden: true });
-    wings.forEach(wing => {
+    wings.forEach((wing) => {
       expect(wing.closest('div')).toHaveClass('wing-animate-hover');
     });
   });

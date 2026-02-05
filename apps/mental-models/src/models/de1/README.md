@@ -5,7 +5,7 @@
 **Model Code:** DE1  
 **Model Name:** Structural Decomposition  
 **Transformation:** Decomposition  
-**Tier:** 1  
+**Tier:** 1
 
 ## Description
 
@@ -43,20 +43,20 @@ const system = {
     {
       id: 'frontend',
       name: 'Frontend Application',
-      type: 'user-interface'
+      type: 'user-interface',
     },
     {
       id: 'api',
       name: 'API Gateway',
-      type: 'service'
-    }
-  ]
+      type: 'service',
+    },
+  ],
 };
 
 const decomposition = createStructuralDecomposition({
   system,
   maxDepth: 3,
-  includeRelationships: true
+  includeRelationships: true,
 });
 
 console.log(decomposition.getComponents());
@@ -70,6 +70,7 @@ console.log(decomposition.getRelationships());
 Creates a new structural decomposition instance.
 
 **Parameters:**
+
 - `config`: Configuration object
   - `system`: The system to decompose
   - `maxDepth`: Maximum depth of decomposition
@@ -102,8 +103,8 @@ const webApp = {
       type: 'frontend',
       components: [
         { id: 'dashboard', name: 'Admin Dashboard', type: 'module' },
-        { id: 'editor', name: 'Content Editor', type: 'module' }
-      ]
+        { id: 'editor', name: 'Content Editor', type: 'module' },
+      ],
     },
     {
       id: 'api',
@@ -111,15 +112,15 @@ const webApp = {
       type: 'backend',
       components: [
         { id: 'auth', name: 'Authentication Service', type: 'service' },
-        { id: 'content', name: 'Content Service', type: 'service' }
-      ]
-    }
-  ]
+        { id: 'content', name: 'Content Service', type: 'service' },
+      ],
+    },
+  ],
 };
 
 const decomposition = createStructuralDecomposition({
   system: webApp,
-  maxDepth: 3
+  maxDepth: 3,
 });
 
 // Get all components at a specific level

@@ -1,6 +1,7 @@
 # SY14: Synthesis Model
 
 ## Overview
+
 This model implements advanced synthesis capabilities for combining multiple mental models into cohesive solutions. It provides a structured way to integrate insights from various perspectives and generate comprehensive analyses.
 
 ## Installation
@@ -21,8 +22,8 @@ const model = createSY14Model({
     maxDepth: 3,
     includeExamples: true,
     includeReasoning: true,
-    confidenceThreshold: 0.7
-  }
+    confidenceThreshold: 0.7,
+  },
 });
 
 // Synthesize multiple model outputs
@@ -35,8 +36,8 @@ const result = await model.synthesize({
       confidence: 0.85,
       metadata: {
         source: 'user-input',
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     },
     {
       type: 'inversion',
@@ -45,25 +46,25 @@ const result = await model.synthesize({
       confidence: 0.78,
       metadata: {
         source: 'api-call',
-        timestamp: new Date().toISOString()
-      }
-    }
+        timestamp: new Date().toISOString(),
+      },
+    },
   ],
   context: {
     userId: 'user123',
     environment: 'production',
-    requestId: 'req_' + Math.random().toString(36).substr(2, 9)
+    requestId: 'req_' + Math.random().toString(36).substr(2, 9),
   },
   options: {
     depth: 2,
     includeExamples: true,
     includeIssues: true,
-    includeRelated: true
+    includeRelated: true,
   },
   metadata: {
     priority: 'high',
-    tags: ['analysis', 'synthesis']
-  }
+    tags: ['analysis', 'synthesis'],
+  },
 });
 
 console.log('Synthesis Result:', result.synthesizedResult);
@@ -78,6 +79,7 @@ console.log('Confidence:', result.confidence);
 Creates a new instance of the SY14 model.
 
 **Parameters:**
+
 - `config` (Optional): Configuration object
   - `id` (string): Unique identifier for this model instance (default: 'sy14')
   - `name` (string): Display name of the model (default: 'SY14 Synthesis Model')
@@ -93,6 +95,7 @@ Creates a new instance of the SY14 model.
 
 **Returns:**
 An object with the following properties:
+
 - `id` (string): The model ID
 - `name` (string): The model name
 - `version` (string): The model version
@@ -103,6 +106,7 @@ An object with the following properties:
 Synthesizes multiple model outputs into a cohesive result.
 
 **Parameters:**
+
 - `input` (object): The input to synthesize
   - `models` (any[]): Array of model outputs to synthesize
   - `context` (object, optional): Additional context for the synthesis
@@ -115,6 +119,7 @@ Synthesizes multiple model outputs into a cohesive result.
 
 **Returns:**
 A Promise that resolves to a synthesis result object with the following structure:
+
 - `id` (string): Unique identifier for this synthesis
 - `synthesizedResult` (any): The synthesized result
 - `insights` (string[]): Key insights from the synthesis
@@ -126,17 +131,21 @@ A Promise that resolves to a synthesis result object with the following structur
 The model emits the following events:
 
 ### synthesisComplete
+
 Emitted when synthesis is successfully completed.
 
 **Event Data:**
+
 - `requestId` (string): Unique ID for the request
 - `result` (object): The synthesis result
 - `timestamp` (string): ISO timestamp of when the event was emitted
 
 ### synthesisError
+
 Emitted when an error occurs during synthesis.
 
 **Event Data:**
+
 - `requestId` (string): Unique ID for the request
 - `error` (string): Error message
 - `timestamp` (string): ISO timestamp of when the error occurred

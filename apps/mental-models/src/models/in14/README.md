@@ -1,6 +1,7 @@
 # IN14: Inversion Model
 
 ## Overview
+
 This model implements the Inversion mental model by challenging assumptions and considering the opposite of conventional thinking.
 
 ## Installation
@@ -16,7 +17,7 @@ import { createIN14Model } from '@hummbl/models/in14';
 
 // Create an instance of the model
 const model = createIN14Model({
-  telemetryEnabled: true
+  telemetryEnabled: true,
 });
 
 // Analyze some input
@@ -27,7 +28,7 @@ const result = await model.analyze({
   },
   options: {
     // Model-specific options
-  }
+  },
 });
 ```
 
@@ -38,6 +39,7 @@ const result = await model.analyze({
 Creates a new instance of the IN14 model.
 
 **Parameters:**
+
 - `config` (Optional): Configuration object
   - `name` (string): Name of the model instance (default: 'IN14')
   - `version` (string): Version of the model (default: '1.0.0')
@@ -47,6 +49,7 @@ Creates a new instance of the IN14 model.
 
 **Returns:**
 An object with the following properties:
+
 - `id` (string): The model ID
 - `name` (string): The model name
 - `version` (string): The model version
@@ -57,6 +60,7 @@ An object with the following properties:
 Analyzes the input using the Inversion model.
 
 **Parameters:**
+
 - `input` (object): The input to analyze
   - `input` (string): The input to analyze
   - `context` (object, optional): Additional context
@@ -73,17 +77,21 @@ A Promise that resolves to an analysis result object.
 The model emits the following events:
 
 ### analysisComplete
+
 Emitted when analysis is successfully completed.
 
 **Event Data:**
+
 - `requestId` (string): Unique ID for the request
 - `result` (object): The analysis result
 - `timestamp` (string): ISO timestamp of when the event was emitted
 
 ### analysisError
+
 Emitted when an error occurs during analysis.
 
 **Event Data:**
+
 - `requestId` (string): Unique ID for the request
 - `error` (string): Error message
 - `timestamp` (string): ISO timestamp of when the error occurred

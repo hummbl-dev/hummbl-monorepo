@@ -6,7 +6,7 @@
 
 /**
  * SpaceX Rocket Cost Reduction Example
- * 
+ *
  * Problem: Traditional rocket launches are too expensive ($65M per launch)
  * Traditional Approach: Optimize existing rocket manufacturing
  * First Principles Approach:
@@ -16,29 +16,29 @@
  * 4. Rebuild solution from atomic truths
  */
 export const spaceXExample = {
-  problem: "Rocket launches are too expensive at $65M per launch",
-  traditionalApproach: "Optimize existing rocket manufacturing processes",
+  problem: 'Rocket launches are too expensive at $65M per launch',
+  traditionalApproach: 'Optimize existing rocket manufacturing processes',
   firstPrinciplesApproach: {
     decomposed: [
-      "What are rockets made of?",
-      "What is the cost of materials?",
-      "Can we make the manufacturing process more efficient?",
-      "Can rockets be made reusable?"
+      'What are rockets made of?',
+      'What is the cost of materials?',
+      'Can we make the manufacturing process more efficient?',
+      'Can rockets be made reusable?',
     ],
     fundamentalTruths: [
-      "Rocket materials (aluminum, titanium, copper, carbon fiber) cost ~2% of launch price",
-      "Most of the cost is in manufacturing and single-use components",
-      "Reusability could dramatically reduce costs if implemented effectively"
+      'Rocket materials (aluminum, titanium, copper, carbon fiber) cost ~2% of launch price',
+      'Most of the cost is in manufacturing and single-use components',
+      'Reusability could dramatically reduce costs if implemented effectively',
     ],
-    solution: "Develop reusable rockets with in-house manufacturing to reduce costs by ~10x"
+    solution: 'Develop reusable rockets with in-house manufacturing to reduce costs by ~10x',
   },
-  outcome: "SpaceX reduced launch costs to ~$60M (Falcon 9) vs $392M (Space Shuttle)",
-  impact: "Revolutionized space industry economics, enabled commercial space ventures"
+  outcome: 'SpaceX reduced launch costs to ~$60M (Falcon 9) vs $392M (Space Shuttle)',
+  impact: 'Revolutionized space industry economics, enabled commercial space ventures',
 };
 
 /**
  * Business Model Innovation Example
- * 
+ *
  * Problem: Taxi services are expensive and inefficient in many cities
  * Traditional Approach: Add more taxis, optimize dispatch systems
  * First Principles Approach:
@@ -48,25 +48,25 @@ export const spaceXExample = {
  * 4. Rebuild with modern technology
  */
 export const uberExample = {
-  problem: "Inefficient urban transportation with high costs and poor availability",
-  traditionalApproach: "Add more taxis, improve dispatch systems",
+  problem: 'Inefficient urban transportation with high costs and poor availability',
+  traditionalApproach: 'Add more taxis, improve dispatch systems',
   firstPrinciplesApproach: {
     decomposed: [
-      "What do people fundamentally need from transportation?",
-      "Why are taxis expensive?",
-      "How can technology improve vehicle utilization?",
-      "What are the regulatory barriers?"
+      'What do people fundamentally need from transportation?',
+      'Why are taxis expensive?',
+      'How can technology improve vehicle utilization?',
+      'What are the regulatory barriers?',
     ],
     fundamentalTruths: [
-      "People need reliable A-to-B transportation, not necessarily car ownership",
-      "Taxis are expensive due to low utilization and regulatory costs",
-      "Smartphones enable real-time matching of supply and demand",
-      "Many car owners would share their vehicles for compensation"
+      'People need reliable A-to-B transportation, not necessarily car ownership',
+      'Taxis are expensive due to low utilization and regulatory costs',
+      'Smartphones enable real-time matching of supply and demand',
+      'Many car owners would share their vehicles for compensation',
     ],
-    solution: "Create a platform connecting drivers with passengers using personal vehicles"
+    solution: 'Create a platform connecting drivers with passengers using personal vehicles',
   },
-  outcome: "Uber created a $70B+ company and transformed urban transportation",
-  impact: "Disrupted taxi industry, created gig economy, changed urban mobility patterns"
+  outcome: 'Uber created a $70B+ company and transformed urban transportation',
+  impact: 'Disrupted taxi industry, created gig economy, changed urban mobility patterns',
 };
 
 /**
@@ -74,25 +74,25 @@ export const uberExample = {
  */
 
 export const teslaBatteryExample = {
-  problem: "Electric vehicle batteries are too expensive for mass adoption",
-  traditionalApproach: "Source cheaper battery cells from suppliers",
+  problem: 'Electric vehicle batteries are too expensive for mass adoption',
+  traditionalApproach: 'Source cheaper battery cells from suppliers',
   firstPrinciplesApproach: {
     decomposed: [
-      "What are batteries made of?",
-      "What is the spot market value of these materials?",
-      "How are batteries manufactured?",
-      "Where are the inefficiencies?"
+      'What are batteries made of?',
+      'What is the spot market value of these materials?',
+      'How are batteries manufactured?',
+      'Where are the inefficiencies?',
     ],
     fundamentalTruths: [
-      "Batteries are made of lithium, nickel, aluminum, steel, and other materials",
-      "Commodity materials cost ~$80/kWh at scale",
-      "Existing manufacturing is optimized for small consumer electronics, not cars",
-      "Vertical integration could reduce costs significantly"
+      'Batteries are made of lithium, nickel, aluminum, steel, and other materials',
+      'Commodity materials cost ~$80/kWh at scale',
+      'Existing manufacturing is optimized for small consumer electronics, not cars',
+      'Vertical integration could reduce costs significantly',
     ],
-    solution: "Build Gigafactories with optimized manufacturing and vertical integration"
+    solution: 'Build Gigafactories with optimized manufacturing and vertical integration',
   },
-  outcome: "Tesla reduced battery costs from $1,200/kWh (2010) to ~$100/kWh (2023)",
-  impact: "Enabled mass-market electric vehicles, accelerated transition to sustainable transport"
+  outcome: 'Tesla reduced battery costs from $1,200/kWh (2010) to ~$100/kWh (2023)',
+  impact: 'Enabled mass-market electric vehicles, accelerated transition to sustainable transport',
 };
 
 /**
@@ -100,20 +100,20 @@ export const teslaBatteryExample = {
  */
 export const canonicalExamples = [
   {
-    name: "SpaceX Rocket Cost Reduction",
-    description: "How SpaceX reduced launch costs through first principles thinking",
-    data: spaceXExample
+    name: 'SpaceX Rocket Cost Reduction',
+    description: 'How SpaceX reduced launch costs through first principles thinking',
+    data: spaceXExample,
   },
   {
     name: "Uber's Disruption of Transportation",
-    description: "How Uber reimagined urban mobility from first principles",
-    data: uberExample
+    description: 'How Uber reimagined urban mobility from first principles',
+    data: uberExample,
   },
   {
-    name: "Tesla Battery Innovation",
-    description: "How Tesla approached battery cost reduction from first principles",
-    data: teslaBatteryExample
-  }
+    name: 'Tesla Battery Innovation',
+    description: 'How Tesla approached battery cost reduction from first principles',
+    data: teslaBatteryExample,
+  },
 ];
 
 // Export individual examples for direct import
@@ -121,5 +121,5 @@ export default {
   spaceXExample,
   uberExample,
   teslaBatteryExample,
-  canonicalExamples
+  canonicalExamples,
 };

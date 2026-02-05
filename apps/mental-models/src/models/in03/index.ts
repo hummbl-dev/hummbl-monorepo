@@ -1,16 +1,16 @@
 import { v4 as uuidv4 } from 'uuid';
 import { EventEmitter } from 'events';
-import { 
-  InversionInput, 
-  InversionOutput, 
-  InversionConfig, 
-  DEFAULT_CONFIG as DEFAULT_INVERSION_CONFIG 
+import {
+  InversionInput,
+  InversionOutput,
+  InversionConfig,
+  DEFAULT_CONFIG as DEFAULT_INVERSION_CONFIG,
 } from './types';
 import { version } from './constants';
 
 /**
  * IN03: Inversion Model
- * 
+ *
  * This model implements the Inversion mental model by challenging assumptions
  * and considering the opposite of conventional thinking.
  */
@@ -30,22 +30,22 @@ export const createIN03Model = (config: Partial<InversionConfig> = {}) => {
   const analyze = async (input: InversionInput): Promise<InversionOutput> => {
     const startTime = Date.now();
     const requestId = uuidv4();
-    
+
     try {
       // Input validation
       if (!input || typeof input !== 'object') {
         throw new Error('Input must be an object');
       }
-      
+
       if (!input.input) {
         throw new Error('Input must contain an "input" property');
       }
-      
+
       // Core Inversion logic
       const invertedInput = {
         ...input,
         input: 'Inverted: ' + input.input,
-        originalInput: input.input
+        originalInput: input.input,
       };
 
       const result: InversionOutput = {
@@ -55,18 +55,20 @@ export const createIN03Model = (config: Partial<InversionConfig> = {}) => {
           insights: [
             'Considered the opposite perspective',
             'Challenged initial assumptions',
-            'Identified potential blind spots'
-          ]
+            'Identified potential blind spots',
+          ],
         },
         confidence: 0.8,
         metadata: {
           modelVersion,
           timestamp: new Date().toISOString(),
           executionTimeMs: Date.now() - startTime,
-          telemetry: telemetryEnabled ? {
-            inputLength: input.input?.length || 0,
-            contextKeys: input.context ? Object.keys(input.context) : []
-          } : undefined,
+          telemetry: telemetryEnabled
+            ? {
+                inputLength: input.input?.length || 0,
+                contextKeys: input.context ? Object.keys(input.context) : [],
+              }
+            : undefined,
         },
       };
 
@@ -74,20 +76,20 @@ export const createIN03Model = (config: Partial<InversionConfig> = {}) => {
       eventEmitter.emit('analysisComplete', {
         requestId,
         result,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error during analysis';
-      
+
       // Emit error event
       eventEmitter.emit('analysisError', {
         requestId,
         error: errorMessage,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
-      
+
       throw error;
     }
   };
@@ -96,7 +98,7 @@ export const createIN03Model = (config: Partial<InversionConfig> = {}) => {
     id: 'IN03',
     name,
     version: modelVersion,
-    analyze
+    analyze,
   };
 };
 

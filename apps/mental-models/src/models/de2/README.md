@@ -5,7 +5,7 @@
 **Model Code:** DE2  
 **Model Name:** Cognitive Tracing  
 **Transformation:** Decomposition  
-**Tier:** 1  
+**Tier:** 1
 
 ## Description
 
@@ -44,7 +44,7 @@ const result = await model.traceSteps({
   input: 'How can we improve user engagement in our mobile app?',
   maxDepth: 3,
   maxBreadth: 2,
-  minConfidence: 0.7
+  minConfidence: 0.7,
 });
 
 // Get a human-readable explanation of the trace
@@ -55,11 +55,11 @@ console.log(explanation);
 ### Advanced Usage
 
 ```typescript
-import { 
+import {
   createCognitiveTracingModel,
   createCognitiveStep,
   createDecisionPoint,
-  createCognitiveTrace
+  createCognitiveTrace,
 } from '@hummbl/models-de2';
 
 // Create a custom trace
@@ -78,7 +78,7 @@ const decisionPoint = createDecisionPoint(
   [
     { id: 'opt1', description: 'Gamification' },
     { id: 'opt2', description: 'Personalized content' },
-    { id: 'opt3', description: 'Social features' }
+    { id: 'opt3', description: 'Social features' },
   ],
   step3.id,
   'opt1'
@@ -91,7 +91,7 @@ const model = createCognitiveTracingModel();
 const continuedResult = await model.continueTrace({
   trace,
   fromStepId: step3.id,
-  maxDepth: 2
+  maxDepth: 2,
 });
 ```
 
@@ -102,6 +102,7 @@ const continuedResult = await model.continueTrace({
 Creates a new instance of the CognitiveTracingModel.
 
 **Parameters:**
+
 - `config` (optional): Configuration object with the following properties:
   - `defaultMaxDepth`: Maximum depth of the trace (default: 5)
   - `defaultMaxBreadth`: Maximum breadth at each decision point (default: 3)
@@ -117,6 +118,7 @@ Creates a new instance of the CognitiveTracingModel.
 Traces the cognitive steps for a given input.
 
 **Parameters:**
+
 - `params`: Object containing:
   - `input`: The input to process (string)
   - `maxDepth?`: Maximum depth of the trace (default: model's default)
@@ -131,6 +133,7 @@ Traces the cognitive steps for a given input.
 Continues an existing trace from a specific step.
 
 **Parameters:**
+
 - `params`: Object containing:
   - `trace`: The existing `CognitiveTrace`
   - `fromStepId`: ID of the step to continue from
@@ -143,6 +146,7 @@ Continues an existing trace from a specific step.
 Analyzes a decision point in detail.
 
 **Parameters:**
+
 - `params`: Object containing:
   - `trace`: The `CognitiveTrace` containing the decision point
   - `decisionPointId`: ID of the decision point to analyze
@@ -154,6 +158,7 @@ Analyzes a decision point in detail.
 Generates a human-readable explanation of a trace.
 
 **Parameters:**
+
 - `trace`: The `CognitiveTrace` to explain
 
 **Returns:** A string containing the explanation.
@@ -176,7 +181,7 @@ This model is considered successfully implemented when it can:
 const model = createCognitiveTracingModel();
 const result = await model.traceSteps({
   input: 'Should we implement feature X or feature Y first?',
-  maxDepth: 4
+  maxDepth: 4,
 });
 
 console.log(`Trace completed with ${result.trace.steps.length} steps`);
@@ -190,11 +195,11 @@ console.log(`Found ${result.trace.decisionPoints.length} decision points`);
 const decisionPoint = trace.decisionPoints[0];
 const analysis = await model.analyzeDecisionPoint({
   trace,
-  decisionPointId: decisionPoint.id
+  decisionPointId: decisionPoint.id,
 });
 
 console.log(`Analysis for decision: ${decisionPoint.decision}`);
-analysis.alternatives.forEach(alt => {
+analysis.alternatives.forEach((alt) => {
   console.log(`- ${alt.optionId}: ${alt.pros.length} pros, ${alt.cons.length} cons`);
 });
 ```

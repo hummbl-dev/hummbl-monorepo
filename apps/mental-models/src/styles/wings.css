@@ -5,18 +5,18 @@
 
 :root {
   /* === Wing Colors === */
-  --wing-p-primary: #FFD700;
-  --wing-p-secondary: #FFA500;
-  --wing-in-primary: #4A90E2;
-  --wing-in-secondary: #2C5AA0;
-  --wing-co-primary: #50C878;
-  --wing-co-secondary: #2E8B57;
-  --wing-de-primary: #E74C3C;
-  --wing-de-secondary: #C0392B;
-  --wing-re-primary: #9B59B6;
-  --wing-re-secondary: #8E44AD;
-  --wing-sy-primary: #FFD700;
-  --wing-sy-secondary: #FF8C00;
+  --wing-p-primary: #ffd700;
+  --wing-p-secondary: #ffa500;
+  --wing-in-primary: #4a90e2;
+  --wing-in-secondary: #2c5aa0;
+  --wing-co-primary: #50c878;
+  --wing-co-secondary: #2e8b57;
+  --wing-de-primary: #e74c3c;
+  --wing-de-secondary: #c0392b;
+  --wing-re-primary: #9b59b6;
+  --wing-re-secondary: #8e44ad;
+  --wing-sy-primary: #ffd700;
+  --wing-sy-secondary: #ff8c00;
 
   /* === Sizes === */
   --wing-size-small: 48px;
@@ -78,7 +78,7 @@
   cursor: default;
 }
 
-.wing-container[role="button"] {
+.wing-container[role='button'] {
   cursor: pointer;
 }
 
@@ -95,7 +95,10 @@
 }
 
 .wing-label {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--wing-text);
@@ -103,10 +106,22 @@
 }
 
 /* === Wing Sizes === */
-.wing-size-small { width: var(--wing-size-small); height: var(--wing-size-small); }
-.wing-size-medium { width: var(--wing-size-medium); height: var(--wing-size-medium); }
-.wing-size-large { width: var(--wing-size-large); height: var(--wing-size-large); }
-.wing-size-xlarge { width: var(--wing-size-xlarge); height: var(--wing-size-xlarge); }
+.wing-size-small {
+  width: var(--wing-size-small);
+  height: var(--wing-size-small);
+}
+.wing-size-medium {
+  width: var(--wing-size-medium);
+  height: var(--wing-size-medium);
+}
+.wing-size-large {
+  width: var(--wing-size-large);
+  height: var(--wing-size-large);
+}
+.wing-size-xlarge {
+  width: var(--wing-size-xlarge);
+  height: var(--wing-size-xlarge);
+}
 
 /* ============================================
    Wing Grid
@@ -119,10 +134,18 @@
   padding: var(--wing-spacing-lg);
 }
 
-.wing-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-.wing-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-.wing-grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
-.wing-grid-cols-6 { grid-template-columns: repeat(6, 1fr); }
+.wing-grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.wing-grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.wing-grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.wing-grid-cols-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
 
 @media (max-width: 768px) {
   .wing-grid-cols-3,
@@ -146,7 +169,10 @@
 }
 
 .wing-grid-label {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: var(--wing-text);
@@ -181,7 +207,10 @@
 
 .wing-selector-label {
   margin-top: var(--wing-spacing-sm);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--wing-text);
@@ -225,7 +254,10 @@
 }
 
 .wing-animation-indicator {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 1rem;
   font-weight: 600;
   color: var(--wing-text);
@@ -249,7 +281,10 @@
 }
 
 .wing-showcase-title {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 2rem;
   font-weight: 700;
   color: var(--wing-text);
@@ -257,7 +292,10 @@
 }
 
 .wing-showcase-subtitle {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 1.125rem;
   color: var(--wing-text);
   opacity: 0.8;
@@ -278,7 +316,10 @@
 }
 
 .wing-showcase-description {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--wing-text);

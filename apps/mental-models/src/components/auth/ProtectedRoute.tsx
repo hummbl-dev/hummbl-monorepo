@@ -10,32 +10,39 @@ interface ProtectedRouteProps {
   requiredRole?: Role;
 }
 
+interface AuthState {
+  authorized: boolean;
+  showLogin: boolean;
+  checked: boolean;
+}
+
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requiredRole = 'admin',
 }) => {
-  const [authorized, setAuthorized] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const [authState, setAuthState] = useState<AuthState>({
+    authorized: false,
+    showLogin: false,
+    checked: false,
+  });
 
   useEffect(() => {
-    checkAuth();
+    const isAuthorized = hasRole(requiredRole);
+    setAuthState({
+      authorized: isAuthorized,
+      showLogin: !isAuthorized,
+      checked: true,
+    });
   }, [requiredRole]);
 
-  const checkAuth = () => {
-    const isAuthorized = hasRole(requiredRole);
-    setAuthorized(isAuthorized);
-    setShowLogin(!isAuthorized);
-    setChecked(true);
-  };
+  const { authorized, showLogin, checked } = authState;
 
   const handleLoginSuccess = () => {
-    setAuthorized(true);
-    setShowLogin(false);
+    setAuthState((prev) => ({ ...prev, authorized: true, showLogin: false }));
   };
 
   const handleLoginCancel = () => {
-    setShowLogin(false);
+    setAuthState((prev) => ({ ...prev, showLogin: false }));
     // Redirect to home or show access denied
     window.location.href = '/';
   };
@@ -54,7 +61,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         <div style={{ padding: '2rem', textAlign: 'center' }}>
           <h2>Access Restricted</h2>
           <p>This page requires admin access.</p>
-          <button onClick={() => setShowLogin(true)}>Login</button>
+          <button onClick={() => setAuthState((prev) => ({ ...prev, showLogin: true }))}>
+            Login
+          </button>
         </div>
 
         {showLogin && (

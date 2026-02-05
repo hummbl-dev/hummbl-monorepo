@@ -26,12 +26,12 @@ declare global {
      */
     plausible?: (
       event: string,
-      options?: { 
+      options?: {
         /** Event properties to be sent to Plausible */
-        props?: Record<string, string | number | boolean> 
+        props?: Record<string, string | number | boolean>;
       }
     ) => void;
-    
+
     /**
      * Google Analytics gtag.js function
      * @see https://developers.google.com/analytics/devguides/collection/gtagjs
@@ -50,19 +50,19 @@ declare global {
 export interface AnalyticsEvent {
   /** The name of the event (e.g., 'page_view', 'button_click') */
   event: string;
-  
+
   /** Category of the event (e.g., 'engagement', 'navigation') */
   category?: string;
-  
+
   /** Label for the event (e.g., 'hero_banner', 'footer_link') */
   label?: string;
-  
+
   /** Numeric value associated with the event (e.g., purchase amount) */
   value?: number;
-  
+
   /** If true, the event won't affect bounce rate calculations */
   nonInteraction?: boolean;
-  
+
   /** Additional properties to include with the event */
   properties?: Record<string, string | number | boolean>;
 }
@@ -82,26 +82,26 @@ const logAnalyticsEvent = (event: string, data?: unknown) => {
  * @returns void
  */
 export const trackEvent = (event: AnalyticsEvent): void => {
-  const { 
-    event: eventName, 
+  const {
+    event: eventName,
     category = 'engagement',
     label,
     value,
     nonInteraction = false,
-    properties = {}
+    properties = {},
   } = event;
 
   try {
     // Plausible Analytics (privacy-first)
     if (typeof window !== 'undefined' && window.plausible) {
       try {
-        window.plausible(eventName, { 
-          props: { 
+        window.plausible(eventName, {
+          props: {
             ...properties,
             ...(category && { category }),
             ...(label && { label }),
-            ...(value !== undefined && { value })
-          } 
+            ...(value !== undefined && { value }),
+          },
         });
       } catch (error) {
         console.error('Error tracking with Plausible:', error);
@@ -116,9 +116,9 @@ export const trackEvent = (event: AnalyticsEvent): void => {
           ...(label && { event_label: label }),
           ...(value !== undefined && { value }),
           non_interaction: nonInteraction,
-          ...properties
+          ...properties,
         };
-        
+
         window.gtag('event', eventName, gtagEvent);
       } catch (error) {
         console.error('Error tracking with Google Analytics:', error);
@@ -137,10 +137,7 @@ export const trackEvent = (event: AnalyticsEvent): void => {
  * @param route The current route/path of the page
  * @param title Optional page title
  */
-export const trackPageView = (
-  route: string, 
-  title: string = document.title
-): void => {
+export const trackPageView = (route: string, title: string = document.title): void => {
   trackEvent({
     event: 'page_view',
     category: 'engagement',
@@ -162,22 +159,22 @@ export const trackPageView = (
 export const AnalyticsCategory = {
   /** User engagement events (e.g., clicks, interactions) */
   ENGAGEMENT: 'engagement',
-  
+
   /** Navigation events (e.g., page views, route changes) */
   NAVIGATION: 'navigation',
-  
+
   /** User-initiated actions (e.g., form submissions, button clicks) */
   USER_ACTION: 'user_action',
-  
+
   /** Content-related events (e.g., viewing articles, videos) */
   CONTENT: 'content',
-  
+
   /** Search-related events (e.g., search queries, filters) */
   SEARCH: 'search',
-  
+
   /** User feedback (e.g., ratings, surveys) */
   FEEDBACK: 'feedback',
-  
+
   /** Error events (e.g., failed API calls, exceptions) */
   ERROR: 'error',
 } as const;
@@ -185,8 +182,7 @@ export const AnalyticsCategory = {
 /**
  * Type representing all possible analytics category values
  */
-type AnalyticsCategoryType = typeof AnalyticsCategory[keyof typeof AnalyticsCategory];
-
+type AnalyticsCategoryType = (typeof AnalyticsCategory)[keyof typeof AnalyticsCategory];
 
 /**
  * Track when a user views a mental model
@@ -339,7 +335,7 @@ export const trackBookmarkRemoved = (
  * ```
  */
 export const trackNoteCreated = (
-  itemType: 'mental_model' | 'narrative', 
+  itemType: 'mental_model' | 'narrative',
   itemId: string,
   noteLength: number = 0
 ): void => {
@@ -447,25 +443,25 @@ export const trackHeroCTAClicked = (ctaType: string, position?: string): void =>
  * Configuration options for the analytics module
  */
 interface AnalyticsConfig {
-  /** 
+  /**
    * Enable debug mode to log events to console
    * @default false in production, true in development
    */
   debug?: boolean;
-  
-  /** 
+
+  /**
    * Automatically track page views
    * @default true
    */
   trackPageViews?: boolean;
-  
-  /** 
+
+  /**
    * Automatically track unhandled errors
    * @default true
    */
   trackErrors?: boolean;
-  
-  /** 
+
+  /**
    * Sample rate for events (0.0 to 1.0)
    * @default 1.0 (100% of events)
    */

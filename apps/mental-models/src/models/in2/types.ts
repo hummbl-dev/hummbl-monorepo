@@ -1,6 +1,6 @@
 /**
  * IN2: Error Utilization
- * 
+ *
  * This model converts detected error patterns into improvement signals for the system.
  * It's part of the Inversion transformation category.
  */
@@ -11,37 +11,37 @@
 export interface ErrorPattern {
   /** Unique identifier for the error pattern */
   id: string;
-  
+
   /** The error message or pattern that was detected */
   pattern: string | RegExp;
-  
+
   /** Category of the error */
   category: ErrorCategory;
-  
+
   /** Severity level of the error */
   severity: ErrorSeverity;
-  
+
   /** Context in which this error occurs */
   context: string;
-  
+
   /** Confidence score for this pattern match (0-1) */
   confidence: number;
-  
+
   /** Tags for categorization */
   tags: string[];
-  
+
   /** Timestamp when this error was first detected */
   firstSeen: Date;
-  
+
   /** Timestamp when this error was last seen */
   lastSeen: Date;
-  
+
   /** Number of times this error has occurred */
   occurrenceCount: number;
-  
+
   /** Related error patterns (by ID) */
   relatedErrors: string[];
-  
+
   /** Metadata */
   meta: {
     source: string;
@@ -57,28 +57,28 @@ export interface ErrorPattern {
 export interface ImprovementSignal {
   /** Unique identifier */
   id: string;
-  
+
   /** The improvement suggestion */
   suggestion: string;
-  
+
   /** Impact of implementing this improvement (0-1) */
   impact: number;
-  
+
   /** Effort required to implement (0-1, where 0 is low effort) */
   effort: number;
-  
+
   /** Priority level for implementation */
   priority: ImprovementPriority;
-  
+
   /** IDs of the error patterns that led to this improvement */
   sourceErrors: string[];
-  
+
   /** Status of this improvement */
   status: ImprovementStatus;
-  
+
   /** Tags for categorization */
   tags: string[];
-  
+
   /** Metadata */
   meta: {
     createdAt: Date;
@@ -94,19 +94,19 @@ export interface ImprovementSignal {
 export interface FeedbackLoop {
   /** Unique identifier */
   id: string;
-  
+
   /** Name of the feedback loop */
   name: string;
-  
+
   /** Description of what this feedback loop monitors */
   description: string;
-  
+
   /** The error patterns being monitored */
   errorPatterns: ErrorPattern[];
-  
+
   /** The improvements generated from these errors */
   improvements: ImprovementSignal[];
-  
+
   /** Configuration for the feedback loop */
   config: {
     isActive: boolean;
@@ -115,7 +115,7 @@ export interface FeedbackLoop {
     maxImprovementsPerCycle: number;
     cooldownPeriod: number; // ms between processing cycles
   };
-  
+
   /** Metrics about the feedback loop's performance */
   metrics: {
     totalErrorsProcessed: number;
@@ -124,7 +124,7 @@ export interface FeedbackLoop {
     errorReductionRate: number; // 0-1, reduction in errors over time
     lastProcessed: Date | null;
   };
-  
+
   /** Metadata */
   meta: {
     createdAt: Date;
@@ -139,10 +139,10 @@ export interface FeedbackLoop {
 export interface ErrorAnalysis {
   /** Error patterns found */
   errors: ErrorPattern[];
-  
+
   /** Improvements generated */
   improvements: ImprovementSignal[];
-  
+
   /** Overall quality metrics */
   metrics: {
     totalErrors: number;
@@ -160,19 +160,19 @@ export interface ErrorAnalysis {
 export interface DetectErrorsParams {
   /** The text or data to analyze for errors */
   input: string | Record<string, any>;
-  
+
   /** Minimum confidence threshold (0-1) */
   minConfidence?: number;
-  
+
   /** Minimum severity level to include */
   minSeverity?: ErrorSeverity;
-  
+
   /** Maximum number of errors to return */
   limit?: number;
-  
+
   /** Context for the analysis */
   context?: string;
-  
+
   /** Additional metadata */
   meta?: Record<string, any>;
 }
@@ -183,16 +183,16 @@ export interface DetectErrorsParams {
 export interface GenerateImprovementsParams {
   /** Errors to analyze */
   errors: ErrorPattern[];
-  
+
   /** Additional context */
   context?: string;
-  
+
   /** Maximum number of improvements to generate */
   limit?: number;
-  
+
   /** Minimum impact threshold (0-1) */
   minImpact?: number;
-  
+
   /** Maximum effort threshold (0-1) */
   maxEffort?: number;
 }
@@ -206,22 +206,22 @@ export interface ErrorUtilizationModel {
   name: string;
   description: string;
   version: string;
-  
+
   /** Core methods */
   detectErrors(params: DetectErrorsParams): Promise<ErrorPattern[]>;
   generateImprovements(params: GenerateImprovementsParams): Promise<ImprovementSignal[]>;
   analyzeErrors(input: string | Record<string, any>): Promise<ErrorAnalysis>;
-  
+
   /** Feedback loop management */
   createFeedbackLoop(config: Partial<Omit<FeedbackLoop, 'id'>>): FeedbackLoop;
   updateFeedbackLoop(id: string, updates: Partial<FeedbackLoop>): FeedbackLoop | null;
   getFeedbackLoop(id: string): FeedbackLoop | null;
   listFeedbackLoops(): FeedbackLoop[];
-  
+
   /** Utility methods */
   calculateImpact(error: ErrorPattern): number;
   calculateEffort(improvement: string): number;
-  
+
   /** Configuration */
   config: {
     defaultMinConfidence: number;
@@ -236,11 +236,11 @@ export interface ErrorUtilizationModel {
  * Error severity levels
  */
 export enum ErrorSeverity {
-  CRITICAL = 'critical',    // System failure, data loss, security breach
-  HIGH = 'high',            // Major functionality impacted
-  MEDIUM = 'medium',        // Partial or degraded functionality
-  LOW = 'low',              // Minor issue, workaround exists
-  INFO = 'info',            // Informational, not an error
+  CRITICAL = 'critical', // System failure, data loss, security breach
+  HIGH = 'high', // Major functionality impacted
+  MEDIUM = 'medium', // Partial or degraded functionality
+  LOW = 'low', // Minor issue, workaround exists
+  INFO = 'info', // Informational, not an error
 }
 
 /**
@@ -273,22 +273,22 @@ export enum ErrorCategory {
  * Improvement priority levels
  */
 export enum ImprovementPriority {
-  CRITICAL = 'critical',   // Fix immediately
-  HIGH = 'high',           // Fix in next release
-  MEDIUM = 'medium',       // Plan to fix in future release
-  LOW = 'low',             // Backlog, consider if time permits
-  FUTURE = 'future',       // Keep in mind for future consideration
+  CRITICAL = 'critical', // Fix immediately
+  HIGH = 'high', // Fix in next release
+  MEDIUM = 'medium', // Plan to fix in future release
+  LOW = 'low', // Backlog, consider if time permits
+  FUTURE = 'future', // Keep in mind for future consideration
 }
 
 /**
  * Improvement status
  */
 export enum ImprovementStatus {
-  PROPOSED = 'proposed',       // Newly generated, not yet reviewed
-  APPROVED = 'approved',       // Approved for implementation
+  PROPOSED = 'proposed', // Newly generated, not yet reviewed
+  APPROVED = 'approved', // Approved for implementation
   IN_PROGRESS = 'in_progress', // Currently being worked on
-  COMPLETED = 'completed',     // Successfully implemented
-  REJECTED = 'rejected',       // Decided not to implement
-  DEFERRED = 'deferred',       // Postponed to a later time
-  DUPLICATE = 'duplicate',     // Duplicate of another improvement
+  COMPLETED = 'completed', // Successfully implemented
+  REJECTED = 'rejected', // Decided not to implement
+  DEFERRED = 'deferred', // Postponed to a later time
+  DUPLICATE = 'duplicate', // Duplicate of another improvement
 }

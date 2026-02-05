@@ -114,7 +114,7 @@ export function ChatSettings({
               <div className="settings-section-header">
                 <span>Export Current Conversation</span>
               </div>
-              
+
               <div className="export-buttons">
                 <button
                   className="export-button"

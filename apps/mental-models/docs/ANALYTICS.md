@@ -3,6 +3,7 @@
 This document provides guidance on using the analytics utilities in the HUMMBL application.
 
 ## Table of Contents
+
 - [Overview](#overview)
 - [Setup](#setup)
 - [Basic Usage](#basic-usage)
@@ -27,7 +28,7 @@ The analytics module provides a unified interface for tracking user interactions
 
    // Initialize with default settings
    initAnalytics();
-   
+
    // Or with custom configuration
    initAnalytics({
      debug: process.env.NODE_ENV === 'development',
@@ -95,25 +96,25 @@ Use these predefined categories for consistent tracking:
 import { AnalyticsCategory } from '../utils/analytics';
 
 // Available categories:
-AnalyticsCategory.ENGAGEMENT   // User engagement events
-AnalyticsCategory.NAVIGATION   // Navigation events
-AnalyticsCategory.USER_ACTION  // User actions
-AnalyticsCategory.CONTENT      // Content interactions
-AnalyticsCategory.SEARCH       // Search-related events
-AnalyticsCategory.FEEDBACK     // User feedback
-AnalyticsCategory.ERROR        // Error events
+AnalyticsCategory.ENGAGEMENT; // User engagement events
+AnalyticsCategory.NAVIGATION; // Navigation events
+AnalyticsCategory.USER_ACTION; // User actions
+AnalyticsCategory.CONTENT; // Content interactions
+AnalyticsCategory.SEARCH; // Search-related events
+AnalyticsCategory.FEEDBACK; // User feedback
+AnalyticsCategory.ERROR; // Error events
 ```
 
 ## Configuration
 
 ### `initAnalytics` Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `debug` | `boolean` | `process.env.NODE_ENV === 'development'` | Enable debug logging |
-| `trackPageViews` | `boolean` | `true` | Automatically track page views |
-| `trackErrors` | `boolean` | `true` | Track unhandled exceptions |
-| `sampleRate` | `number` | `1.0` | Sample rate (0.0 to 1.0) |
+| Option           | Type      | Default                                  | Description                    |
+| ---------------- | --------- | ---------------------------------------- | ------------------------------ |
+| `debug`          | `boolean` | `process.env.NODE_ENV === 'development'` | Enable debug logging           |
+| `trackPageViews` | `boolean` | `true`                                   | Automatically track page views |
+| `trackErrors`    | `boolean` | `true`                                   | Track unhandled exceptions     |
+| `sampleRate`     | `number`  | `1.0`                                    | Sample rate (0.0 to 1.0)       |
 
 ## Testing
 
@@ -141,6 +142,7 @@ npm run test:coverage
 The analytics module has comprehensive test coverage including:
 
 #### Unit Tests (`analytics.test.ts`)
+
 - Core functionality of all tracking methods
 - Event parameter validation and formatting
 - Provider initialization and configuration
@@ -148,6 +150,7 @@ The analytics module has comprehensive test coverage including:
 - Error handling for missing providers
 
 #### Edge Case Tests (`analytics.edge-cases.test.ts`)
+
 - Empty or invalid event objects
 - Missing or undefined parameters
 - Special characters in event properties
@@ -186,7 +189,7 @@ it('should handle empty event objects', () => {
   // Test with empty object
   const event = {} as any;
   analytics.trackEvent(event);
-  
+
   // Verify default values are used
   expect(analytics.trackEvent).toHaveBeenCalledWith(expect.objectContaining({
     category: 'engagement'
@@ -199,6 +202,7 @@ it('should handle empty event objects', () => {
 When testing analytics, make sure to cover these scenarios:
 
 1. **Missing Required Fields**
+
    ```typescript
    // Test with missing required fields
    const event = { event: 'test' };
@@ -206,33 +210,36 @@ When testing analytics, make sure to cover these scenarios:
    ```
 
 2. **Special Characters**
+
    ```typescript
    // Test with special characters
    analytics.trackEvent({
      event: 'special_chars',
-     properties: { special: '!@#$%^&*()_+{}|:\"<>?\'`~' }
+     properties: { special: '!@#$%^&*()_+{}|:\"<>?\'`~' },
    });
    ```
 
 3. **Very Long Values**
+
    ```typescript
    // Test with very long values
    const longString = 'a'.repeat(1000);
    analytics.trackEvent({
      event: longString,
-     properties: { longValue: longString }
+     properties: { longValue: longString },
    });
    ```
 
 4. **Missing Providers**
+
    ```typescript
    // Test when analytics providers are not available
    const originalGtag = window.gtag;
    delete (window as any).gtag;
-   
+
    // Should not throw when providers are missing
    expect(() => analytics.trackEvent({ event: 'test' })).not.toThrow();
-   
+
    // Restore
    window.gtag = originalGtag;
    ```
@@ -242,16 +249,19 @@ When testing analytics, make sure to cover these scenarios:
 The analytics module is designed to be resilient in the face of errors and edge cases:
 
 ### Input Validation
+
 - All tracking functions validate their inputs
 - Missing required fields use sensible defaults
 - Invalid input types are gracefully handled
 
 ### Error Recovery
+
 - Individual provider failures won't break the application
 - Errors are logged to the console in development mode
 - Failed events don't block application execution
 
 ### Performance Considerations
+
 - Events are processed asynchronously
 - Large payloads are automatically truncated
 - Memory usage is optimized for high-volume event tracking

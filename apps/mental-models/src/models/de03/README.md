@@ -1,6 +1,7 @@
 # DE03: Deconstruction Model
 
 ## Overview
+
 This model implements the Deconstruction mental model by breaking down complex systems into their fundamental components and relationships.
 
 ## Installation
@@ -16,7 +17,7 @@ import { createDE03Model } from '@hummbl/models/de03';
 
 // Create an instance of the model
 const model = createDE03Model({
-  telemetryEnabled: true
+  telemetryEnabled: true,
 });
 
 // Analyze a system by deconstructing it
@@ -28,19 +29,19 @@ const result = await model.analyze({
     components: ['UI', 'API', 'Database'],
     config: {
       debug: true,
-      logLevel: 'info'
-    }
+      logLevel: 'info',
+    },
   },
   context: {
     // Additional context can be provided here
     userId: 'user123',
-    environment: 'development'
+    environment: 'development',
   },
   options: {
     // Model-specific options
     maxDepth: 3,
-    includeReasoning: true
-  }
+    includeReasoning: true,
+  },
 });
 
 // Use the deconstructed components and relationships
@@ -56,6 +57,7 @@ console.log('Insights:', result.analysis.insights);
 Creates a new instance of the DE03 model.
 
 **Parameters:**
+
 - `config` (Optional): Configuration object
   - `name` (string): Name of the model instance (default: 'DE03')
   - `version` (string): Version of the model (default: '1.0.0')
@@ -65,6 +67,7 @@ Creates a new instance of the DE03 model.
 
 **Returns:**
 An object with the following properties:
+
 - `id` (string): The model ID
 - `name` (string): The model name
 - `version` (string): The model version
@@ -75,6 +78,7 @@ An object with the following properties:
 Deconstructs the input system into its fundamental components and relationships.
 
 **Parameters:**
+
 - `input` (object): The input to analyze
   - `system` (any): The system to deconstruct (object, array, or primitive)
   - `context` (object, optional): Additional context
@@ -91,17 +95,21 @@ A Promise that resolves to a deconstruction result object.
 The model emits the following events:
 
 ### analysisComplete
+
 Emitted when analysis is successfully completed.
 
 **Event Data:**
+
 - `requestId` (string): Unique ID for the request
 - `result` (object): The deconstruction result
 - `timestamp` (string): ISO timestamp of when the event was emitted
 
 ### analysisError
+
 Emitted when an error occurs during analysis.
 
 **Event Data:**
+
 - `requestId` (string): Unique ID for the request
 - `error` (string): Error message
 - `timestamp` (string): ISO timestamp of when the error occurred

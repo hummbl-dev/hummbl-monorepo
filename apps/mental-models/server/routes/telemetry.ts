@@ -1,7 +1,7 @@
 // Telemetry Routes
 // Model routing data collection and analytics
 
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 import Database from 'better-sqlite3';
 import { logger } from '../utils/logger';
 import { AuthenticatedRequest } from '../middleware/authGuard';
@@ -46,9 +46,10 @@ interface TelemetryEvent {
 const dbPath = path.join(process.cwd(), 'data', 'telemetry.db');
 let db: Database.Database;
 
+import fs from 'fs';
+
 try {
   // Ensure data directory exists
-  const fs = require('fs');
   const dataDir = path.dirname(dbPath);
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });

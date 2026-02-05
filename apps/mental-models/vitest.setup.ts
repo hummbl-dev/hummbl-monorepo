@@ -5,7 +5,7 @@ import { setupTestEnvironment } from './src/test-utils/cleanup';
 
 // Extend Vitest's expect with jest-dom matchers
 Object.entries(matchers).forEach(([key, matcher]) => {
-  // @ts-ignore - We're extending expect with custom matchers
+  // @ts-expect-error - We're extending expect with custom matchers
   expect.extend({ [key]: matcher });
 });
 
@@ -17,10 +17,10 @@ const testUtils = setupTestEnvironment();
 afterEach(async () => {
   // Clean up React Testing Library
   rtlCleanup();
-  
+
   // Run any registered cleanup callbacks
   await testUtils.runCleanup?.();
-  
+
   // Reset all mocks
   vi.clearAllMocks();
 });
@@ -29,7 +29,7 @@ afterEach(async () => {
 beforeAll(() => {
   // Add any global test setup here
   console.log('Running test setup...');
-  
+
   // Enable test isolation
   vi.resetModules();
 });
@@ -38,11 +38,11 @@ beforeAll(() => {
 afterAll(() => {
   // Add any global test teardown here
   console.log('Tests completed. Cleaning up...');
-  
+
   // Clear any remaining mocks and timers
   vi.clearAllMocks();
   vi.clearAllTimers();
-  
+
   // Force garbage collection if available
   if (typeof global.gc === 'function') {
     global.gc();
@@ -65,7 +65,7 @@ if (process.env.NODE_ENV === 'test' && process.env.DEBUG_MEMORY === 'true') {
       clearInterval(memoryLogInterval);
     }
   }, 30000); // Log every 30 seconds
-  
+
   // Clean up the interval when tests are done
   afterAll(() => {
     clearInterval(memoryLogInterval);

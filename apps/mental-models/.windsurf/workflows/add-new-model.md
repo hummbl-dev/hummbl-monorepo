@@ -3,6 +3,7 @@
 This workflow guides you through adding a new mental model to the HUMMBL system.
 
 ## Prerequisites
+
 - Model ledger CSV updated with new model entry
 - Bibliography sources verified
 - Model definition written and reviewed
@@ -17,6 +18,7 @@ This workflow guides you through adding a new mental model to the HUMMBL system.
 ```
 
 **Template:**
+
 ```json
 {
   "code": "P1",
@@ -78,6 +80,7 @@ pnpm validate-model P1
 ```
 
 **Template:**
+
 ```typescript
 import { FC } from 'react';
 import { ModelLayout } from '@/components/layouts/ModelLayout';
@@ -175,7 +178,7 @@ export const SEARCH_INDEX = [
     name: 'First Principles Thinking',
     transformation: 'P',
     keywords: ['problem solving', 'critical thinking', 'fundamentals'],
-    path: '/models/P1'
+    path: '/models/P1',
   },
   // ... other models
 ];
@@ -309,6 +312,7 @@ Before marking a model as published:
 ### Issue: Model not showing in navigation
 
 **Solution:**
+
 1. Check navigation component includes model
 2. Verify route is registered
 3. Clear browser cache
@@ -317,6 +321,7 @@ Before marking a model as published:
 ### Issue: Bibliography links broken
 
 **Solution:**
+
 1. Verify DOI format is correct
 2. Check URL accessibility
 3. Update to archived version if original is down
@@ -325,6 +330,7 @@ Before marking a model as published:
 ### Issue: Page styling inconsistent
 
 **Solution:**
+
 1. Use ModelLayout wrapper component
 2. Follow existing page component patterns
 3. Check CSS class names match design system
@@ -333,6 +339,7 @@ Before marking a model as published:
 ## Next Steps
 
 After model is published:
+
 1. Monitor analytics for page visits
 2. Gather user feedback
 3. Update examples based on real-world usage

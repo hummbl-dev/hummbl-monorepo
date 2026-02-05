@@ -5,7 +5,7 @@
 **Model Code:** P11  
 **Model Name:** [Human-Readable Name]  
 **Transformation:** Perspective  
-**Tier:** 11  
+**Tier:** 11
 
 ## Description
 
@@ -53,19 +53,19 @@ const model = createP11Model({
 
 ### Input
 
-| Parameter | Type     | Description |
-|-----------|----------|-------------|
-| input     | any      | The input to analyze |
-| context   | object   | Additional context  |
-| options   | object   | Analysis options    |
+| Parameter | Type   | Description          |
+| --------- | ------ | -------------------- |
+| input     | any    | The input to analyze |
+| context   | object | Additional context   |
+| options   | object | Analysis options     |
 
 ### Output
 
-| Field     | Type     | Description |
-|-----------|----------|-------------|
-| id        | string   | Unique ID for this analysis |
-| analysis  | any      | Analysis results |
-| metadata  | object   | Metadata about the analysis |
+| Field    | Type   | Description                 |
+| -------- | ------ | --------------------------- |
+| id       | string | Unique ID for this analysis |
+| analysis | any    | Analysis results            |
+| metadata | object | Metadata about the analysis |
 
 ## Examples
 

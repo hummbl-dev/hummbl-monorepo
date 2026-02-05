@@ -15,31 +15,30 @@ export interface TemplateOptions {
   };
 }
 
-export async function extractTemplate(sourcePath: string, outputPath: string, options: TemplateOptions): Promise<void> {
+export async function extractTemplate(
+  sourcePath: string,
+  outputPath: string,
+  options: TemplateOptions
+): Promise<void> {
   try {
     // Read the source file
     const sourceCode = fs.readFileSync(sourcePath, 'utf-8');
-    
+
     // Create AST from source code
-    const sourceFile = ts.createSourceFile(
-      'source.ts',
-      sourceCode,
-      ts.ScriptTarget.Latest,
-      true
-    );
+    const sourceFile = ts.createSourceFile('source.ts', sourceCode, ts.ScriptTarget.Latest, true);
 
     // Process the source file to create template
     const template = transformToTemplate(sourceFile, options);
-    
+
     // Ensure output directory exists
     const outputDir = path.dirname(outputPath);
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
-    
+
     // Write the template to file
     fs.writeFileSync(outputPath, template, 'utf-8');
-    
+
     console.log(`✅ Template successfully extracted to: ${outputPath}`);
   } catch (error) {
     console.error('❌ Error extracting template:', error);
@@ -49,11 +48,12 @@ export async function extractTemplate(sourcePath: string, outputPath: string, op
 
 function transformToTemplate(node: ts.Node, options: TemplateOptions): string {
   const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
-  const transformer = <T extends ts.Node>(context: ts.TransformationContext) => 
+  const transformer =
+    <T extends ts.Node>(context: ts.TransformationContext) =>
     (rootNode: T) => {
       function visit(node: ts.Node): ts.Node {
         node = ts.visitEachChild(node, visit, context);
-        
+
         // Replace class name
         if (ts.isClassDeclaration(node) && node.name?.text === 'FirstPrinciplesModelImpl') {
           return ts.factory.updateClassDeclaration(
@@ -62,7 +62,7 @@ function transformToTemplate(node: ts.Node, options: TemplateOptions): string {
             ts.factory.createIdentifier('{{MODEL_IMPL_CLASS}}'),
             node.typeParameters,
             node.heritageClauses,
-            node.members.map(member => {
+            node.members.map((member) => {
               // Process methods and properties
               if (ts.isMethodDeclaration(member)) {
                 return processMethod(member);
@@ -74,23 +74,25 @@ function transformToTemplate(node: ts.Node, options: TemplateOptions): string {
             })
           );
         }
-        
+
         // Update constants
-        if (ts.isVariableStatement(node) && 
-            node.declarationList.declarations.some(d => d.name.getText() === 'P1_CONSTANTS')) {
+        if (
+          ts.isVariableStatement(node) &&
+          node.declarationList.declarations.some((d) => d.name.getText() === 'P1_CONSTANTS')
+        ) {
           return createConstants(options);
         }
-        
+
         return node;
       }
       return ts.visitNode(rootNode, visit);
     };
-  
+
   const result = ts.transform(node, [transformer]);
   const transformedSourceFile = result.transformed[0] as ts.SourceFile;
-  
-  let output = printer.printFile(transformedSourceFile);
-  
+
+  const output = printer.printFile(transformedSourceFile);
+
   // Add template header
   const header = `/**
  * GENERATED TEMPLATE - DO NOT EDIT DIRECTLY
@@ -112,7 +114,7 @@ function processMethod(method: ts.MethodDeclaration): ts.MethodDeclaration {
   if (method.name && ts.isIdentifier(method.name) && skipMethods.includes(method.name.text)) {
     return method;
   }
-  
+
   // Add implementation placeholder for other methods
   return ts.factory.updateMethodDeclaration(
     method,
@@ -129,10 +131,10 @@ function processMethod(method: ts.MethodDeclaration): ts.MethodDeclaration {
         ts.factory.createStringLiteral('// TODO: Implement this method')
       ),
       ts.factory.createReturnStatement(
-        method.type && !ts.isVoidTypeNode(method.type) 
+        method.type && !ts.isVoidTypeNode(method.type)
           ? ts.factory.createIdentifier('undefined')
           : undefined
-      )
+      ),
     ])
   );
 }
@@ -162,56 +164,58 @@ function createConstants(options: TemplateOptions): ts.VariableStatement {
           'MODEL_CONSTANTS',
           undefined,
           undefined,
-          ts.factory.createObjectLiteralExpression([
-            ts.factory.createPropertyAssignment(
-              'MODEL_CODE',
-              ts.factory.createStringLiteral(`'${options.modelId}'`)
-            ),
-            ts.factory.createPropertyAssignment(
-              'MODEL_NAME',
-              ts.factory.createStringLiteral(`'${options.modelName}'`)
-            ),
-            ts.factory.createPropertyAssignment(
-              'DESCRIPTION',
-              ts.factory.createStringLiteral(`'${options.description}'`)
-            ),
-            ts.factory.createPropertyAssignment(
-              'KEY_CHARACTERISTICS',
-              ts.factory.createArrayLiteralExpression(
-                options.characteristics.map(char => 
-                  ts.factory.createStringLiteral(char)
-                ),
-                true
-              )
-            ),
-            ts.factory.createPropertyAssignment(
-              'RELATED_MODELS',
-              ts.factory.createArrayLiteralExpression(
-                options.relatedModels.map(model => 
-                  ts.factory.createStringLiteral(model)
-                ),
-                true
-              )
-            ),
-            ts.factory.createPropertyAssignment(
-              'EXAMPLE',
-              ts.factory.createObjectLiteralExpression([
-                ts.factory.createPropertyAssignment(
-                  'problem',
-                  ts.factory.createStringLiteral(options.example.problem)
-                ),
-                ts.factory.createPropertyAssignment(
-                  'traditionalApproach',
-                  ts.factory.createStringLiteral(options.example.traditionalApproach)
-                ),
-                ts.factory.createPropertyAssignment(
-                  'modelApproach',
-                  ts.factory.createStringLiteral(options.example.modelApproach)
+          ts.factory.createObjectLiteralExpression(
+            [
+              ts.factory.createPropertyAssignment(
+                'MODEL_CODE',
+                ts.factory.createStringLiteral(`'${options.modelId}'`)
+              ),
+              ts.factory.createPropertyAssignment(
+                'MODEL_NAME',
+                ts.factory.createStringLiteral(`'${options.modelName}'`)
+              ),
+              ts.factory.createPropertyAssignment(
+                'DESCRIPTION',
+                ts.factory.createStringLiteral(`'${options.description}'`)
+              ),
+              ts.factory.createPropertyAssignment(
+                'KEY_CHARACTERISTICS',
+                ts.factory.createArrayLiteralExpression(
+                  options.characteristics.map((char) => ts.factory.createStringLiteral(char)),
+                  true
                 )
-              ], true)
-            )
-          ], true)
-        )
+              ),
+              ts.factory.createPropertyAssignment(
+                'RELATED_MODELS',
+                ts.factory.createArrayLiteralExpression(
+                  options.relatedModels.map((model) => ts.factory.createStringLiteral(model)),
+                  true
+                )
+              ),
+              ts.factory.createPropertyAssignment(
+                'EXAMPLE',
+                ts.factory.createObjectLiteralExpression(
+                  [
+                    ts.factory.createPropertyAssignment(
+                      'problem',
+                      ts.factory.createStringLiteral(options.example.problem)
+                    ),
+                    ts.factory.createPropertyAssignment(
+                      'traditionalApproach',
+                      ts.factory.createStringLiteral(options.example.traditionalApproach)
+                    ),
+                    ts.factory.createPropertyAssignment(
+                      'modelApproach',
+                      ts.factory.createStringLiteral(options.example.modelApproach)
+                    ),
+                  ],
+                  true
+                )
+              ),
+            ],
+            true
+          )
+        ),
       ],
       ts.NodeFlags.Const
     )

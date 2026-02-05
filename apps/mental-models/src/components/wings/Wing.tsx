@@ -38,15 +38,19 @@ export const Wing: React.FC<WingProps> = ({
   onClick,
   'aria-label': ariaLabel,
 }) => {
-  const animationClass = 
-    animate === true ? 'wing-animate-hover' :
-    animate === 'hover' ? 'wing-animate-hover' :
-    animate === 'pulse' ? 'wing-animate-pulse' :
-    animate === 'float' ? 'wing-animate-float' :
-    '';
+  const animationClass =
+    animate === true
+      ? 'wing-animate-hover'
+      : animate === 'hover'
+        ? 'wing-animate-hover'
+        : animate === 'pulse'
+          ? 'wing-animate-pulse'
+          : animate === 'float'
+            ? 'wing-animate-float'
+            : '';
 
   const sizeClass = `wing-size-${size}`;
-  
+
   const handleClick = () => {
     if (onClick) onClick();
   };

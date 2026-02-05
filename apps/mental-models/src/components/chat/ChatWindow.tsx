@@ -130,10 +130,10 @@ export function ChatWindow({
                 </div>
               )}
               {error && <div className="chat-error">⚠️ {error}</div>}
-              
+
               {/* Render children (model suggestions, errors, etc.) */}
               {children}
-              
+
               <div ref={messagesEndRef} />
             </>
           )}

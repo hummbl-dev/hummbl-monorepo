@@ -32,7 +32,9 @@ function run(cmd, opts = {}) {
         console.warn(`[phase2] WARNING: HEAD !== BASELINE (${baseline}). Current: ${current}`);
       }
     }
-  } catch {}
+  } catch {
+    // Baseline verification is optional
+  }
 
   // Step 1: Clear caches
   log('Clearing caches...');

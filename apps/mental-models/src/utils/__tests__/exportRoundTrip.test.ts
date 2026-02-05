@@ -2,7 +2,13 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import type { Narrative } from '@cascade/types/narrative';
-import { validateJSONExport } from '../exportValidation';
+import { validateJSONExport, validateCSVExport, validateMarkdownExport } from '../exportValidation';
+import {
+  parseJSONImport,
+  parseCSVImport,
+  parseMarkdownImport,
+  compareNarratives,
+} from '../importParsers';
 
 // Test data
 const mockNarratives: Narrative[] = [

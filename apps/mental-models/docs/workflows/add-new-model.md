@@ -11,11 +11,13 @@ This guide walks you through the process of adding a new mental model to the HUM
 ## Step 1: Create Model Files
 
 1. Navigate to the models directory:
+
    ```bash
    cd src/models
    ```
 
 2. Create a new directory for your model (kebab-case):
+
    ```bash
    mkdir my-new-model
    ```
@@ -111,13 +113,15 @@ describe('MyNewModel', () => {
 
 In `README.md`:
 
-```markdown
+````markdown
 # My New Model
 
 ## Overview
+
 Brief description of the model, its purpose, and when to use it.
 
 ## Key Concepts
+
 - Concept 1
 - Concept 2
 - Concept 3
@@ -132,10 +136,13 @@ const model = createMyNewModel({
   description: 'Custom description',
 });
 ```
+````
 
 ## Related Models
+
 - [Related Model 1](../related-model1)
 - [Related Model 2](../related-model2)
+
 ```
 
 ## Step 7: Update Documentation

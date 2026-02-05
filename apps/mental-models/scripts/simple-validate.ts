@@ -17,7 +17,7 @@ interface ModelStatus {
 
 function checkModel(modelId: string): ModelStatus {
   const modelPath = path.join(ROOT_DIR, 'src', 'models', modelId.toLowerCase());
-  
+
   // Check if model directory exists
   if (!fs.existsSync(modelPath)) {
     return {
@@ -26,7 +26,7 @@ function checkModel(modelId: string): ModelStatus {
       testCount: 0,
       hasDocumentation: false,
       hasTypes: false,
-      status: 'scaffold'
+      status: 'scaffold',
     };
   }
 
@@ -35,9 +35,8 @@ function checkModel(modelId: string): ModelStatus {
   let hasImplementation = false;
   if (fs.existsSync(indexPath)) {
     const content = fs.readFileSync(indexPath, 'utf-8');
-    hasImplementation = content.includes('analyze(') && 
-                       !content.includes('TODO') && 
-                       !content.includes('implement');
+    hasImplementation =
+      content.includes('analyze(') && !content.includes('TODO') && !content.includes('implement');
   }
 
   // Check tests
@@ -70,15 +69,12 @@ function checkModel(modelId: string): ModelStatus {
     testCount,
     hasDocumentation,
     hasTypes,
-    status
+    status,
   };
 }
 
 // Models to validate
-const modelsToValidate = [
-  'p1', 'p5', 'p10', 'p15', 'p20',
-  'in1', 'in5', 'in10', 'in15', 'in20'
-];
+const modelsToValidate = ['p1', 'p5', 'p10', 'p15', 'p20', 'in1', 'in5', 'in10', 'in15', 'in20'];
 
 console.log('🔍 Validating models...\n');
 
@@ -89,14 +85,14 @@ const results = modelsToValidate.map(checkModel);
 console.log('MODEL | IMPL  | TESTS | DOCS  | TYPES | STATUS   ');
 console.log('------|-------|-------|-------|-------|-----------');
 
-results.forEach(model => {
+results.forEach((model) => {
   console.log(
     `${model.id.padEnd(5)}| ` +
-    `${model.hasImplementation ? '✅' : '❌'}     | ` +
-    `${model.testCount.toString().padEnd(6)}| ` +
-    `${model.hasDocumentation ? '✅' : '❌'}     | ` +
-    `${model.hasTypes ? '✅' : '❌'}     | ` +
-    `${model.status.padEnd(9)}`
+      `${model.hasImplementation ? '✅' : '❌'}     | ` +
+      `${model.testCount.toString().padEnd(6)}| ` +
+      `${model.hasDocumentation ? '✅' : '❌'}     | ` +
+      `${model.hasTypes ? '✅' : '❌'}     | ` +
+      `${model.status.padEnd(9)}`
   );
 });
 
@@ -105,25 +101,25 @@ const summary = {
   timestamp: new Date().toISOString(),
   stats: {
     totalModels: results.length,
-    complete: results.filter(m => m.status === 'complete').length,
-    partial: results.filter(m => m.status === 'partial').length,
-    scaffold: results.filter(m => m.status === 'scaffold').length,
-    withTests: results.filter(m => m.testCount > 0).length,
-    withDocs: results.filter(m => m.hasDocumentation).length,
-    withTypes: results.filter(m => m.hasTypes).length
+    complete: results.filter((m) => m.status === 'complete').length,
+    partial: results.filter((m) => m.status === 'partial').length,
+    scaffold: results.filter((m) => m.status === 'scaffold').length,
+    withTests: results.filter((m) => m.testCount > 0).length,
+    withDocs: results.filter((m) => m.hasDocumentation).length,
+    withTypes: results.filter((m) => m.hasTypes).length,
   },
   models: Object.fromEntries(
-    results.map(model => [
+    results.map((model) => [
       model.id,
       {
         status: model.status,
         implementation: model.hasImplementation,
         tests: model.testCount,
         documentation: model.hasDocumentation,
-        types: model.hasTypes
-      }
+        types: model.hasTypes,
+      },
     ])
-  )
+  ),
 };
 
 // Save detailed report

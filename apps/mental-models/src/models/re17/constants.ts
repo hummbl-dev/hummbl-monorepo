@@ -1,6 +1,6 @@
 /**
  * RE17 Constants
- * 
+ *
  * This file contains constants used by the RE17 model.
  */
 
@@ -11,18 +11,19 @@ export const version = '1.0.0';
 export const DEFAULT_OPTIONS = {
   includeReasoning: true,
   maxDepth: 3,
-  includeIssues: true
+  includeIssues: true,
 };
 
 /** Model metadata */
 export const MODEL_METADATA = {
   id: 're17',
   name: 'RE17 Reconstruction Model',
-  description: 'Reassemblies components into a coherent system with improved structure and relationships',
+  description:
+    'Reassemblies components into a coherent system with improved structure and relationships',
   version: '1.0.0',
   author: 'HUMMBL',
   createdAt: '2025-10-23',
-  updatedAt: '2025-10-23'
+  updatedAt: '2025-10-23',
 };
 
 /** Default component types */
@@ -34,7 +35,7 @@ export const COMPONENT_TYPES = [
   'database',
   'cache',
   'queue',
-  'storage'
+  'storage',
 ];
 
 /** Default relationship types */
@@ -46,12 +47,12 @@ export const RELATIONSHIP_TYPES = [
   'calls',
   'references',
   'contains',
-  'belongs_to'
+  'belongs_to',
 ];
 
 /** Error messages */
 export const ERRORS = {
   INVALID_INPUT: 'Input must be an object',
   MISSING_COMPONENTS: 'Input must contain a non-empty "components" array',
-  RECONSTRUCTION_FAILED: 'Failed to reconstruct system'
+  RECONSTRUCTION_FAILED: 'Failed to reconstruct system',
 };

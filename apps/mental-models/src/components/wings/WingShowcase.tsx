@@ -37,7 +37,8 @@ export const WingShowcase: React.FC<WingShowcaseProps> = ({
   darkMode = false,
   className = '',
 }) => {
-  const transformations = customTransformations || 
+  const transformations =
+    customTransformations ||
     (showAllTransformations ? (['P', 'IN', 'CO', 'DE', 'RE', 'SY'] as Transformation[]) : []);
 
   return (
@@ -46,7 +47,7 @@ export const WingShowcase: React.FC<WingShowcaseProps> = ({
         <h2 className="wing-showcase-title">{title}</h2>
         {subtitle && <p className="wing-showcase-subtitle">{subtitle}</p>}
       </div>
-      
+
       <WingGrid
         transformations={transformations}
         columns={columns}
@@ -54,7 +55,7 @@ export const WingShowcase: React.FC<WingShowcaseProps> = ({
         animate={animate}
         showLabels={showLabels}
       />
-      
+
       {showLabels && (
         <div className="wing-showcase-descriptions">
           {transformations.map((transformation) => (

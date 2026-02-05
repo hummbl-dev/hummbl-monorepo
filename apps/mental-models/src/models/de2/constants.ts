@@ -10,7 +10,7 @@ export const DE2_CONSTANTS = {
   MODEL_NAME: 'Cognitive Tracing',
   TRANSFORMATION: 'Decomposition',
   VERSION: '1.0.0',
-  
+
   // Default configuration values
   DEFAULTS: {
     DEFAULT_MAX_DEPTH: 5,
@@ -20,7 +20,7 @@ export const DE2_CONSTANTS = {
     MAX_STEPS_PER_TRACE: 50,
     MAX_DECISION_POINTS: 10,
   },
-  
+
   // Cognitive step types
   STEP_TYPES: [
     'observation',
@@ -32,9 +32,9 @@ export const DE2_CONSTANTS = {
     'abstraction',
     'application',
     'verification',
-    'reflection'
+    'reflection',
   ] as const,
-  
+
   // Relationship types between steps
   RELATIONSHIP_TYPES: [
     'leads-to',
@@ -44,9 +44,9 @@ export const DE2_CONSTANTS = {
     'elaborates',
     'contradicts',
     'generalizes',
-    'specializes'
+    'specializes',
   ] as const,
-  
+
   // Common decision point types
   DECISION_TYPES: [
     'selection',
@@ -56,9 +56,9 @@ export const DE2_CONSTANTS = {
     'solution-evaluation',
     'resource-allocation',
     'goal-selection',
-    'strategy-choice'
+    'strategy-choice',
   ] as const,
-  
+
   // Default step templates
   STEP_TEMPLATES: {
     observation: (content: string) => `Observed: ${content}`,
@@ -66,15 +66,15 @@ export const DE2_CONSTANTS = {
     decision: (content: string) => `Decide: ${content}`,
     evaluation: (content: string) => `Evaluate: ${content}`,
   },
-  
+
   // Default confidence values
   CONFIDENCE_LEVELS: {
     HIGH: 0.8,
     MEDIUM: 0.6,
     LOW: 0.4,
-    VERY_LOW: 0.2
+    VERY_LOW: 0.2,
   },
-  
+
   // Common tags for categorization
   TAGS: {
     ANALYTICAL: 'analytical',
@@ -84,9 +84,9 @@ export const DE2_CONSTANTS = {
     TACTICAL: 'tactical',
     METACOGNITIVE: 'metacognitive',
     HEURISTIC: 'heuristic',
-    ALGORITHMIC: 'algorithmic'
+    ALGORITHMIC: 'algorithmic',
   },
-  
+
   // Error messages
   ERRORS: {
     MAX_DEPTH_EXCEEDED: 'Maximum trace depth exceeded',
@@ -96,8 +96,8 @@ export const DE2_CONSTANTS = {
     INVALID_STEP: 'Invalid cognitive step',
     INVALID_DECISION_POINT: 'Invalid decision point',
     STEP_NOT_FOUND: 'Step not found in trace',
-    DECISION_POINT_NOT_FOUND: 'Decision point not found'
-  }
+    DECISION_POINT_NOT_FOUND: 'Decision point not found',
+  },
 } as const;
 
 /**
@@ -120,8 +120,8 @@ export function createCognitiveStep(
     meta: {
       timestamp,
       tags: [],
-      ...meta
-    }
+      ...meta,
+    },
   };
 }
 
@@ -130,19 +130,19 @@ export function createCognitiveStep(
  */
 export function createDecisionPoint(
   decision: string,
-  options: Array<{id: string, description: string}>,
+  options: Array<{ id: string; description: string }>,
   stepId: string,
   selectedOptionId?: string
 ): DecisionPoint {
   return {
     id: `dp-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
     decision,
-    options: options.map(opt => ({
+    options: options.map((opt) => ({
       ...opt,
-      selected: opt.id === selectedOptionId
+      selected: opt.id === selectedOptionId,
     })),
     stepId,
-    selectedOptionId
+    selectedOptionId,
   };
 }
 
@@ -181,8 +181,8 @@ export function createCognitiveTrace(input: string): {
         createdAt: now,
         updatedAt: now,
         modelVersion: DE2_CONSTANTS.VERSION,
-        tags: []
-      }
-    }
+        tags: [],
+      },
+    },
   };
 }

@@ -19,7 +19,7 @@ export function initErrorTracking(config: {
 
   try {
     const integrations: any[] = [];
-    
+
     // Only add BrowserTracing in production
     if (process.env.NODE_ENV === 'production') {
       integrations.push(
@@ -81,10 +81,7 @@ export function initErrorTracking(config: {
  * @param error The error to report
  * @param context Additional context data
  */
-export function captureError(
-  error: Error,
-  context?: Record<string, unknown>
-) {
+export function captureError(error: Error, context?: Record<string, unknown>) {
   if (!Sentry.getClient()) {
     console.error('Sentry not initialized. Error:', error, 'Context:', context);
     return;

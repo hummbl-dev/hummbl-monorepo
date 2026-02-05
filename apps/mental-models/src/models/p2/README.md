@@ -35,7 +35,7 @@ const stakeholder1 = model.methods.createStakeholder({
   type: 'customer',
   influence: 4,
   interest: 5,
-  description: 'Primary users of the product/service'
+  description: 'Primary users of the product/service',
 });
 
 const stakeholder2 = model.methods.createStakeholder({
@@ -43,7 +43,7 @@ const stakeholder2 = model.methods.createStakeholder({
   type: 'regulator',
   influence: 5,
   interest: 3,
-  description: 'Government agency overseeing compliance'
+  description: 'Government agency overseeing compliance',
 });
 
 // Analyze stakeholders
@@ -126,8 +126,10 @@ Launching a new product in a regulated market
 const analysis = analyzeStakeholderMap(exampleStakeholders);
 
 // Key stakeholders (high influence, high interest)
-analysis.keyStakeholders.forEach(stakeholder => {
-  console.log(`Key: ${stakeholder.name} (Influence: ${stakeholder.influence}, Interest: ${stakeholder.interest})`);
+analysis.keyStakeholders.forEach((stakeholder) => {
+  console.log(
+    `Key: ${stakeholder.name} (Influence: ${stakeholder.influence}, Interest: ${stakeholder.interest})`
+  );
 });
 
 // Generate network map data for visualization

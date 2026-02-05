@@ -18,7 +18,8 @@
 }
 
 @keyframes wing-pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
@@ -29,7 +30,8 @@
 }
 
 @keyframes wing-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -38,7 +40,8 @@
 }
 
 @keyframes wing-glow {
-  0%, 100% {
+  0%,
+  100% {
     filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.3));
   }
   50% {
@@ -102,12 +105,24 @@
   animation: wing-fade-in 600ms cubic-bezier(0.4, 0, 0.2, 1) backwards;
 }
 
-.wing-grid-item:nth-child(1) { animation-delay: 0ms; }
-.wing-grid-item:nth-child(2) { animation-delay: 100ms; }
-.wing-grid-item:nth-child(3) { animation-delay: 200ms; }
-.wing-grid-item:nth-child(4) { animation-delay: 300ms; }
-.wing-grid-item:nth-child(5) { animation-delay: 400ms; }
-.wing-grid-item:nth-child(6) { animation-delay: 500ms; }
+.wing-grid-item:nth-child(1) {
+  animation-delay: 0ms;
+}
+.wing-grid-item:nth-child(2) {
+  animation-delay: 100ms;
+}
+.wing-grid-item:nth-child(3) {
+  animation-delay: 200ms;
+}
+.wing-grid-item:nth-child(4) {
+  animation-delay: 300ms;
+}
+.wing-grid-item:nth-child(5) {
+  animation-delay: 400ms;
+}
+.wing-grid-item:nth-child(6) {
+  animation-delay: 500ms;
+}
 
 /* === Performance Optimizations === */
 
@@ -134,7 +149,7 @@
     animation: none !important;
     transition: none !important;
   }
-  
+
   .wing-container:hover {
     transform: none !important;
   }
@@ -144,7 +159,8 @@
 
 @media (prefers-color-scheme: dark) {
   @keyframes wing-glow {
-    0%, 100% {
+    0%,
+    100% {
       filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.4));
     }
     50% {

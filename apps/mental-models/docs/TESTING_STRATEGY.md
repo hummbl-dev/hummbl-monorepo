@@ -1,6 +1,7 @@
 # Testing Strategy
 
 ## Overview
+
 This document outlines the testing approach for HUMMBL models, ensuring consistency, reliability, and maintainability across all implementations.
 
 ## Testing Pyramid
@@ -15,11 +16,13 @@ graph TD
 ## 1. Unit Testing
 
 ### Scope
+
 - Individual model components
 - Utility functions
 - Helper methods
 
 ### Tools
+
 - **Framework**: Jest
 - **Assertions**: Jest + `@testing-library`
 - **Mocks**: Jest Mocks
@@ -30,17 +33,17 @@ graph TD
 ```typescript
 describe('P1: First Principles', () => {
   let model: FirstPrinciplesModel;
-  
+
   beforeEach(() => {
     model = createFirstPrinciplesModel();
   });
-  
+
   it('should break down problems into fundamental truths', async () => {
     const result = await model.analyze({
       problem: 'Improve user engagement',
-      context: 'Mobile app'
+      context: 'Mobile app',
     });
-    
+
     expect(result).toHaveProperty('fundamentals');
     expect(result.fundamentals.length).toBeGreaterThan(0);
     expect(result.assumptions).toBeDefined();
@@ -51,11 +54,13 @@ describe('P1: First Principles', () => {
 ## 2. Integration Testing
 
 ### Scope
+
 - Model interactions
 - Data flow between components
 - External service integrations
 
 ### Tools
+
 - **Framework**: Jest
 - **Mocks**: `nock` for HTTP mocks
 - **Fixtures**: Test data factories
@@ -67,10 +72,10 @@ describe('Model Integration: P1 + IN1', () => {
   it('should combine first principles with inversion', async () => {
     const p1 = createFirstPrinciplesModel();
     const in1 = createInversionModel();
-    
+
     const fundamentals = await p1.analyze('Reduce server costs');
     const inverted = await in1.invert(fundamentals);
-    
+
     expect(inverted).toHaveProperty('invertedPrinciples');
     expect(inverted.invertedPrinciples.length).toBe(fundamentals.length);
   });
@@ -80,11 +85,13 @@ describe('Model Integration: P1 + IN1', () => {
 ## 3. End-to-End Testing
 
 ### Scope
+
 - Complete user flows
 - API endpoints
 - UI interactions
 
 ### Tools
+
 - **Framework**: Cypress
 - **Assertions**: Chai
 - **Visual**: Percy.io
@@ -105,12 +112,14 @@ describe('Model Exploration Flow', () => {
 ## 4. Performance Testing
 
 ### Metrics
+
 - Response times
 - Memory usage
 - CPU utilization
 - Throughput
 
 ### Tools
+
 - **Load Testing**: k6
 - **Profiling**: Node.js built-in profiler
 - **Monitoring**: Prometheus + Grafana
@@ -132,14 +141,14 @@ export const options = {
 export default function () {
   const res = http.post('https://api.hummbl.io/models/p1/analyze', {
     problem: 'Test problem',
-    context: 'test'
+    context: 'test',
   });
-  
+
   check(res, {
     'status is 200': (r) => r.status === 200,
     'response time < 200ms': (r) => r.timings.duration < 200,
   });
-  
+
   sleep(1);
 }
 ```
@@ -147,6 +156,7 @@ export default function () {
 ## 5. Test Data Management
 
 ### Strategies
+
 - **Factories**: Generate test data
 - **Fixtures**: Pre-defined test cases
 - **Fuzzing**: Random data generation
@@ -168,12 +178,14 @@ const createTestProblem = (overrides = {}) => ({
 ## 6. Continuous Testing
 
 ### Pipeline Integration
+
 - **On Commit**: Unit tests
 - **On PR**: Integration tests + Linting
 - **On Merge**: Full test suite + E2E
 - **Nightly**: Performance tests
 
 ### Tools
+
 - **CI/CD**: GitHub Actions
 - **Code Quality**: SonarQube
 - **Coverage**: Codecov
@@ -181,12 +193,14 @@ const createTestProblem = (overrides = {}) => ({
 ## 7. Test Coverage
 
 ### Targets
+
 - **Statements**: 90%+
 - **Branches**: 85%+
 - **Functions**: 90%+
 - **Lines**: 90%+
 
 ### Reporting
+
 - HTML reports
 - Badges in README
 - PR comments
@@ -194,14 +208,17 @@ const createTestProblem = (overrides = {}) => ({
 ## 8. Mutation Testing
 
 ### Purpose
+
 - Validate test effectiveness
 - Find untested code paths
 
 ### Tools
+
 - StrykerJS
 - Mutode
 
 ### Configuration
+
 ```javascript
 // stryker.conf.js
 module.exports = {
@@ -209,22 +226,20 @@ module.exports = {
   reporters: ['html', 'clear-text', 'progress'],
   testRunner: 'jest',
   coverageAnalysis: 'perTest',
-  mutate: [
-    'src/models/**/*.ts',
-    '!src/models/**/*.test.ts',
-    '!src/models/**/index.ts',
-  ],
+  mutate: ['src/models/**/*.ts', '!src/models/**/*.test.ts', '!src/models/**/index.ts'],
 };
 ```
 
 ## 9. Visual Regression Testing
 
 ### Tools
+
 - Percy
 - Applitools
 - Storybook + Chromatic
 
 ### Implementation
+
 ```javascript
 // In your test file
 describe('Model Visualization', () => {
@@ -238,12 +253,14 @@ describe('Model Visualization', () => {
 ## 10. Security Testing
 
 ### Focus Areas
+
 - Input validation
 - Authentication/Authorization
 - Data protection
 - Dependency vulnerabilities
 
 ### Tools
+
 - OWASP ZAP
 - npm audit
 - Snyk
@@ -251,12 +268,14 @@ describe('Model Visualization', () => {
 ## Test Environment
 
 ### Requirements
+
 - Isolated test database
 - Mock external services
 - Consistent test data
 - Clean state between tests
 
 ### Setup
+
 ```bash
 # Install dependencies
 npm install --save-dev jest @testing-library/react cypress @percy/cli

@@ -33,11 +33,11 @@ export const WingSelector: React.FC<WingSelectorProps> = ({
         const newSelected = prev.includes(transformation)
           ? prev.filter((t) => t !== transformation)
           : [...prev, transformation];
-        
+
         if (onSelect && newSelected.length > 0) {
           onSelect(newSelected[newSelected.length - 1]);
         }
-        
+
         return newSelected;
       });
     } else {
@@ -65,11 +65,7 @@ export const WingSelector: React.FC<WingSelectorProps> = ({
               animate="hover"
               onClick={() => handleWingClick(transformation)}
             />
-            {showLabels && (
-              <div className="wing-selector-label">
-                {transformation}
-              </div>
-            )}
+            {showLabels && <div className="wing-selector-label">{transformation}</div>}
           </div>
         );
       })}

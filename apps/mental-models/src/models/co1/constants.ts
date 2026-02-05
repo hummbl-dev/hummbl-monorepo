@@ -1,12 +1,12 @@
-import { 
-  BindingPattern, 
-  ModelBinding, 
-  ComponentReference, 
-  Constraint, 
-  ConstraintType, 
+import {
+  BindingPattern,
+  ModelBinding,
+  ComponentReference,
+  Constraint,
+  ConstraintType,
   ConstraintSeverity,
   BindingType,
-  BindingDirection
+  BindingDirection,
 } from './types';
 
 /**
@@ -19,7 +19,7 @@ export const CO1_CONSTANTS = {
   MODEL_NAME: 'Syntactic Binding',
   TRANSFORMATION: 'Composition',
   VERSION: '1.0.0',
-  
+
   // Default configuration values
   DEFAULTS: {
     MAX_BINDINGS_PER_COMPONENT: 10,
@@ -27,7 +27,7 @@ export const CO1_CONSTANTS = {
     ENABLE_AUTO_VALIDATION: true,
     STRICT_MODE: false,
   },
-  
+
   // Common constraint templates
   CONSTRAINT_TEMPLATES: {
     // Type constraints
@@ -37,7 +37,7 @@ export const CO1_CONSTANTS = {
       message: `Value must be of type ${expectedType}`,
       severity: ConstraintSeverity.ERROR,
     }),
-    
+
     // Cardinality constraints
     MIN_CARDINALITY: (min: number): Constraint => ({
       type: ConstraintType.MIN_CARDINALITY,
@@ -45,14 +45,14 @@ export const CO1_CONSTANTS = {
       message: `At least ${min} component(s) required`,
       severity: ConstraintSeverity.ERROR,
     }),
-    
+
     MAX_CARDINALITY: (max: number): Constraint => ({
       type: ConstraintType.MAX_CARDINALITY,
       params: { max },
       message: `At most ${max} component(s) allowed`,
       severity: ConstraintSeverity.ERROR,
     }),
-    
+
     // Dependency constraints
     REQUIRES: (componentId: string): Constraint => ({
       type: ConstraintType.REQUIRES,
@@ -60,14 +60,14 @@ export const CO1_CONSTANTS = {
       message: `Requires component with ID: ${componentId}`,
       severity: ConstraintSeverity.ERROR,
     }),
-    
+
     EXCLUDES: (componentId: string): Constraint => ({
       type: ConstraintType.EXCLUDES,
       params: { componentId },
       message: `Cannot be used with component: ${componentId}`,
       severity: ConstraintSeverity.ERROR,
     }),
-    
+
     // Performance constraints
     MAX_LATENCY: (maxMs: number): Constraint => ({
       type: ConstraintType.MAX_LATENCY,
@@ -76,7 +76,7 @@ export const CO1_CONSTANTS = {
       severity: ConstraintSeverity.WARNING,
     }),
   },
-  
+
   // Built-in binding patterns
   BUILTIN_PATTERNS: [
     {
@@ -194,7 +194,7 @@ export const CO1_CONSTANTS = {
     },
     // More patterns can be added here
   ] as BindingPattern[],
-  
+
   // Example bindings for testing and documentation
   EXAMPLE_BINDINGS: [
     {
@@ -240,11 +240,12 @@ export const CO1_CONSTANTS = {
       },
     },
   ] as ModelBinding[],
-  
+
   // Example scenario for documentation
   EXAMPLE_SCENARIO: {
     title: 'E-commerce Checkout Flow',
-    description: 'A binding that connects the shopping cart, payment processor, and order management system',
+    description:
+      'A binding that connects the shopping cart, payment processor, and order management system',
     bindings: [
       {
         type: BindingType.SEQUENTIAL,

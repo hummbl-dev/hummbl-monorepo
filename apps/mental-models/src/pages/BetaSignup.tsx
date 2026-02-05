@@ -19,15 +19,15 @@ const BetaSignup: React.FC = () => {
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
 
   const handleInputChange = (field: keyof BetaApplicationForm, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleArrayChange = (field: keyof BetaApplicationForm, value: string, checked: boolean) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: checked
-        ? [...(prev[field] as string[] || []), value]
-        : (prev[field] as string[] || []).filter(item => item !== value)
+        ? [...((prev[field] as string[]) || []), value]
+        : ((prev[field] as string[]) || []).filter((item) => item !== value),
     }));
   };
 
@@ -63,8 +63,21 @@ const BetaSignup: React.FC = () => {
   };
 
   const isFormValid = () => {
-    const required = ['firstName', 'lastName', 'email', 'currentRole', 'industry', 'painPoints', 'discoverySource', 'expectedOutcomes', 'location'];
-    return required.every(field => formData[field as keyof BetaApplicationForm]) && formData.agreeToTerms;
+    const required = [
+      'firstName',
+      'lastName',
+      'email',
+      'currentRole',
+      'industry',
+      'painPoints',
+      'discoverySource',
+      'expectedOutcomes',
+      'location',
+    ];
+    return (
+      required.every((field) => formData[field as keyof BetaApplicationForm]) &&
+      formData.agreeToTerms
+    );
   };
 
   return (
@@ -85,7 +98,9 @@ const BetaSignup: React.FC = () => {
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">Personal Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    First Name *
+                  </label>
                   <input
                     type="text"
                     required
@@ -95,7 +110,9 @@ const BetaSignup: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Last Name *
+                  </label>
                   <input
                     type="text"
                     required
@@ -117,7 +134,9 @@ const BetaSignup: React.FC = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">LinkedIn Profile</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    LinkedIn Profile
+                  </label>
                   <input
                     type="url"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -126,7 +145,9 @@ const BetaSignup: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">GitHub Profile</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    GitHub Profile
+                  </label>
                   <input
                     type="url"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -142,7 +163,9 @@ const BetaSignup: React.FC = () => {
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">Professional Background</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Current Role *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Current Role *
+                  </label>
                   <input
                     type="text"
                     required
@@ -163,7 +186,9 @@ const BetaSignup: React.FC = () => {
                 </div>
               </div>
               <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Years of Experience</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Years of Experience
+                </label>
                 <select
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={formData.yearsExperience || ''}
@@ -177,19 +202,25 @@ const BetaSignup: React.FC = () => {
                 </select>
               </div>
               <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Primary Programming Languages</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Primary Programming Languages
+                </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  {['JavaScript', 'TypeScript', 'Python', 'Java', 'C#', 'Go', 'Rust', 'Other'].map(lang => (
-                    <label key={lang} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        className="mr-2"
-                        checked={formData.primaryLanguages?.includes(lang) || false}
-                        onChange={(e) => handleArrayChange('primaryLanguages', lang, e.target.checked)}
-                      />
-                      {lang}
-                    </label>
-                  ))}
+                  {['JavaScript', 'TypeScript', 'Python', 'Java', 'C#', 'Go', 'Rust', 'Other'].map(
+                    (lang) => (
+                      <label key={lang} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          className="mr-2"
+                          checked={formData.primaryLanguages?.includes(lang) || false}
+                          onChange={(e) =>
+                            handleArrayChange('primaryLanguages', lang, e.target.checked)
+                          }
+                        />
+                        {lang}
+                      </label>
+                    )
+                  )}
                 </div>
               </div>
             </div>
@@ -198,7 +229,9 @@ const BetaSignup: React.FC = () => {
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">Problem Solving Context</h2>
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Types of Complex Problems You Solve</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Types of Complex Problems You Solve
+                </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {[
                     'System Architecture Design',
@@ -208,14 +241,16 @@ const BetaSignup: React.FC = () => {
                     'Integration Issues',
                     'Technical Debt Management',
                     'Team Coordination',
-                    'Product Strategy'
-                  ].map(problem => (
+                    'Product Strategy',
+                  ].map((problem) => (
                     <label key={problem} className="flex items-center">
                       <input
                         type="checkbox"
                         className="mr-2"
                         checked={formData.problemTypes?.includes(problem) || false}
-                        onChange={(e) => handleArrayChange('problemTypes', problem, e.target.checked)}
+                        onChange={(e) =>
+                          handleArrayChange('problemTypes', problem, e.target.checked)
+                        }
                       />
                       {problem}
                     </label>
@@ -223,15 +258,28 @@ const BetaSignup: React.FC = () => {
                 </div>
               </div>
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Current Frameworks or Methodologies</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Current Frameworks or Methodologies
+                </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  {['Agile', 'Scrum', 'Kanban', 'Design Thinking', 'Systems Thinking', 'TRIZ', 'Six Sigma', 'None'].map(framework => (
+                  {[
+                    'Agile',
+                    'Scrum',
+                    'Kanban',
+                    'Design Thinking',
+                    'Systems Thinking',
+                    'TRIZ',
+                    'Six Sigma',
+                    'None',
+                  ].map((framework) => (
                     <label key={framework} className="flex items-center">
                       <input
                         type="checkbox"
                         className="mr-2"
                         checked={formData.currentFrameworks?.includes(framework) || false}
-                        onChange={(e) => handleArrayChange('currentFrameworks', framework, e.target.checked)}
+                        onChange={(e) =>
+                          handleArrayChange('currentFrameworks', framework, e.target.checked)
+                        }
                       />
                       {framework}
                     </label>
@@ -239,7 +287,9 @@ const BetaSignup: React.FC = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Pain Points in Current Problem-Solving *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Pain Points in Current Problem-Solving *
+                </label>
                 <textarea
                   required
                   rows={4}
@@ -255,7 +305,9 @@ const BetaSignup: React.FC = () => {
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">HUMMBL Interest</h2>
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">How did you learn about HUMMBL? *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  How did you learn about HUMMBL? *
+                </label>
                 <select
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -275,7 +327,9 @@ const BetaSignup: React.FC = () => {
                 </select>
               </div>
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Use Cases Interested in Exploring</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Use Cases Interested in Exploring
+                </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {[
                     'Personal Problem Solving',
@@ -285,8 +339,8 @@ const BetaSignup: React.FC = () => {
                     'Research Projects',
                     'Educational Applications',
                     'Business Strategy',
-                    'Technical Leadership'
-                  ].map(useCase => (
+                    'Technical Leadership',
+                  ].map((useCase) => (
                     <label key={useCase} className="flex items-center">
                       <input
                         type="checkbox"
@@ -300,7 +354,9 @@ const BetaSignup: React.FC = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Expected Outcomes *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Expected Outcomes *
+                </label>
                 <textarea
                   required
                   rows={4}
@@ -317,7 +373,9 @@ const BetaSignup: React.FC = () => {
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">Technical Requirements</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Development Environment</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Development Environment
+                  </label>
                   <select
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={formData.developmentEnvironment || ''}
@@ -330,15 +388,19 @@ const BetaSignup: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Integration Needs</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Integration Needs
+                  </label>
                   <div className="space-y-2">
-                    {['api', 'sdk', 'ui'].map(need => (
+                    {['api', 'sdk', 'ui'].map((need) => (
                       <label key={need} className="flex items-center">
                         <input
                           type="checkbox"
                           className="mr-2"
                           checked={formData.integrationNeeds?.includes(need as any) || false}
-                          onChange={(e) => handleArrayChange('integrationNeeds', need, e.target.checked)}
+                          onChange={(e) =>
+                            handleArrayChange('integrationNeeds', need, e.target.checked)
+                          }
                         />
                         {need.toUpperCase()}
                       </label>
@@ -346,7 +408,9 @@ const BetaSignup: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Performance Expectations</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Performance Expectations
+                  </label>
                   <select
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={formData.performanceExpectations || ''}
@@ -366,7 +430,9 @@ const BetaSignup: React.FC = () => {
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">Commitment Level</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Weekly Hours</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Weekly Hours
+                  </label>
                   <select
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={formData.weeklyHours || 2}
@@ -379,7 +445,9 @@ const BetaSignup: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Feedback Frequency</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Feedback Frequency
+                  </label>
                   <select
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={formData.feedbackFrequency || 'weekly'}
@@ -391,11 +459,15 @@ const BetaSignup: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Participation Duration</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Participation Duration
+                  </label>
                   <select
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={formData.participationDuration || 3}
-                    onChange={(e) => handleInputChange('participationDuration', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      handleInputChange('participationDuration', parseInt(e.target.value))
+                    }
                   >
                     <option value="3">3 months</option>
                     <option value="6">6 months</option>
@@ -420,7 +492,9 @@ const BetaSignup: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Company Size</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Company Size
+                  </label>
                   <select
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={formData.companySize || ''}
@@ -466,13 +540,16 @@ const BetaSignup: React.FC = () => {
                     <a href="/beta-terms" className="text-blue-600 hover:text-blue-800 underline">
                       Beta Terms and Conditions
                     </a>{' '}
-                    and consent to the collection of anonymized usage data for product improvement. *
+                    and consent to the collection of anonymized usage data for product improvement.
+                    *
                   </span>
                 </label>
               </div>
 
               {submitMessage && (
-                <div className={`mb-6 p-4 rounded-md ${submitMessage.includes('error') ? 'bg-red-50 text-red-800' : 'bg-green-50 text-green-800'}`}>
+                <div
+                  className={`mb-6 p-4 rounded-md ${submitMessage.includes('error') ? 'bg-red-50 text-red-800' : 'bg-green-50 text-green-800'}`}
+                >
                   {submitMessage}
                 </div>
               )}
@@ -489,7 +566,12 @@ const BetaSignup: React.FC = () => {
         </div>
 
         <div className="mt-8 text-center text-sm text-gray-600">
-          <p>Questions about the beta? Contact us at <a href="mailto:beta@hummbl.dev" className="text-blue-600 hover:text-blue-800">beta@hummbl.dev</a></p>
+          <p>
+            Questions about the beta? Contact us at{' '}
+            <a href="mailto:beta@hummbl.dev" className="text-blue-600 hover:text-blue-800">
+              beta@hummbl.dev
+            </a>
+          </p>
         </div>
       </div>
     </div>

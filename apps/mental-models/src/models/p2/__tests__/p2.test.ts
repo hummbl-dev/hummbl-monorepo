@@ -2,16 +2,8 @@ import modelExports from '../index';
 import type { Stakeholder } from '../types';
 
 // Destructure the exports
-const { 
-  createStakeholderModel, 
-  analyzeStakeholderMap,
-  createStakeholder
-} = modelExports;
-import { 
-  P2_CONSTANTS, 
-  EXAMPLE_STAKEHOLDERS, 
-  EXAMPLE_SCENARIO 
-} from '../constants';
+const { createStakeholderModel, analyzeStakeholderMap, createStakeholder } = modelExports;
+import { P2_CONSTANTS, EXAMPLE_STAKEHOLDERS, EXAMPLE_SCENARIO } from '../constants';
 
 describe('P2 - Stakeholder Mapping', () => {
   let model: ReturnType<typeof createStakeholderModel>;
@@ -19,7 +11,7 @@ describe('P2 - Stakeholder Mapping', () => {
 
   beforeEach(() => {
     model = createStakeholderModel();
-    testStakeholders = EXAMPLE_STAKEHOLDERS.map(s => createStakeholder(s));
+    testStakeholders = EXAMPLE_STAKEHOLDERS.map((s) => createStakeholder(s));
   });
 
   describe('Model Creation', () => {
@@ -47,7 +39,7 @@ describe('P2 - Stakeholder Mapping', () => {
         type: 'customer',
         influence: 4,
         interest: 3,
-        description: 'Test description'
+        description: 'Test description',
       });
 
       expect(stakeholder).toHaveProperty('id');
@@ -63,7 +55,7 @@ describe('P2 - Stakeholder Mapping', () => {
   describe('Stakeholder Map Creation', () => {
     it('should create a stakeholder map with initial values', () => {
       const map = model.methods.createStakeholderMap('Test Map', 'Test Description');
-      
+
       expect(map).toHaveProperty('id');
       expect(map.name).toBe('Test Map');
       expect(map.description).toBe('Test Description');
@@ -91,9 +83,9 @@ describe('P2 - Stakeholder Mapping', () => {
     it('should generate a network map', () => {
       expect(analysis.networkMap).toBeDefined();
       expect(analysis.networkMap.nodes.length).toBe(testStakeholders.length);
-      
+
       // Check if nodes have required properties
-      analysis.networkMap.nodes.forEach(node => {
+      analysis.networkMap.nodes.forEach((node) => {
         expect(node).toHaveProperty('id');
         expect(node).toHaveProperty('label');
         expect(node).toHaveProperty('type');
@@ -106,9 +98,9 @@ describe('P2 - Stakeholder Mapping', () => {
     it('should find key stakeholders', () => {
       const keyStakeholders = model.methods.findKeyStakeholders(testStakeholders);
       expect(Array.isArray(keyStakeholders)).toBe(true);
-      
+
       // All key stakeholders should have high influence and interest
-      keyStakeholders.forEach(stakeholder => {
+      keyStakeholders.forEach((stakeholder) => {
         expect(stakeholder.influence).toBeGreaterThanOrEqual(P2_CONSTANTS.INFLUENCE_THRESHOLD);
         expect(stakeholder.interest).toBeGreaterThanOrEqual(P2_CONSTANTS.INTEREST_THRESHOLD);
       });
@@ -117,9 +109,9 @@ describe('P2 - Stakeholder Mapping', () => {
     it('should find influencers', () => {
       const influencers = model.methods.findInfluencers(testStakeholders, 4);
       expect(Array.isArray(influencers)).toBe(true);
-      
+
       // All influencers should have influence >= 4
-      influencers.forEach(stakeholder => {
+      influencers.forEach((stakeholder) => {
         expect(stakeholder.influence).toBeGreaterThanOrEqual(4);
       });
 
@@ -133,7 +125,7 @@ describe('P2 - Stakeholder Mapping', () => {
   describe('Convenience Function', () => {
     it('should analyze stakeholders using the convenience function', () => {
       const analysis = analyzeStakeholderMap(testStakeholders);
-      
+
       expect(analysis).toHaveProperty('keyStakeholders');
       expect(analysis).toHaveProperty('keepSatisfied');
       expect(analysis).toHaveProperty('keepInformed');
@@ -147,14 +139,14 @@ describe('P2 - Stakeholder Mapping', () => {
       expect(model.example.scenario).toBe(EXAMPLE_SCENARIO);
       expect(Array.isArray(model.example.stakeholders)).toBe(true);
       expect(model.example.stakeholders.length).toBeGreaterThan(0);
-      
-      model.example.stakeholders.forEach(stakeholder => {
+
+      model.example.stakeholders.forEach((stakeholder) => {
         expect(stakeholder).toHaveProperty('id');
         expect(stakeholder).toHaveProperty('name');
         expect(stakeholder).toHaveProperty('type');
         expect(stakeholder).toHaveProperty('influence');
         expect(stakeholder).toHaveProperty('interest');
-        
+
         // Validate influence and interest are within 1-5 range
         expect(stakeholder.influence).toBeGreaterThanOrEqual(1);
         expect(stakeholder.influence).toBeLessThanOrEqual(5);

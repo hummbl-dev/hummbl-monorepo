@@ -34,7 +34,7 @@ export async function generateModel(
       ...definition,
       className: `${definition.id}Model`,
       varName: `${definition.id.toLowerCase()}Model`,
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
     };
 
     // Create output directory if it doesn't exist
@@ -42,13 +42,17 @@ export async function generateModel(
 
     // Read template
     const template = await readFile(templatePath, 'utf-8');
-    
+
     // Render template with model data
-    const rendered = ejs.render(template, { model }, {
-      filename: templatePath,
-      delimiter: '%%',
-      strict: true
-    });
+    const rendered = ejs.render(
+      template,
+      { model },
+      {
+        filename: templatePath,
+        delimiter: '%%',
+        strict: true,
+      }
+    );
 
     // Write output file
     const outputPath = path.join(outputDir, `${model.id}Model.ts`);

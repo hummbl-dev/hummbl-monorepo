@@ -1,6 +1,7 @@
 # CO15: Composition Model
 
 ## Overview
+
 This model implements the Composition mental model by combining elements to create new wholes with emergent properties.
 
 ## Installation
@@ -16,24 +17,22 @@ import { createCO15Model } from '@hummbl/models/co15';
 
 // Create an instance of the model
 const model = createCO15Model({
-  telemetryEnabled: true
+  telemetryEnabled: true,
 });
 
 // Analyze some input
 const result = await model.analyze({
   elements: [
     { id: 'e1', type: 'component', properties: { name: 'Component 1' } },
-    { id: 'e2', type: 'component', properties: { name: 'Component 2' } }
+    { id: 'e2', type: 'component', properties: { name: 'Component 2' } },
   ],
-  relationships: [
-    { type: 'connectsTo', source: 'e1', target: 'e2' }
-  ],
+  relationships: [{ type: 'connectsTo', source: 'e1', target: 'e2' }],
   context: {
     // Additional context can be provided here
   },
   options: {
     // Model-specific options
-  }
+  },
 });
 ```
 
@@ -44,6 +43,7 @@ const result = await model.analyze({
 Creates a new instance of the CO15 model.
 
 **Parameters:**
+
 - `config` (Optional): Configuration object
   - `name` (string): Name of the model instance (default: 'CO15')
   - `version` (string): Version of the model (default: '1.0.0')
@@ -53,6 +53,7 @@ Creates a new instance of the CO15 model.
 
 **Returns:**
 An object with the following properties:
+
 - `id` (string): The model ID
 - `name` (string): The model name
 - `version` (string): The model version
@@ -63,6 +64,7 @@ An object with the following properties:
 Analyzes the input using the Composition model.
 
 **Parameters:**
+
 - `input` (object): The input to analyze
   - `elements` (CompositionElement[]): The elements to compose
   - `relationships` (CompositionRelationship[], optional): Relationships between elements
@@ -80,17 +82,21 @@ A Promise that resolves to an analysis result object.
 The model emits the following events:
 
 ### analysisComplete
+
 Emitted when analysis is successfully completed.
 
 **Event Data:**
+
 - `requestId` (string): Unique ID for the request
 - `result` (object): The analysis result
 - `timestamp` (string): ISO timestamp of when the event was emitted
 
 ### analysisError
+
 Emitted when an error occurs during analysis.
 
 **Event Data:**
+
 - `requestId` (string): Unique ID for the request
 - `error` (string): Error message
 - `timestamp` (string): ISO timestamp of when the error occurred

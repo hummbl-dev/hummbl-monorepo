@@ -5,7 +5,7 @@
 **Model Code:** P17  
 **Model Name:** [Human-Readable Name]  
 **Transformation:** Perspective  
-**Tier:** 17  
+**Tier:** 17
 
 ## Description
 
@@ -53,19 +53,19 @@ const model = createP17Model({
 
 ### Input
 
-| Parameter | Type     | Description |
-|-----------|----------|-------------|
-| input     | any      | The input to analyze |
-| context   | object   | Additional context  |
-| options   | object   | Analysis options    |
+| Parameter | Type   | Description          |
+| --------- | ------ | -------------------- |
+| input     | any    | The input to analyze |
+| context   | object | Additional context   |
+| options   | object | Analysis options     |
 
 ### Output
 
-| Field     | Type     | Description |
-|-----------|----------|-------------|
-| id        | string   | Unique ID for this analysis |
-| analysis  | any      | Analysis results |
-| metadata  | object   | Metadata about the analysis |
+| Field    | Type   | Description                 |
+| -------- | ------ | --------------------------- |
+| id       | string | Unique ID for this analysis |
+| analysis | any    | Analysis results            |
+| metadata | object | Metadata about the analysis |
 
 ## Examples
 

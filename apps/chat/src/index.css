@@ -3,7 +3,7 @@
 @import '@fontsource/inter/500.css';
 @import '@fontsource/jetbrains-mono/400.css';
 
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ===================================
    Accessibility Utilities

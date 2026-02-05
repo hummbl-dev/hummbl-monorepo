@@ -1,22 +1,26 @@
 # HUMMBL Global Development Rules
 
 ## Project Context
+
 HUMMBL (Highly Useful Mental Model Base Language) is a Base120 framework of mental models organized across 6 transformations (P, IN, CO, DE, RE, SY). This is a TypeScript/React monorepo deployed to Vercel.
 
 ## Core Principles
 
 ### 1. Transformation-First Thinking
+
 - **Always consider which transformation applies**: P (Perspective), IN (Inversion), CO (Composition), DE (Decomposition), RE (Recursion), SY (Systems)
 - Code organization should mirror HUMMBL's structure
 - Use transformation codes (P1, IN3, etc.) in comments for complex decisions
 
 ### 2. Agent-Ready Architecture
+
 - Design for both human and AI agent consumption
 - Prioritize programmatic interfaces over UIs
 - JSON responses should include transformation metadata
 - Every model should be accessible via API endpoint
 
 ### 3. Type Safety is Non-Negotiable
+
 - TypeScript strict mode always enabled
 - No `any` types unless absolutely necessary (document why)
 - Prefer type inference but add explicit types for public APIs
@@ -25,6 +29,7 @@ HUMMBL (Highly Useful Mental Model Base Language) is a Base120 framework of ment
 ## Tech Stack Standards
 
 ### React Patterns
+
 ```typescript
 // ✅ Correct: Functional components with explicit return types
 export const ModelCard: FC<ModelCardProps> = ({ model }) => {
@@ -38,6 +43,7 @@ export default function ModelCard(props) {
 ```
 
 ### File Organization
+
 ```
 src/
 ├── components/          # Reusable UI components
@@ -50,6 +56,7 @@ src/
 ```
 
 ### Naming Conventions
+
 - **Components**: PascalCase (ModelCard.tsx)
 - **Utilities**: camelCase (formatModelCode.ts)
 - **Constants**: SCREAMING_SNAKE_CASE (BASE_TRANSFORMATIONS)
@@ -59,12 +66,14 @@ src/
 ## Performance Requirements
 
 ### Core Metrics
+
 - **Initial Load**: <2s (Time to Interactive)
 - **API Response**: <200ms (p95)
 - **Bundle Size**: <500KB initial (gzipped)
 - **Lighthouse Score**: 90+ across all categories
 
 ### Optimization Rules
+
 - Lazy load routes with React.lazy()
 - Memoize expensive computations
 - Use proper React keys for lists
@@ -74,6 +83,7 @@ src/
 ## Error Handling
 
 ### Never Fail Silently
+
 ```typescript
 // ✅ Correct: Explicit error handling
 try {
@@ -94,6 +104,7 @@ try {
 ```
 
 ### Error Boundaries
+
 - Wrap route components in error boundaries
 - Log errors to monitoring service (Sentry when configured)
 - Show user-friendly messages, not stack traces
@@ -101,6 +112,7 @@ try {
 ## Git & CI/CD Practices
 
 ### Commit Messages
+
 ```bash
 # ✅ Correct: Imperative mood, clear scope
 feat(models): add P-series model pages
@@ -114,12 +126,14 @@ wip
 ```
 
 ### Branch Strategy
+
 - **main**: Production-ready code only
 - **feature/**: New features (feature/p-series-pages)
 - **fix/**: Bug fixes (fix/model-search-null)
 - **docs/**: Documentation (docs/api-reference)
 
 ### Before Push Checklist
+
 - [ ] `pnpm lint` passes
 - [ ] `pnpm type-check` passes
 - [ ] `pnpm test` passes (when tests exist)
@@ -130,25 +144,32 @@ wip
 ## Code Quality
 
 ### Prefer Composition Over Inheritance
+
 ```typescript
 // ✅ Correct: Composable utilities
 const enhanceWithMetadata = (model: Model) => ({
   ...model,
-  metadata: { lastUpdated: new Date() }
+  metadata: { lastUpdated: new Date() },
 });
 
 // ❌ Incorrect: Class hierarchy
-class BaseModel { /* ... */ }
-class EnhancedModel extends BaseModel { /* ... */ }
+class BaseModel {
+  /* ... */
+}
+class EnhancedModel extends BaseModel {
+  /* ... */
+}
 ```
 
 ### Keep Functions Small and Focused
+
 - Functions should do ONE thing
 - Maximum 30 lines per function (guideline, not rule)
 - Extract complex logic into named utilities
 - Use descriptive names that explain intent
 
 ### Comments: Why, Not What
+
 ```typescript
 // ✅ Correct: Explains reasoning
 // Using IN2 (Inversion) to reframe the problem from the opposite perspective
@@ -162,11 +183,13 @@ const invertedProblem = invertProblemStatement(problem);
 ## Testing Philosophy (When Implemented)
 
 ### Test Pyramid
+
 - **Unit Tests**: 70% - Test individual functions/components
 - **Integration Tests**: 20% - Test feature workflows
 - **E2E Tests**: 10% - Test critical user journeys
 
 ### What to Test
+
 - ✅ Business logic (transformations, scoring)
 - ✅ API integrations
 - ✅ Complex UI interactions
@@ -176,6 +199,7 @@ const invertedProblem = invertProblemStatement(problem);
 ## Accessibility Standards
 
 ### Minimum Requirements
+
 - Semantic HTML (nav, main, article, section)
 - ARIA labels for interactive elements
 - Keyboard navigation for all actions
@@ -185,6 +209,7 @@ const invertedProblem = invertProblemStatement(problem);
 ## Dependencies Management
 
 ### Adding New Dependencies
+
 1. Check bundle size impact (bundlephobia.com)
 2. Verify active maintenance (last commit < 6 months)
 3. Check security (npm audit)
@@ -192,6 +217,7 @@ const invertedProblem = invertProblemStatement(problem);
 5. Prefer smaller, focused libraries over monoliths
 
 ### Avoid Dependency Bloat
+
 - Use tree-shakeable imports
 - Consider native browser APIs before adding libraries
 - Evaluate cost vs. benefit for every dependency
@@ -199,12 +225,14 @@ const invertedProblem = invertProblemStatement(problem);
 ## Documentation Standards
 
 ### Every Feature Needs
+
 - **README**: What it does, why it exists
 - **Usage Examples**: Code snippets that work
 - **API Documentation**: Parameters, return types, examples
 - **Architecture Decision Records**: For significant decisions
 
 ### Write for Future You
+
 - Assume 6 months memory loss
 - Document assumptions and constraints
 - Link to relevant HUMMBL models where applicable
@@ -213,12 +241,13 @@ const invertedProblem = invertProblemStatement(problem);
 ## Mental Model Application
 
 ### Document Transformation Usage
+
 When solving complex problems in code, document which HUMMBL transformations informed the solution:
 
 ```typescript
 /**
  * Wickedness scoring algorithm
- * 
+ *
  * Applies multiple transformations:
  * - DE3 (Modularization): Break problem into 5 measurable dimensions
  * - SY7 (Feedback Loops): Iterate scores based on interdependencies
@@ -232,6 +261,7 @@ export function calculateWickednessScore(problem: Problem): WickednessScore {
 ## Production Deployment
 
 ### Vercel Deployment Checklist
+
 - [ ] Environment variables configured
 - [ ] Build succeeds without warnings
 - [ ] Performance budgets met
@@ -240,6 +270,7 @@ export function calculateWickednessScore(problem: Problem): WickednessScore {
 - [ ] Preview deployments disabled (main only)
 
 ### Post-Deployment Verification
+
 1. Check production URL loads (<2s)
 2. Test critical user flows
 3. Verify API endpoints respond

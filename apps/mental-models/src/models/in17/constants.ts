@@ -1,6 +1,6 @@
 /**
  * IN17 Constants
- * 
+ *
  * This file contains constants used by the IN17 model.
  */
 
@@ -11,7 +11,7 @@ export const version = '1.0.0';
 export const DEFAULT_OPTIONS = {
   includeReasoning: true,
   maxAlternatives: 3,
-  includeConfidenceScores: true
+  includeConfidenceScores: true,
 };
 
 /** Model metadata */
@@ -22,5 +22,5 @@ export const MODEL_METADATA = {
   version: '1.0.0',
   author: 'HUMMBL',
   createdAt: '2025-10-23',
-  updatedAt: '2025-10-23'
+  updatedAt: '2025-10-23',
 };

@@ -30,7 +30,7 @@ export function ModelRoutingDemo() {
     }
   };
 
-  const useExample = (example: string) => {
+  const handleSelectExample = (example: string) => {
     setInput(example);
     setResult(null);
   };
@@ -89,7 +89,7 @@ export function ModelRoutingDemo() {
             {exampleScenarios.execution.slice(0, 3).map((example, i) => (
               <button
                 key={i}
-                onClick={() => useExample(example)}
+                onClick={() => handleSelectExample(example)}
                 style={{
                   display: 'block',
                   width: '100%',
@@ -113,7 +113,7 @@ export function ModelRoutingDemo() {
             {exampleScenarios.reasoning.slice(0, 3).map((example, i) => (
               <button
                 key={i}
-                onClick={() => useExample(example)}
+                onClick={() => handleSelectExample(example)}
                 style={{
                   display: 'block',
                   width: '100%',
@@ -137,7 +137,7 @@ export function ModelRoutingDemo() {
             {exampleScenarios.creative.slice(0, 3).map((example, i) => (
               <button
                 key={i}
-                onClick={() => useExample(example)}
+                onClick={() => handleSelectExample(example)}
                 style={{
                   display: 'block',
                   width: '100%',

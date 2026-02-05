@@ -7,19 +7,19 @@ import { EventEmitter } from 'events';
 export interface P6Config {
   /** Unique identifier for this model instance */
   id?: string;
-  
+
   /** Display name for the model */
   name?: string;
-  
+
   /** Version string */
   version?: string;
-  
+
   /** Custom event emitter for model events */
   eventEmitter?: EventEmitter;
-  
+
   /** Whether to collect telemetry data */
   telemetryEnabled?: boolean;
-  
+
   /** Custom logger implementation */
   logger?: Console;
 }
@@ -28,15 +28,15 @@ export interface P6Config {
 export interface P6Input {
   /** The input data to analyze */
   input: any;
-  
+
   /** Additional context for the analysis */
   context?: Record<string, any>;
-  
+
   /** Analysis options */
   options?: {
     [key: string]: any;
   };
-  
+
   /** Additional metadata */
   metadata?: Record<string, any>;
 }
@@ -45,24 +45,24 @@ export interface P6Input {
 export interface P6Output {
   /** Unique identifier for this analysis */
   id: string;
-  
+
   /** The analysis result */
   analysis: any;
-  
+
   /** Confidence score (0-1) */
   confidence: number;
-  
+
   /** Metadata about the analysis */
   metadata: {
     /** Version of the model used */
     modelVersion: string;
-    
+
     /** When the analysis was performed */
     timestamp: string;
-    
+
     /** Time taken for analysis in milliseconds */
     executionTimeMs: number;
-    
+
     /** Additional telemetry data */
     telemetry?: Record<string, any>;
   };

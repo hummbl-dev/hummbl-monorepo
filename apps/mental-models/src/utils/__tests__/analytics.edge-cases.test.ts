@@ -52,8 +52,8 @@ describe('Analytics Edge Cases', () => {
       trackEvent({});
       expect(mockPlausible).toHaveBeenCalledWith(undefined, {
         props: {
-          category: 'engagement'
-        }
+          category: 'engagement',
+        },
       });
     });
 
@@ -61,8 +61,8 @@ describe('Analytics Edge Cases', () => {
       trackEvent({ event: 'test_event' });
       expect(mockPlausible).toHaveBeenCalledWith('test_event', {
         props: {
-          category: 'engagement'
-        }
+          category: 'engagement',
+        },
       });
     });
 
@@ -71,18 +71,18 @@ describe('Analytics Edge Cases', () => {
       trackEvent({ event: longEventName });
       expect(mockPlausible).toHaveBeenCalledWith(longEventName, {
         props: {
-          category: 'engagement'
-        }
+          category: 'engagement',
+        },
       });
     });
 
     it('should handle special characters in event properties', () => {
-      const specialChars = '!@#$%^&*()_+{}|:\"<>?\'`~';
+      const specialChars = '!@#$%^&*()_+{}|:"<>?\'`~';
       trackEvent({
         event: 'special_chars',
-        properties: { special: specialChars }
+        properties: { special: specialChars },
       });
-      
+
       const call = mockPlausible.mock.calls[0];
       expect(call[0]).toBe('special_chars');
       expect(call[1].props.special).toBe(specialChars);
@@ -94,7 +94,7 @@ describe('Analytics Edge Cases', () => {
     it('should handle undefined route', () => {
       // @ts-expect-error - Testing invalid input
       trackPageView(undefined);
-      
+
       const call = mockPlausible.mock.calls[0];
       expect(call[0]).toBe('page_view');
       expect(call[1].props.category).toBe('engagement');

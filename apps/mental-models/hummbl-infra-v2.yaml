@@ -1,14 +1,14 @@
 ---
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Description: HUMMBL Infrastructure v2 - Production Stack (us-east-1)
 
 Metadata:
-  Version: "2.0"
-  Owner: "ReubenBowlby"
-  ManagedBy: "HUMMBL OS"
-  Application: "HUMMBL"
-  Environment: "Production"
-  Region: "us-east-1"
+  Version: '2.0'
+  Owner: 'ReubenBowlby'
+  ManagedBy: 'HUMMBL OS'
+  Application: 'HUMMBL'
+  Environment: 'Production'
+  Region: 'us-east-1'
 
 Parameters:
   Environment:

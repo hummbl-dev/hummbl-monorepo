@@ -14,13 +14,13 @@ const CATEGORIES = [
     id: 'perspective',
     name: 'Perspective',
     description: 'Models for viewing situations from different angles and perspectives.',
-    models: allModels.filter(m => m.category === 'perspective')
+    models: allModels.filter((m) => m.category === 'perspective'),
   },
   {
     id: 'inversion',
     name: 'Inversion',
     description: 'Models for thinking backwards or considering the opposite of what you want.',
-    models: allModels.filter(m => m.category === 'inversion')
+    models: allModels.filter((m) => m.category === 'inversion'),
   },
   // Add other categories as needed
 ];
@@ -65,7 +65,7 @@ This document provides a comprehensive reference for all 120 mental models in th
   // Add content for each category
   for (const category of CATEGORIES) {
     markdown += `\n## ${category.name} Models (${category.id.toUpperCase()}1-${category.id.toUpperCase()}20)\n\n${category.description}\n`;
-    
+
     // Add models for this category
     for (const model of category.models) {
       markdown += '\n' + generateModelSection(model) + '\n';
@@ -80,16 +80,15 @@ async function main() {
   try {
     console.log('Generating model documentation...');
     const docs = generateDocumentation();
-    
+
     // Ensure the directory exists
     if (!existsSync(ROOT_DIR)) {
       mkdirSync(ROOT_DIR, { recursive: true });
     }
-    
+
     // Write the documentation file
     writeFileSync(OUTPUT_FILE, docs, 'utf-8');
     console.log(`✅ Documentation generated at: ${OUTPUT_FILE}`);
-    
   } catch (error) {
     console.error('Error generating documentation:', error);
     process.exit(1);

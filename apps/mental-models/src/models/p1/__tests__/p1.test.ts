@@ -47,7 +47,7 @@ describe('P1 - First Principles Framing', () => {
       const assumptions = model.methods.identifyAssumptions(testProblem);
       expect(Array.isArray(assumptions)).toBe(true);
       expect(assumptions.length).toBeGreaterThan(0);
-      assumptions.forEach(assumption => {
+      assumptions.forEach((assumption) => {
         expect(typeof assumption).toBe('string');
         expect(assumption.length).toBeGreaterThan(0);
       });
@@ -59,7 +59,7 @@ describe('P1 - First Principles Framing', () => {
       const truths = model.methods.extractFundamentalTruths(testProblem);
       expect(Array.isArray(truths)).toBe(true);
       expect(truths.length).toBeGreaterThan(0);
-      truths.forEach(truth => {
+      truths.forEach((truth) => {
         expect(typeof truth).toBe('string');
         expect(truth.length).toBeGreaterThan(0);
       });
@@ -85,13 +85,13 @@ describe('P1 - First Principles Framing', () => {
   describe('End-to-End Application', () => {
     it('should apply first principles to a problem', () => {
       const analysis = applyFirstPrinciples(testProblem);
-      
+
       expect(analysis).toHaveProperty('problem', testProblem);
       expect(Array.isArray(analysis.decomposed)).toBe(true);
       expect(Array.isArray(analysis.assumptions)).toBe(true);
       expect(Array.isArray(analysis.fundamentalTruths)).toBe(true);
       expect(typeof analysis.solution).toBe('string');
-      
+
       // Verify the solution includes the number of truths
       const truthCount = analysis.fundamentalTruths.length;
       expect(analysis.solution).toContain(`Solution derived from ${truthCount} fundamental truths`);

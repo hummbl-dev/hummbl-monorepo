@@ -6,7 +6,7 @@ import { Transformation } from '../Wing';
 describe('WingSelector', () => {
   const transformations: Transformation[] = ['P', 'IN', 'CO', 'DE', 'RE', 'SY'];
   const mockOnSelect = vi.fn();
-  
+
   it('renders all transformation options', () => {
     render(<WingSelector onSelect={mockOnSelect} />);
     const buttons = screen.getAllByRole('button');
@@ -37,9 +37,7 @@ describe('WingSelector', () => {
 
   it('applies custom className', () => {
     const customClass = 'custom-selector';
-    const { container } = render(
-      <WingSelector onSelect={mockOnSelect} className={customClass} />
-    );
+    const { container } = render(<WingSelector onSelect={mockOnSelect} className={customClass} />);
     expect(container.firstChild).toHaveClass(customClass);
   });
 

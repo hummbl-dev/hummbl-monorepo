@@ -3,17 +3,20 @@
 ## 🚀 3-Minute Test
 
 ### Step 1: Open the App
+
 ```
 ✓ Dev server should be running at http://localhost:5173
 ```
 
 ### Step 2: Check for Chat Widget
+
 ```
 ✓ Look for chat icon in bottom-right corner
 ✓ Click to open
 ```
 
 ### Step 3: Observe What You Built
+
 ```
 ✓ See the chat interface
 ✓ Note: Without API key, widget won't appear (by design)
@@ -41,12 +44,14 @@ To test full functionality:
 ## 🧪 What to Test
 
 ### Basic Checklist:
+
 - [ ] Chat widget appears (if API key set)
 - [ ] Chat opens when clicked
 - [ ] Interface looks good
 - [ ] No console errors
 
 ### If API Key is Set:
+
 - [ ] Can send messages
 - [ ] AI responds
 - [ ] Model suggestions appear
@@ -61,7 +66,7 @@ To test full functionality:
 ✅ **Enhanced Error Handling**: Contextual error messages with retry  
 ✅ **Export Functionality**: Download/copy conversations in multiple formats  
 ✅ **Better Context**: AI sees 20 models instead of 10  
-✅ **Real-time Analysis**: Suggestions update as conversation evolves  
+✅ **Real-time Analysis**: Suggestions update as conversation evolves
 
 ---
 
@@ -91,9 +96,9 @@ To test full functionality:
 ## ✅ Success!
 
 If you see the chat interface (with or without API key):
+
 - 🎉 Chat widget renders correctly
 - 🎉 Integration is successful
 - 🎉 Ready to test with real API key
 
 **Next**: Test with API key → Build Narrative Modal
-

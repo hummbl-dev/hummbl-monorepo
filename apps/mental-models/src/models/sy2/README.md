@@ -5,7 +5,7 @@
 **Model Code:** SY2  
 **Model Name:** Universal Schema Mapping  
 **Transformation:** Synthesis  
-**Tier:** 2  
+**Tier:** 2
 
 ## Description
 
@@ -43,7 +43,7 @@ const mapping = createSchemaMapping({
         lastName: { type: 'string' },
         email: { type: 'string', format: 'email' },
       },
-      required: ['firstName', 'lastName', 'email']
+      required: ['firstName', 'lastName', 'email'],
     },
   },
   target: {
@@ -61,7 +61,7 @@ const mapping = createSchemaMapping({
           email: { type: 'string', format: 'email' },
         },
       },
-      required: ['name', 'contact']
+      required: ['name', 'contact'],
     },
   },
 });
@@ -95,8 +95,9 @@ const sourceData = {
   email: 'john.doe@example.com',
 };
 
-mapper.map(sourceData, mapping)
-  .then(result => {
+mapper
+  .map(sourceData, mapping)
+  .then((result) => {
     console.log('Mapped data:', result.data);
     // Output:
     // {
@@ -104,7 +105,7 @@ mapper.map(sourceData, mapping)
     //   contact: { email: 'john.doe@example.com' }
     // }
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('Mapping failed:', error);
   });
 ```
@@ -131,11 +132,12 @@ const targetSchema = {
   },
 };
 
-mapper.generateMapping(sourceSchema, targetSchema, {
-  confidenceThreshold: 0.7,
-  includeExamples: true,
-})
-  .then(mapping => {
+mapper
+  .generateMapping(sourceSchema, targetSchema, {
+    confidenceThreshold: 0.7,
+    includeExamples: true,
+  })
+  .then((mapping) => {
     console.log('Generated mapping:', mapping);
     // The mapping will include automatically detected field correspondences
   });
@@ -161,9 +163,11 @@ mapping.mappings.push({
 Creates a new schema mapper instance.
 
 **Parameters:**
+
 - `config` (Optional): Configuration object for the mapper
 
 **Returns:** A schema mapper instance with the following methods:
+
 - `map(sourceData, mapping, options)`: Maps data from source to target schema
 - `validateMapping(mapping)`: Validates a schema mapping
 - `generateMapping(sourceSchema, targetSchema, options)`: Generates a mapping between schemas
@@ -174,6 +178,7 @@ Creates a new schema mapper instance.
 Creates a new schema mapping with default values.
 
 **Parameters:**
+
 - `overrides` (Optional): Object with properties to override the defaults
 
 **Returns:** A new schema mapping object
@@ -230,6 +235,7 @@ The mapper provides detailed error information in the mapping result:
 ## Changelog
 
 ### 1.0.0 (2023-10-23)
+
 - Initial release
 
 ## License

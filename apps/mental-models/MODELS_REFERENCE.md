@@ -3,6 +3,7 @@
 This document provides a comprehensive reference for all 120 mental models in the HUMMBL framework, organized by category.
 
 ## Table of Contents
+
 - [Perspective Models (PERSPECTIVE1-PERSPECTIVE20)](#perspective-models-perspective1-perspective20)
 - [Inversion Models (INVERSION1-INVERSION20)](#inversion-models-inversion1-inversion20)
 
@@ -29,7 +30,6 @@ const model = createP1Model({
 });
 ```
 
-
 ### P2: Stakeholder Mapping
 
 Identifies and analyzes all parties with interest or influence in a system or decision to understand complex stakeholder landscapes.
@@ -48,7 +48,6 @@ const model = createP2Model({
   // Configuration options
 });
 ```
-
 
 ### P3: Temporal Perspective
 
@@ -69,7 +68,6 @@ const model = createP3Model({
 });
 ```
 
-
 ### P4: Multiple Perspectives
 
 Systematically explores different viewpoints to gain a more comprehensive understanding of complex issues.
@@ -88,7 +86,6 @@ const model = createP4Model({
   // Configuration options
 });
 ```
-
 
 ### P5: Contextual Awareness
 
@@ -109,7 +106,6 @@ const model = createP5Model({
 });
 ```
 
-
 ### P6: Abstraction Laddering
 
 Moves between different levels of abstraction to find the most appropriate perspective for problem-solving.
@@ -128,7 +124,6 @@ const model = createP6Model({
   // Configuration options
 });
 ```
-
 
 ### P7: Boundary Setting
 
@@ -149,7 +144,6 @@ const model = createP7Model({
 });
 ```
 
-
 ### P8: Perspective Shifting
 
 Deliberately adopts different viewpoints to gain new insights and challenge existing assumptions.
@@ -168,7 +162,6 @@ const model = createP8Model({
   // Configuration options
 });
 ```
-
 
 ### P9: Scale Awareness
 
@@ -189,7 +182,6 @@ const model = createP9Model({
 });
 ```
 
-
 ### P10: Temporal Decomposition
 
 Breaks down time-based processes into distinct phases or stages for analysis.
@@ -208,7 +200,6 @@ const model = createP10Model({
   // Configuration options
 });
 ```
-
 
 ### P11: Spatial Analysis
 
@@ -229,7 +220,6 @@ const model = createP11Model({
 });
 ```
 
-
 ### P12: Network Perspective
 
 Views systems as networks of interconnected nodes to understand relationships and flows.
@@ -248,7 +238,6 @@ const model = createP12Model({
   // Configuration options
 });
 ```
-
 
 ### P13: Hierarchical Thinking
 
@@ -269,7 +258,6 @@ const model = createP13Model({
 });
 ```
 
-
 ### P14: Dimensional Analysis
 
 Examines problems across multiple dimensions to identify key variables and their interactions.
@@ -288,7 +276,6 @@ const model = createP14Model({
   // Configuration options
 });
 ```
-
 
 ### P15: Pattern Recognition
 
@@ -309,7 +296,6 @@ const model = createP15Model({
 });
 ```
 
-
 ### P16: Emergent Properties
 
 Focuses on properties that emerge from the interaction of system components.
@@ -328,7 +314,6 @@ const model = createP16Model({
   // Configuration options
 });
 ```
-
 
 ### P17: Feedback Loops
 
@@ -349,7 +334,6 @@ const model = createP17Model({
 });
 ```
 
-
 ### P18: System Boundaries
 
 Defines what is included within and excluded from the system under analysis.
@@ -368,7 +352,6 @@ const model = createP18Model({
   // Configuration options
 });
 ```
-
 
 ### P19: Leverage Points
 
@@ -389,7 +372,6 @@ const model = createP19Model({
 });
 ```
 
-
 ### P20: Meta-Perspective
 
 Takes a step back to examine the process of perspective-taking itself.
@@ -408,7 +390,6 @@ const model = createP20Model({
   // Configuration options
 });
 ```
-
 
 ## Inversion Models (INVERSION1-INVERSION20)
 
@@ -433,7 +414,6 @@ const model = createIn1Model({
 });
 ```
 
-
 ### IN2: Negative Space Analysis
 
 Examines what is not present or not happening to gain insights into a system or problem.
@@ -452,7 +432,6 @@ const model = createIn2Model({
   // Configuration options
 });
 ```
-
 
 ### IN3: Assumption Inversion
 
@@ -473,7 +452,6 @@ const model = createIn3Model({
 });
 ```
 
-
 ### IN4: Failure Mode Analysis
 
 Systematically examines how things could fail to prevent problems before they occur.
@@ -492,7 +470,6 @@ const model = createIn4Model({
   // Configuration options
 });
 ```
-
 
 ### IN5: Contrarian Thinking
 
@@ -513,7 +490,6 @@ const model = createIn5Model({
 });
 ```
 
-
 ### IN6: Devil's Advocate
 
 Systematically argues against a position to test its strength and identify weaknesses.
@@ -532,7 +508,6 @@ const model = createIn6Model({
   // Configuration options
 });
 ```
-
 
 ### IN7: Red Team Analysis
 
@@ -553,7 +528,6 @@ const model = createIn7Model({
 });
 ```
 
-
 ### IN8: Pre-Mortem Analysis
 
 Imagines a future failure and works backward to determine what could lead to that outcome.
@@ -572,7 +546,6 @@ const model = createIn8Model({
   // Configuration options
 });
 ```
-
 
 ### IN9: Antifragility Assessment
 
@@ -593,7 +566,6 @@ const model = createIn9Model({
 });
 ```
 
-
 ### IN10: Black Swan Preparation
 
 Prepares for high-impact, hard-to-predict events that are beyond normal expectations.
@@ -612,7 +584,6 @@ const model = createIn10Model({
   // Configuration options
 });
 ```
-
 
 ### IN11: Counterfactual Reasoning
 
@@ -633,7 +604,6 @@ const model = createIn11Model({
 });
 ```
 
-
 ### IN12: Negative Visualization
 
 Imagines the worst-case scenarios to build resilience and appreciation.
@@ -652,7 +622,6 @@ const model = createIn12Model({
   // Configuration options
 });
 ```
-
 
 ### IN13: Incentive Analysis
 
@@ -673,7 +642,6 @@ const model = createIn13Model({
 });
 ```
 
-
 ### IN14: Perverse Incentives
 
 Identifies and mitigates incentives that lead to unintended consequences.
@@ -692,7 +660,6 @@ const model = createIn14Model({
   // Configuration options
 });
 ```
-
 
 ### IN15: Backward Induction
 
@@ -713,7 +680,6 @@ const model = createIn15Model({
 });
 ```
 
-
 ### IN16: Second-Order Thinking
 
 Considers the long-term and indirect consequences of decisions.
@@ -732,7 +698,6 @@ const model = createIn16Model({
   // Configuration options
 });
 ```
-
 
 ### IN17: Third-Order Thinking
 
@@ -753,7 +718,6 @@ const model = createIn17Model({
 });
 ```
 
-
 ### IN18: Inversion of Constraints
 
 Treats constraints as opportunities for innovation.
@@ -772,7 +736,6 @@ const model = createIn18Model({
   // Configuration options
 });
 ```
-
 
 ### IN19: Antifragile Systems
 
@@ -793,7 +756,6 @@ const model = createIn19Model({
 });
 ```
 
-
 ### IN20: Meta-Inversion
 
 Applies inversion to the process of inversion itself.
@@ -812,4 +774,3 @@ const model = createIn20Model({
   // Configuration options
 });
 ```
-

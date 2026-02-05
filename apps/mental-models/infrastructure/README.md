@@ -35,17 +35,21 @@ The infrastructure is organized into the following main components:
 ## Getting Started
 
 1. **Install Dependencies**
+
    ```bash
    npm install
    ```
 
 2. **Bootstrap AWS Environment (first time only)**
+
    ```bash
    npx cdk bootstrap aws://ACCOUNT-NUMBER/REGION
    ```
+
    Replace `ACCOUNT-NUMBER` with your AWS account ID and `REGION` with your desired AWS region.
 
 3. **Synthesize CloudFormation Template**
+
    ```bash
    npm run synth
    ```

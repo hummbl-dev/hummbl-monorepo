@@ -34,7 +34,9 @@ export function ChatWidget({ mentalModels, narratives, apiKey, context }: ChatWi
   const [showSettings, setShowSettings] = useState(false);
   const [streamingResponse, setStreamingResponse] = useState<string>('');
   const streamingRef = useRef<boolean>(false);
-  const [conversationAnalysis, setConversationAnalysis] = useState<ConversationAnalysis | null>(null);
+  const [conversationAnalysis, setConversationAnalysis] = useState<ConversationAnalysis | null>(
+    null
+  );
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   // Initialize conversations on mount
@@ -62,20 +64,23 @@ export function ChatWidget({ mentalModels, narratives, apiKey, context }: ChatWi
   }, [mentalModels]);
 
   // Analyze conversation for model suggestions
-  const analyzeConversationAsync = React.useCallback(async (conv: ChatConversation) => {
-    if (!mentalModels || mentalModels.length === 0) return;
-    
-    setIsAnalyzing(true);
-    try {
-      const contextualBuilder = getContextualBuilder(mentalModels as MentalModel[]);
-      const analysis = contextualBuilder.analyzeConversation(conv);
-      setConversationAnalysis(analysis);
-    } catch (error) {
-      console.error('Failed to analyze conversation:', error);
-    } finally {
-      setIsAnalyzing(false);
-    }
-  }, [mentalModels]);
+  const analyzeConversationAsync = React.useCallback(
+    async (conv: ChatConversation) => {
+      if (!mentalModels || mentalModels.length === 0) return;
+
+      setIsAnalyzing(true);
+      try {
+        const contextualBuilder = getContextualBuilder(mentalModels as MentalModel[]);
+        const analysis = contextualBuilder.analyzeConversation(conv);
+        setConversationAnalysis(analysis);
+      } catch (error) {
+        console.error('Failed to analyze conversation:', error);
+      } finally {
+        setIsAnalyzing(false);
+      }
+    },
+    [mentalModels]
+  );
 
   // Check for API key
   useEffect(() => {
@@ -189,7 +194,7 @@ export function ChatWidget({ mentalModels, narratives, apiKey, context }: ChatWi
           // Clear streaming state
           setStreamingResponse('');
           setIsLoading(false);
-          
+
           // Re-analyze conversation with new message
           analyzeConversationAsync(finalConv);
         },

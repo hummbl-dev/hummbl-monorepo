@@ -1,6 +1,7 @@
 # CO2: Conceptual Fusion
 
 ## Overview
+
 The Conceptual Fusion (CO2) model is a powerful tool for merging multiple conceptual models into a unified representation. It enables the integration of concepts from different domains, resolving conflicts and identifying synergies between them. This model is particularly useful in scenarios where you need to combine knowledge from multiple sources or create a unified view of related concepts.
 
 ## Features
@@ -31,7 +32,7 @@ const model = createConceptualFusionModel({
   defaultSimilarityThreshold: 0.7,
   maxConceptsToFuse: 10,
   autoResolveConflicts: true,
-  defaultFusionStrategy: 'union'
+  defaultFusionStrategy: 'union',
 });
 
 // Add some concepts
@@ -41,12 +42,12 @@ const customerConcept = model.addConcept({
   sourceModels: ['CRM', 'Billing'],
   properties: {
     name: { value: 'string', confidence: 0.95, sources: ['CRM', 'Billing'] },
-    email: { value: 'string', confidence: 0.9, sources: ['CRM'] }
+    email: { value: 'string', confidence: 0.9, sources: ['CRM'] },
   },
   relationships: [],
   tags: ['core', 'business'],
   confidence: 0.9,
-  isActive: true
+  isActive: true,
 });
 
 const clientConcept = model.addConcept({
@@ -55,18 +56,18 @@ const clientConcept = model.addConcept({
   sourceModels: ['Sales'],
   properties: {
     fullName: { value: 'string', confidence: 0.92, sources: ['Sales'] },
-    company: { value: 'string', confidence: 0.8, sources: ['Sales'] }
+    company: { value: 'string', confidence: 0.8, sources: ['Sales'] },
   },
   relationships: [],
   tags: ['sales', 'external'],
   confidence: 0.85,
-  isActive: true
+  isActive: true,
 });
 
 // Fuse the concepts
 const fusionResult = await model.fuseConcepts({
   conceptIds: [customerConcept.id, clientConcept.id],
-  strategy: 'union'
+  strategy: 'union',
 });
 
 console.log('Fused concept:', fusionResult.result);
@@ -79,6 +80,7 @@ console.log('Fused concept:', fusionResult.result);
 Creates a new instance of the Conceptual Fusion model.
 
 **Parameters:**
+
 - `config` (optional): Configuration object
   - `defaultSimilarityThreshold` (number, default: 0.7): Default threshold for similarity matching
   - `maxConceptsToFuse` (number, default: 10): Maximum number of concepts that can be fused at once
@@ -94,6 +96,7 @@ Creates a new instance of the Conceptual Fusion model.
 Fuses multiple concepts into a single unified concept.
 
 **Parameters:**
+
 - `conceptIds` (string[]): IDs of the concepts to fuse
 - `strategy` ('union' | 'intersection' | 'preferred' | 'custom'): Fusion strategy
 - `autoResolve` (boolean, optional): Override auto-resolve setting
@@ -106,6 +109,7 @@ Fuses multiple concepts into a single unified concept.
 Finds concepts similar to the specified concept.
 
 **Parameters:**
+
 - `conceptId` (string): ID of the concept to find similarities for
 - `threshold` (number, optional): Minimum similarity score (0-1)
 - `limit` (number, optional): Maximum number of results
@@ -122,7 +126,8 @@ model.on('conceptAdded', (event) => {
 });
 
 model.on('beforeFusion', (event) => {
-  console.log('Before fusion:', event.concepts);});
+  console.log('Before fusion:', event.concepts);
+});
 
 model.on('afterFusion', (event) => {
   console.log('After fusion:', event.result);
@@ -135,15 +140,19 @@ model.off('conceptAdded', handler);
 ## Fusion Strategies
 
 ### Union
+
 Combines all properties and relationships from all source concepts. If there are conflicts, the first occurrence is used.
 
 ### Intersection
+
 Only includes properties and relationships that exist in all source concepts.
 
 ### Preferred
+
 Uses a priority order to determine which source concept's properties to prefer in case of conflicts.
 
 ### Custom
+
 Allows defining custom transformation rules for how concepts should be merged.
 
 ## Examples
@@ -181,7 +190,7 @@ model.addRule({
     }
   `,
   isActive: true,
-  tags: ['user', 'merge']
+  tags: ['user', 'merge'],
 });
 ```
 
@@ -192,7 +201,7 @@ model.addRule({
 const similar = await model.findSimilarConcepts({
   conceptId: customerConcept.id,
   threshold: 0.6,
-  limit: 5
+  limit: 5,
 });
 
 console.log('Similar concepts:', similar);
@@ -206,7 +215,7 @@ The model provides comprehensive error handling through exceptions and validatio
 try {
   const result = await model.fuseConcepts({
     conceptIds: [id1, id2],
-    strategy: 'union'
+    strategy: 'union',
   });
 } catch (error) {
   console.error('Fusion failed:', error.message);
