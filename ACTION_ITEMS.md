@@ -1,6 +1,8 @@
 # Action Items from Comprehensive Audit
 
-This document tracks the remediation items identified in the comprehensive audit conducted on January 3, 2026.
+This document tracks the remediation items identified in the comprehensive audit conducted on January 3, 2026, and updated February 5, 2026.
+
+**See also:** [Audit Recommendations](./AUDIT_RECOMMENDATIONS.md) for categorized improvements (NECESSARY vs INDICATED vs POSSIBLE)
 
 ## ✅ Completed
 
@@ -8,6 +10,10 @@ This document tracks the remediation items identified in the comprehensive audit
 - [x] Fix duplicate React dependency in apps/web/package.json
 - [x] Create CODEOWNERS file for automated PR reviewer assignment
 - [x] Add CodeQL security scanning workflow
+- [x] Create AUDIT_RECOMMENDATIONS.md with categorized improvements
+- [x] Update branch-protection-config.json with secure defaults
+- [x] Fix CI memory issues (increased NODE_OPTIONS heap size)
+- [x] Fix Dependabot configuration (directory path and GitHub Actions ecosystem)
 
 ## 🔴 Critical (Fix Immediately)
 
