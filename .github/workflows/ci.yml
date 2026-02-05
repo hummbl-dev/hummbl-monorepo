@@ -74,7 +74,9 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm test
-        timeout-minutes: 10
+        timeout-minutes: 15
+        env:
+          NODE_OPTIONS: '--max-old-space-size=6144'
 
   build:
     permissions:
