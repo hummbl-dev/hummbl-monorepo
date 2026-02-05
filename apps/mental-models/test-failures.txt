@@ -1,0 +1,761 @@
+
+> hummbl-io@1.0.0 test
+> NODE_OPTIONS='--max-old-space-size=4096 --expose-gc' vitest run --no-watch --silent --run src/models/p1/__tests__/FirstPrinciplesModel.test.ts
+
+
+ RUN  v3.2.4 /Users/others/hummbl-io
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts (53 tests | 45 failed) 967ms 25 MB heap used
+   × FirstPrinciplesModel > Basic Functionality > should create an instance successfully 26ms
+     → FirstPrinciplesModel is not defined
+   ✓ FirstPrinciplesModel > Basic Functionality > should have analyze method 14ms
+   × FirstPrinciplesModel > Basic Functionality > should return properly structured output 22ms
+     → expected { …(7) } to have property "components"
+   ✓ FirstPrinciplesModel > Input Validation > should reject null input 23ms
+   ✓ FirstPrinciplesModel > Input Validation > should reject undefined input 19ms
+   × FirstPrinciplesModel > Input Validation > should reject empty problem string 20ms
+     → expected [Function] to throw error including 'Problem statement is required and mus…' but got 'Problem statement must be a string wi…'
+   × FirstPrinciplesModel > Input Validation > should reject whitespace-only problem string 15ms
+     → expected [Function] to throw error including 'Problem statement is required and mus…' but got 'Problem statement must be a string wi…'
+   × FirstPrinciplesModel > Input Validation > should reject non-string problem 17ms
+     → expected [Function] to throw error including 'Problem statement is required and mus…' but got 'Problem statement must be a string wi…'
+   × FirstPrinciplesModel > Input Validation > should reject excessively long problem statements 25ms
+     → promise resolved "{ …(7) }" instead of rejecting
+   ✓ FirstPrinciplesModel > Input Validation > should accept valid problem with optional context 17ms
+   × FirstPrinciplesModel > Problem Decomposition > should extract constraints from problem 22ms
+     → Cannot read properties of undefined (reading 'filter')
+   × FirstPrinciplesModel > Problem Decomposition > should extract objectives from problem 16ms
+     → Cannot read properties of undefined (reading 'filter')
+   × FirstPrinciplesModel > Problem Decomposition > should extract metrics from problem 15ms
+     → Cannot read properties of undefined (reading 'filter')
+   × FirstPrinciplesModel > Problem Decomposition > should extract relationships from problem 14ms
+     → Cannot read properties of undefined (reading 'filter')
+   × FirstPrinciplesModel > Problem Decomposition > should handle problems with no clear patterns 16ms
+     → Cannot read properties of undefined (reading 'length')
+   × FirstPrinciplesModel > Assumption Identification > should identify explicit assumptions 17ms
+     → expected false to be true // Object.is equality
+   ✓ FirstPrinciplesModel > Assumption Identification > should infer assumptions from constraints 18ms
+   × FirstPrinciplesModel > Assumption Identification > should identify domain-specific assumptions for customer problems 14ms
+     → expected false to be true // Object.is equality
+   ✓ FirstPrinciplesModel > Assumption Identification > should provide baseline assumptions for simple problems 16ms
+   × FirstPrinciplesModel > Fundamental Truth Extraction > should extract mathematical truths from percentages 17ms
+     → Cannot read properties of undefined (reading 'some')
+   × FirstPrinciplesModel > Fundamental Truth Extraction > should extract truths about time 17ms
+     → Cannot read properties of undefined (reading 'some')
+   × FirstPrinciplesModel > Fundamental Truth Extraction > should extract customer behavior truths 17ms
+     → Cannot read properties of undefined (reading 'some')
+   × FirstPrinciplesModel > Fundamental Truth Extraction > should extract constraint truths 16ms
+     → Cannot read properties of undefined (reading 'some')
+   × FirstPrinciplesModel > Fundamental Truth Extraction > should always extract baseline universal truths 17ms
+     → Cannot read properties of undefined (reading 'length')
+   × FirstPrinciplesModel > Solution Generation > should generate structured solution 21ms
+     → expected 'I\'m unable to process this request a…' to contain 'FIRST PRINCIPLES SOLUTION'
+   × FirstPrinciplesModel > Solution Generation > should include all fundamental truths in solution 18ms
+     → Cannot read properties of undefined (reading 'forEach')
+   × FirstPrinciplesModel > Solution Generation > should incorporate context when provided 17ms
+     → expected 'i\'m unable to process this request a…' to contain 'urgency'
+   × FirstPrinciplesModel > Solution Generation > should provide actionable recommendations 17ms
+     → expected false to be true // Object.is equality
+   × FirstPrinciplesModel > Wickedness Assessment > should identify low wickedness for technical problems 16ms
+     → actual value must be number or bigint, received "undefined"
+   × FirstPrinciplesModel > Wickedness Assessment > should identify high wickedness for stakeholder conflict 16ms
+     → actual value must be number or bigint, received "undefined"
+   × FirstPrinciplesModel > Wickedness Assessment > should identify medium wickedness for business problems 16ms
+     → actual value must be number or bigint, received "undefined"
+   × FirstPrinciplesModel > Wickedness Assessment > should flag value judgments as wicked 16ms
+     → actual value must be number or bigint, received "undefined"
+   × FirstPrinciplesModel > Quality Metrics > should calculate alignment score within bounds 17ms
+     → Cannot read properties of undefined (reading 'alignmentScore')
+   × FirstPrinciplesModel > Quality Metrics > should calculate trace fidelity within bounds 17ms
+     → Cannot read properties of undefined (reading 'traceFidelity')
+   × FirstPrinciplesModel > Quality Metrics > should calculate entropy delta within bounds 16ms
+     → Cannot read properties of undefined (reading 'entropyDelta')
+   × FirstPrinciplesModel > Quality Metrics > should calculate confidence score within bounds 19ms
+     → actual value must be number or bigint, received "undefined"
+   × FirstPrinciplesModel > Quality Metrics > should show lower confidence for wicked problems 17ms
+     → actual value must be number or bigint, received "undefined"
+   × FirstPrinciplesModel > HUMMBL Metadata > should include correct model identification 18ms
+     → Cannot read properties of undefined (reading 'modelId')
+   × FirstPrinciplesModel > HUMMBL Metadata > should include version in metadata 16ms
+     → .toMatch() expects to receive a string, but got undefined
+   × FirstPrinciplesModel > HUMMBL Metadata > should include execution time 17ms
+     → expected 'undefined' to be 'number' // Object.is equality
+   ✓ FirstPrinciplesModel > HUMMBL Metadata > should include ISO timestamp 16ms
+   × FirstPrinciplesModel > Integration Tests - Real-World Scenarios > should handle business optimization problem 15ms
+     → Cannot read properties of undefined (reading 'length')
+   × FirstPrinciplesModel > Integration Tests - Real-World Scenarios > should handle technical problem 16ms
+     → Cannot read properties of undefined (reading 'length')
+   × FirstPrinciplesModel > Integration Tests - Real-World Scenarios > should handle strategic problem with context 16ms
+     → expected 'I\'m unable to process this request a…' to contain 'urgency'
+   × FirstPrinciplesModel > Integration Tests - Real-World Scenarios > should handle wicked organizational problem 16ms
+     → actual value must be number or bigint, received "undefined"
+   × FirstPrinciplesModel > Event Handling > should emit analysis:start event 18ms
+     → expected false to be true // Object.is equality
+   × FirstPrinciplesModel > Event Handling > should emit analysis:complete event 16ms
+     → expected false to be true // Object.is equality
+   × FirstPrinciplesModel > Event Handling > should emit analysis:error event on failure 18ms
+     → expected false to be true // Object.is equality
+   × FirstPrinciplesModel > Event Handling > should support event listener removal 16ms
+     → model.removeListener is not a function
+   × FirstPrinciplesModel > Edge Cases > should handle single-word problem 19ms
+     → Problem statement must be a string with at least 10 characters
+   × FirstPrinciplesModel > Edge Cases > should handle problem with special characters 20ms
+     → Cannot read properties of undefined (reading 'length')
+   ✓ FirstPrinciplesModel > Edge Cases > should handle problem with unicode characters 17ms
+   × FirstPrinciplesModel > Edge Cases > should handle very long but valid problem 19ms
+     → Cannot read properties of undefined (reading 'length')
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 45 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Basic Functionality > should create an instance successfully
+ReferenceError: FirstPrinciplesModel is not defined
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:18:36
+     16|   describe('Basic Functionality', () => {
+     17|     it('should create an instance successfully', () => {
+     18|       expect(model).toBeInstanceOf(FirstPrinciplesModel);
+       |                                    ^
+     19|     });
+     20| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Basic Functionality > should return properly structured output
+AssertionError: expected { …(7) } to have property "components"
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:31:22
+     29| 
+     30|       expect(result).toHaveProperty('problem');
+     31|       expect(result).toHaveProperty('components');
+       |                      ^
+     32|       expect(result).toHaveProperty('assumptions');
+     33|       expect(result).toHaveProperty('truths');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Input Validation > should reject empty problem string
+AssertionError: expected [Function] to throw error including 'Problem statement is required and mus…' but got 'Problem statement must be a string wi…'
+
+Expected: [32m"Problem statement [7mis required and must be a non-empty string[27m"[39m
+Received: [31m"Problem statement [7mmust be a string with at least 10 characters[27m"[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:57:7
+     55| 
+     56|     it('should reject empty problem string', async () => {
+     57|       await expect(model.analyze({ problem: '' })).rejects.toThrow(
+       |       ^
+     58|         'Problem statement is required and must be a non-empty string'
+     59|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Input Validation > should reject whitespace-only problem string
+AssertionError: expected [Function] to throw error including 'Problem statement is required and mus…' but got 'Problem statement must be a string wi…'
+
+Expected: [32m"Problem statement [7mis required and must be a non-empty string[27m"[39m
+Received: [31m"Problem statement [7mmust be a string with at least 10 characters[27m"[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:63:7
+     61| 
+     62|     it('should reject whitespace-only problem string', async () => {
+     63|       await expect(model.analyze({ problem: '   ' })).rejects.toThrow(
+       |       ^
+     64|         'Problem statement is required and must be a non-empty string'
+     65|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Input Validation > should reject non-string problem
+AssertionError: expected [Function] to throw error including 'Problem statement is required and mus…' but got 'Problem statement must be a string wi…'
+
+Expected: [32m"Problem statement [7mis required and must be a non-empty string[27m"[39m
+Received: [31m"Problem statement [7mmust be a string with at least 10 characters[27m"[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:69:7
+     67| 
+     68|     it('should reject non-string problem', async () => {
+     69|       await expect(model.analyze({ problem: 123 as any })).rejects.toT…
+       |       ^
+     70|         'Problem statement is required and must be a non-empty string'
+     71|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Input Validation > should reject excessively long problem statements
+AssertionError: promise resolved "{ …(7) }" instead of rejecting
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- Error {[39m
+[32m-   "message": "rejected promise",[39m
+[31m+ {[39m
+[31m+   "assumptions": [[39m
+[31m+     "I'm unable to process this request at the moment. Please try again later.",[39m
+[31m+   ],[39m
+[31m+   "decomposed": [[39m
+[31m+     "I'm unable to process this request at the moment. Please try again later.",[39m
+[31m+   ],[39m
+[31m+   "fundamentalTruths": [[39m
+[31m+     "I'm unable to process this request at the moment. Please try again later.",[39m
+[31m+   ],[39m
+[31m+   "id": "8522d23b-7a31-41d7-b626-60babfbd4f3c",[39m
+[31m+   "metadata": {[39m
+[31m+     "executionTimeMs": 2.304894,[39m
+[31m+     "modelVersion": "1.0.0",[39m
+[31m+     "telemetry": {[39m
+[31m+       "alignmentScore": 0,[39m
+[31m+       "entropyDelta": -0.9251099295352732,[39m
+[31m+       "executionTimeMs": 1.52227,[39m
+[31m+       "memoryUsageMb": 25.223220825195312,[39m
+[31m+       "timestamp": "2025-10-25T13:39:51.884Z",[39m
+[31m+       "traceFidelity": 0.757,[39m
+[31m+     },[39m
+[31m+     "timestamp": "2025-10-25T13:39:51.884Z",[39m
+[31m+   },[39m
+[31m+   "problem": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",[39m
+[31m+   "solution": "I'm unable to process this request at the moment. Please try again later.",[39m
+[2m  }[22m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:76:59
+     74|     it('should reject excessively long problem statements', async () =…
+     75|       const longProblem = 'a'.repeat(10001);
+     76|       await expect(model.analyze({ problem: longProblem })).rejects.to…
+       |                                                           ^
+     77|         'Problem statement exceeds maximum length'
+     78|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Problem Decomposition > should extract constraints from problem
+TypeError: Cannot read properties of undefined (reading 'filter')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:100:45
+     98|       });
+     99| 
+    100|       const constraints = result.components.filter(c => c.includes('[c…
+       |                                             ^
+    101|       expect(constraints.length).toBeGreaterThan(0);
+    102|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Problem Decomposition > should extract objectives from problem
+TypeError: Cannot read properties of undefined (reading 'filter')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:109:44
+    107|       });
+    108| 
+    109|       const objectives = result.components.filter(c => c.includes('[ob…
+       |                                            ^
+    110|       expect(objectives.length).toBeGreaterThan(0);
+    111|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Problem Decomposition > should extract metrics from problem
+TypeError: Cannot read properties of undefined (reading 'filter')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:118:41
+    116|       });
+    117| 
+    118|       const metrics = result.components.filter(c => c.includes('[metri…
+       |                                         ^
+    119|       expect(metrics.length).toBeGreaterThan(0);
+    120|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Problem Decomposition > should extract relationships from problem
+TypeError: Cannot read properties of undefined (reading 'filter')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:127:47
+    125|       });
+    126| 
+    127|       const relationships = result.components.filter(c => c.includes('…
+       |                                               ^
+    128|       expect(relationships.length).toBeGreaterThan(0);
+    129|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Problem Decomposition > should handle problems with no clear patterns
+TypeError: Cannot read properties of undefined (reading 'length')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:136:32
+    134|       });
+    135| 
+    136|       expect(result.components.length).toBeGreaterThan(0);
+       |                                ^
+    137|       expect(Array.isArray(result.components)).toBe(true);
+    138|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Assumption Identification > should identify explicit assumptions
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:155:37
+    153|         a.toLowerCase().includes('explicit') || a.includes('Assuming')
+    154|       );
+    155|       expect(hasExplicitAssumption).toBe(true);
+       |                                     ^
+    156|     });
+    157| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Assumption Identification > should identify domain-specific assumptions for customer problems
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:174:37
+    172|         a.toLowerCase().includes('customer')
+    173|       );
+    174|       expect(hasCustomerAssumption).toBe(true);
+       |                                     ^
+    175|     });
+    176| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Fundamental Truth Extraction > should extract mathematical truths from percentages
+TypeError: Cannot read properties of undefined (reading 'some')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:196:42
+    194|       });
+    195| 
+    196|       const hasMathTruth = result.truths.some(t => 
+       |                                          ^
+    197|         t.toLowerCase().includes('percentage') || t.toLowerCase().incl…
+    198|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Fundamental Truth Extraction > should extract truths about time
+TypeError: Cannot read properties of undefined (reading 'some')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:207:42
+    205|       });
+    206| 
+    207|       const hasTimeTruth = result.truths.some(t => 
+       |                                          ^
+    208|         t.toLowerCase().includes('time') || t.toLowerCase().includes('…
+    209|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Fundamental Truth Extraction > should extract customer behavior truths
+TypeError: Cannot read properties of undefined (reading 'some')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:218:46
+    216|       });
+    217| 
+    218|       const hasCustomerTruth = result.truths.some(t => 
+       |                                              ^
+    219|         t.toLowerCase().includes('customer') || t.toLowerCase().includ…
+    220|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Fundamental Truth Extraction > should extract constraint truths
+TypeError: Cannot read properties of undefined (reading 'some')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:229:48
+    227|       });
+    228| 
+    229|       const hasConstraintTruth = result.truths.some(t => 
+       |                                                ^
+    230|         t.toLowerCase().includes('constraint') || t.toLowerCase().incl…
+    231|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Fundamental Truth Extraction > should always extract baseline universal truths
+TypeError: Cannot read properties of undefined (reading 'length')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:240:28
+    238|       });
+    239| 
+    240|       expect(result.truths.length).toBeGreaterThan(0);
+       |                            ^
+    241|     });
+    242|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Solution Generation > should generate structured solution
+AssertionError: expected 'I\'m unable to process this request a…' to contain 'FIRST PRINCIPLES SOLUTION'
+
+Expected: [32m"FIRST PRINCIPLES SOLUTION"[39m
+Received: [31m"I'm unable to process this request at the moment. Please try again later."[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:254:31
+    252|       });
+    253| 
+    254|       expect(result.solution).toContain('FIRST PRINCIPLES SOLUTION');
+       |                               ^
+    255|       expect(result.solution).toContain('FOUNDATION');
+    256|       expect(result.solution).toContain('RECOMMENDED APPROACH');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Solution Generation > should include all fundamental truths in solution
+TypeError: Cannot read properties of undefined (reading 'forEach')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:264:21
+    262|       });
+    263| 
+    264|       result.truths.forEach(truth => {
+       |                     ^
+    265|         expect(result.solution).toContain(truth);
+    266|       });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Solution Generation > should incorporate context when provided
+AssertionError: expected 'i\'m unable to process this request a…' to contain 'urgency'
+
+Expected: [32m"urgency"[39m
+Received: [31m"i'm unable to process this request at the moment. please try again later."[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:275:45
+    273|       });
+    274| 
+    275|       expect(result.solution.toLowerCase()).toContain('urgency');
+       |                                             ^
+    276|       expect(result.solution.toLowerCase()).toContain('budget');
+    277|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Solution Generation > should provide actionable recommendations
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:285:34
+    283| 
+    284|       const hasActionableItems = result.solution.includes('→') || resu…
+    285|       expect(hasActionableItems).toBe(true);
+       |                                  ^
+    286|     });
+    287|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Wickedness Assessment > should identify low wickedness for technical problems
+TypeError: actual value must be number or bigint, received "undefined"
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:299:38
+    297|       });
+    298| 
+    299|       expect(result.wickednessScore).toBeLessThan(0.4);
+       |                                      ^
+    300|       expect(result.recommendedApproach).toBe('first-principles');
+    301|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Wickedness Assessment > should identify high wickedness for stakeholder conflict
+TypeError: actual value must be number or bigint, received "undefined"
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:308:38
+    306|       });
+    307| 
+    308|       expect(result.wickednessScore).toBeGreaterThan(0.6);
+       |                                      ^
+    309|       expect(result.recommendedApproach).toMatch(/systems-thinking|hyb…
+    310|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Wickedness Assessment > should identify medium wickedness for business problems
+TypeError: actual value must be number or bigint, received "undefined"
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:317:38
+    315|       });
+    316| 
+    317|       expect(result.wickednessScore).toBeGreaterThan(0.2);
+       |                                      ^
+    318|       expect(result.wickednessScore).toBeLessThan(0.8);
+    319|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Wickedness Assessment > should flag value judgments as wicked
+TypeError: actual value must be number or bigint, received "undefined"
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:326:38
+    324|       });
+    325| 
+    326|       expect(result.wickednessScore).toBeGreaterThan(0.5);
+       |                                      ^
+    327|     });
+    328|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Quality Metrics > should calculate alignment score within bounds
+TypeError: Cannot read properties of undefined (reading 'alignmentScore')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:340:36
+    338|       });
+    339| 
+    340|       expect(result.hummblMetadata.alignmentScore).toBeGreaterThanOrEq…
+       |                                    ^
+    341|       expect(result.hummblMetadata.alignmentScore).toBeLessThanOrEqual…
+    342|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Quality Metrics > should calculate trace fidelity within bounds
+TypeError: Cannot read properties of undefined (reading 'traceFidelity')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:349:36
+    347|       });
+    348| 
+    349|       expect(result.hummblMetadata.traceFidelity).toBeGreaterThanOrEqu…
+       |                                    ^
+    350|       expect(result.hummblMetadata.traceFidelity).toBeLessThanOrEqual(…
+    351|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Quality Metrics > should calculate entropy delta within bounds
+TypeError: Cannot read properties of undefined (reading 'entropyDelta')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:358:36
+    356|       });
+    357| 
+    358|       expect(result.hummblMetadata.entropyDelta).toBeGreaterThanOrEqua…
+       |                                    ^
+    359|       expect(result.hummblMetadata.entropyDelta).toBeLessThanOrEqual(1…
+    360|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Quality Metrics > should calculate confidence score within bounds
+TypeError: actual value must be number or bigint, received "undefined"
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:367:33
+    365|       });
+    366| 
+    367|       expect(result.confidence).toBeGreaterThanOrEqual(0);
+       |                                 ^
+    368|       expect(result.confidence).toBeLessThanOrEqual(1);
+    369|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Quality Metrics > should show lower confidence for wicked problems
+TypeError: actual value must be number or bigint, received "undefined"
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:380:39
+    378|       });
+    379| 
+    380|       expect(wickedResult.confidence).toBeLessThan(simpleResult.confid…
+       |                                       ^
+    381|     });
+    382|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > HUMMBL Metadata > should include correct model identification
+TypeError: Cannot read properties of undefined (reading 'modelId')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:394:36
+    392|       });
+    393| 
+    394|       expect(result.hummblMetadata.modelId).toBe('P1');
+       |                                    ^
+    395|       expect(result.hummblMetadata.modelName).toBe('First Principles F…
+    396|       expect(result.hummblMetadata.transformationType).toBe('Perspecti…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > HUMMBL Metadata > should include version in metadata
+TypeError: .toMatch() expects to receive a string, but got undefined
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:404:39
+    402|       });
+    403| 
+    404|       expect(result.metadata.version).toMatch(/^\d+\.\d+\.\d+$/);
+       |                                       ^
+    405|     });
+    406| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > HUMMBL Metadata > should include execution time
+AssertionError: expected 'undefined' to be 'number' // Object.is equality
+
+Expected: [32m"number"[39m
+Received: [31m"undefined"[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:412:52
+    410|       });
+    411| 
+    412|       expect(typeof result.metadata.executionTime).toBe('number');
+       |                                                    ^
+    413|       expect(result.metadata.executionTime).toBeGreaterThan(0);
+    414|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Integration Tests - Real-World Scenarios > should handle business optimization problem
+TypeError: Cannot read properties of undefined (reading 'length')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:435:32
+    433|       });
+    434| 
+    435|       expect(result.components.length).toBeGreaterThan(3);
+       |                                ^
+    436|       expect(result.truths.length).toBeGreaterThan(3);
+    437|       expect(result.solution).toContain('APPROACH');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[35/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Integration Tests - Real-World Scenarios > should handle technical problem
+TypeError: Cannot read properties of undefined (reading 'length')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:447:32
+    445|       });
+    446| 
+    447|       expect(result.components.length).toBeGreaterThan(2);
+       |                                ^
+    448|       expect(result.recommendedApproach).toBe('first-principles');
+    449|       expect(result.wickednessScore).toBeLessThan(0.4);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[36/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Integration Tests - Real-World Scenarios > should handle strategic problem with context
+AssertionError: expected 'I\'m unable to process this request a…' to contain 'urgency'
+
+Expected: [32m"urgency"[39m
+Received: [31m"I'm unable to process this request at the moment. Please try again later."[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:462:31
+    460|       });
+    461| 
+    462|       expect(result.solution).toContain('urgency');
+       |                               ^
+    463|       expect(result.solution).toContain('budget');
+    464|       expect(result.solution).toContain('risk');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[37/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Integration Tests - Real-World Scenarios > should handle wicked organizational problem
+TypeError: actual value must be number or bigint, received "undefined"
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:473:38
+    471|       });
+    472| 
+    473|       expect(result.wickednessScore).toBeGreaterThan(0.6);
+       |                                      ^
+    474|       expect(result.recommendedApproach).not.toBe('first-principles');
+    475|       expect(result.confidence).toBeLessThan(0.7);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[38/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Event Handling > should emit analysis:start event
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:495:26
+    493|       });
+    494| 
+    495|       expect(eventFired).toBe(true);
+       |                          ^
+    496|     });
+    497| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Event Handling > should emit analysis:complete event
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:509:26
+    507|       });
+    508| 
+    509|       expect(eventFired).toBe(true);
+       |                          ^
+    510|     });
+    511| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[40/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Event Handling > should emit analysis:error event on failure
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:525:31
+    523|       }
+    524| 
+    525|       expect(errorEventFired).toBe(true);
+       |                               ^
+    526|     });
+    527| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[41/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Event Handling > should support event listener removal
+TypeError: model.removeListener is not a function
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:531:13
+    529|       const listener = () => {};
+    530|       model.on('test-event', listener);
+    531|       model.removeListener('test-event', listener);
+       |             ^
+    532|       
+    533|       expect(true).toBe(true); // No error means success
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[42/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Edge Cases > should handle single-word problem
+Error: Problem statement must be a string with at least 10 characters
+ ❯ FirstPrinciplesModelImpl.validateInput src/models/p1/FirstPrinciplesModel.ts:1332:13
+    1330|     // Check if problem has at least 10 characters
+    1331|     if (inputObj.problem.trim().length < 10) {
+    1332|       throw new Error('Problem statement must be a string with at leas…
+       |             ^
+    1333|     }
+    1334|   }
+ ❯ FirstPrinciplesModelImpl.analyze src/models/p1/FirstPrinciplesModel.ts:619:12
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:543:34
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[43/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Edge Cases > should handle problem with special characters
+TypeError: Cannot read properties of undefined (reading 'length')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:556:32
+    554|       });
+    555| 
+    556|       expect(result.components.length).toBeGreaterThan(0);
+       |                                ^
+    557|     });
+    558| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[44/45]⎯
+
+ FAIL  src/models/p1/__tests__/FirstPrinciplesModel.test.ts > FirstPrinciplesModel > Edge Cases > should handle very long but valid problem
+TypeError: Cannot read properties of undefined (reading 'length')
+ ❯ src/models/p1/__tests__/FirstPrinciplesModel.test.ts:575:32
+    573|       });
+    574| 
+    575|       expect(result.components.length).toBeGreaterThan(0);
+       |                                ^
+    576|     });
+    577|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[45/45]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  45 failed | 8 passed (53)
+   Start at  09:39:50
+   Duration  2.09s (transform 155ms, setup 280ms, collect 124ms, tests 967ms, environment 349ms, prepare 88ms)
+

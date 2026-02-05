@@ -1,0 +1,210 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: HUMMBL Production Stack (Free Tier) - EC2 + RDS + Lambda Telemetry
+
+Parameters:
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: SSH key for EC2 access
+    ConstraintDescription: Must be the name of an existing EC2 KeyPair
+  DBName:
+    Type: String
+    Default: hummbl
+  DBUser:
+    Type: String
+    Default: hummbl_admin
+  DBPassword:
+    Type: String
+    NoEcho: true
+  EC2InstanceType:
+    Type: String
+    Default: t2.micro
+
+Resources:
+  HUMMBLVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: HUMMBLVPC
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref HUMMBLVPC
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select [0, !GetAZs '']
+      Tags:
+        - Key: Name
+          Value: HUMMBLPublicSubnet
+
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref HUMMBLVPC
+      CidrBlock: 10.0.2.0/24
+      MapPublicIpOnLaunch: false
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags:
+        - Key: Name
+          Value: HUMMBLPrivateSubnet
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: HUMMBLGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref HUMMBLVPC
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref HUMMBLVPC
+      Tags:
+        - Key: Name
+          Value: HUMMBLPublicRT
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+
+  HUMMBLEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH, HTTP, HTTPS
+      VpcId: !Ref HUMMBLVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+
+  HUMMBLRDSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow EC2 to access RDS
+      VpcId: !Ref HUMMBLVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref HUMMBLEC2SecurityGroup
+
+  HUMMBLRDS:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBName: !Ref DBName
+      Engine: postgres
+      MasterUsername: !Ref DBUser
+      MasterUserPassword: !Ref DBPassword
+      AllocatedStorage: 20
+      DBInstanceClass: db.t3.micro
+      PubliclyAccessible: false
+      StorageType: gp2
+      DBSubnetGroupName: !Ref HUMMBLDBSubnetGroup
+      VPCSecurityGroups: [!Ref HUMMBLRDSSecurityGroup]
+      DeletionProtection: false
+
+  HUMMBLDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: HUMMBL Private Subnets
+      SubnetIds: [!Ref PrivateSubnet]
+      DBSubnetGroupName: hummbl-db-subnet-group
+
+  HUMMBLEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref EC2InstanceType
+      KeyName: !Ref KeyPairName
+      ImageId: ami-0c2d06f50f35eb12d # Amazon Linux 2 (us-west-2)
+      SecurityGroupIds: [!Ref HUMMBLEC2SecurityGroup]
+      SubnetId: !Ref PublicSubnet
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          yum update -y
+          yum install -y nodejs git postgresql
+          cd /home/ec2-user
+          git clone https://github.com/hummbl-io/hummbl.git
+          cd hummbl
+          npm install
+          npm run build
+          npm start
+      Tags:
+        - Key: Name
+          Value: HUMMBL-Production-EC2
+
+  HUMMBLTelemetryLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: hummbl-telemetry
+      Runtime: python3.11
+      Handler: index.lambda_handler
+      Role: !GetAtt HUMMBLLambdaRole.Arn
+      Timeout: 30
+      Code:
+        ZipFile: |
+          import boto3, datetime, json, os
+          def lambda_handler(event, context):
+              cw = boto3.client('cloudwatch')
+              metrics = cw.list_metrics()
+              print(json.dumps(metrics, default=str))
+              return {"status": "ok", "timestamp": str(datetime.datetime.utcnow())}
+
+  HUMMBLLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/CloudWatchFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+
+  TelemetrySchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: rate(5 minutes)
+      Targets:
+        - Arn: !GetAtt HUMMBLTelemetryLambda.Arn
+          Id: TelemetryTarget
+
+Outputs:
+  EC2PublicIP:
+    Description: Public IP of HUMMBL EC2 instance
+    Value: !GetAtt HUMMBLEC2Instance.PublicIp
+  RDSEndpoint:
+    Description: PostgreSQL RDS endpoint
+    Value: !GetAtt HUMMBLRDS.Endpoint.Address

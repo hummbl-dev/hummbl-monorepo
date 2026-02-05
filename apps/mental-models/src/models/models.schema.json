@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "title": "HUMMBL models list",
+  "items": {
+    "type": "object",
+    "required": ["id", "code", "name", "description", "transformation", "tier"],
+    "properties": {
+      "id": { "type": "string" },
+      "code": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "transformation": {
+        "type": "string",
+        "enum": [
+          "Perspective",
+          "Inversion",
+          "Composition",
+          "Decomposition",
+          "Recursion",
+          "Meta-Systems"
+        ]
+      },
+      "tier": { "type": "integer", "minimum": 1, "maximum": 20 },
+      "aliases": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+      "linked_signals": {
+        "type": ["array", "null"],
+        "items": { "type": "string" }
+      },
+      "metadata": { "type": "object", "additionalProperties": true }
+    },
+    "additionalProperties": false
+  }
+}

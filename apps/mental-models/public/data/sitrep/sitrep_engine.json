@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-10-17T18:21:58.509Z",
+  "status": "operational",
+  "narratives_loaded": 6,
+  "evidence_quality_distribution": {
+    "A": 5,
+    "B": 1,
+    "C": 0
+  }
+}

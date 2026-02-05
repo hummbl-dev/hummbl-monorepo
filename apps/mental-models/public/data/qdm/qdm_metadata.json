@@ -1,0 +1,7 @@
+{
+  "build_timestamp": "2025-10-17T18:21:58.556Z",
+  "source_files": ["narratives.yaml", "integrity_report.json"],
+  "total_narratives": 6,
+  "matrix_dimensions": "6x6",
+  "build_time_ms": 16
+}

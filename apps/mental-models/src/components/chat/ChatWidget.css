@@ -1,0 +1,61 @@
+/* Chat Widget - Floating Button */
+
+.chat-widget-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  box-shadow:
+    0 4px 12px rgba(16, 185, 129, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.chat-widget-button:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 6px 16px rgba(16, 185, 129, 0.5),
+    0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.chat-widget-button:active {
+  transform: scale(0.95);
+}
+
+.chat-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  border: 2px solid white;
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .chat-widget-button {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 56px;
+    height: 56px;
+  }
+}

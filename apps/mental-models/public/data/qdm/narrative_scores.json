@@ -1,0 +1,62 @@
+[
+  {
+    "narrative_id": "NAR-HUMMBL-METASYSTEMS",
+    "confidence": 0.91,
+    "evidence_quality": "A",
+    "evidence_score": 1,
+    "complexity_score": 1,
+    "relationship_score": 0.6,
+    "composite_score": 0.9240000000000002,
+    "rank": 1
+  },
+  {
+    "narrative_id": "NAR-HUMMBL-COMPOSITION",
+    "confidence": 0.9,
+    "evidence_quality": "A",
+    "evidence_score": 1,
+    "complexity_score": 0.8,
+    "relationship_score": 0.6,
+    "composite_score": 0.8800000000000001,
+    "rank": 2
+  },
+  {
+    "narrative_id": "NAR-HUMMBL-DECOMPOSITION",
+    "confidence": 0.9,
+    "evidence_quality": "A",
+    "evidence_score": 1,
+    "complexity_score": 0.8,
+    "relationship_score": 0.6,
+    "composite_score": 0.8800000000000001,
+    "rank": 3
+  },
+  {
+    "narrative_id": "NAR-HUMMBL-INVERSION",
+    "confidence": 0.88,
+    "evidence_quality": "A",
+    "evidence_score": 1,
+    "complexity_score": 0.9,
+    "relationship_score": 0.4,
+    "composite_score": 0.8720000000000001,
+    "rank": 4
+  },
+  {
+    "narrative_id": "NAR-HUMMBL-PERSPECTIVE",
+    "confidence": 0.92,
+    "evidence_quality": "A",
+    "evidence_score": 1,
+    "complexity_score": 0.8,
+    "relationship_score": 0.4,
+    "composite_score": 0.8680000000000001,
+    "rank": 5
+  },
+  {
+    "narrative_id": "NAR-HUMMBL-RECURSION",
+    "confidence": 0.89,
+    "evidence_quality": "B",
+    "evidence_score": 0.8,
+    "complexity_score": 0.9,
+    "relationship_score": 0.8,
+    "composite_score": 0.8560000000000001,
+    "rank": 6
+  }
+]

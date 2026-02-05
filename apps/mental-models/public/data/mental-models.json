@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-10-17T15:30:00Z",
+  "models": [
+    {
+      "id": "first-principles",
+      "name": "First Principles Thinking",
+      "code": "FP",
+      "description": "Breaking down complex problems into their most basic, foundational elements and reasoning up from there.",
+      "example": "Elon Musk used first principles to reduce the cost of rocket launches by building reusable rockets.",
+      "category": "Problem Solving",
+      "tags": ["reasoning", "analysis", "decision-making"],
+      "transformations": ["P", "IN", "EX", "CO", "CH"],
+      "sources": [
+        {
+          "name": "Aristotle",
+          "reference": "Metaphysics"
+        }
+      ],
+      "meta": {
+        "isCore": true,
+        "difficulty": 3,
+        "added": "2025-01-01",
+        "updated": "2025-10-15"
+      }
+    },
+    {
+      "id": "second-order-thinking",
+      "name": "Second-Order Thinking",
+      "code": "SOT",
+      "description": "Considering the long-term and indirect consequences of decisions by thinking in terms of 'and then what?'",
+      "category": "Decision Making",
+      "tags": ["consequences", "long-term thinking", "systems"],
+      "transformations": ["IN", "EX", "CH"],
+      "sources": [
+        {
+          "name": "Howard Marks",
+          "reference": "The Most Important Thing"
+        }
+      ],
+      "meta": {
+        "isCore": true,
+        "difficulty": 4
+      }
+    }
+  ]
+}

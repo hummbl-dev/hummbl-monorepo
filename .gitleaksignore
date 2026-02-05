@@ -1,0 +1,8 @@
+apps/mcp-server/DEPLOYMENT.md
+apps/mcp-server/scripts/deploy.js
+apps/workers/DOCS.md
+apps/workers/src/openapi/examples.ts
+apps/workers/src/openapi/schemas.ts
+docs/legacy/
+apps/frontend/docs/PRODUCTION_SETUP.md
+apps/mcp-server/api-key-*.json

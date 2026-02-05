@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="re-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9B59B6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8E44AD;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- RE Wing: Reconstructive, building, synthesizing -->
+  <path d="M 100 50 L 140 80 L 130 120 L 100 110 L 70 120 L 60 80 Z" 
+        fill="url(#re-gradient)" 
+        opacity="0.9"/>
+  
+  <!-- Building blocks -->
+  <rect x="85" y="70" width="30" height="15" fill="#9B59B6" opacity="0.6"/>
+  <rect x="75" y="90" width="50" height="15" fill="#9B59B6" opacity="0.4"/>
+  
+  <!-- Construction points -->
+  <circle cx="100" cy="50" r="5" fill="#9B59B6"/>
+  <circle cx="100" cy="110" r="5" fill="#9B59B6"/>
+</svg>

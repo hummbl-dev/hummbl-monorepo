@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#0a0a0a"/>
+  <g id="network">
+    <!-- Static SVG representation -->
+    <text x="20" y="30" fill="#fff" font-size="20">HUMMBL Transform Network</text>
+    <text x="20" y="60" fill="#999" font-size="14">Nodes: 6 | Edges: 16</text>
+  </g>
+</svg>

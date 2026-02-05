@@ -1,0 +1,84 @@
+{
+  "timestamp": "2025-10-24T02:55:29.146Z",
+  "stats": {
+    "totalModels": 10,
+    "complete": 0,
+    "partial": 9,
+    "scaffold": 1,
+    "withTests": 9,
+    "withDocs": 9,
+    "withTypes": 9
+  },
+  "models": {
+    "p1": {
+      "status": "partial",
+      "implementation": false,
+      "tests": 9,
+      "documentation": true,
+      "types": true
+    },
+    "p5": {
+      "status": "partial",
+      "implementation": false,
+      "tests": 5,
+      "documentation": true,
+      "types": true
+    },
+    "p10": {
+      "status": "partial",
+      "implementation": false,
+      "tests": 5,
+      "documentation": true,
+      "types": true
+    },
+    "p15": {
+      "status": "partial",
+      "implementation": false,
+      "tests": 5,
+      "documentation": true,
+      "types": true
+    },
+    "p20": {
+      "status": "partial",
+      "implementation": false,
+      "tests": 5,
+      "documentation": true,
+      "types": true
+    },
+    "in1": {
+      "status": "partial",
+      "implementation": false,
+      "tests": 16,
+      "documentation": true,
+      "types": true
+    },
+    "in5": {
+      "status": "scaffold",
+      "implementation": false,
+      "tests": 0,
+      "documentation": false,
+      "types": false
+    },
+    "in10": {
+      "status": "partial",
+      "implementation": false,
+      "tests": 5,
+      "documentation": true,
+      "types": true
+    },
+    "in15": {
+      "status": "partial",
+      "implementation": false,
+      "tests": 5,
+      "documentation": true,
+      "types": true
+    },
+    "in20": {
+      "status": "partial",
+      "implementation": false,
+      "tests": 5,
+      "documentation": true,
+      "types": true
+    }
+  }
+}
