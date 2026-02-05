@@ -52,8 +52,15 @@ jobs:
           # Get current branch protection settings
           PROTECTION_DATA=$(gh api repos/${{ github.repository }}/branches/main/protection 2>/dev/null || echo "null")
 
-          if [ "$PROTECTION_DATA" = "null" ] || [ -z "$PROTECTION_DATA" ]; then
+          # Check if response is null, empty, or an error response
+          IS_ERROR=$(echo "$PROTECTION_DATA" | jq -r '.message // empty' 2>/dev/null || true)
+          HAS_PROTECTION=$(echo "$PROTECTION_DATA" | jq -r '.url // empty' 2>/dev/null || true)
+
+          if [ "$PROTECTION_DATA" = "null" ] || [ -z "$PROTECTION_DATA" ] || [ -n "$IS_ERROR" ] || [ -z "$HAS_PROTECTION" ]; then
             echo -e "${YELLOW}⚠️ Unable to read branch protection rules${NC}"
+            if [ -n "$IS_ERROR" ]; then
+              echo -e "${YELLOW}API Error: ${IS_ERROR}${NC}"
+            fi
             echo -e "${YELLOW}This is likely due to insufficient permissions with the default GITHUB_TOKEN.${NC}"
             echo -e "${YELLOW}The token requires admin access to read branch protection settings.${NC}"
             echo ""
