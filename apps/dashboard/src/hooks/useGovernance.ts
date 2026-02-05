@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import {
   getGovernanceState,
   checkGovernance,
@@ -86,9 +87,17 @@ export function useDeclareFreeze() {
       return declareFreeze(validatedReason);
     },
     onSuccess: () => {
+      toast.success('Code freeze declared', {
+        description: 'All mutation operations are now blocked',
+      });
       queryClient.invalidateQueries({ queryKey: governanceKeys.state() });
       queryClient.invalidateQueries({ queryKey: governanceKeys.temporal() });
       queryClient.invalidateQueries({ queryKey: governanceKeys.chain() });
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to declare freeze', {
+        description: error.message,
+      });
     },
   });
 }
@@ -110,9 +119,17 @@ export function useLiftFreeze() {
       return liftFreeze(validatedReason);
     },
     onSuccess: () => {
+      toast.success('Freeze lifted', {
+        description: 'System returned to normal operation',
+      });
       queryClient.invalidateQueries({ queryKey: governanceKeys.state() });
       queryClient.invalidateQueries({ queryKey: governanceKeys.temporal() });
       queryClient.invalidateQueries({ queryKey: governanceKeys.chain() });
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to lift freeze', {
+        description: error.message,
+      });
     },
   });
 }
@@ -135,10 +152,18 @@ export function useDeclareIncident() {
 
       return declareIncident(validatedId, validatedReason);
     },
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      toast.warning('Incident declared', {
+        description: `Incident ${variables.incidentId.toUpperCase()} is now active`,
+      });
       queryClient.invalidateQueries({ queryKey: governanceKeys.state() });
       queryClient.invalidateQueries({ queryKey: governanceKeys.temporal() });
       queryClient.invalidateQueries({ queryKey: governanceKeys.chain() });
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to declare incident', {
+        description: error.message,
+      });
     },
   });
 }
@@ -160,9 +185,17 @@ export function useResolveIncident() {
       return resolveIncident(validatedReason);
     },
     onSuccess: () => {
+      toast.success('Incident resolved', {
+        description: 'System returned to normal operation',
+      });
       queryClient.invalidateQueries({ queryKey: governanceKeys.state() });
       queryClient.invalidateQueries({ queryKey: governanceKeys.temporal() });
       queryClient.invalidateQueries({ queryKey: governanceKeys.chain() });
+    },
+    onError: (error: Error) => {
+      toast.error('Failed to resolve incident', {
+        description: error.message,
+      });
     },
   });
 }
