@@ -1,0 +1,24 @@
+{
+  "name": "@hummbl/governance",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./types": "./dist/types.js",
+    "./profile": "./dist/profile.js",
+    "./audit": "./dist/audit.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "echo 'Using pre-built dist from hummbl-agent'",
+    "sync": "cp -r ../../../hummbl-agent/packages/governance/dist ."
+  },
+  "dependencies": {
+    "yaml": "^2.3.4"
+  }
+}
