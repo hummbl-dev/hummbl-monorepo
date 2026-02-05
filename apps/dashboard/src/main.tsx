@@ -13,6 +13,9 @@ import { AuthGuard } from './components/AuthGuard';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { HomePage } from './pages/HomePage';
 import { TemporalPage } from './pages/TemporalPage';
+import { AuditPage } from './pages/AuditPage';
+import { ProfilesPage } from './pages/ProfilesPage';
+import { CheckerPage } from './pages/CheckerPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +41,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               <Route path="/" element={<DashboardLayout />}>
                 <Route index element={<HomePage />} />
                 <Route path="temporal" element={<TemporalPage />} />
+                <Route path="audit" element={<AuditPage />} />
+                <Route path="profiles" element={<ProfilesPage />} />
+                <Route path="check" element={<CheckerPage />} />
               </Route>
             </Routes>
           </BrowserRouter>

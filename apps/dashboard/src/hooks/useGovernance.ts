@@ -10,6 +10,10 @@ import {
   getTemporalSummary,
   getChainState,
   loadPresets,
+  getAuditLog,
+  getAuditActions,
+  seedAuditEvents,
+  type AuditLogOptions,
 } from '@/lib/governance-mock';
 import { useAuth } from '@/components/AuthGuard';
 import { logDashboardAction, canPerform } from '@/lib/auth';
@@ -22,6 +26,8 @@ export const governanceKeys = {
   temporal: () => [...governanceKeys.all, 'temporal'] as const,
   chain: () => [...governanceKeys.all, 'chain'] as const,
   presets: () => [...governanceKeys.all, 'presets'] as const,
+  audit: (options?: AuditLogOptions) => [...governanceKeys.all, 'audit', options] as const,
+  auditActions: () => [...governanceKeys.all, 'auditActions'] as const,
 };
 
 // State query
@@ -184,5 +190,26 @@ export function useCheckGovernance() {
         command: request.command,
       });
     },
+  });
+}
+
+// Audit log query
+export function useAuditLog(options: AuditLogOptions = {}) {
+  // Seed sample events on first load
+  seedAuditEvents();
+
+  return useQuery({
+    queryKey: governanceKeys.audit(options),
+    queryFn: () => getAuditLog(options),
+    refetchInterval: 10000, // Refresh every 10 seconds
+  });
+}
+
+// Audit actions for filter dropdown
+export function useAuditActions() {
+  return useQuery({
+    queryKey: governanceKeys.auditActions(),
+    queryFn: getAuditActions,
+    staleTime: 60000, // Cache for 1 minute
   });
 }
