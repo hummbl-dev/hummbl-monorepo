@@ -36,7 +36,16 @@ describe('validation', () => {
     });
 
     it('should accept all valid actions', () => {
-      const validActions = ['read', 'commit', 'push', 'deploy', 'delete', 'schema_change', 'approve', 'execute'];
+      const validActions = [
+        'read',
+        'commit',
+        'push',
+        'deploy',
+        'delete',
+        'schema_change',
+        'approve',
+        'execute',
+      ];
       for (const action of validActions) {
         expect(validateAction(action)).toBe(action);
       }
