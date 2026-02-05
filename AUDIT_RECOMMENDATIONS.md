@@ -11,7 +11,7 @@
 This audit categorizes improvements into three tiers based on urgency and impact:
 
 - **NECESSARY** - Required fixes for security, stability, and compliance
-- **INDICATED** - Strongly recommended for best practices and risk mitigation  
+- **INDICATED** - Strongly recommended for best practices and risk mitigation
 - **POSSIBLE** - Nice-to-have enhancements for improved developer experience
 
 ---
@@ -25,6 +25,7 @@ This audit categorizes improvements into three tiers based on urgency and impact
 **Root Cause:** Main branch lacks proper protection rules
 
 **Issues Identified:**
+
 - Missing required status checks (CI / Format Check, Lint, Type Check, Test, Build)
 - Missing CodeQL Security Scanning status check
 - Insufficient required approving reviews (currently 0)
@@ -45,6 +46,7 @@ This audit categorizes improvements into three tiers based on urgency and impact
 ### ⚠️ 13 Security Warnings (Estimated)
 
 Based on the audit investigation, security warnings likely include:
+
 - Branch protection configuration weaknesses
 - Potential Dependabot alerts for dependencies
 - Missing security scanning coverage
@@ -63,13 +65,14 @@ These items directly impact security, stability, or compliance and must be addre
 **Impact:** Security compliance, prevents unauthorized changes
 
 **Required Actions:**
+
 ```json
 {
   "requiredStatusChecks": {
     "strict": true,
     "contexts": [
       "CI / Format Check",
-      "CI / Lint", 
+      "CI / Lint",
       "CI / Type Check",
       "CI / Test",
       "CI / Build",
@@ -88,12 +91,13 @@ These items directly impact security, stability, or compliance and must be addre
 ```
 
 **Steps:**
+
 1. Go to Repository Settings → Branches → Branch protection rules
 2. Edit the `main` branch rule
 3. Apply the configurations above
 4. Re-run the validation workflow to close Issue #75
 
-### 2. ✅ Fix CI Memory Issues (Failing PR)
+### 2. Fix CI Memory Issues (Failing PR)
 
 **Priority:** P0 - Critical  
 **Effort:** 2-4 hours  
@@ -102,15 +106,17 @@ These items directly impact security, stability, or compliance and must be addre
 **Problem:** Tests in `apps/mental-models` exceed 4GB heap limit
 
 **Recommended Fix (in vitest.config.ts or CI workflow):**
+
 ```yaml
 # In .github/workflows/ci.yml - test job
 - run: pnpm test
   timeout-minutes: 10
   env:
-    NODE_OPTIONS: '--max-old-space-size=6144'  # Increase to 6GB
+    NODE_OPTIONS: '--max-old-space-size=6144' # Increase to 6GB
 ```
 
 **Alternative Fixes:**
+
 - Split test files into smaller chunks
 - Add `--isolate` flag to vitest for per-test isolation
 - Use `--shard` flag for parallel test execution
@@ -123,6 +129,7 @@ These items directly impact security, stability, or compliance and must be addre
 **Impact:** Vulnerability remediation
 
 **Action Required:**
+
 1. Review Dependabot alerts in GitHub Security tab
 2. Create PRs for critical/high severity vulnerabilities
 3. Merge dependency updates with proper testing
@@ -136,6 +143,7 @@ These items directly impact security, stability, or compliance and must be addre
 **Current Risk:** Authentication tokens stored in localStorage are vulnerable to XSS attacks
 
 **Recommended Fix:**
+
 - Migrate to httpOnly cookies for token storage
 - Implement proper CSRF protection
 - Add SameSite cookie attributes
@@ -157,6 +165,7 @@ These items follow security and development best practices and should be priorit
 **Target:** 70%+ coverage
 
 **Missing Tests:**
+
 - MCP server tools (search_models, get_model_details, get_transformation)
 - Workers API routes
 - React components in web app
@@ -172,6 +181,7 @@ These items follow security and development best practices and should be priorit
 **Current State:** Only auth endpoint has rate limiting (10 req/min)
 
 **Recommended:** Add global middleware for all API endpoints:
+
 ```typescript
 // In apps/workers/src/middleware/rateLimit.ts
 import { Hono } from 'hono';
@@ -181,7 +191,7 @@ export const rateLimitMiddleware = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   limit: 100, // 100 requests per window
   standardHeaders: true,
-  message: { error: 'Too many requests' }
+  message: { error: 'Too many requests' },
 });
 ```
 
@@ -192,6 +202,7 @@ export const rateLimitMiddleware = rateLimit({
 **Impact:** Build consistency, type checking reliability
 
 **Current State:**
+
 - Root: `"typescript": "^5.7.2"`
 - Apps: `"typescript": "^5.7.2"` or `"~5.9.3"`
 
@@ -206,14 +217,15 @@ export const rateLimitMiddleware = rateLimit({
 **Current State:** 37 instances of `console.log` usage
 
 **Recommended:** Replace with structured logging library (Pino recommended):
+
 ```typescript
 import pino from 'pino';
 
 const logger = pino({
   level: process.env.LOG_LEVEL || 'info',
   formatters: {
-    level: (label) => ({ level: label })
-  }
+    level: label => ({ level: label }),
+  },
 });
 
 // Usage
@@ -229,6 +241,7 @@ logger.info({ userId, action: 'login' }, 'User authenticated');
 **Missing:** No circuit breaker for D1 database calls
 
 **Recommended Implementation:**
+
 ```typescript
 // In apps/workers/src/lib/circuitBreaker.ts
 class CircuitBreaker {
@@ -260,6 +273,7 @@ class CircuitBreaker {
 **Impact:** Prevents credential leaks
 
 **Action:**
+
 1. Enable GitHub secret scanning in repository settings
 2. Enable push protection to block commits with secrets
 3. Consider adding TruffleHog to pre-commit hooks
@@ -279,6 +293,7 @@ These items improve developer experience and code quality but are not urgent.
 **Note:** Workers app already has partial OpenAPI setup with `@hono/swagger-ui`
 
 **Enhancement:** Complete the API documentation with:
+
 - All endpoint schemas
 - Request/response examples
 - Authentication flows
@@ -291,6 +306,7 @@ These items improve developer experience and code quality but are not urgent.
 **Impact:** Documentation, knowledge transfer
 
 **Recommended Structure:**
+
 ```
 docs/adr/
 ├── 0001-use-turborepo-for-monorepo.md
@@ -308,13 +324,14 @@ docs/adr/
 **Note:** `.github/workflows/bundle-size.yml` exists but may need enhancement
 
 **Recommended:** Add size budgets and alerts:
+
 ```javascript
 // In bundle-size.config.js
 module.exports = {
   budgets: [
     { path: 'apps/web/dist/*.js', maxSize: '500kb' },
-    { path: 'apps/web/dist/*.css', maxSize: '50kb' }
-  ]
+    { path: 'apps/web/dist/*.css', maxSize: '50kb' },
+  ],
 };
 ```
 
@@ -325,6 +342,7 @@ module.exports = {
 **Impact:** Contributor experience, consistency
 
 **Missing:**
+
 - Local development setup instructions
 - Testing guidelines
 - PR workflow documentation
@@ -348,44 +366,48 @@ module.exports = {
 
 ## Summary Matrix
 
-| # | Item | Category | Priority | Effort | Status |
-|---|------|----------|----------|--------|--------|
-| 1 | Fix Branch Protection Rules | NECESSARY | P0 | 1-2h | ✅ Config Updated |
-| 2 | Fix CI Memory Issues | NECESSARY | P0 | 2-4h | ✅ Applied |
-| 3 | Address Dependabot Alerts | NECESSARY | P1 | 1-2h | ⏳ Review |
-| 4 | Strengthen Token Storage | NECESSARY | P1 | 4-8h | ⏳ Not Started |
-| 5 | Increase Test Coverage | INDICATED | P2 | 2-4w | ⏳ 11.8% |
-| 6 | Implement Rate Limiting | INDICATED | P2 | 1-2d | ⏳ Partial |
-| 7 | Align TypeScript Versions | INDICATED | P2 | 1-2h | ⏳ Inconsistent |
-| 8 | Implement Structured Logging | INDICATED | P2 | 1-2d | ⏳ console.log |
-| 9 | Add Circuit Breaker | INDICATED | P2 | 2-3d | ⏳ Missing |
-| 10 | Enable Secret Scanning | INDICATED | P2 | 30m | ⏳ Not Enabled |
-| 11 | Add API Documentation | POSSIBLE | P3 | 1-2d | ⏳ Partial |
-| 12 | Create ADRs | POSSIBLE | P3 | Ongoing | ⏳ Not Started |
-| 13 | Bundle Size Monitoring | POSSIBLE | P3 | 2-4h | ⏳ Basic |
-| 14 | Enhance Contributing Guide | POSSIBLE | P3 | 2-4h | ⏳ Basic |
-| 15 | Define Performance Budgets | POSSIBLE | P3 | 1-2d | ⏳ Not Defined |
+| #   | Item                         | Category  | Priority | Effort  | Status          |
+| --- | ---------------------------- | --------- | -------- | ------- | --------------- |
+| 1   | Fix Branch Protection Rules  | NECESSARY | P0       | 1-2h    | ⏳ Open         |
+| 2   | Fix CI Memory Issues         | NECESSARY | P0       | 2-4h    | ⏳ Failing      |
+| 3   | Address Dependabot Alerts    | NECESSARY | P1       | 1-2h    | ⏳ Review       |
+| 4   | Strengthen Token Storage     | NECESSARY | P1       | 4-8h    | ⏳ Not Started  |
+| 5   | Increase Test Coverage       | INDICATED | P2       | 2-4w    | ⏳ 11.8%        |
+| 6   | Implement Rate Limiting      | INDICATED | P2       | 1-2d    | ⏳ Partial      |
+| 7   | Align TypeScript Versions    | INDICATED | P2       | 1-2h    | ⏳ Inconsistent |
+| 8   | Implement Structured Logging | INDICATED | P2       | 1-2d    | ⏳ console.log  |
+| 9   | Add Circuit Breaker          | INDICATED | P2       | 2-3d    | ⏳ Missing      |
+| 10  | Enable Secret Scanning       | INDICATED | P2       | 30m     | ⏳ Not Enabled  |
+| 11  | Add API Documentation        | POSSIBLE  | P3       | 1-2d    | ⏳ Partial      |
+| 12  | Create ADRs                  | POSSIBLE  | P3       | Ongoing | ⏳ Not Started  |
+| 13  | Bundle Size Monitoring       | POSSIBLE  | P3       | 2-4h    | ⏳ Basic        |
+| 14  | Enhance Contributing Guide   | POSSIBLE  | P3       | 2-4h    | ⏳ Basic        |
+| 15  | Define Performance Budgets   | POSSIBLE  | P3       | 1-2d    | ⏳ Not Defined  |
 
 ---
 
 ## Recommended Next Steps
 
 ### Immediate (This Week)
+
 1. ✅ Apply branch protection rules via GitHub UI
 2. ✅ Fix CI memory issue by increasing NODE_OPTIONS heap size
 3. ✅ Review and address Dependabot security alerts
 
 ### Short-Term (This Sprint)
+
 4. Align TypeScript versions across all packages
 5. Enable GitHub secret scanning
 6. Begin implementing structured logging
 
 ### Medium-Term (This Month)
+
 7. Increase test coverage to 30%
 8. Implement global rate limiting
 9. Add circuit breaker pattern
 
 ### Long-Term (This Quarter)
+
 10. Complete API documentation
 11. Create ADR templates and initial records
 12. Define and enforce performance budgets
@@ -395,6 +417,7 @@ module.exports = {
 ## Appendix A: Branch Protection Configuration
 
 To apply via GitHub CLI:
+
 ```bash
 gh api repos/hummbl-dev/hummbl-monorepo/branches/main/protection \
   -X PUT \
@@ -409,16 +432,17 @@ gh api repos/hummbl-dev/hummbl-monorepo/branches/main/protection \
 ## Appendix B: CI Memory Fix
 
 Add to `.github/workflows/ci.yml`:
+
 ```yaml
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      # ... existing steps ...
-      - run: pnpm test
-        timeout-minutes: 15
-        env:
-          NODE_OPTIONS: '--max-old-space-size=6144'
+test:
+  name: Test
+  runs-on: ubuntu-latest
+  steps:
+    # ... existing steps ...
+    - run: pnpm test
+      timeout-minutes: 15
+      env:
+        NODE_OPTIONS: '--max-old-space-size=6144'
 ```
 
 ---
