@@ -210,7 +210,7 @@ jobs:
 
       - name: Create issue for failed validation
         if: failure() && steps.validate.outputs.status == 'failed'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const title = '🚨 Branch Protection Rules Validation Failed';
@@ -276,7 +276,7 @@ jobs:
 
       - name: Close resolved issues
         if: success() && steps.validate.outputs.status == 'passed'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             // Find and close any open branch protection issues
