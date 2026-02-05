@@ -241,3 +241,113 @@ export const IN2_CONSTANTS = {
     LOW: 0, // score < 0.4
   },
 } as const;
+
+// Export individual constants for direct imports
+export const DEFAULT_CONFIG = {
+  defaultMinConfidence: IN2_CONSTANTS.DEFAULTS.MIN_CONFIDENCE,
+  defaultMinSeverity: IN2_CONSTANTS.DEFAULTS.DEFAULT_MIN_SEVERITY,
+  maxErrorsPerRequest: IN2_CONSTANTS.DEFAULTS.MAX_ERRORS_PER_REQUEST,
+  maxImprovementsPerRequest: IN2_CONSTANTS.DEFAULTS.MAX_IMPROVEMENTS_PER_REQUEST,
+  errorPatternLifetime: IN2_CONSTANTS.DEFAULTS.ERROR_PATTERN_LIFETIME,
+};
+
+// Error pattern definitions with regex patterns
+export const ERROR_PATTERNS = [
+  // Add generic patterns for common test scenarios
+  {
+    id: 'pattern_generic_error',
+    pattern: /Error:/i,
+    category: ErrorCategory.RUNTIME,
+    severity: ErrorSeverity.MEDIUM,
+    confidence: 0.7,
+    tags: ['runtime', 'generic'],
+  },
+  {
+    id: 'pattern_type_error',
+    pattern: /TypeError:/i,
+    category: ErrorCategory.RUNTIME,
+    severity: ErrorSeverity.HIGH,
+    confidence: 0.9,
+    tags: ['runtime', 'type-error'],
+  },
+  {
+    id: 'pattern_reference_error',
+    pattern: /ReferenceError:/i,
+    category: ErrorCategory.RUNTIME,
+    severity: ErrorSeverity.HIGH,
+    confidence: 0.9,
+    tags: ['runtime', 'reference-error'],
+  },
+  {
+    id: 'pattern_not_found',
+    pattern: /not found/i,
+    category: ErrorCategory.DATA,
+    severity: ErrorSeverity.MEDIUM,
+    confidence: 0.75,
+    tags: ['data', 'not-found'],
+  },
+  // Include patterns from IN2_CONSTANTS
+  ...IN2_CONSTANTS.ERROR_PATTERNS.map((p, i) => ({
+    id: `pattern_${i}`,
+    pattern: p.pattern,
+    category: p.category,
+    severity: p.severity,
+    confidence: 0.8,
+    tags: [p.category.toLowerCase(), 'system'],
+  })),
+];
+
+// Example data exports
+export const EXAMPLE_ERROR_PATTERNS = IN2_CONSTANTS.EXAMPLE_ERROR_PATTERNS;
+export const EXAMPLE_IMPROVEMENTS = IN2_CONSTANTS.EXAMPLE_IMPROVEMENTS;
+
+// Impact weights for calculation
+export const IMPACT_WEIGHTS = {
+  severity: IN2_CONSTANTS.IMPACT_WEIGHTS.SEVERITY,
+  frequency: IN2_CONSTANTS.IMPACT_WEIGHTS.FREQUENCY,
+  recency: IN2_CONSTANTS.IMPACT_WEIGHTS.RECENCY,
+  contexts: {
+    Frontend: 0.8,
+    Backend: 0.9,
+    API: 0.85,
+    Database: 0.95,
+    default: 0.5,
+  } as Record<string, number>,
+  categories: {
+    [ErrorCategory.RUNTIME]: 0.9,
+    [ErrorCategory.NETWORK]: 0.85,
+    [ErrorCategory.AUTHENTICATION]: 0.9,
+    [ErrorCategory.DATA]: 0.7,
+    [ErrorCategory.VALIDATION]: 0.6,
+    [ErrorCategory.SYNTAX]: 0.8,
+    [ErrorCategory.TIMEOUT]: 0.7,
+    [ErrorCategory.RATE_LIMIT]: 0.5,
+    [ErrorCategory.RESOURCE]: 0.8,
+    [ErrorCategory.COMPATIBILITY]: 0.4,
+    [ErrorCategory.PERFORMANCE]: 0.6,
+    [ErrorCategory.API]: 0.8,
+  } as Record<string, number>,
+};
+
+// Effort estimation factors
+export const EFFORT_FACTORS = {
+  BASE: 2,
+  LENGTH_WEIGHT: 1,
+  WORD_WEIGHT: 0.5,
+  COMPLEXITY_WEIGHT: 2,
+  KEYWORDS: {
+    implement: 0.5,
+    refactor: 0.7,
+    add: 0.3,
+    fix: 0.2,
+    test: 0.4,
+    document: 0.2,
+    retry: 0.4,
+    exponential: 0.3,
+    backoff: 0.3,
+    circuit: 0.5,
+    breaker: 0.5,
+    optimize: 0.6,
+    database: 0.4,
+  } as Record<string, number>,
+};

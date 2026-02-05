@@ -91,6 +91,9 @@ export function useSearchHistory() {
     saveSavedSearches(savedSearches);
   }, [savedSearches]);
 
+  // Counter to ensure unique timestamps even when Date.now() returns the same value
+  const timestampCounter = { current: 0 };
+
   /**
    * Add search to history
    */
@@ -102,9 +105,13 @@ export function useSearchHistory() {
         return prev; // Don't add duplicate
       }
 
+      // Generate unique timestamp by combining Date.now() with a counter
+      timestampCounter.current += 1;
+      const uniqueTimestamp = Date.now() * 1000 + timestampCounter.current;
+
       const newEntry: SearchHistoryEntry = {
         ...entry,
-        timestamp: Date.now(),
+        timestamp: uniqueTimestamp,
       };
 
       const updated = [newEntry, ...prev];
@@ -193,10 +200,14 @@ export function useSearchHistory() {
   /**
    * Save a search with a name
    */
+  // Counter to ensure unique IDs even when Date.now() returns the same value
+  const idCounter = { current: 0 };
+
   const saveSearch = useCallback(
     (name: string, query: string, filters?: Record<string, unknown>) => {
+      idCounter.current += 1;
       const newSearch: SavedSearch = {
-        id: `search_${Date.now()}`,
+        id: `search_${Date.now()}_${idCounter.current}_${Math.random().toString(36).substr(2, 9)}`,
         name,
         query,
         filters,

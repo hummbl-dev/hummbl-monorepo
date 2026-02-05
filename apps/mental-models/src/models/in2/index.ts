@@ -22,6 +22,20 @@ import {
   EFFORT_FACTORS,
 } from './constants';
 
+// Severity order for comparison (higher = more severe)
+const SEVERITY_ORDER: Record<ErrorSeverity, number> = {
+  [ErrorSeverity.INFO]: 0,
+  [ErrorSeverity.LOW]: 1,
+  [ErrorSeverity.MEDIUM]: 2,
+  [ErrorSeverity.HIGH]: 3,
+  [ErrorSeverity.CRITICAL]: 4,
+};
+
+// Helper to compare severity levels
+const isSeverityAtLeast = (severity: ErrorSeverity, minSeverity: ErrorSeverity): boolean => {
+  return SEVERITY_ORDER[severity] >= SEVERITY_ORDER[minSeverity];
+};
+
 /**
  * Creates a new Error Utilization model instance
  */
@@ -34,13 +48,16 @@ export const createErrorUtilizationModel = (config = {}): ErrorUtilizationModel 
   // Merge default config with provided config
   const modelConfig = { ...DEFAULT_CONFIG, ...config };
 
-  // Initialize with example data if empty
-  if (errors.size === 0) {
-    EXAMPLE_ERROR_PATTERNS.forEach((err) => errors.set(err.id, err));
-  }
+  // Initialize with example data if requested (disabled by default for cleaner test isolation)
+  const preloadExamples = (config as { preloadExamples?: boolean }).preloadExamples ?? false;
+  if (preloadExamples) {
+    if (errors.size === 0 && EXAMPLE_ERROR_PATTERNS) {
+      EXAMPLE_ERROR_PATTERNS.forEach((err) => errors.set(err.id, err));
+    }
 
-  if (improvements.size === 0) {
-    EXAMPLE_IMPROVEMENTS.forEach((imp) => improvements.set(imp.id, imp));
+    if (improvements.size === 0 && EXAMPLE_IMPROVEMENTS) {
+      EXAMPLE_IMPROVEMENTS.forEach((imp) => improvements.set(imp.id, imp));
+    }
   }
 
   /**
@@ -67,7 +84,7 @@ export const createErrorUtilizationModel = (config = {}): ErrorUtilizationModel 
           ? inputStr.includes(pattern.pattern)
           : pattern.pattern.test(inputStr);
 
-      if (isMatch && pattern.severity >= minSeverity) {
+      if (isMatch && isSeverityAtLeast(pattern.severity, minSeverity)) {
         const errorId = `err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
         const error: ErrorPattern = {
           id: errorId,
@@ -89,9 +106,10 @@ export const createErrorUtilizationModel = (config = {}): ErrorUtilizationModel 
           },
         };
 
-        // Check for existing similar error
+        // Check for existing similar error (compare patterns by string representation)
+        const patternStr = String(error.pattern);
         const existing = Array.from(errors.values()).find(
-          (e) => e.pattern === error.pattern && e.context === context
+          (e) => String(e.pattern) === patternStr && e.context === context
         );
 
         if (existing) {
@@ -152,7 +170,7 @@ export const createErrorUtilizationModel = (config = {}): ErrorUtilizationModel 
 
       const suggestion =
         `Address ${error.pattern} in ${context} context. ` +
-        `This is a ${ErrorSeverity[error.severity].toLowerCase()} severity issue ` +
+        `This is a ${error.severity} severity issue ` +
         `that has been detected ${error.occurrenceCount} time(s).`;
 
       const improvement: ImprovementSignal = {
@@ -163,7 +181,7 @@ export const createErrorUtilizationModel = (config = {}): ErrorUtilizationModel 
         priority: ImprovementPriority.MEDIUM,
         sourceErrors: [error.id],
         status: ImprovementStatus.PROPOSED,
-        tags: [...error.tags, `severity:${ErrorSeverity[error.severity].toLowerCase()}`],
+        tags: [...error.tags, `severity:${error.severity}`],
         meta: {
           createdAt: now,
           updatedAt: now,
@@ -198,7 +216,7 @@ export const createErrorUtilizationModel = (config = {}): ErrorUtilizationModel 
 
     // Calculate metrics
     const totalErrors = errors.size;
-    const uniqueErrorTypes = new Set(Array.from(errors.values()).map((e) => e.pattern)).size;
+    const uniqueErrorTypes = new Set(Array.from(errors.values()).map((e) => String(e.pattern))).size;
     const improvementsGenerated = improvements.size;
 
     const avgImpact =

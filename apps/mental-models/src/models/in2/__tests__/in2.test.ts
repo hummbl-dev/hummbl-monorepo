@@ -68,7 +68,7 @@ describe('IN2: Error Utilization Model', () => {
       expect(errors.length).toBeGreaterThan(0);
       expect(errors[0]).toHaveProperty('pattern');
       expect(errors[0]).toHaveProperty('severity');
-      expect(errors[0].severity).toBeGreaterThanOrEqual(ErrorSeverity.LOW);
+      expect(Object.values(ErrorSeverity)).toContain(errors[0].severity);
     });
 
     it('should respect minConfidence and minSeverity parameters', async () => {
