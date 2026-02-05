@@ -3,7 +3,7 @@
   "protectionRules": {
     "requiredStatusChecks": {
       "strict": true,
-      "contexts": ["CI / Format Check", "CI / Lint", "CI / Type Check", "CI / Test", "CI / Build"]
+      "contexts": ["Format Check", "Lint", "Type Check", "Test", "Build", "CodeQL"]
     },
     "enforceAdmins": true,
     "requiredPullRequestReviews": {
