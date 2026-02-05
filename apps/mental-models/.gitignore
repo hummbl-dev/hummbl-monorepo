@@ -150,4 +150,4 @@ lambda/venv/
 .tmproj
 *.esproj
 *.sublime-*
-Thumbs.db
+Thumbs.db.vitest-cache

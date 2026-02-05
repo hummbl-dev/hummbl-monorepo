@@ -50,3 +50,4 @@ Thumbs.db
 # Turbo
 .turbo
 
+apps/mental-models/.vitest-cache
