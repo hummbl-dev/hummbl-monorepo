@@ -45,12 +45,12 @@ test.describe('Audit Log', () => {
   });
 
   test('should show seeded sample events', async ({ page }) => {
-    // Wait for events to load
-    await expect(page.getByText(/\d+ events/)).toBeVisible({ timeout: 5000 });
+    // Wait for table to have content - check for at least one row
+    await expect(page.locator('tbody tr').first()).toBeVisible({ timeout: 5000 });
 
-    // Should have some events from seed data
-    const eventCount = await page.getByText(/\d+ events/).textContent();
-    expect(parseInt(eventCount?.match(/\d+/)?.[0] || '0')).toBeGreaterThan(0);
+    // Should have some events (at least one row in the table)
+    const rowCount = await page.locator('tbody tr').count();
+    expect(rowCount).toBeGreaterThan(0);
   });
 
   test('should filter by decision', async ({ page }) => {

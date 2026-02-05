@@ -19,7 +19,7 @@ test.describe('Action Checker', () => {
 
   test('should show current context card', async ({ page }) => {
     await expect(page.getByText('Current Context')).toBeVisible();
-    await expect(page.getByText('Normal')).toBeVisible();
+    await expect(page.getByText('Normal', { exact: true })).toBeVisible();
   });
 
   test('should display quick check buttons', async ({ page }) => {
@@ -41,9 +41,9 @@ test.describe('Action Checker', () => {
     await page.getByRole('button', { name: 'Read' }).click();
 
     // Should show result
-    await expect(page.getByText('Results')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('heading', { name: 'Results' })).toBeVisible({ timeout: 5000 });
     await expect(page.locator('code:has-text("read")')).toBeVisible();
-    await expect(page.getByText('allow')).toBeVisible();
+    await expect(page.getByText('allow', { exact: true }).first()).toBeVisible();
   });
 
   test('should check custom action', async ({ page }) => {
@@ -55,7 +55,7 @@ test.describe('Action Checker', () => {
     await page.getByRole('button', { name: /check permission/i }).click();
 
     // Should show result
-    await expect(page.getByText('Results')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('heading', { name: 'Results' })).toBeVisible({ timeout: 5000 });
     await expect(page.locator('code:has-text("commit")')).toBeVisible();
   });
 
@@ -73,8 +73,8 @@ test.describe('Action Checker', () => {
     await page.getByRole('button', { name: 'Deploy' }).click();
 
     // Should show denied result
-    await expect(page.getByText('deny')).toBeVisible({ timeout: 5000 });
-    await expect(page.getByText('System is frozen')).toBeVisible();
+    await expect(page.getByText('deny', { exact: true }).first()).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText('System is frozen').first()).toBeVisible();
   });
 
   test('should allow read action during freeze', async ({ page }) => {
@@ -82,7 +82,7 @@ test.describe('Action Checker', () => {
     await page.goto('/temporal');
     await page.getByRole('button', { name: /declare freeze/i }).click();
     await page.getByRole('button', { name: 'Declare Freeze' }).last().click();
-    await expect(page.getByText('System is frozen')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText('System is frozen').first()).toBeVisible({ timeout: 5000 });
 
     // Go to checker
     await page.goto('/check');
@@ -91,7 +91,7 @@ test.describe('Action Checker', () => {
     await page.getByRole('button', { name: 'Read' }).click();
 
     // Should show allowed result
-    await expect(page.getByText('allow')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText('allow', { exact: true }).first()).toBeVisible({ timeout: 5000 });
   });
 
   test('should accumulate results', async ({ page }) => {
@@ -108,7 +108,7 @@ test.describe('Action Checker', () => {
   test('should clear results', async ({ page }) => {
     // Check an action
     await page.getByRole('button', { name: 'Read' }).click();
-    await expect(page.getByText('Results')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('heading', { name: 'Results' })).toBeVisible({ timeout: 5000 });
 
     // Clear results
     await page.getByRole('button', { name: 'Clear' }).click();

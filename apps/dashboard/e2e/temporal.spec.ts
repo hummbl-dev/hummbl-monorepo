@@ -14,7 +14,7 @@ test.describe('Temporal Controls', () => {
 
   test('should display current state indicator', async ({ page }) => {
     await expect(page.getByText('Current State')).toBeVisible();
-    await expect(page.getByText('Normal')).toBeVisible();
+    await expect(page.getByText('Normal', { exact: true }).first()).toBeVisible();
   });
 
   test('should display temporal effects', async ({ page }) => {
@@ -26,7 +26,7 @@ test.describe('Temporal Controls', () => {
 
   test('should show freeze control card', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Code Freeze' })).toBeVisible();
-    await expect(page.getByLabel('Reason')).toBeVisible();
+    await expect(page.getByLabel('Reason').first()).toBeVisible();
     await expect(page.getByRole('button', { name: /declare freeze/i })).toBeVisible();
   });
 
@@ -39,11 +39,12 @@ test.describe('Temporal Controls', () => {
   test('should open confirmation dialog when clicking Declare Freeze', async ({ page }) => {
     await page.getByRole('button', { name: /declare freeze/i }).click();
 
-    // Check dialog appears
+    // Check dialog appears - use text-based selectors for custom dialog
     await expect(page.getByText('Declare Code Freeze?')).toBeVisible();
     await expect(page.getByText('This will block all mutation operations')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Declare Freeze' })).toBeVisible();
+    // Find the confirm button in the dialog (last one with this name)
+    await expect(page.getByRole('button', { name: 'Declare Freeze' }).last()).toBeVisible();
   });
 
   test('should close confirmation dialog on Cancel', async ({ page }) => {
@@ -61,27 +62,30 @@ test.describe('Temporal Controls', () => {
     // Click declare freeze
     await page.getByRole('button', { name: /declare freeze/i }).click();
 
-    // Confirm in dialog
+    // Wait for dialog and confirm
+    await expect(page.getByText('Declare Code Freeze?')).toBeVisible();
     await page.getByRole('button', { name: 'Declare Freeze' }).last().click();
 
-    // Wait for state to update
-    await expect(page.getByText('Freeze')).toBeVisible({ timeout: 5000 });
-    await expect(page.getByText('System is frozen')).toBeVisible();
+    // Wait for state to update - look for Freeze badge
+    await expect(page.locator('span:has-text("Freeze")').first()).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText('System is frozen').first()).toBeVisible();
     await expect(page.getByRole('button', { name: /lift freeze/i })).toBeVisible();
   });
 
   test('should lift freeze and return to normal', async ({ page }) => {
     // First, declare freeze
     await page.getByRole('button', { name: /declare freeze/i }).click();
+    await expect(page.getByText('Declare Code Freeze?')).toBeVisible();
     await page.getByRole('button', { name: 'Declare Freeze' }).last().click();
-    await expect(page.getByText('System is frozen')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText('System is frozen').first()).toBeVisible({ timeout: 5000 });
 
     // Now lift freeze
     await page.getByRole('button', { name: /lift freeze/i }).click();
+    await expect(page.getByText('Lift Code Freeze?')).toBeVisible();
     await page.getByRole('button', { name: 'Lift Freeze' }).last().click();
 
-    // Should return to normal
-    await expect(page.getByText('Normal')).toBeVisible({ timeout: 5000 });
+    // Should return to normal - look for Normal badge
+    await expect(page.getByText('Normal', { exact: true }).first()).toBeVisible({ timeout: 5000 });
   });
 
   test('should declare incident and show incident state', async ({ page }) => {
@@ -92,11 +96,12 @@ test.describe('Temporal Controls', () => {
     // Click declare incident
     await page.getByRole('button', { name: /declare incident/i }).click();
 
-    // Confirm in dialog
+    // Wait for dialog and confirm
+    await expect(page.getByText('Declare Incident Mode?')).toBeVisible();
     await page.getByRole('button', { name: 'Declare Incident' }).last().click();
 
-    // Wait for state to update
-    await expect(page.getByText('Incident')).toBeVisible({ timeout: 5000 });
+    // Wait for state to update - look for Incident badge
+    await expect(page.locator('span:has-text("Incident")').first()).toBeVisible({ timeout: 5000 });
     await expect(page.getByText('Incident mode active')).toBeVisible();
     await expect(page.getByRole('button', { name: /resolve incident/i })).toBeVisible();
   });
