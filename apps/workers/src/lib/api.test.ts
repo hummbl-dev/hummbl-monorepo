@@ -122,7 +122,7 @@ describe('respondWithResult', () => {
       value: { created: true },
     };
 
-    respondWithResult(c, result, 200);
+    respondWithResult(c, result, 201);
 
     expect(c.json).toHaveBeenCalledWith(
       {
