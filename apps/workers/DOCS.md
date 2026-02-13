@@ -54,9 +54,52 @@ curl -X GET "https://api.hummbl.dev/v1/user/profile" \
 
 ### Rate Limiting
 
-- **Global Limit**: 100 requests per minute per IP
-- **Auth Endpoints**: 10 requests per minute per IP
-- Rate limit headers are included in all responses
+The API implements tiered rate limiting based on endpoint sensitivity and computational cost:
+
+| Tier                     | Endpoints                               | Limit   | Description              |
+| ------------------------ | --------------------------------------- | ------- | ------------------------ |
+| **auth**                 | Authentication (login, register, OAuth) | 10/min  | Brute force protection   |
+| **models_read**          | GET /v1/models/\*                       | 100/min | Standard model reads     |
+| **models_write**         | POST/PUT/DELETE /v1/models/\*           | 30/min  | Data modifications       |
+| **models_recommend**     | POST /v1/models/recommend               | 20/min  | Expensive computation    |
+| **transformations_read** | GET /v1/transformations/\*              | 120/min | Static/cached data       |
+| **user**                 | /v1/user/\*                             | 200/min | Authenticated operations |
+| **analytics**            | /v1/analytics/\*                        | 30/min  | Admin/reporting          |
+| **public**               | /health, /                              | 300/min | Health checks            |
+
+**Rate Limit Adjustments:**
+
+- **Authenticated users**: 1.5x higher limits
+- **Unknown clients**: 3x stricter limits (potential abuse)
+
+**Rate Limit Headers:**
+
+```
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
+X-RateLimit-Reset: 1707147600
+```
+
+**Rate Limit Exceeded Response (429):**
+
+```json
+{
+  "error": "Too Many Requests",
+  "message": "Rate limit exceeded for models_read tier. Please try again in 45 seconds.",
+  "code": "RATE_LIMIT_EXCEEDED",
+  "tier": "models_read",
+  "limit": 100,
+  "retryAfter": 45,
+  "resetAt": "2024-01-15T10:01:00Z"
+}
+```
+
+**Retry-After Header:**
+When rate limited, the `Retry-After` header indicates seconds until reset:
+
+```
+Retry-After: 45
+```
 
 ## 🧠 Base120 Mental Models
 
