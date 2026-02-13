@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createApiError, respondWithResult } from './api';
 import type { Context } from 'hono';
 import type { Env } from '../env';
@@ -122,7 +122,7 @@ describe('respondWithResult', () => {
       value: { created: true },
     };
 
-    respondWithResult(c, result, 201);
+    respondWithResult(c, result, 200);
 
     expect(c.json).toHaveBeenCalledWith(
       {
