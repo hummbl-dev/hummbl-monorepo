@@ -68,6 +68,6 @@ export function logDashboardAction(
     details,
   };
 
-  // Log to console in dev, could send to server in prod
-  console.log('[DASHBOARD_AUDIT]', JSON.stringify(entry));
+  // Log audit event
+  logger.info('Dashboard action', entry);
 }

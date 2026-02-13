@@ -18,6 +18,7 @@
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
+    "@hummbl/core": "workspace:*",
     "@hummbl/ui": "workspace:*",
     "@tanstack/react-query": "^5.90.12",
     "lucide-react": "^0.563.0",

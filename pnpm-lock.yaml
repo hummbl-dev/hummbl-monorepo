@@ -157,6 +157,9 @@ importers:
       '@fontsource/jetbrains-mono':
         specifier: ^5.2.8
         version: 5.2.8
+      '@hummbl/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@hummbl/ui':
         specifier: workspace:*
         version: link:../../packages/ui

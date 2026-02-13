@@ -677,7 +677,7 @@ describe('MCP Server Tools', () => {
       const result = await capturedHandlers.listTools();
 
       expect(result.tools).toHaveLength(4);
-      expect(result.tools.map((t: { name: string }) => t.name)).toEqual([
+      expect(result.tools.map((t: unknown) => (t as { name: string }).name)).toEqual([
         'search_models',
         'get_model_details',
         'get_transformation',
