@@ -3,6 +3,7 @@
 CAES = **Coordination and Execution Standard** for HUMMBL repos.
 
 This spec defines the minimum interoperability rules for:
+
 - Human operators
 - Cloud models (Codex/Claude/etc.)
 - Local models (Ollama)
@@ -63,6 +64,7 @@ The coordination bus is a TSV file:
 This repo is the canonical CAES source for HUMMBL.
 
 Downstream repos that adopt CAES SHOULD include:
+
 - `governance/CAES_SPEC.md`
 - `governance/CAES_VERSION`
 - `governance/CAES_CANONICAL.sha256` (sha256 pinned to canonical)
