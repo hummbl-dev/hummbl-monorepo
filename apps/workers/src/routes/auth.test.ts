@@ -60,7 +60,7 @@ describe('authRouter CSRF Protection', () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Origin': 'https://hummbl.dev',
+        Origin: 'https://hummbl.dev',
       },
       body: JSON.stringify({ email: 'test@example.com', password: 'password123' }),
     });
@@ -94,7 +94,7 @@ describe('authRouter CSRF Protection', () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Origin': 'https://evil.com',
+        Origin: 'https://evil.com',
       },
       body: JSON.stringify({ email: 'test@example.com', password: 'password123' }),
     });

@@ -17,11 +17,11 @@ docker-compose down
 
 ## Services
 
-| Service | Port | Description |
-|---------|------|-------------|
-| workers | 8787 | Cloudflare Workers API (wrangler dev) |
-| dashboard | 5174 | Vite React development server |
-| mcp-server | - | MCP server (stdio mode, optional) |
+| Service    | Port | Description                           |
+| ---------- | ---- | ------------------------------------- |
+| workers    | 8787 | Cloudflare Workers API (wrangler dev) |
+| dashboard  | 5174 | Vite React development server         |
+| mcp-server | -    | MCP server (stdio mode, optional)     |
 
 ## Usage
 
@@ -41,15 +41,19 @@ docker-compose --profile mcp up -d
 ### Development Workflow
 
 1. **Start the workers API:**
+
    ```bash
    docker-compose up -d workers
    ```
+
    Access at: http://localhost:8787
 
 2. **Start the dashboard:**
+
    ```bash
    docker-compose up -d dashboard
    ```
+
    Access at: http://localhost:5174
 
 3. **View combined logs:**
@@ -60,16 +64,17 @@ docker-compose --profile mcp up -d
 ### Hot Reload
 
 The Docker setup supports hot reloading:
+
 - Changes to `apps/workers/src` automatically restart wrangler
 - Changes to `apps/dashboard/src` trigger Vite HMR
 - Changes to `packages/*` rebuild the package and reload dependents
 
 ## Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `NODE_ENV` | development | Node environment |
-| `WORKER_URL` | http://localhost:8787 | Workers API URL |
+| Variable       | Default               | Description           |
+| -------------- | --------------------- | --------------------- |
+| `NODE_ENV`     | development           | Node environment      |
+| `WORKER_URL`   | http://localhost:8787 | Workers API URL       |
 | `VITE_API_URL` | http://localhost:8787 | API URL for dashboard |
 
 ## Troubleshooting
@@ -88,7 +93,7 @@ Or modify the ports in `docker-compose.yml`:
 
 ```yaml
 ports:
-  - "8788:8787"  # Use port 8788 on host
+  - '8788:8787' # Use port 8788 on host
 ```
 
 ### Rebuild After Dependency Changes
