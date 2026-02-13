@@ -8,6 +8,7 @@
  */
 
 import type { D1Database, D1PreparedStatement, D1Result } from '@cloudflare/workers-types';
+import { createLogger } from '@hummbl/core';
 import {
   CircuitBreaker,
   CircuitBreakerState,
@@ -17,6 +18,8 @@ import {
   type CircuitBreakerError,
   // type CircuitBreakerConfig,
 } from './circuit-breaker';
+
+const logger = createLogger('db-wrapper');
 
 export interface DbOperationContext {
   operation: 'read' | 'write' | 'auth';
@@ -106,7 +109,7 @@ export class ProtectedD1PreparedStatement {
    * Log database errors with context
    */
   private logDatabaseError(method: string, error: unknown): void {
-    console.error(`[DB_WRAPPER][${this.context.operation}] Database ${method} operation failed`, {
+    logger.error(`Database ${method} operation failed`, {
       table: this.context.table,
       query: this.context.query?.substring(0, 200),
       error:
@@ -160,7 +163,7 @@ export class ProtectedDatabase {
       try {
         return await this.db.batch(statements);
       } catch (error) {
-        console.error('[DB_WRAPPER][write] Batch operation failed', {
+        logger.error('Batch operation failed', {
           statementCount: statements.length,
           error: error instanceof Error ? error.message : String(error),
         });
@@ -180,7 +183,7 @@ export class ProtectedDatabase {
       try {
         return await this.db.exec(query);
       } catch (error) {
-        console.error(`[DB_WRAPPER][${operation}] Exec operation failed`, {
+        logger.error(`Exec operation failed`, {
           query: query.substring(0, 200),
           error: error instanceof Error ? error.message : String(error),
         });
@@ -266,7 +269,7 @@ export class ProtectedDatabase {
     error: CircuitBreakerError,
     context?: DbOperationContext
   ): FallbackResponse {
-    console.warn(`[DB_WRAPPER] Providing fallback response for ${error.code}`, {
+    logger.warn(`Providing fallback response for ${error.code}`, {
       operation: context?.operation,
       table: context?.table,
       state: error.circuitState,
@@ -449,7 +452,7 @@ export async function executeWithFallback<T>(
     return await operation();
   } catch (error) {
     if (ProtectedDatabase.isCircuitBreakerError(error)) {
-      console.warn('[DB_WRAPPER] Circuit breaker activated, using fallback', {
+      logger.warn('Circuit breaker activated, using fallback', {
         operation: context.operation,
         table: context.table,
         state: error.circuitState,

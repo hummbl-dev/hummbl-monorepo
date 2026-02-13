@@ -1,7 +1,10 @@
 // Chat storage service for persistent conversation management
 // Migrated from hummbl-io with enhanced error handling and TypeScript strict mode
 
+import { createLogger } from '../logger';
 import type { ChatConversation, ChatSettings } from '../types/chat';
+
+const logger = createLogger('chat-storage');
 
 const STORAGE_KEYS = {
   CONVERSATIONS: 'hummbl-chat-conversations',
@@ -33,7 +36,7 @@ export class ChatStorageService {
         .map(this.validateConversation)
         .filter((conv): conv is ChatConversation => conv !== null);
     } catch (error) {
-      console.error('Failed to load conversations:', error);
+      logger.error('Failed to load conversations', { error });
       return [];
     }
   }
@@ -44,7 +47,7 @@ export class ChatStorageService {
       const validConversations = conversations.filter(this.validateConversation);
       localStorage.setItem(STORAGE_KEYS.CONVERSATIONS, JSON.stringify(validConversations));
     } catch (error) {
-      console.error('Failed to save conversations:', error);
+      logger.error('Failed to save conversations', { error });
       // Handle quota exceeded error
       if (error instanceof Error && error.name === 'QuotaExceededError') {
         // Keep only the most recent conversations
@@ -59,7 +62,7 @@ export class ChatStorageService {
     try {
       return localStorage.getItem(STORAGE_KEYS.CURRENT_CONVERSATION);
     } catch (error) {
-      console.error('Failed to load current conversation ID:', error);
+      logger.error('Failed to load current conversation ID', { error });
       return null;
     }
   }
@@ -69,7 +72,7 @@ export class ChatStorageService {
     try {
       localStorage.setItem(STORAGE_KEYS.CURRENT_CONVERSATION, id);
     } catch (error) {
-      console.error('Failed to save current conversation ID:', error);
+      logger.error('Failed to save current conversation ID', { error });
     }
   }
 
@@ -82,7 +85,7 @@ export class ChatStorageService {
       const parsed = JSON.parse(stored);
       return { ...DEFAULT_SETTINGS, ...parsed };
     } catch (error) {
-      console.error('Failed to load chat settings:', error);
+      logger.error('Failed to load chat settings', { error });
       return DEFAULT_SETTINGS;
     }
   }
@@ -93,7 +96,7 @@ export class ChatStorageService {
       const mergedSettings = { ...DEFAULT_SETTINGS, ...settings };
       localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(mergedSettings));
     } catch (error) {
-      console.error('Failed to save chat settings:', error);
+      logger.error('Failed to save chat settings', { error });
     }
   }
 
@@ -104,7 +107,7 @@ export class ChatStorageService {
         localStorage.removeItem(key);
       });
     } catch (error) {
-      console.error('Failed to clear chat data:', error);
+      logger.error('Failed to clear chat data', { error });
     }
   }
 
@@ -124,7 +127,7 @@ export class ChatStorageService {
 
       return { used, available, conversations };
     } catch (error) {
-      console.error('Failed to get storage stats:', error);
+      logger.error('Failed to get storage stats', { error });
       return { used: 0, available: 0, conversations: 0 };
     }
   }

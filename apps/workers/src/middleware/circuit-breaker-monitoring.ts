@@ -208,7 +208,7 @@ async function sendCircuitBreakerAlert(
     // - Discord webhook
     // - Custom webhook
 
-    console.error(`🚨 CIRCUIT BREAKER ALERT: ${alert.circuit} circuit is ${alert.state}`, {
+    logger.error(`Circuit breaker alert: ${alert.circuit} circuit is ${alert.state}`, {
       path: alert.path,
       failureRate: `${(alert.failureRate * 100).toFixed(2)}%`,
       totalRequests: alert.totalRequests,

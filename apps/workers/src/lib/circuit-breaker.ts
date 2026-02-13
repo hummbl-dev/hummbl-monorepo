@@ -2,6 +2,10 @@
 // @ts-nocheck
 /**
  * Circuit Breaker Pattern Implementation for Database Resilience
+
+import { createLogger } from '@hummbl/core';
+
+const logger = createLogger('circuit-breaker');
  *
  * Protects against cascading failures during database outages by:
  * - Failing fast when database is unavailable
@@ -326,7 +330,7 @@ export class CircuitBreaker {
    */
   private logStateChange(newState: string, reason: string): void {
     const metrics = this.getMetrics();
-    console.warn(`[CIRCUIT_BREAKER][${this.config.name}] State changed to ${newState}: ${reason}`, {
+    logger.warn(`State changed to ${newState}: ${reason}`, {
       metrics: {
         failureRate: metrics.failureRate.toFixed(3),
         totalRequests: metrics.totalRequests,
@@ -342,7 +346,7 @@ export class CircuitBreaker {
    * Log errors with context
    */
   private logError(error: CircuitBreakerError, cause?: unknown): void {
-    console.error(`[CIRCUIT_BREAKER][${this.config.name}] ${error.message}`, {
+    logger.error(`${error.message}`, {
       code: error.code,
       state: error.circuitState,
       cause:

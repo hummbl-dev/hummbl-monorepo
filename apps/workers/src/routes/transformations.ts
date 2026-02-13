@@ -3,6 +3,7 @@
  */
 
 import { Hono } from 'hono';
+import { createLogger } from '@hummbl/core';
 import {
   TRANSFORMATIONS,
   Result,
@@ -15,6 +16,8 @@ import { getCachedResult } from '../lib/cache';
 import type { ApiError } from '../lib/api';
 import { createProtectedDatabase, ProtectedDatabase } from '../lib/db-wrapper';
 import type { DbOperationContext } from '../lib/db-wrapper';
+
+const logger = createLogger('transformations');
 
 interface DbMentalModel {
   code: string;
@@ -144,7 +147,7 @@ transformationsRouter.get('/:type', async c => {
       } catch (error) {
         // Handle circuit breaker errors with fallback
         if (ProtectedDatabase.isCircuitBreakerError(error)) {
-          console.warn(`[TRANSFORMATIONS] Circuit breaker active for transformation ${type}`, {
+          logger.warn(`Circuit breaker active for transformation ${type}`, {
             state: error.circuitState,
             type,
           });
