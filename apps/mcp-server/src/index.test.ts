@@ -79,7 +79,9 @@ vi.mock('@modelcontextprotocol/sdk/server/index.js', () => ({
         if (!capturedHandlers.listTools) {
           capturedHandlers.listTools = handler as () => Promise<{ tools: unknown[] }>;
         } else if (!capturedHandlers.callTool) {
-          capturedHandlers.callTool = handler as (request: CallToolRequest) => Promise<ToolResponse>;
+          capturedHandlers.callTool = handler as (
+            request: CallToolRequest
+          ) => Promise<ToolResponse>;
         }
       }
     }
@@ -111,14 +113,14 @@ describe('MCP Server Tools', () => {
     vi.clearAllMocks();
     mockFetch.mockReset();
     global.fetch = mockFetch as unknown as typeof fetch;
-    
+
     // Reset captured handlers
     capturedHandlers.callTool = undefined;
     capturedHandlers.listTools = undefined;
-    
+
     // Set environment
     process.env.WORKER_URL = WORKER_URL;
-    
+
     // Dynamic import to re-execute the module and capture handlers
     vi.resetModules();
     await import('./index.js');
@@ -133,7 +135,10 @@ describe('MCP Server Tools', () => {
   // ========================================================================
 
   describe('search_models', () => {
-    const callSearchModels = async (args: { query: string; transformation?: string }): Promise<ToolResponse> => {
+    const callSearchModels = async (args: {
+      query: string;
+      transformation?: string;
+    }): Promise<ToolResponse> => {
       if (!capturedHandlers.callTool) {
         throw new Error('Call tool handler not captured');
       }
@@ -157,9 +162,7 @@ describe('MCP Server Tools', () => {
       expect(result.isError).toBeUndefined();
       expect(result.content[0].text).toContain('[P1] First Principles');
       expect(result.content[0].text).toContain('[P2] Second Order Thinking');
-      expect(mockFetch).toHaveBeenCalledWith(
-        `${WORKER_URL}/v1/models?search=thinking`
-      );
+      expect(mockFetch).toHaveBeenCalledWith(`${WORKER_URL}/v1/models?search=thinking`);
     });
 
     it('applies transformation filter when provided', async () => {
@@ -383,7 +386,9 @@ describe('MCP Server Tools', () => {
       const result = await callGetTransformation({ code: 'P' });
 
       expect(result.content[0].text).toContain('Use search_models with transformation filter');
-      expect(result.content[0].text).toContain('search_models(query="feedback", transformation="P")');
+      expect(result.content[0].text).toContain(
+        'search_models(query="feedback", transformation="P")'
+      );
     });
 
     it('rejects invalid transformation code', async () => {
@@ -500,9 +505,7 @@ describe('MCP Server Tools', () => {
     });
 
     it('handles relationships without evidence', async () => {
-      const mockRelationships = [
-        createMockRelationship({ evidence: undefined }),
-      ];
+      const mockRelationships = [createMockRelationship({ evidence: undefined })];
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
@@ -608,7 +611,9 @@ describe('MCP Server Tools', () => {
 
       expect(result.isError).toBe(true);
       expect(result.content[0].text).toContain('Error fetching relationships');
-      expect(result.content[0].text).toContain('Model NONEXISTENT not found or has no relationships');
+      expect(result.content[0].text).toContain(
+        'Model NONEXISTENT not found or has no relationships'
+      );
     });
 
     it('handles network errors', async () => {
@@ -701,43 +706,43 @@ describe('SSRF Protection', () => {
 
   it('accepts localhost URL', async () => {
     process.env.WORKER_URL = 'http://localhost:8787';
-    
+
     await expect(import('./index.js')).resolves.toBeDefined();
   });
 
   it('accepts 127.0.0.1 URL', async () => {
     process.env.WORKER_URL = 'http://127.0.0.1:8787';
-    
+
     await expect(import('./index.js')).resolves.toBeDefined();
   });
 
   it('accepts allowed production URL', async () => {
     process.env.WORKER_URL = 'https://hummbl-workers.hummbl.workers.dev';
-    
+
     await expect(import('./index.js')).resolves.toBeDefined();
   });
 
   it('throws error for file:// protocol', async () => {
     process.env.WORKER_URL = 'file:///etc/passwd';
-    
+
     await expect(import('./index.js')).rejects.toThrow('Invalid WORKER_URL');
   });
 
   it('throws error for malicious host', async () => {
     process.env.WORKER_URL = 'http://evil.com/api';
-    
+
     await expect(import('./index.js')).rejects.toThrow('Invalid WORKER_URL');
   });
 
   it('throws error for invalid URL format', async () => {
     process.env.WORKER_URL = 'not-a-valid-url';
-    
+
     await expect(import('./index.js')).rejects.toThrow('Invalid WORKER_URL');
   });
 
   it('defaults to localhost when WORKER_URL is not set', async () => {
     delete process.env.WORKER_URL;
-    
+
     await expect(import('./index.js')).resolves.toBeDefined();
   });
 });
