@@ -55,7 +55,7 @@ export const createApiError = (
 export const respondWithResult = <T>(
   c: Context<{ Bindings: Env }>,
   result: Result<T, ApiError>,
-  successStatus = 200 as const
+  successStatus: ContentfulStatusCode = 200
 ) => {
   try {
     if (result.ok) {
