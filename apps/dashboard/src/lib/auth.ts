@@ -1,6 +1,10 @@
 // Environment-based auth for internal tool
 // In production, replace with proper auth provider
 
+import { createLogger } from '@hummbl/core';
+
+const logger = createLogger('dashboard:auth');
+
 export type UserRole = 'admin' | 'operator' | 'viewer';
 
 export interface AuthContext {

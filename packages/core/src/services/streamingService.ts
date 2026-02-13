@@ -1,7 +1,10 @@
 // OpenAI Streaming API service for real-time responses
 // Migrated from hummbl-io with enhanced error handling and TypeScript strict mode
 
+import { createLogger } from '../logger';
 import type { OpenAIMessage, StreamCallbacks, OpenAIResponse } from '../types/chat';
+
+const logger = createLogger('streaming');
 
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 const DEFAULT_MODEL = 'gpt-4o-mini';
@@ -112,7 +115,7 @@ export class OpenAIStreamingService {
                 callbacks.onToken(content);
               }
             } catch (parseError) {
-              console.warn('Failed to parse streaming data:', parseError);
+              logger.warn('Failed to parse streaming data', { error: parseError });
             }
           }
         }
