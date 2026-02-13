@@ -22,7 +22,7 @@
     "ts-jest": "^29.2.5",
     "aws-cdk": "2.1030.0",
     "ts-node": "^10.9.2",
-    "typescript": "~5.6.3",
+    "typescript": "^5.7.2",
     "eslint": "^8.56.0",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
