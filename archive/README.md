@@ -5,7 +5,9 @@ This directory contains archived documentation and artifacts from earlier phases
 ## Contents
 
 ### `docs/legacy/`
+
 Historical documentation from completed project phases:
+
 - Accessibility audit reports
 - Authentication implementation guides
 - Backend setup documentation
@@ -23,6 +25,7 @@ Historical documentation from completed project phases:
 ## When to Reference
 
 These documents are kept for historical context. Active documentation should be in:
+
 - `/docs/` - Current project documentation
 - `/README.md` - Project overview
 - `/AGENTS.md` - Agent-specific guidance
@@ -30,6 +33,7 @@ These documents are kept for historical context. Active documentation should be 
 ## Cleanup Policy
 
 Archived documents older than 1 year may be removed. If you need something from here, consider:
+
 1. Updating and moving it to active docs
 2. Extracting relevant parts into a new document
 3. Creating a summary in the current documentation
