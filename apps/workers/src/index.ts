@@ -12,7 +12,7 @@ import { transformationsRouter } from './routes/transformations';
 import authRouter from './routes/auth';
 import { userRouter } from './routes/user';
 import analytics, { trackRequest } from './routes/analytics';
-import { rateLimiter } from './middleware/rateLimiter';
+import { rateLimiter, createTieredRateLimiter } from './middleware/rateLimiter';
 import { errorTrackingMiddleware, enhancedErrorHandler } from './middleware/errorTracking';
 import { createLogger, addBreadcrumb } from '@hummbl/core';
 import { createProtectedDatabase } from './lib/db-wrapper';
@@ -38,7 +38,44 @@ app.use(
   })
 );
 
-// Global rate limiting (before auth routes to avoid double limiting)
+// ============================================
+// Rate Limiting Configuration
+// ============================================
+// 
+// Different endpoints have different rate limits based on:
+// - Computational cost (e.g., recommendations are expensive)
+// - Data sensitivity (e.g., auth endpoints are strict)
+// - Expected usage patterns (e.g., read operations are frequent)
+//
+// Tier Overview:
+// - auth: 10 req/min (brute force protection)
+// - models_read: 100 req/min (standard API reads)
+// - models_write: 30 req/min (data modifications)
+// - models_recommend: 20 req/min (expensive computation)
+// - transformations_read: 120 req/min (cached/static data)
+// - user: 200 req/min (authenticated user operations)
+// - analytics: 30 req/min (admin/reporting)
+// - public: 300 req/min (health checks)
+
+// Auth routes have their own internal rate limiting (more strict)
+// We apply a looser limit here as a safety net
+app.use('/v1/auth/*', createTieredRateLimiter('auth'));
+
+// Models routes - differentiated by operation type
+// GET /v1/models/* uses models_read tier (applied automatically by path detection)
+// POST /v1/models/recommend uses models_recommend tier (applied automatically)
+app.use('/v1/models/*', rateLimiter());
+
+// Transformations routes
+app.use('/v1/transformations/*', createTieredRateLimiter('transformations_read'));
+
+// User routes (authenticated - higher limits)
+app.use('/v1/user/*', createTieredRateLimiter('user'));
+
+// Analytics routes
+app.use('/v1/analytics/*', createTieredRateLimiter('analytics'));
+
+// General API fallback for any other /v1/* routes
 app.use('/v1/*', rateLimiter());
 
 // Circuit breaker and performance monitoring

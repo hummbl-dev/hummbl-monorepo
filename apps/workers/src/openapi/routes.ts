@@ -8,6 +8,7 @@ import { createRoute } from '@hono/zod-openapi';
 import { z } from 'zod';
 import {
   ErrorSchema,
+  RateLimitErrorSchema,
   SuccessResponseSchema,
   UserSchema,
   AuthResponseSchema,
@@ -353,7 +354,7 @@ export const getModelsRoute = createRoute({
   tags: ['Models'],
   summary: 'List Mental Models',
   description:
-    'Get a list of mental models with optional filtering by transformation type or search query',
+    'Get a list of mental models with optional filtering by transformation type or search query. Rate limit: 100 requests/minute (models_read tier).',
   request: {
     query: ModelFilterQuerySchema,
   },
@@ -381,6 +382,14 @@ export const getModelsRoute = createRoute({
       },
       description: 'Invalid query parameters',
     },
+    429: {
+      content: {
+        'application/json': {
+          schema: RateLimitErrorSchema,
+        },
+      },
+      description: 'Rate limit exceeded (100 requests/minute)',
+    },
   },
 });
 
@@ -389,7 +398,7 @@ export const getModelRoute = createRoute({
   path: '/v1/models/{code}',
   tags: ['Models'],
   summary: 'Get Mental Model',
-  description: 'Get detailed information about a specific mental model',
+  description: 'Get detailed information about a specific mental model. Rate limit: 100 requests/minute (models_read tier).',
   request: {
     params: z.object({
       code: z
@@ -427,6 +436,14 @@ export const getModelRoute = createRoute({
       },
       description: 'Model not found',
     },
+    429: {
+      content: {
+        'application/json': {
+          schema: RateLimitErrorSchema,
+        },
+      },
+      description: 'Rate limit exceeded (100 requests/minute)',
+    },
   },
 });
 
@@ -435,7 +452,7 @@ export const getModelRelationshipsRoute = createRoute({
   path: '/v1/models/{code}/relationships',
   tags: ['Models'],
   summary: 'Get Model Relationships',
-  description: 'Get relationships for a specific mental model',
+  description: 'Get relationships for a specific mental model. Rate limit: 100 requests/minute (models_read tier).',
   request: {
     params: z.object({
       code: z
@@ -475,6 +492,14 @@ export const getModelRelationshipsRoute = createRoute({
       },
       description: 'Model not found',
     },
+    429: {
+      content: {
+        'application/json': {
+          schema: RateLimitErrorSchema,
+        },
+      },
+      description: 'Rate limit exceeded (100 requests/minute)',
+    },
   },
 });
 
@@ -483,7 +508,7 @@ export const recommendModelsRoute = createRoute({
   path: '/v1/models/recommend',
   tags: ['Models'],
   summary: 'Get Model Recommendations',
-  description: 'Get mental model recommendations based on a problem description',
+  description: 'Get mental model recommendations based on a problem description. Rate limit: 20 requests/minute (models_recommend tier) - stricter due to computational cost.',
   requestBody: {
     content: {
       'application/json': {
@@ -510,6 +535,14 @@ export const recommendModelsRoute = createRoute({
       },
       description: 'Invalid request or problem description',
     },
+    429: {
+      content: {
+        'application/json': {
+          schema: RateLimitErrorSchema,
+        },
+      },
+      description: 'Rate limit exceeded (20 requests/minute) - This endpoint is computationally expensive',
+    },
   },
 });
 
@@ -519,7 +552,7 @@ export const getTransformationsRoute = createRoute({
   path: '/v1/transformations',
   tags: ['Transformations'],
   summary: 'List Transformation Types',
-  description: 'Get all transformation types with their details',
+  description: 'Get all transformation types with their details. Rate limit: 120 requests/minute (transformations_read tier).',
   responses: {
     200: {
       content: {
@@ -534,6 +567,14 @@ export const getTransformationsRoute = createRoute({
       },
       description: 'List of transformation types',
     },
+    429: {
+      content: {
+        'application/json': {
+          schema: RateLimitErrorSchema,
+        },
+      },
+      description: 'Rate limit exceeded (120 requests/minute)',
+    },
   },
 });
 
@@ -542,7 +583,7 @@ export const getTransformationRoute = createRoute({
   path: '/v1/transformations/{type}',
   tags: ['Transformations'],
   summary: 'Get Transformation Details',
-  description: 'Get detailed information about a transformation type and its models',
+  description: 'Get detailed information about a transformation type and its models. Rate limit: 120 requests/minute (transformations_read tier).',
   request: {
     params: z.object({
       type: z.enum(['P', 'IN', 'CO', 'DE', 'RE', 'SY']).describe('Transformation type code'),
@@ -577,6 +618,14 @@ export const getTransformationRoute = createRoute({
         },
       },
       description: 'Transformation not found',
+    },
+    429: {
+      content: {
+        'application/json': {
+          schema: RateLimitErrorSchema,
+        },
+      },
+      description: 'Rate limit exceeded (120 requests/minute)',
     },
   },
 });

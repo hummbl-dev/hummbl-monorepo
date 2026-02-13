@@ -21,6 +21,30 @@ export const ErrorSchema = z
     description: 'Standard error response format',
   });
 
+// Rate limit error schema
+export const RateLimitErrorSchema = z
+  .object({
+    error: z.literal('Too Many Requests'),
+    message: z.string().describe('Human-readable error message with retry information'),
+    code: z.literal('RATE_LIMIT_EXCEEDED'),
+    tier: z.string().describe('Rate limit tier that was exceeded'),
+    limit: z.number().describe('Maximum requests allowed per window'),
+    retryAfter: z.number().describe('Seconds until the rate limit resets'),
+    resetAt: z.string().datetime().describe('ISO timestamp when the rate limit resets'),
+  })
+  .openapi({
+    description: 'Rate limit exceeded error response',
+    example: {
+      error: 'Too Many Requests',
+      message: 'Rate limit exceeded for models_read tier. Please try again in 45 seconds.',
+      code: 'RATE_LIMIT_EXCEEDED',
+      tier: 'models_read',
+      limit: 100,
+      retryAfter: 45,
+      resetAt: '2024-01-15T10:01:00Z',
+    },
+  });
+
 export const SuccessResponseSchema = <T extends z.ZodType>(dataSchema: T) =>
   z
     .object({
