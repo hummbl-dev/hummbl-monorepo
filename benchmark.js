@@ -1,81 +1,72 @@
 #!/usr/bin/env node
+/**
+ * Simple performance benchmark for HUMMBL Workers API
+ * Measures response times for key endpoints
+ */
 
-import { execSync } from 'child_process';
-import fs from 'fs';
+import { performance } from 'perf_hooks';
 
-const today = new Date().toISOString().split('T')[0];
-const benchmarkPath = `reports/benchmark-${today}.json`;
+const WORKER_URL = process.env.WORKER_URL || 'http://localhost:8787';
 
-if (!fs.existsSync('reports')) fs.mkdirSync('reports');
+const endpoints = [
+  { path: '/health', method: 'GET', name: 'Health Check' },
+  { path: '/v1/models', method: 'GET', name: 'List Models' },
+  { path: '/v1/transformations', method: 'GET', name: 'List Transformations' },
+];
+
+async function benchmarkEndpoint(endpoint, iterations = 10) {
+  const times = [];
+  
+  for (let i = 0; i < iterations; i++) {
+    const start = performance.now();
+    try {
+      const response = await fetch(`${WORKER_URL}${endpoint.path}`, {
+        method: endpoint.method,
+      });
+      const end = performance.now();
+      times.push(end - start);
+      
+      if (!response.ok) {
+        console.warn(`  Warning: ${endpoint.path} returned ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`  Error: ${endpoint.path} - ${error.message}`);
+      times.push(null);
+    }
+  }
+  
+  const validTimes = times.filter(t => t !== null);
+  if (validTimes.length === 0) return null;
+  
+  const avg = validTimes.reduce((a, b) => a + b, 0) / validTimes.length;
+  const min = Math.min(...validTimes);
+  const max = Math.max(...validTimes);
+  
+  return { avg, min, max, success: validTimes.length };
+}
 
 async function runBenchmarks() {
-  const results = { timestamp: new Date().toISOString(), tests: {} };
-
-  // Build benchmark
-  console.log('🔨 Running build benchmark...');
-  const buildStart = Date.now();
-  try {
-    execSync('pnpm build', { stdio: 'ignore' });
-    results.tests.build = { time: Date.now() - buildStart, status: 'pass' };
-  } catch {
-    results.tests.build = { time: Date.now() - buildStart, status: 'fail' };
+  console.log('╔════════════════════════════════════════════════════════════╗');
+  console.log('║           HUMMBL Workers API Performance Benchmark         ║');
+  console.log('╚════════════════════════════════════════════════════════════╝');
+  console.log(`\nWorker URL: ${WORKER_URL}\n`);
+  
+  for (const endpoint of endpoints) {
+    console.log(`📊 ${endpoint.name} (${endpoint.method} ${endpoint.path})`);
+    const result = await benchmarkEndpoint(endpoint, 10);
+    
+    if (result) {
+      console.log(`   Avg: ${result.avg.toFixed(2)}ms`);
+      console.log(`   Min: ${result.min.toFixed(2)}ms`);
+      console.log(`   Max: ${result.max.toFixed(2)}ms`);
+      console.log(`   Success: ${result.success}/10`);
+    } else {
+      console.log('   Failed to benchmark');
+    }
+    console.log();
   }
-
-  // Test benchmark
-  console.log('🧪 Running test benchmark...');
-  const testStart = Date.now();
-  try {
-    execSync('pnpm test', { stdio: 'ignore' });
-    results.tests.test = { time: Date.now() - testStart, status: 'pass' };
-  } catch {
-    results.tests.test = { time: Date.now() - testStart, status: 'fail' };
-  }
-
-  // Lint benchmark
-  console.log('🔍 Running lint benchmark...');
-  const lintStart = Date.now();
-  try {
-    execSync('pnpm lint', { stdio: 'ignore' });
-    results.tests.lint = { time: Date.now() - lintStart, status: 'pass' };
-  } catch {
-    results.tests.lint = { time: Date.now() - lintStart, status: 'fail' };
-  }
-
-  // MCP stress test (if available)
-  console.log('⚡ Running MCP benchmark...');
-  try {
-    const mcpOutput = execSync(
-      'cd apps/mcp-server && pnpm build && timeout 30s node src/stress-client.ts 2>&1 || true',
-      { encoding: 'utf8' }
-    );
-    const throughputMatch = mcpOutput.match(/Throughput: ([\d.]+) req\/sec/);
-    const latencyMatch = mcpOutput.match(/Avg Latency: ([\d.]+)ms/);
-
-    results.tests.mcp = {
-      throughput: throughputMatch ? parseFloat(throughputMatch[1]) : 0,
-      latency: latencyMatch ? parseFloat(latencyMatch[1]) : 0,
-      status: throughputMatch ? 'pass' : 'fail',
-    };
-  } catch {
-    results.tests.mcp = { throughput: 0, latency: 0, status: 'fail' };
-  }
-
-  // Calculate overall score
-  const passCount = Object.values(results.tests).filter(t => t.status === 'pass').length;
-  results.score = Math.round((passCount / Object.keys(results.tests).length) * 100);
-
-  fs.writeFileSync(benchmarkPath, JSON.stringify(results, null, 2));
-
-  console.log('\n📊 Benchmark Results:');
-  console.log(`Build: ${results.tests.build.time}ms (${results.tests.build.status})`);
-  console.log(`Test: ${results.tests.test.time}ms (${results.tests.test.status})`);
-  console.log(`Lint: ${results.tests.lint.time}ms (${results.tests.lint.status})`);
-  console.log(
-    `MCP: ${results.tests.mcp.throughput} req/s, ${results.tests.mcp.latency}ms (${results.tests.mcp.status})`
-  );
-  console.log(`Overall Score: ${results.score}%`);
-
-  return results;
+  
+  console.log('✅ Benchmark complete');
 }
 
 runBenchmarks().catch(console.error);
