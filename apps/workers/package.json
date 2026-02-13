@@ -24,7 +24,7 @@
     "@hono/swagger-ui": "^0.5.3",
     "@hono/zod-openapi": "^1.2.0",
     "@hummbl/core": "workspace:*",
-    "hono": "^4.11.7",
+    "hono": "^4.11.9",
     "zod": "^4.3.5"
   },
   "devDependencies": {
