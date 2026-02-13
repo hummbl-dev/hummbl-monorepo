@@ -41,7 +41,7 @@ app.use(
 // ============================================
 // Rate Limiting Configuration
 // ============================================
-// 
+//
 // Different endpoints have different rate limits based on:
 // - Computational cost (e.g., recommendations are expensive)
 // - Data sensitivity (e.g., auth endpoints are strict)

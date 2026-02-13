@@ -398,7 +398,8 @@ export const getModelRoute = createRoute({
   path: '/v1/models/{code}',
   tags: ['Models'],
   summary: 'Get Mental Model',
-  description: 'Get detailed information about a specific mental model. Rate limit: 100 requests/minute (models_read tier).',
+  description:
+    'Get detailed information about a specific mental model. Rate limit: 100 requests/minute (models_read tier).',
   request: {
     params: z.object({
       code: z
@@ -452,7 +453,8 @@ export const getModelRelationshipsRoute = createRoute({
   path: '/v1/models/{code}/relationships',
   tags: ['Models'],
   summary: 'Get Model Relationships',
-  description: 'Get relationships for a specific mental model. Rate limit: 100 requests/minute (models_read tier).',
+  description:
+    'Get relationships for a specific mental model. Rate limit: 100 requests/minute (models_read tier).',
   request: {
     params: z.object({
       code: z
@@ -508,7 +510,8 @@ export const recommendModelsRoute = createRoute({
   path: '/v1/models/recommend',
   tags: ['Models'],
   summary: 'Get Model Recommendations',
-  description: 'Get mental model recommendations based on a problem description. Rate limit: 20 requests/minute (models_recommend tier) - stricter due to computational cost.',
+  description:
+    'Get mental model recommendations based on a problem description. Rate limit: 20 requests/minute (models_recommend tier) - stricter due to computational cost.',
   requestBody: {
     content: {
       'application/json': {
@@ -541,7 +544,8 @@ export const recommendModelsRoute = createRoute({
           schema: RateLimitErrorSchema,
         },
       },
-      description: 'Rate limit exceeded (20 requests/minute) - This endpoint is computationally expensive',
+      description:
+        'Rate limit exceeded (20 requests/minute) - This endpoint is computationally expensive',
     },
   },
 });
@@ -552,7 +556,8 @@ export const getTransformationsRoute = createRoute({
   path: '/v1/transformations',
   tags: ['Transformations'],
   summary: 'List Transformation Types',
-  description: 'Get all transformation types with their details. Rate limit: 120 requests/minute (transformations_read tier).',
+  description:
+    'Get all transformation types with their details. Rate limit: 120 requests/minute (transformations_read tier).',
   responses: {
     200: {
       content: {
@@ -583,7 +588,8 @@ export const getTransformationRoute = createRoute({
   path: '/v1/transformations/{type}',
   tags: ['Transformations'],
   summary: 'Get Transformation Details',
-  description: 'Get detailed information about a transformation type and its models. Rate limit: 120 requests/minute (transformations_read tier).',
+  description:
+    'Get detailed information about a transformation type and its models. Rate limit: 120 requests/minute (transformations_read tier).',
   request: {
     params: z.object({
       type: z.enum(['P', 'IN', 'CO', 'DE', 'RE', 'SY']).describe('Transformation type code'),
