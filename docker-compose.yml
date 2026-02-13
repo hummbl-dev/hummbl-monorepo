@@ -6,8 +6,6 @@
 #   docker-compose down           # Stop all services
 #   docker-compose logs -f        # Follow logs
 
-version: '3.8'
-
 services:
   # Workers API (Cloudflare Workers local dev)
   workers:
