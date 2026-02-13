@@ -1,0 +1,79 @@
+# HUMMBL Monorepo - Local Development Environment
+# 
+# Usage:
+#   docker-compose up -d          # Start all services
+#   docker-compose up -d workers  # Start only workers
+#   docker-compose down           # Stop all services
+#   docker-compose logs -f        # Follow logs
+
+version: '3.8'
+
+services:
+  # Workers API (Cloudflare Workers local dev)
+  workers:
+    build:
+      context: .
+      dockerfile: ./apps/workers/Dockerfile
+    ports:
+      - "8787:8787"
+    environment:
+      - NODE_ENV=development
+      - WORKER_URL=http://localhost:8787
+    volumes:
+      - ./apps/workers:/app/apps/workers
+      - ./packages:/app/packages
+      - /app/node_modules
+    command: pnpm --filter @hummbl/workers dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8787/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - hummbl-network
+
+  # Dashboard (Vite dev server)
+  dashboard:
+    build:
+      context: .
+      dockerfile: ./apps/dashboard/Dockerfile
+    ports:
+      - "5174:5174"
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:8787
+    volumes:
+      - ./apps/dashboard:/app/apps/dashboard
+      - ./packages:/app/packages
+      - /app/node_modules
+    command: pnpm --filter @hummbl/dashboard dev --host
+    depends_on:
+      - workers
+    networks:
+      - hummbl-network
+
+  # MCP Server (stdio mode - for testing)
+  mcp-server:
+    build:
+      context: .
+      dockerfile: ./apps/mcp-server/Dockerfile
+    environment:
+      - NODE_ENV=development
+      - WORKER_URL=http://workers:8787
+    volumes:
+      - ./apps/mcp-server:/app/apps/mcp-server
+      - ./packages:/app/packages
+      - /app/node_modules
+    command: pnpm --filter @hummbl/mcp-server build
+    networks:
+      - hummbl-network
+    profiles:
+      - mcp
+
+networks:
+  hummbl-network:
+    driver: bridge
+
+volumes:
+  node_modules:
